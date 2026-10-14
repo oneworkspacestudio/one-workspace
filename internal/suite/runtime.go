@@ -148,7 +148,11 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	if health == "" {
 		health = "/"
 	}
-	if e = WaitHTTP(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), 90*time.Second); e != nil {
+	startupTimeout := 90 * time.Second
+	if app.ID == "gitea" {
+		startupTimeout = 3 * time.Minute
+	}
+	if e = WaitHTTP(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout); e != nil {
 		held.Close()
 		return e
 	}
