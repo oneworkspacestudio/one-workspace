@@ -1,61 +1,49 @@
-<img src="internal/branding/icons/one_workspace.svg" alt="One Workspace" width="80" height="80">
+# <img src="internal/branding/icons/one_workspace.svg" alt="" width="40" height="40"> One Workspace
 
-# One Workspace
+Your self-hosted apps, connected by one MyAccounts login. Install the core suite with one Windows EXE, keep files on your own storage, and add more apps as your workspace grows.
 
-One Windows installer for **MyAccounts, Drive, Docs, Photos, Git and Music**, with an app
-portal and a manifest system for adding more applications later.
+[Download Windows installer](https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.3) · [Setup guide](#install) · [Add an app](docs/ADDING-APPS.md) · [Source and licenses](docs/COMPONENTS.md)
 
-[Download the setup EXE](https://github.com/fahimc/one-workspace/releases) ·
-[Custom FileBrowser source](https://github.com/fahimc/filebrowser/tree/drive-reskin) ·
-[MyAccounts](https://github.com/fahimc/myaccounts)
+![One Workspace product showcase with Drive, Office, Photos, Photo Editor, Git and Music](docs/images/one-workspace-showcase.png)
 
-**Mail preview:** [Gmail-style Stalwart client](https://github.com/fahimc/stalwart/tree/main/workspace-mail)
-with MyAccounts sign-in, standalone Mail.exe and a domain/Cloudflare setup wizard.
-Add it as an app or include it in a local installer build with `-Mail`:
-[Mail integration guide](docs/MAIL.md). Existing released installers are unchanged.
+*Illustrated product overview. App availability varies by installer edition; the guides below include actual interface captures and current preview limits.*
 
-![Workspace setup wizard](docs/screenshots/setup-new-logo.png)
+## Meet the apps
 
-![Updated suite app logos](docs/screenshots/app-logos.png)
+| App | What you can do |
+| --- | --- |
+| **MyAccounts** | Sign in, manage people and reset passwords. |
+| <img src="internal/branding/icons/my_drive.svg" alt="" width="28" height="28"> **Drive** | Browse, upload, share and organise files with [My Drive](https://github.com/fahimc/filebrowser/tree/drive-reskin). |
+| <img src="internal/branding/icons/my_office.svg" alt="" width="28" height="28"> **Office** | Edit documents, sheets, slides and PDFs inside Drive. [Office guide](https://github.com/fahimc/filebrowser/blob/drive-reskin/OFFICE.md). |
+| <img src="internal/branding/icons/my_photos.svg" alt="" width="28" height="28"> **Photos** | Explore your existing folders as a photo library. [Photos guide](https://github.com/fahimc/filebrowser/blob/drive-reskin/PHOTOS.md). |
+| <img src="internal/branding/icons/my_git.svg" alt="" width="28" height="28"> **Git** | Host repositories and collaborate with [My Git](https://github.com/fahimc/gitea). |
+| <img src="internal/branding/icons/my_music.svg" alt="" width="28" height="28"> **Music** | Play your library from the shared Music folder with [My Music](https://github.com/fahimc/swingmusic). |
+| <img src="internal/branding/icons/photo_editor.svg" alt="" width="28" height="28"> **Photo&nbsp;Editor** | Edit images with layers, drawing tools and filters in [Studio](https://github.com/fahimc/miniPaint). |
+
+The **0.2 Git and Music preview** includes Accounts, Drive, Docs, Photos, Git and Music. The original 0.1 installer includes the first four. Photo Editor is a separate app/integration. See the [Git and Music edition guide](docs/GIT-MUSIC.md) for component details.
+
+**Optional Mail preview:** the [Stalwart-based Mail app](https://github.com/fahimc/stalwart/tree/main/workspace-mail) adds webmail, MyAccounts sign-in and a domain/Cloudflare setup wizard. Add it to a workspace or include it in a local build with `-Mail`; see the [Mail integration guide](docs/MAIL.md). Existing released installers are unchanged.
 
 ## Install
 
-1. Download `WorkspaceSetup-windows-amd64.exe` from a Workspace release.
-2. Run it. The setup wizard opens in your browser on this computer.
-3. Enter your name, account email and a password. **No SMTP account is required.**
-4. Choose separate folders for programs, private data and your files. Programs
-   and files can live on another drive; private data needs an **NTFS** volume.
-5. Choose local access, your existing HTTPS proxy, or a dedicated Cloudflare Tunnel.
-6. Install, launch, then open the workspace address. Allow a minute or two for the
-   first start and integrity checks. Later, use **One Workspace** in the Start menu.
+1. Download `WorkspaceSetup-windows-amd64.exe` from the [Git and Music preview release](https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.3).
+2. Run it and enter your name, email address and a password. No SMTP account is required.
+3. Choose folders for programs, private data and your files. Programs and files can use another drive; private data needs an **NTFS** volume.
+4. Choose local access, your existing HTTPS proxy, or a dedicated Cloudflare Tunnel.
+5. Install and launch. Open the workspace address, sign in and choose an app.
 
-The EXE contains the app binaries, editor assets and optional Cloudflare connector.
-Local setup does not download applications or require Go, Node.js, Office, Docker,
-a mail server or a second document server. Public access needs an Internet
-connection and your own domains/tunnel account. Windows x64 only; unsigned preview.
-Allow at least 2 GB for setup/program files and room for your documents and history.
+The installer includes the app binaries, editor assets and optional Cloudflare connector. Installing does not require Go, Node.js, Python, Docker or a separate Office server. Allow at least 2 GB for programs/setup plus room for your files. The current packages are unsigned Windows x64 previews.
 
-| Included app | What it does | Integration |
-| --- | --- | --- |
-| MyAccounts | Sign-in and account administration | Shared OIDC identity provider |
-| Drive | Browse, upload and manage files | Custom FileBrowser with MyAccounts login |
-| Docs | DOCX, XLSX, PPTX and supported PDF editing | Runs inside the Drive executable |
-| Photos | Photo library and viewer | Shares Drive's permissions and authenticated APIs |
-| Git | Gitea repositories and collaboration | Native MyAccounts login at `/git/` |
-| Music | Standalone Swing Music player | MyAccounts login at `/music/`, shared Drive `Music` folder |
+<details>
+<summary>See the setup wizard</summary>
 
-Git and Music are included in the **0.2 Git and Music preview**. The original
-0.1 installer contains the first four apps. See [Git and Music setup](docs/GIT-MUSIC.md)
-for standalone use, shared storage and component details.
+![One Workspace setup wizard](docs/screenshots/setup-new-logo.png)
 
-**These are self-hosted applications, with no Google service dependency.** Files
-remain ordinary files in your chosen folder. The initial `My Drive` source is a
-shared folder available to new suite users; it is not an automatic private home
-directory per person. Configure FileBrowser scopes/permissions before using it
-with people who should have different file access.
+</details>
+
+Files remain ordinary files in your chosen folder. The initial `My Drive` is a shared source, rather than an automatic private home per person. Configure FileBrowser scopes and permissions before giving different people access to different files. These applications use your own hosting and storage; no Google service is required.
 
 ## Accounts and administration
-
 The wizard creates a Workspace owner in the ordinary `myaccounts` organization.
 Sign in to the portal, then use **Manage accounts** to add/edit/remove users and
 reset passwords. Email delivery is disabled initially; administrators can reset
@@ -69,7 +57,6 @@ sign out of Drive and Accounts as well on shared computers. Immediate global
 session revocation across all apps is not implemented in this preview.
 
 ## Local and public addresses
-
 Default local addresses are `http://localhost:8990` for Workspace and
 `http://localhost:8991` for Accounts. Drive is under `/drive/`, Docs opens the
 Documents folder, and standalone Photos is at `/photos-app/` on Workspace.
@@ -90,7 +77,6 @@ later administration. Cloudflare is used for HTTPS tunnelling, not email.
 See [public connection setup](docs/CONNECTIONS.md).
 
 ## Add another app
-
 Future apps have a manifest describing their package hash, launch arguments,
 port, route, dependencies and optional OIDC callback. Stop Workspace, add a trusted
 single-EXE app, then start it again:
@@ -108,7 +94,6 @@ and credentials through environment variables. App packages run as your Windows
 user: only add apps you trust. [Manifest guide and working example](docs/ADDING-APPS.md).
 
 ## Operate and back up
-
 Use the small `Workspace.exe` in the **private data folder** with `--data PATH`:
 
 | Command | Result |
@@ -137,7 +122,6 @@ resources separately using their recorded IDs. No automatic in-place upgrade or
 destructive uninstaller is supplied.
 
 ## Development and release
-
 ```powershell
 go test ./...
 go vet ./...
@@ -160,6 +144,8 @@ from outstanding clean-host, service/reboot and live Cloudflare provisioning
 checks. Component licenses and source distributions accompany release assets;
 the bundled editor retains its upstream AGPL terms and notices.
 
-## App logos
+## Brand assets and product images
 
-Current source uses your coordinated SVG logos, with matching browser, installable app and Windows executable icons. Existing published installers keep their original branding until a new release is built. See [branding and rebuild instructions](docs/BRANDING.md).
+The source includes coordinated SVG logos, browser icons and Windows executable icons. The showcase above is generated artwork; the setup capture and linked app guides show actual UI. Published installers retain the assets embedded when they were built.
+
+[Brand assets and rebuild steps](docs/BRANDING.md) · [Showcase generation notes](docs/branding/showcase-generation.md)
