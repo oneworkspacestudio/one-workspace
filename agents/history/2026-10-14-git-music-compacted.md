@@ -116,3 +116,11 @@ exact bytes and playback, no page errors. Final artifact in dist/gitmusic-3.
 Preview2 remains an earlier verified release, superseded by preview3 shared session.
 No CI configured; all current Go packages passed after merging other task's
 concurrent docs and payload-test adjustment, without overwriting its changes.
+
+Final preview3 published: https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.3
+GitHub confirms8 uploaded assets; primary SHA256 matches7ed54018da46ec39519f40c029a82729d1d1b904a3ccf071b29c20b9dc017a87.
+Exactly one password prompt across all4 clients, then actual player, anonymous
+denial and clean stop/persisted restart passed on the exact fresh installed package.
+Healthy final demonstration remains localhost19390..19395, private root final3.
+All requested forks, standalone packages and combined installer are published.
+
