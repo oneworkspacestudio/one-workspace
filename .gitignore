@@ -1,0 +1,10 @@
+/dist/
+/internal/payload/bundle/*
+!/internal/payload/bundle/README.txt
+*.exe
+*.zip
+*.dpapi
+*.db*
+*.log
+.env*
+node_modules/
