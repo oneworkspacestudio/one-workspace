@@ -95,3 +95,25 @@ Remaining publication step at this edit: commit final fixes/evidence, publish
 v0.1.0-preview.1 EXE/catalog/checksums/acceptance, verify remote digest, record it.
 Cloudflare fake API tests pass; live provisioning, clean host, reboot/service,
 code-signing and cross-machine migration are not acceptance claims.
+
+## Published handoff
+
+Published https://github.com/fahimc/one-workspace/releases/tag/v0.1.0-preview.1
+at tested source c5592ab91fe6e959a5515300502d75e2de8d314a, also retained on
+release/0.1.0-preview.1. GitHub's server-computed EXE digest exactly matches
+`229fd58e71e9f082e87009f0e82ec85a197381c049ae15307c2f910165129fa9`;
+size311577088 bytes. Manager/catalog/checksums/acceptance are uploaded alongside it.
+Component seed assets and their server-side digests were verified as well.
+
+Concurrent Git/Music source commit7bd4ac2 arrived during push. Preserved it by
+merging into main (0238ce0), while keeping the tested 0.1 installer tag at c5592ab.
+Main includes the separate 0.2 preview docs/timeout changes; do not confuse its
+additional apps with the four core apps in the published 0.1 EXE. Merged Go tests
+and vet passed locally. Embedded-payload smoke test accepts additional app entries
+so future extended bundles are not rejected for exceeding four apps.
+
+All owned F: private smoke folders for this task were stopped and removed; disk
+space restored. Removed only the test-created Start Menu shortcut after checking
+its target. Synthetic documents/images remain under ignored dist fixtures on I:.
+Existing live MyAccounts/Drive and the separate Git/Music test installation remain
+outside this task's cleanup. No Actions runs; repository Actions remains disabled.

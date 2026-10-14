@@ -12,7 +12,7 @@ func TestEmbeddedPayloadCatalog(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	if len(c.Apps) != 4 || len(z.File) < 5 {
+	if len(c.Apps) < 4 || len(z.File) < 5 {
 		t.Fatal("incomplete offline catalog")
 	}
 }
