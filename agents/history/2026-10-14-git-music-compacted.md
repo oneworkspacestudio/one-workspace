@@ -101,3 +101,18 @@ DPAPI synthetic owner credentials. Source CI not configured in base repo; all
 local Go tests and signed OIDC/native browser checks passed. gh release edit is
 unavailable in this CLI, so publication used authenticated GitHub PATCH draft=false.
 
+
+## Final shared-session build
+
+The base Workspace continuation added enableSigninSession during initial release
+upload. Incorporated it into final0.2.0-gitmusic-preview.3, code target2fe96c4
+(including the base session fix), installer SHA256
+7ed54018da46ec39519f40c029a82729d1d1b904a3ccf071b29c20b9dc017a87.
+Fresh private root C:/Projects/.cache/workspace-gitmusic-final3/private and fresh
+I:/Projects/workspace/dist/gitmusic-final3-programs; same owned test music files.
+Full real-browser flow passed again with **exactly one password prompt across
+portal/Drive/Music/Gitea**, all callbacks, normal permissions, shared file/indexing,
+exact bytes and playback, no page errors. Final artifact in dist/gitmusic-3.
+Preview2 remains an earlier verified release, superseded by preview3 shared session.
+No CI configured; all current Go packages passed after merging other task's
+concurrent docs and payload-test adjustment, without overwriting its changes.

@@ -1,6 +1,6 @@
 # Git and Music edition
 
-[Download the Git and Music installer](https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.2).
+[Download the Git and Music installer](https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.3).
 
 The extended installer includes the independent [Gitea fork](https://github.com/fahimc/gitea)
 and [Swing Music fork](https://github.com/fahimc/swingmusic). Each is a supervised
@@ -65,3 +65,7 @@ and bad state. All Workspace Go tests pass. Fresh installation and restart use
 isolated directories; existing live apps are preserved. No new production tunnel,
 DNS change, clean-host Windows or reboot acceptance is claimed.
 
+
+The final preview3 also verifies **one MyAccounts password sign-in** across the
+portal, Drive, Music and Gitea. It includes enableSigninSession from the base
+Workspace project's shared-session fix.
