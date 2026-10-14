@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/fahimc/one-workspace/internal/branding"
 	"github.com/fahimc/one-workspace/internal/catalog"
 	"github.com/fahimc/one-workspace/internal/platform"
 	"github.com/fahimc/one-workspace/internal/suite"
@@ -54,6 +55,7 @@ func Serve(ctx context.Context, z *zip.Reader, c catalog.Catalog, open bool) err
 }
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
+	mux.Handle("GET /branding/", branding.Handler())
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)

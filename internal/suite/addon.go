@@ -58,7 +58,7 @@ func AddApp(ctx context.Context, data, manifest, binary string) error {
 	if add.App.OIDC && (add.App.Callback == "" || !strings.HasPrefix(add.App.Callback, strings.TrimRight(add.App.Route, "/")+"/") || strings.ContainsAny(add.App.Callback, "?#\\") || strings.Contains(add.App.Callback, "..")) {
 		return errors.New("OIDC callback must be inside the app route")
 	}
-	for _, prefix := range []string{"/api", "/auth", "/_", "/photos", "/drive", "/sdkjs", "/fonts", "/settings", "/tools", "/files", "/healthz"} {
+	for _, prefix := range []string{"/api", "/auth", "/_", "/branding", "/photos", "/drive", "/sdkjs", "/fonts", "/settings", "/tools", "/files", "/healthz"} {
 		if strings.HasPrefix(add.App.Route, prefix) {
 			return errors.New("app route conflicts with suite routes")
 		}

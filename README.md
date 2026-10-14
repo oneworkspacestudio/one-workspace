@@ -1,3 +1,5 @@
+<img src="internal/branding/icons/one_workspace.svg" alt="One Workspace" width="80" height="80">
+
 # One Workspace
 
 One Windows installer for **MyAccounts, Drive, Docs, Photos, Git and Music**, with an app
@@ -7,9 +9,9 @@ portal and a manifest system for adding more applications later.
 [Custom FileBrowser source](https://github.com/fahimc/filebrowser/tree/drive-reskin) ·
 [MyAccounts](https://github.com/fahimc/myaccounts)
 
-![Workspace setup wizard](docs/screenshots/setup.png)
+![Workspace setup wizard](docs/screenshots/setup-new-logo.png)
 
-![Workspace sign-in portal](docs/screenshots/portal.png)
+![Updated suite app logos](docs/screenshots/app-logos.png)
 
 ## Install
 
@@ -152,3 +154,7 @@ and Photos payload comes from the local Photos development build; MyAccounts is
 from outstanding clean-host, service/reboot and live Cloudflare provisioning
 checks. Component licenses and source distributions accompany release assets;
 the bundled editor retains its upstream AGPL terms and notices.
+
+## App logos
+
+Current source uses your coordinated SVG logos, with matching browser, installable app and Windows executable icons. Existing published installers keep their original branding until a new release is built. See [branding and rebuild instructions](docs/BRANDING.md).
