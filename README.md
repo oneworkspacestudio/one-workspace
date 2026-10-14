@@ -1,6 +1,6 @@
 # One Workspace
 
-One Windows installer for **MyAccounts, Drive, Docs and Photos**, with an app
+One Windows installer for **MyAccounts, Drive, Docs, Photos, Git and Music**, with an app
 portal and a manifest system for adding more applications later.
 
 [Download the setup EXE](https://github.com/fahimc/one-workspace/releases) ·
@@ -34,6 +34,12 @@ Allow at least 2 GB for setup/program files and room for your documents and hist
 | Drive | Browse, upload and manage files | Custom FileBrowser with MyAccounts login |
 | Docs | DOCX, XLSX, PPTX and supported PDF editing | Runs inside the Drive executable |
 | Photos | Photo library and viewer | Shares Drive's permissions and authenticated APIs |
+| Git | Gitea repositories and collaboration | Native MyAccounts login at `/git/` |
+| Music | Standalone Swing Music player | MyAccounts login at `/music/`, shared Drive `Music` folder |
+
+Git and Music are included in the **0.2 Git and Music preview**. The original
+0.1 installer contains the first four apps. See [Git and Music setup](docs/GIT-MUSIC.md)
+for standalone use, shared storage and component details.
 
 **These are self-hosted applications, with no Google service dependency.** Files
 remain ordinary files in your chosen folder. The initial `My Drive` source is a
