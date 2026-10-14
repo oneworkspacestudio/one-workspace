@@ -21,3 +21,13 @@ Publish only the listed README/guides/archive/image/history paths. Preserve othe
 ongoing work. The generation source and local render scratch remain outside Git;
 all consumed final assets are repository-local. Upstream attribution/licenses are
 retained and linked from each main README.
+
+README refresh commits pushed and remote refs verified:
+- one-workspace (main): 4655028829eae05762c21eb44d9e7941fb46d934
+- filebrowser-drive (drive-reskin): 8fa6ed6ebd01c4a61ab95c03f0140cb51ace5d79
+- minipaint-studio (master): fcaeea08cc019dc85bf4a1abd61b9b48ea4e9aee
+- gitea (main): e3936dd0c8f4dabea7e2be4c6988d88e3b7af6bf
+- swingmusic (master): efdd4e1101ea4c303a99e16fe348eb5b1b574668
+All final consumed assets are tracked. FileBrowser uses its custom drive-reskin
+branch; its upstream-tracking main/default branch is intentionally preserved.
+No new executable release created.
