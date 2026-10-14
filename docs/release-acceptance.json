@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "version": "0.1.0-preview.1",
+  "platform": "windows-amd64",
+  "evaluationOnly": true,
+  "installerSHA256": "229fd58e71e9f082e87009f0e82ec85a197381c049ae15307c2f910165129fa9",
+  "managerSHA256": "34f9edd0e46949992c17325389ca9a82772725ee928dc644041e86dd49c1b0f4",
+  "checks": {
+    "localGoTests": "passed",
+    "localGoVet": "passed",
+    "freshSingleEXEInstall": "passed",
+    "noSMTPInstall": "passed",
+    "startupStopRestart": "passed",
+    "anonymousDriveAndPhotosDenied": "passed",
+    "portalPKCELogin": "passed",
+    "driveSharedSigninWithoutSecondPassword": "passed",
+    "docsTypedTextPersistedToDOCX": "passed",
+    "photosAuthenticatedLibraryAndImageViewer": "passed",
+    "postInstallExtension": "passed",
+    "anonymousExtensionDenied": "passed",
+    "authenticatedExtensionRoute": "passed",
+    "ownerAccountAdministration": "passed"
+  },
+  "gates": {
+    "liveCloudflareProvisioning": false,
+    "cleanWindowsHost": false,
+    "windowsSignInReboot": false,
+    "windowsService": false,
+    "codeSigned": false,
+    "crossMachineMigration": false,
+    "fullOfficeFormatRegression": false
+  },
+  "githubActions": "disabled at user request",
+  "seedRelease": "components-20261014"
+}

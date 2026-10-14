@@ -3,7 +3,7 @@
 User requested a new repository and one Windows setup EXE installing MyAccounts,
 custom Drive/Docs and Photos, extensible for future applications. Default name
 One Workspace, private fahimc/one-workspace; optional name/visibility question pending.
-Source I:/Projects/workspace (new Git repository). Existing MyAccounts/Drive source
+Source now I:/Projects/one-workspace (new Git repository). Existing MyAccounts/Drive source
 and live integration previews must stay intact. Components are process-managed,
 not merged into a new identity/file implementation. Docs is built into Drive.
 
@@ -53,3 +53,45 @@ post-install extension route, finalize components.lock digest, acceptance eviden
 screenshots/product name; publish source/notices with installer/seed release; inspect
 CI. Preserve existing live apps. Avoid modifying Go sources during a bundle build
 (one interrupted build failed because module imports were renamed mid-compile).
+
+## Final implementation and verification
+
+Final installer 0.1.0-preview.1 SHA256
+`229fd58e71e9f082e87009f0e82ec85a197381c049ae15307c2f910165129fa9`.
+Manager SHA256 `34f9edd0e46949992c17325389ca9a82772725ee928dc644041e86dd49c1b0f4`.
+Exact final EXE installed into a fresh fixture, no SMTP, programs/files I: and
+private data F: NTFS. Native tests/vet pass. Stop/restart, exited-child containment,
+manifest import, anonymous API/extension denial and authenticated Hello page pass.
+Real browser final-artifact portal login reused the Accounts session for Drive
+without a second password; Docs typing/autosave was verified in DOCX XML; Photos
+listed/viewed a synthetic image. Owner organization users panel is accessible.
+Enable both enableAutoSignin AND enableSigninSession on cloned clients: the latter
+was essential for app-to-app SSO and has a regression test. Embedded ZIP is read
+with ReaderAt directly, avoiding a full ~300MB copy before wizard display.
+
+PowerShell localhost readiness timed out on this host despite healthy services;
+the smoke script now uses 127.0.0.1 and a five-second timeout, which passed. The
+installer/actual browser origins remain localhost for OIDC/cookie consistency.
+
+User explicitly prohibited GitHub Actions. Repository Actions is disabled through
+the GitHub API; remove workflow templates and use scripts/build.ps1, rebuild.ps1
+and smoke.ps1 locally. The first push was rejected for missing OAuth workflow
+scope; unpublished root was amended before successful source publication. Do not
+request expanded workflow credentials or enable Actions on a later continuation.
+
+Component seed release components-20261014 is published privately, digest pinned
+in components.lock.json. It contains core EXEs, available Drive/Photos/editor
+source, MyAccounts source and source manifest with additional engine source links.
+Seed manager is ignored by rebuild.ps1; that script builds the current manager.
+The final installer payload changes when manager source changes, independently of
+the pinned core component seed. README screenshots use One Workspace branding.
+
+The earlier I:/Projects/workspace directory remains separate; a different ongoing
+build was observed there. Preserve it. Current canonical source is one-workspace.
+Fresh test fixtures are disposable and must be stopped/cleaned after release;
+never touch F:/MyAccounts/install or F:/MyAccounts/integration-preview.
+
+Remaining publication step at this edit: commit final fixes/evidence, publish
+v0.1.0-preview.1 EXE/catalog/checksums/acceptance, verify remote digest, record it.
+Cloudflare fake API tests pass; live provisioning, clean host, reboot/service,
+code-signing and cross-machine migration are not acceptance claims.

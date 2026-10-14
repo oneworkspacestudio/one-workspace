@@ -10,8 +10,16 @@ not a clean Windows VM or a production deployment.
 - Account/bootstrap creation and dedicated portal/Drive OIDC clients.
 - Portal code flow with PKCE, nonce, state and verified ID token; real owner login.
 - Authenticated Drive file listing and the created Documents/Photos folders.
+- Final released EXE installed from scratch, followed by clean stop/restart and
+  importing the Hello example app. Anonymous extension requests were redirected
+  to login; the signed-in extension page loaded successfully.
+- Portal-to-Drive sign-in reused the Accounts session without another password.
+  Owner account administration loaded in the ordinary organization.
+- Standalone Photos reused Drive authentication, listed a synthetic test image
+  and opened its original in the viewer.
 - Real Docs editing and DOCX save; extracted `word/document.xml` contained the
   typed text. A root-relative converter worker route was fixed during this test.
+- Final-artifact DOCX creation was repeated; its ZIP XML contained the typed text.
 - Unit checks for catalog traversal, Windows device/ADS paths, bad hashes,
   executable/package mismatch, dependency cycles, route overlap and duplicate ZIP
   entries; wizard capability/Origin/Host checks; proxy cookie protections; Photos
