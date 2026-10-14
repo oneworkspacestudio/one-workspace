@@ -9,7 +9,8 @@ param(
  [string]$DriveVersion='photos-preview-local',
  [string]$ComponentNotices='',
  [string]$Gitea='',
- [string]$Music=''
+ [string]$Music='',
+ [string]$Mail=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -22,6 +23,11 @@ try {
  if($ComponentNotices){Get-ChildItem -LiteralPath $ComponentNotices -File | ForEach-Object {$inputs['notice-'+$_.Name]=@{source=$_.FullName;file='licenses/components/'+$_.Name}}}
  if([bool]$Gitea -ne [bool]$Music){throw 'Supply both Gitea and Music for the extended Workspace bundle'}
  if($Gitea){$inputs['gitea']=@{source=$Gitea;file='Gitea.exe'};$inputs['music']=@{source=$Music;file='Music.exe'}}
+ if($Mail){
+  $inputs['mail']=@{source=$Mail;file='Mail.exe'}
+  $inputs['mail-license']=@{source=(Join-Path $root 'docs/licenses/stalwart-AGPL-3.0-only.txt');file='licenses/Mail-AGPL-3.0-only.txt'}
+  $inputs['mail-notice']=@{source=(Join-Path $root 'docs/MAIL-NOTICE.md');file='licenses/Mail-NOTICE.md'}
+ }
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/fahimc/myaccounts/releases/tag/'+$AccountsVersion},
@@ -33,6 +39,7 @@ try {
   @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version='28.1.0-workspace.1';kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/fahimc/gitea'},
   @{id='music';name='Music';description='Swing Music — your shared Music folder';version='3.0.0-workspace.1';kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/fahimc/swingmusic'}
  )}
+ if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version='0.1.0-preview.1';kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/fahimc/stalwart/tree/main/workspace-mail'}}
  $catalog=@{schema=1;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  Add-Type -AssemblyName System.IO.Compression

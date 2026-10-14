@@ -9,6 +9,11 @@ portal and a manifest system for adding more applications later.
 [Custom FileBrowser source](https://github.com/fahimc/filebrowser/tree/drive-reskin) ·
 [MyAccounts](https://github.com/fahimc/myaccounts)
 
+**Mail preview:** [Gmail-style Stalwart client](https://github.com/fahimc/stalwart/tree/main/workspace-mail)
+with MyAccounts sign-in, standalone Mail.exe and a domain/Cloudflare setup wizard.
+Add it as an app or include it in a local installer build with `-Mail`:
+[Mail integration guide](docs/MAIL.md). Existing released installers are unchanged.
+
 ![Workspace setup wizard](docs/screenshots/setup-new-logo.png)
 
 ![Updated suite app logos](docs/screenshots/app-logos.png)

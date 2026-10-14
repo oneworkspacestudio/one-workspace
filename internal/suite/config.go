@@ -130,6 +130,8 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 4
 		case "music":
 			app.Port = r.Port + 5
+		case "mail":
+			app.Port = r.Port + 6
 		}
 		apps = append(apps, app)
 	}
@@ -163,6 +165,9 @@ func CheckPorts(c Config) error {
 	for _, a := range c.Catalog.Apps {
 		if a.Kind == "process" {
 			ports = append(ports, a.Port)
+			if a.ID == "mail" {
+				ports = append(ports, a.Port+1, a.Port+2)
+			}
 		}
 	}
 	listeners := []net.Listener{}
@@ -172,6 +177,9 @@ func CheckPorts(c Config) error {
 		}
 	}()
 	for _, p := range ports {
+		if p > 65535 {
+			return errors.New("Workspace port range exceeds 65535; choose a lower base port")
+		}
 		l, e := net.Listen("tcp4", fmt.Sprintf("127.0.0.1:%d", p))
 		if e != nil {
 			return fmt.Errorf("port %d is already in use", p)

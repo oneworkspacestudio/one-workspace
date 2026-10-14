@@ -125,6 +125,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "music" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_MUSIC_DIR="+filepath.Join(c.Files, "Music"), "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 		}
+		if app.ID == "mail" {
+			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
+		}
 	}
 	log := &platform.Log{Path: filepath.Join(c.Data, "logs", app.ID+".log")}
 	cmd.Stdout = log
