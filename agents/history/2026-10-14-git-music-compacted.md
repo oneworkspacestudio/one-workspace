@@ -74,3 +74,30 @@ changes from C:/Projects/.cache/workspace-gitmusic-git (clone of remote096e43d).
 The remote initial commit already contains the earlier catalog/OIDC/proxy changes.
 Do not overwrite the other task's release or git index.
 
+
+Final cold install on I/C passed the full browser script with no page errors.
+Clean stop verified all ports19390..19395 closed, then restart retained accounts,
+library and cookies; actual player still streamed successful range206 afterrestart.
+Live final preview remains19390 with synthetic owner@example.test; protected owner
+password/browser state only in C:/Projects/.cache/workspace-gitmusic-final. Source
+commit7bd4ac2 published; combined v0.2.0-gitmusic-preview.2 draft upload is the last
+publication step. Removed only task-owned old C prototype programs after checking
+no process used them, reclaiming ~1GB. Durable installer/artifacts stay on I.
+
+
+## Published handoff
+
+Completed: https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.2
+(published preview,8 assets). GitHub's uploaded installer SHA256 exactly matches
+local c0ee4622875c7294418ad1bb04394f07ccde363b14468618e680ce485ff6d012.
+Source/binary code target7bd4ac2, plus later documentation-only handoff update.
+Fork standalone releases workspace-20261014 published with matching SHA256 asset
+digests and licenses/checksums. Final verification.json records actual player,
+clean all-listener stop and persisted restart. Current localhost19390 preview
+remains healthy; it is an isolated synthetic demonstration, not the existing
+login.m8e.co.uk deployment. No work or approvals remain for this requested preview.
+New installs choose their own owner in the wizard; this preview uses private
+DPAPI synthetic owner credentials. Source CI not configured in base repo; all
+local Go tests and signed OIDC/native browser checks passed. gh release edit is
+unavailable in this CLI, so publication used authenticated GitHub PATCH draft=false.
+
