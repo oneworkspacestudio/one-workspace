@@ -134,9 +134,10 @@ go vet ./...
 ```
 
 The result is `dist/WorkspaceSetup-windows-amd64.exe`; SHA256 sums and the
-component catalog are beside it. Component binaries stay out of Git. The rebuild
-workflow uses a pinned component seed release in this same private repository.
-The unit-test workflow template does not need private upstream repository credentials.
+component catalog are beside it. Component binaries stay out of Git. To rebuild
+from the pinned component seed in this private repository, run
+`./scripts/rebuild.ps1 -Go 'I:\Tools\Go\bin\go.exe'`. Builds and tests run locally;
+GitHub Actions is disabled for this repository.
 
 This is an **evaluation release**, not production acceptance. The current Drive
 and Photos payload comes from the local Photos development build; MyAccounts is

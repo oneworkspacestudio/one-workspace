@@ -17,7 +17,8 @@ NTFS storage; large component executables may remain on the program volume.
 The latest Photos source was uncommitted in the existing FileBrowser worktree.
 This repository does not claim that it has a corresponding published upstream
 tag, or publish changes back into that worktree. The component seed release
-includes its source snapshot and the editor/engine source archives. That snapshot
+includes its source snapshot (with editor source) and links to separate engine
+source archives. That snapshot
 captures the available development tree; byte-for-byte reproducibility of the
 pre-existing development executable has not been established.
 
@@ -25,7 +26,7 @@ The editor derives from `ranuts/document` at
 `1330b3c525ca4d7211f99592f5e94df749e5202a`, including downstream embedding and
 collaboration patches. Its upstream AGPL license/notice and the FileBrowser
 third-party notices are extracted into the program folder. Engine sources and
-the pre-existing converter source snapshot are supplied with the component seed.
+the pre-existing converter source snapshot are linked from the component seed.
 The converter upstream did not pin its compiler/source for exact reproduction;
 the source snapshot is not asserted to reproduce its WebAssembly byte for byte.
 

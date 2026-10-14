@@ -120,6 +120,7 @@ func registerClient(ctx context.Context, api *identityAPI, id, name, callback st
 	app["enableSignUp"] = false
 	app["disableSelfSignup"] = true
 	app["enableAutoSignin"] = true
+	app["enableSigninSession"] = true
 	app["providers"] = []any{}
 	app["scopes"] = []any{}
 	return result, api.call(ctx, "/api/add-application", app, nil)
