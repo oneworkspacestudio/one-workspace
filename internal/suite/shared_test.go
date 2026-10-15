@@ -61,3 +61,16 @@ func TestSharedPackagesAreExplicitAndAppPortsDoNotDependOnMail(t *testing.T) {
 		t.Fatal("incorrect shared dependency")
 	}
 }
+
+func TestReleasedHostingMailStaysPrivateWithCalendar(t *testing.T) {
+	c := Config{Catalog: catalog.Catalog{Packages: map[string]catalog.Package{"services-shared": {}, "stalwart-shared": {}}, Apps: []catalog.App{
+		{ID: "mail", Env: map[string]string{"WORKSPACE_MAIL_BACKEND": "private"}}, {ID: "calendar"}, {ID: "contacts"},
+	}}}
+	if usesShared(c, "mail") || !usesShared(c, "calendar") || !usesShared(c, "contacts") {
+		t.Fatal("adding Calendar changed Mail's storage mode")
+	}
+	c.Catalog.Apps[0].Env = nil
+	if !usesShared(c, "mail") {
+		t.Fatal("explicit older shared-Mail catalog lost support")
+	}
+}

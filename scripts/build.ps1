@@ -16,6 +16,11 @@ param(
  [string]$Contacts='',
  [string]$Services='',
  [string]$Stalwart='',
+ [string]$Studio='',
+ [string]$StudioVersion='studio-v0.1.0',
+ [string]$DriveSource='https://github.com/oneworkspacestudio/drive',
+ [string]$PhotosSource='https://github.com/oneworkspacestudio/drive',
+ [switch]$PrivateMail,
  [string]$CalendarVersion='0.1.0-preview.1',
  [string]$MailVersion='0.1.0-preview.1',
  [string]$ReleaseRepo='oneworkspacestudio/one-workspace'
@@ -43,21 +48,26 @@ try {
  if($Services){$inputs['services-shared']=@{source=$Services;file='services/WorkspaceServices.exe'};$inputs['stalwart-shared']=@{source=$Stalwart;file='services/stalwart.exe'}}
  if($Calendar){$inputs['calendar']=@{source=$Calendar;file='Calendar.exe'}}
  if($Contacts){$inputs['contacts']=@{source=$Contacts;file='Contacts.exe'}}
+ if($Studio){$inputs['studio']=@{source=$Studio;file='Studio.exe'};$inputs['studio-license']=@{source=(Join-Path $root 'docs/licenses/miniPaint-MIT.txt');file='licenses/Photo-Editor-MIT.txt'}}
+ if($Calendar -or $Contacts){$inputs['calendar-license']=@{source=(Join-Path $root 'docs/licenses/stalwart-AGPL-3.0-only.txt');file='licenses/Calendar-AGPL-3.0-only.txt'}}
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
-  @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/fahimc/myaccounts/releases/tag/'+$AccountsVersion},
-  @{id='drive';name='Drive';description='Browse, upload and share your files';version=$DriveVersion;kind='process';package='drive';executable='FileBrowser.exe';port=8992;route='/drive/';health='/drive/health';depends=@('accounts');args=@('-c','${DATA}/drive/config.yaml');source='https://github.com/fahimc/filebrowser/tree/drive-reskin'},
-  @{id='docs';name='Docs';description='Create and edit documents, sheets and slides';version=$DriveVersion;kind='builtin';depends=@('drive');route='/drive/files/My%20Drive/Documents';source='https://github.com/fahimc/filebrowser/tree/drive-reskin'},
-  @{id='photos';name='Photos';description='Your photo library, powered by Drive';version=$PhotosVersion;kind='process';package='photos';executable='Photos.exe';port=8993;route='/photos-app/';health='/photos';depends=@('drive');args=@('--server','${ORIGIN}/drive','--listen','127.0.0.1:${PORT}','--no-browser');source='https://github.com/fahimc/filebrowser/tree/drive-reskin'}
+  @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/oneworkspacestudio/myaccounts/releases/tag/'+$AccountsVersion},
+  @{id='drive';name='Drive';description='Browse, upload and share your files';version=$DriveVersion;kind='process';package='drive';executable='FileBrowser.exe';port=8992;route='/drive/';health='/drive/health';depends=@('accounts');args=@('-c','${DATA}/drive/config.yaml');source=$DriveSource},
+  @{id='docs';name='Docs';description='Create and edit documents, sheets and slides';version=$DriveVersion;kind='builtin';depends=@('drive');route='/drive/files/My%20Drive/Documents';source=$DriveSource},
+  @{id='photos';name='Photos';description='Your photo library, powered by Drive';version=$PhotosVersion;kind='process';package='photos';executable='Photos.exe';port=8993;route='/photos-app/';health='/photos';depends=@('drive');args=@('--server','${ORIGIN}/drive','--listen','127.0.0.1:${PORT}','--no-browser');source=$PhotosSource}
  )
  if($Gitea){$apps+=@(
-  @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version='28.1.0-workspace.1';kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/fahimc/gitea'},
-  @{id='music';name='Music';description='Swing Music — your shared Music folder';version='3.0.0-workspace.1';kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/fahimc/swingmusic'}
+  @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version='28.1.0-workspace.1';kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/oneworkspacestudio/gitea/releases/tag/workspace-20261014'},
+  @{id='music';name='Music';description='Swing Music — your shared Music folder';version='3.0.0-workspace.1';kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/oneworkspacestudio/Music/releases/tag/workspace-20261014'}
  )}
- if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version=$MailVersion;kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/oneworkspacestudio/mail/tree/main/workspace-mail'}}
+ if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version=$MailVersion;kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/oneworkspacestudio/mail/releases/tag/workspace-mail-v'+$MailVersion}}
+ if($Mail -and $PrivateMail){($apps|Where-Object id -eq 'mail').env=@{WORKSPACE_MAIL_BACKEND='private'}}
+ if($Studio){$apps+=@{id='studio';name='Photo Editor';description='Edit images and layers; open and save in Drive';version=$StudioVersion;kind='builtin';depends=@('drive');route='/drive/studio';source='https://github.com/oneworkspacestudio/Photo-Editor/releases/tag/'+$StudioVersion}}
  foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){
-  if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data','${DATA}/'+$dependent.id,'--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base','/'+$dependent.id,'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar'}}
+  if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data',('${DATA}/'+$dependent.id),'--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base',('/'+$dependent.id),'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar/releases/tag/v'+$CalendarVersion}}
  }
+ foreach($app in $apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/'){throw ('App source must be an organization repository: '+$app.id)}}
  $catalog=@{schema=1;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  Add-Type -AssemblyName System.IO.Compression

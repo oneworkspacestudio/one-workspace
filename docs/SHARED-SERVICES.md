@@ -11,3 +11,13 @@ Default listeners: private HTTP only; adding Mail does not open SMTP, IMAP or PO
 New shared-mode Mail has no recovery administrator credential, does not own/start/stop Stalwart, and cannot edit its backend through the legacy hosting wizard. Stop individual apps freely. Use the standalone shared manager's explicit stop/backup/upgrade commands for maintenance. Uninstalling an app only removes its shared registration; shared data and other apps remain.
 
 Existing live installations were not changed. See Calendar's technical guide and verification report for native install-order, OIDC, ACL, recovery and app tests. Windows logon/service reboot and a clean machine are separate acceptance gates; this remains an unsigned preview.
+
+## Hosting-compatible organization bundle
+
+The complete organization build marks the published hosting-capable Mail with
+`WORKSPACE_MAIL_BACKEND=private`. Calendar/Contacts share their own service, while
+Mail retains its existing SMTP hosting, mailbox provisioning and private store.
+This intentionally runs two isolated engines. Merely adding Calendar never
+adopts legacy Mail storage, changes its OIDC audience or disables Internet mail.
+Fully shared Mail is still available through the separate Calendar preview and
+requires a separately planned migration. See [organization apps](ORG-APPS.md).

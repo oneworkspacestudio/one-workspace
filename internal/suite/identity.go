@@ -106,7 +106,7 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 		s.Clients[entry.id] = client
 	}
 	for _, app := range c.Catalog.Apps {
-		if !app.OIDC || app.ID == "drive" || (SharedEnabled(*c) && sharedConsumer(app.ID)) {
+		if !app.OIDC || app.ID == "drive" || (usesShared(*c, app.ID)) {
 			continue
 		}
 		client, e := registerClient(ctx, api, app.ID, app.Name, c.Origin+app.Callback)
@@ -122,7 +122,7 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 		}
 		s.Clients["shared"] = client
 		for _, app := range c.Catalog.Apps {
-			if sharedConsumer(app.ID) {
+			if usesShared(*c, app.ID) {
 				s.Clients[app.ID] = client
 			}
 		}

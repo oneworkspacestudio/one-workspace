@@ -1,9 +1,9 @@
 # Git and Music edition
 
-[Download the Git and Music installer](https://github.com/fahimc/one-workspace/releases/tag/v0.2.0-gitmusic-preview.3).
+[Download the Git and Music installer](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.2.0-gitmusic-preview.3).
 
-The extended installer includes the independent [Gitea fork](https://github.com/fahimc/gitea)
-and [Swing Music fork](https://github.com/fahimc/swingmusic). Each is a supervised
+The extended installer includes the independent [Gitea fork](https://github.com/oneworkspacestudio/gitea)
+and [Swing Music fork](https://github.com/oneworkspacestudio/Music). Each is a supervised
 native process with its own MyAccounts client. Both are served by the Workspace
 gateway on its existing address, including through the optional Cloudflare
 tunnel; no additional public hostname or DNS record is needed.
@@ -29,7 +29,7 @@ music/Gitea users receive ordinary roles. Gitea retains a separate random local
 recovery administrator, machine DPAPI protected at `gitea/recovery.dpapi`.
 
 Music runs independently and can also be launched outside Workspace; see the
-fork's [standalone instructions](https://github.com/fahimc/swingmusic/blob/master/WORKSPACE.md).
+fork's [standalone instructions](https://github.com/oneworkspacestudio/Music/blob/master/WORKSPACE.md).
 Without MyAccounts environment variables it retains local-password standalone
 mode. With MyAccounts it disables local/guest account creation and pairing.
 Uploads and changes in Drive's Music folder are rescanned about every 15 seconds.

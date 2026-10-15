@@ -24,21 +24,22 @@ For the included apps and installation steps, start with the main README.
 
 | App | Source or guide |
 | --- | --- |
-| Drive | [Custom FileBrowser](https://github.com/fahimc/filebrowser) |
-| Office | [Office integration and build guide](https://github.com/fahimc/filebrowser/blob/master/OFFICE.md) |
-| Photos | [Photos guide](https://github.com/fahimc/filebrowser/blob/master/PHOTOS.md) |
-| MyAccounts | [Drive sign-in configuration](https://github.com/fahimc/filebrowser/blob/master/MYACCOUNTS.md) |
-| Git | [My Git](https://github.com/fahimc/gitea) |
-| Music | [My Music](https://github.com/fahimc/swingmusic) |
-| Photo Editor | [Studio integration](https://github.com/fahimc/miniPaint/blob/master/STUDIO.md) |
+| Drive | [Custom FileBrowser](https://github.com/oneworkspacestudio/drive) |
+| Office | [Office integration and build guide](https://github.com/oneworkspacestudio/drive/blob/master/OFFICE.md) |
+| Photos | [Photos guide](https://github.com/oneworkspacestudio/drive/blob/master/PHOTOS.md) |
+| MyAccounts | [Drive sign-in configuration](https://github.com/oneworkspacestudio/drive/blob/master/MYACCOUNTS.md) |
+| Git | [My Git](https://github.com/oneworkspacestudio/gitea) |
+| Music | [My Music](https://github.com/oneworkspacestudio/Music) |
+| Photo Editor | [Studio integration](https://github.com/oneworkspacestudio/Photo-Editor/blob/master/STUDIO.md) |
 | Mail | [Mail integration](MAIL.md) |
 
 ## Requirements and storage
 
 - Windows x64. Published packages are unsigned evaluation previews.
-- Allow at least 2 GB for the installer and programs, plus room for files,
+- Allow at least 4 GB for the installer and programs, plus room for files,
   document history and backups.
-- Published installers ask for separate program, private-data and file folders.
+- Setup asks for one parent folder. Advanced/headless requests can still use
+  separate program, private-data and file folders.
   The private-data folder requires a local NTFS volume so Windows can protect
   account settings and credentials. Program/file folders can use another drive.
 - The local one-folder preview requires an NTFS parent folder and organises
@@ -55,18 +56,17 @@ For the included apps and installation steps, start with the main README.
 
 ## Published packages and local previews
 
-The [releases page](https://github.com/fahimc/one-workspace/releases) is the source
-of downloadable installers and their included-app lists. Component versions,
-hashes, notices and verification records accompany each package. Source and
-screenshots can be newer than the binaries embedded in a published installer.
-Photo Editor is a separate integration; the Mail-enabled installer is a local
-preview rather than an update to the published EXEs.
+The [organization releases](https://github.com/oneworkspacestudio/one-workspace/releases)
+provide the installer and verified application bundle. The complete organization
+build includes every currently released application listed in [Organization apps](ORG-APPS.md).
+Notes is awaiting its first release. Setup uses one parent folder, supports
+Cloudflare domain hosting and reports installation/startup progress.
 
-The newer one-folder, domain-first Cloudflare and startup-checklist screens are
-local development previews. Publishing these guides does not publish those
-pending implementation changes or a new installer. See [HOSTING.md](HOSTING.md)
-for the preview workflow, screenshots and exact boundaries. The published setup
-wizard retains its earlier folder and connection choices.
+Normal setup downloads the latest published compatible suite bundle and resolves
+organization Mail independently. Offline mode deliberately uses embedded versions.
+The explicit `install-apps --bundle PATH` maintenance command adds missing suite
+apps to a stopped installation with backups; it refuses changing existing process
+binaries. Mail data migration is not performed. See [Organization apps](ORG-APPS.md).
 
 ## Accounts and administration
 The wizard creates a Workspace owner in the ordinary `myaccounts` organization.
@@ -163,7 +163,7 @@ go vet ./...
 
 The result is `dist/WorkspaceSetup-windows-amd64.exe`; SHA256 sums and the
 component catalog are beside it. Component binaries stay out of Git. To rebuild
-from the pinned component seed in this private repository, run
+from the pinned organization releases in this public repository, run
 `./scripts/rebuild.ps1 -Go 'I:\Tools\Go\bin\go.exe'`. Builds and tests run locally;
 GitHub Actions is disabled for this repository.
 
@@ -208,7 +208,7 @@ explicit alternate repository. Never embed tokens or select a partially uploaded
 release. Keep component license notices and corresponding source links/archives.
 
 
-For source rebuilds, `components.lock.json` pins a verified public release seed.
+For source rebuilds, `organization-components.lock.json` pins verified public organization releases.
 `scripts/rebuild.ps1` downloads that seed without GitHub login, preserves all app
 versions (including Mail/Git/Music), and compiles the current Workspace source.
 This reproducible build seed is separate from the installer's online latest-release

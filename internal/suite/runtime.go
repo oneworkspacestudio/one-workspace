@@ -99,7 +99,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 			progress.Step("public-accounts", "done", "Your secure sign-in address is reachable")
 		}
 	}
-	if _, ok := c.Catalog.Find("mail"); ok && !SharedEnabled(c) {
+	if _, ok := c.Catalog.Find("mail"); ok && !usesShared(c, "mail") {
 		go rt.maintainMailboxes(ctx)
 	}
 	progress.Step("portal", "running", "Connecting the Workspace portal to MyAccounts")
@@ -154,12 +154,12 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "mail" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			cmd.Env = append(cmd.Env, "WORKSPACE_MAIL_PROVISION_TOKEN="+rt.mailProvisionToken)
-			if c.HostingDomain != "" && !SharedEnabled(c) {
+			if c.HostingDomain != "" && !usesShared(c, "mail") {
 				cmd.Env = append(cmd.Env, "WORKSPACE_MAIL_DOMAIN="+c.HostingDomain, "WORKSPACE_MAIL_DNS_ZONE="+c.DNSZoneID, "WORKSPACE_MAIL_DNS_TOKEN="+s.MailDNSToken)
 			}
 		}
 	}
-	if SharedEnabled(c) && sharedConsumer(app.ID) {
+	if usesShared(c, app.ID) {
 		cmd.Env = append(cmd.Env, "WORKSPACE_SHARED_DATA="+filepath.Join(c.Data, "shared"))
 	}
 	log := &platform.Log{Path: filepath.Join(c.Data, "logs", app.ID+".log")}
@@ -168,7 +168,7 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	return cmd
 }
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
-	if SharedEnabled(rt.Config) && sharedConsumer(app.ID) {
+	if usesShared(rt.Config, app.ID) {
 		if e := rt.ensureShared(ctx); e != nil {
 			return e
 		}
@@ -200,7 +200,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	}
 	rt.set(app.ID, "running")
 	rt.progress.Step(app.ID, "done", "App health check passed")
-	if app.ID == "mail" && rt.Config.HostingDomain != "" && !SharedEnabled(rt.Config) {
+	if app.ID == "mail" && rt.Config.HostingDomain != "" && !usesShared(rt.Config, "mail") {
 		rt.mailHostingProgress(ctx, app)
 	}
 	go func() {

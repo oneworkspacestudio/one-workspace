@@ -27,20 +27,24 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_music.svg" alt="" width="28" height="28"> **Music** | Listen to your music collection. |
 | <img src="internal/branding/icons/my_git.svg" alt="" width="28" height="28"> **Git** | Keep code projects organised and collaborate. |
 | **MyAccounts** | Manage people, sign-ins and passwords. |
+| **Photo Editor** | Draw and edit images and layers, opening and saving directly in Drive. A standalone Studio.exe is also installed. |
+| **Mail** | Your inbox, automatic MyAccounts mailboxes and guided hosting setup. |
+| **Calendar** | Events, schedules and calendars with MyAccounts sign-in. |
+| **Contacts** | Your address book, sharing Calendar's local service. |
 
-**More options:** [Photo Editor](https://github.com/fahimc/miniPaint) adds drawing, layers and image editing as a separate integration. Mail includes a Gmail-style inbox, automatic MyAccounts mailboxes and guided hosting setup.
-
-[My Calendar and My Contacts](https://github.com/oneworkspacestudio/calendar) are
-available as a separate Windows preview. Calendar, Mail and Contacts can reuse
-one shared service while remaining independently installable. The next suite
-bundle can opt into this support; it is not included in the currently published
-Workspace installer. [Shared-service integration](docs/SHARED-SERVICES.md).
+The organization build includes all currently released apps above, with exact
+release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
+[Notes](https://github.com/oneworkspacestudio/notes) is being developed separately;
+it has no published executable yet and is not represented as an installed app.
+Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its
+existing private engine and mailboxes until an explicit supported migration.
+[Shared-service integration](docs/SHARED-SERVICES.md).
 
 Included apps vary by download. The [release notes](https://github.com/oneworkspacestudio/one-workspace/releases) show what is available now.
 
 ## Get started
 
-You need a **64-bit Windows PC** and at least **2 GB of free space**, plus room for your files. See the [storage requirements](docs/TECHNICAL.md#requirements-and-storage) before choosing your installation folders.
+You need a **64-bit Windows PC** and at least **4 GB of free space**, plus room for your files. See the [storage requirements](docs/TECHNICAL.md#requirements-and-storage) before choosing your installation folders.
 
 1. **Download the installer.** Open [Downloads](https://github.com/oneworkspacestudio/one-workspace/releases) and choose `WorkspaceSetup-windows-amd64.exe`.
 2. **Make it yours.** Run the setup wizard and enter your name, email address and a password.

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "suiteSeed": {"repository":"oneworkspacestudio/one-workspace","tag":"v0.3.0-preview.16","asset":"workspace-bundle.zip","sha256":"7ca90638fa1be194ffe2382756f17568f727f345248ea9e95fcf4e5b7a0af906"},
+  "accounts": {"repository":"oneworkspacestudio/myaccounts","tag":"preview-20261014.2","asset":"MyAccounts-windows-amd64.exe"},
+  "studio": {"repository":"oneworkspacestudio/Photo-Editor","tag":"studio-v0.1.0","asset":"Studio.exe"},
+  "gitea": {"repository":"oneworkspacestudio/gitea","tag":"workspace-20261014","asset":"Gitea.exe"},
+  "music": {"repository":"oneworkspacestudio/Music","tag":"workspace-20261014","asset":"Music.exe"},
+  "mail": {"repository":"oneworkspacestudio/mail","tag":"workspace-mail-v0.1.0-preview.15","asset":"Mail.exe"},
+  "calendar": {"repository":"oneworkspacestudio/calendar","tag":"v0.1.0-preview.1","asset":"calendar-v0.1.0-preview.1-windows-amd64.zip"}
+}

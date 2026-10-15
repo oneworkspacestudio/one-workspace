@@ -93,6 +93,16 @@ func run() error {
 			return e
 		}
 		return suite.AddApp(ctx, *data, *manifest, *binary)
+	case "install-apps":
+		f := flag.NewFlagSet("install-apps", flag.ContinueOnError)
+		bundle := f.String("bundle", "", "Verified organization Workspace bundle ZIP")
+		if e = f.Parse(args[1:]); e != nil {
+			return e
+		}
+		if *bundle == "" {
+			return fmt.Errorf("provide --bundle with the organization suite ZIP")
+		}
+		return suite.InstallApps(ctx, *data, *bundle, func(message string) { fmt.Println(message) })
 	case "recovery":
 		fmt.Printf("MyAccounts server recovery: %s, organization built-in\nPassword: %s\nDrive recovery: workspace-recovery\nPassword: %s\n", s.AdminEmail, s.AdminPassword, s.RecoveryPassword)
 		return nil
