@@ -23,3 +23,11 @@ both SVG copies match the supplied file; regenerated app overview was inspected.
 Full local package build and fresh NTFS installation verification follow. Named
 build/test staging: tooling/workspace-my-tube22, with private disposable data under
 the dedicated C: cache. Do not touch the current live installation.
+
+Fresh-package verification exposed a pre-existing Calendar/Contacts ambiguity when
+several managed workspaces are registered: their CLI checked discovery before the
+environment-selected root. The catalog now supplies --shared-data explicitly,
+and its launch-contract check requires it. Component pins and binaries are unchanged.
+The first test installer succeeded and My Tube started; the suite then stopped at
+Calendar. Its separately managed shared service was explicitly stopped as part of
+cleanup. Rebuild and repeat the fresh install before publishing preview22.
