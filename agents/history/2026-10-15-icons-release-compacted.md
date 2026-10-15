@@ -78,3 +78,11 @@ checks do not replace the earlier sampled functional acceptance or clear current
 limits. Microsoft's Music determination is still pending. No active installation
 was replaced by publication. Named Studio/Music C: build caches were removed after
 source/output preservation, canonical-path/reparse and process-reference checks.
+
+## README logo visibility correction
+
+GitHub rendered the supplied SVGs, but inline40/42px title icons were easy to
+miss beside older screenshots. README now leads with a112px labelled logo.
+Workspace also has a current-logo overview and explicit organization repository
+links for every app. Documentation-only follow-up; published binaries/tags and
+current preview limitations are unchanged. No Actions or runtime tests needed.

@@ -1,13 +1,13 @@
 <div align="center">
-  <img src="internal/branding/icons/one_workspace.svg" alt="One Workspace" width="64" height="64">
+  <img src="internal/branding/icons/one_workspace.svg" alt="One Workspace logo" width="112" height="112">
   <h1>One Workspace</h1>
   <p>Your apps and files, together on your own Windows PC.</p>
   <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
 </div>
 
-![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase.png)
+![Current One Workspace and app logos](docs/branding/app-suite.png)
 
-*An illustrated look at the workspace. Check the download notes for the apps included in each package.*
+*The current project logos. Open an app repository below for its source, README and downloads.*
 
 ## A place for your everyday work
 
@@ -19,19 +19,19 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 ## Meet your apps
 
-| App | What you can do |
-| --- | --- |
-| <img src="internal/branding/icons/my_drive.svg" alt="" width="28" height="28"> **Drive** | Browse, upload, organise and share your files. |
-| <img src="internal/branding/icons/my_office.svg" alt="" width="28" height="28"> **Docs** | Create and edit documents, spreadsheets, slides and PDFs. |
-| <img src="internal/branding/icons/my_photos.svg" alt="" width="28" height="28"> **Photos** | Browse your pictures and explore folders as albums. |
-| <img src="internal/branding/icons/my_music.svg" alt="" width="28" height="28"> **Music** | Listen to your music collection. |
-| <img src="internal/branding/icons/my_git.svg" alt="" width="28" height="28"> **Git** | Keep code projects organised and collaborate. |
-| <img src="internal/branding/icons/my_accounts.svg" alt="" width="28" height="28"> **MyAccounts** | Manage people, sign-ins and passwords. |
-| <img src="internal/branding/icons/photo_editor.svg" alt="" width="28" height="28"> **Photo Editor** | Draw and edit images and layers, opening and saving directly in Drive. A standalone Studio.exe is also installed. |
-| <img src="internal/branding/icons/my_mail.svg" alt="" width="28" height="28"> **Mail** | Your inbox, automatic MyAccounts mailboxes and guided hosting setup. |
-| <img src="internal/branding/icons/my_calendar.svg" alt="" width="28" height="28"> **Calendar** | Events, schedules and calendars with MyAccounts sign-in. |
-| <img src="internal/branding/icons/my_contacts.svg" alt="" width="28" height="28"> **Contacts** | Your address book, sharing Calendar's local service. |
-| <img src="internal/branding/icons/my_notes.svg" alt="" width="28" height="28"> **Notes** | Private notes and notebooks, with Markdown editing and history. |
+| App | What you can do | Repository |
+| --- | --- | --- |
+| <img src="internal/branding/icons/my_drive.svg" alt="Drive logo" width="40" height="40"> **Drive** | Browse, upload, organise and share your files. | [drive](https://github.com/oneworkspacestudio/drive) |
+| <img src="internal/branding/icons/my_office.svg" alt="Docs logo" width="40" height="40"> **Docs** | Create and edit documents, spreadsheets, slides and PDFs. | [drive](https://github.com/oneworkspacestudio/drive) |
+| <img src="internal/branding/icons/my_photos.svg" alt="Photos logo" width="40" height="40"> **Photos** | Browse your pictures and explore folders as albums. | [drive](https://github.com/oneworkspacestudio/drive) |
+| <img src="internal/branding/icons/my_music.svg" alt="Music logo" width="40" height="40"> **Music** | Listen to your music collection. | [Music](https://github.com/oneworkspacestudio/Music) |
+| <img src="internal/branding/icons/my_git.svg" alt="Git logo" width="40" height="40"> **Git** | Keep code projects organised and collaborate. | [gitea](https://github.com/oneworkspacestudio/gitea) |
+| <img src="internal/branding/icons/my_accounts.svg" alt="MyAccounts logo" width="40" height="40"> **MyAccounts** | Manage people, sign-ins and passwords. | [myaccounts](https://github.com/oneworkspacestudio/myaccounts) |
+| <img src="internal/branding/icons/photo_editor.svg" alt="Photo Editor logo" width="40" height="40"> **Photo Editor** | Draw and edit images and layers, opening and saving directly in Drive. A standalone Studio.exe is also installed. | [Photo-Editor](https://github.com/oneworkspacestudio/Photo-Editor) |
+| <img src="internal/branding/icons/my_mail.svg" alt="Mail logo" width="40" height="40"> **Mail** | Your inbox, automatic MyAccounts mailboxes and guided hosting setup. | [mail](https://github.com/oneworkspacestudio/mail) |
+| <img src="internal/branding/icons/my_calendar.svg" alt="Calendar logo" width="40" height="40"> **Calendar** | Events, schedules and calendars with MyAccounts sign-in. | [calendar](https://github.com/oneworkspacestudio/calendar) |
+| <img src="internal/branding/icons/my_contacts.svg" alt="Contacts logo" width="40" height="40"> **Contacts** | Your address book, sharing Calendar's local service. | [calendar](https://github.com/oneworkspacestudio/calendar) |
+| <img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"> **Notes** | Private notes and notebooks, with Markdown editing and history. | [notes](https://github.com/oneworkspacestudio/notes) |
 
 The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
