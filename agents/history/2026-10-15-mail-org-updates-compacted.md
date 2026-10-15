@@ -67,3 +67,15 @@ was ingested and visibly received at14:55:20 BST. Evidence is stored outside Git
 under C:/Projects/artifacts/mail-repair-20261015/. Actions remain disabled in both
 organization repositories. Both corresponding source trees are published; future
 builds use the corrected public organization Mail notice and manual helper links.
+
+Mail follow-up: Mail0.1.0-preview.14 distinguishes failed SMTP from an unavailable
+or inconclusive third-party probe in the banner. Networking/engine unchanged.
+Live anonymous organization resolution against published suite16 successfully
+downloaded Mail14, reverified the entire catalog and extracted its override;
+exit0, log outside Git dist/mail14-overlay-verification.txt in release staging.
+This proves the online installer can pick a newer Mail independently of its
+bundled13. Deliberate offline16 still uses13; no suite asset was rewritten.
+Installed Mail updated to14 with verified stop/backup/hash/config/restart. A
+further authorized Gmail delivery completed at15:00:13 BST. Final Chrome sign-in
+is currently stopped on a browser security page, requiring the user's inspection;
+do not bypass it. Prior signed-in receipt screenshot proves the lease-window test.

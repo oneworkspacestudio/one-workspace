@@ -13,7 +13,7 @@ independently verifies the current Mail release in the organization repository.
 Build Mail.exe locally in the fork, then use this repository's current manager:
 
 ```powershell
-./scripts/mail-manifest.ps1 -Exe C:/Downloads/Mail.exe -Version 0.1.0-preview.13 -Port 8996 -Output C:/Downloads/mail.json
+./scripts/mail-manifest.ps1 -Exe C:/Downloads/Mail.exe -Version 0.1.0-preview.14 -Port 8996 -Output C:/Downloads/mail.json
 ./Workspace.exe --data C:/WorkspacePrivate stop
 ./Workspace.exe --data C:/WorkspacePrivate add-app --manifest C:/Downloads/mail.json --package C:/Downloads/Mail.exe
 ./Workspace.exe --data C:/WorkspacePrivate run
