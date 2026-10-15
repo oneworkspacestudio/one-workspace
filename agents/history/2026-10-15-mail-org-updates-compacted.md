@@ -91,3 +91,12 @@ Installed/released Mail15, five asset digests checked; normal public entry page
 visually confirms own branding/version15. Sign-in callback warning remains until
 Google resolves classification. No Go networking/auth changes in14/15. Installer
 resolver14 real upgrade test passed; same supported manifest integration1 for15.
+
+Final follow-up: user approved Google report-error submission; UI confirmed success.
+The branding correction is deployed/released as Mail15. A fresh normal Chrome
+sign-in then opened the inbox without bypassing protection. Google's decision is
+still pending; this single successful flow is not a global Safe Browsing clearance.
+The normal online installer independently downloaded and verified Mail15 from the
+organization, with its complete catalog override check passing (48seconds, exit0).
+Logs/evidence remain outside Git. Do not change the pinned offline16 seed catalog
+to15: that immutable bundle intentionally contains13; only online resolution picks15.
