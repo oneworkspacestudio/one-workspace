@@ -31,11 +31,11 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | **Mail** | Your inbox, automatic MyAccounts mailboxes and guided hosting setup. |
 | **Calendar** | Events, schedules and calendars with MyAccounts sign-in. |
 | **Contacts** | Your address book, sharing Calendar's local service. |
+| **Notes** | Private notes and notebooks, with Markdown editing and history. |
 
 The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
-[Notes](https://github.com/oneworkspacestudio/notes) is being developed separately;
-it has no published executable yet and is not represented as an installed app.
+Notes is included from its [organization release](https://github.com/oneworkspacestudio/notes/releases).
 Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its
 existing private engine and mailboxes until an explicit supported migration.
 [Shared-service integration](docs/SHARED-SERVICES.md).

@@ -21,7 +21,7 @@ Always download the current full installer when updating from setup17 or earlier
 | Music | [Music](https://github.com/oneworkspacestudio/Music) | workspace-20261014 |
 | Mail | [mail](https://github.com/oneworkspacestudio/mail) | 0.1.0-preview.15; independently resolved online |
 | Calendar / Contacts | [calendar](https://github.com/oneworkspacestudio/calendar) | 0.1.0-preview.1 |
-| Notes | [notes](https://github.com/oneworkspacestudio/notes) | Awaiting its first release |
+| Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.2 |
 
 Drive/Photos use the newer upload fixes already published in the organization's
 Workspace16 bundle. Their catalog sources name that exact organization release;
@@ -51,10 +51,21 @@ requires a separate explicit upgrade. Existing app data, account databases and
 ordinary files are retained. Restart with the protected installed manager.
 Private Mail never silently switches to the shared Calendar/Contacts store.
 
-## Notes release boundary
+## Notes
 
-Notes is being built in a separate task. An empty repository/no published binary
-cannot be installed. It is not part of the default lock until its actual flags, OIDC, health and package
-contract have been checked. Do not label a tile or placeholder as installed Notes.
-Its first release can use the documented `add-app` manifest contract without
-reinstalling existing apps. Future bundle pins must include its exact org release.
+Notes became available during this integration. The bundle uses preview2, which
+corrects Workspace callback configuration and managed localhost URLs. Its actual
+CLI, OIDC environment and `/notes` proxy contract were checked against source.
+Workspace generates a separate protected `notes-settings.json`, gives the
+Workspace owner Notes administration, and keeps the SQLite data in `Private/notes`.
+Existing settings are preserved. Notes remains in managed MyAccounts mode; no
+local-login fallback is enabled. Full Joplin sync/E2EE is outside this app's
+current preview; see the Notes repository's documented feature boundaries.
+
+## Music runtime storage
+
+Music's packaged Python runtime extracts into an installation-owned private
+`music-runtime-temp` folder. Workspace reclaims only its stale `_MEI` extraction
+directories before the next Music start, so forced supervisor shutdowns do not
+accumulate copies in the Windows user's global temporary folder. User music,
+configuration and unrelated temporary files are preserved.

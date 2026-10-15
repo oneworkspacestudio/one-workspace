@@ -94,3 +94,44 @@ set, verifies rejection, verifies integration2 support and rejects integration3.
 Full Go tests/vet pass again. Build/catalog validation requires the guard. Existing
 installed apps remain functional; update the manager/catalog to18 before final
 release verification. Older saved setup files must be replaced once, as documented.
+## Complete Notes coverage and Music runtime recovery
+
+Preview18 was published with six asset digests/sizes verified, and its compiled
+anonymous --check-updates completed successfully: the entire563MiB bundle and
+all packages verified, then organization Mail15 verified independently, exit0.
+Source tag8a400e3. Preview17 remains a withdrawn draft; its assets were not changed.
+
+Notes preview1 became available while this task was in progress. GitHub's repo
+size remained cached at0 after publication; use the Releases API, not repo size,
+to determine availability. Read the Notes handoff at H:/Projects/notes. Its actual
+manifest/CLI supported Workspace, but configuration validated before deriving the
+callback URL, and managed localhost was rejected. Fixed and regression-tested in
+Notes preview2, source0fecd40 [skip ci], built locally, seven asset digests/sizes
+verified and published. No Actions used for2 (prior CI1 remains separate evidence).
+Public package ZIP and its inner EXE then downloaded and verified for Workspace.
+
+Workspace19 now includes all11 entries and all nine organization repositories.
+Notes uses MyNotes.exe, native managed OIDC, port offset12 and /notes. Runtime
+creates protected notes-settings.json outside the dedicated Notes data directory,
+with explicit Workspace-owner administration. Existing settings are preserved.
+No local auth fallback. Full Go tests/vet and Notes frontend build/tests pass;
+no fresh browser sign-in claim. The public Notes source/release has its own
+Joplin sync/E2EE and clean-host limitations.
+
+During repeated restart checks, C: filled. Music's PyInstaller parent is killed
+with the job and cannot clean global _MEI extractions. Verified ownership and
+module-use checks identified five inactive directories created during this task;
+only those were removed. Older/unrelated preview Music processes and their
+folders were preserved. Recovered about0.8GB. Main suite restored; all nine apps
+and connector healthy, Notes2 health200 and unauthenticated API401.
+
+A general fix is now in music_temp.go: only Music gets a dedicated protected
+music-runtime-temp directory with a matching install ownership marker. Before
+initial/restarted Music processes, remove only _MEI directories inside that owned
+root; never global temp or unknown folders. Other files remain. Unit tests cover
+owned cleanup, unrelated-file preservation and refusal of unowned folders.
+Full Go tests/vet pass again. Rebuild manager/bundle/installer19 before final
+publication and verify one normal restart reuses a bounded single extraction.
+Actual Note integration backup is Private/backups/install-apps-20261015T154635.450712300.
+The initial recovery launch temporarily inherited private TEMP for all children;
+final manager restart must use normal parent environment (Music sets its own).

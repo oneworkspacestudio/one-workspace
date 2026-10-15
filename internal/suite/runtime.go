@@ -150,6 +150,7 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		cmd.Env = append(cmd.Env, "WORKSPACE_OIDC_ISSUER="+c.Issuer, "WORKSPACE_OIDC_CLIENT_ID="+client.ID, "WORKSPACE_OIDC_CLIENT_SECRET="+client.Secret, "WORKSPACE_OIDC_REDIRECT_URI="+c.Origin+app.Callback)
 		if app.ID == "music" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_MUSIC_DIR="+filepath.Join(c.Files, "Music"), "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
+			cmd.Env = append(cmd.Env, "TEMP="+musicRuntimeTemp(c), "TMP="+musicRuntimeTemp(c))
 		}
 		if app.ID == "mail" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
@@ -168,6 +169,16 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	return cmd
 }
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
+	if app.ID == "music" {
+		if e := prepareMusicTemp(rt.Config); e != nil {
+			return e
+		}
+	}
+	if app.ID == "notes" {
+		if e := ensureNotesConfig(rt.Config); e != nil {
+			return e
+		}
+	}
 	if usesShared(rt.Config, app.ID) {
 		if e := rt.ensureShared(ctx); e != nil {
 			return e
@@ -220,6 +231,12 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 			}
 			if ctx.Err() != nil {
 				return
+			}
+			if app.ID == "music" {
+				if e := prepareMusicTemp(rt.Config); e != nil {
+					rt.set(app.ID, "failed: Music temporary storage needs attention")
+					return
+				}
 			}
 			cmd = rt.command(app)
 			if e := rt.job.Start(cmd); e != nil {

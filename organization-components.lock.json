@@ -6,5 +6,6 @@
   "gitea": {"repository":"oneworkspacestudio/gitea","tag":"workspace-20261014","asset":"Gitea.exe"},
   "music": {"repository":"oneworkspacestudio/Music","tag":"workspace-20261014","asset":"Music.exe"},
   "mail": {"repository":"oneworkspacestudio/mail","tag":"workspace-mail-v0.1.0-preview.15","asset":"Mail.exe"},
-  "calendar": {"repository":"oneworkspacestudio/calendar","tag":"v0.1.0-preview.1","asset":"calendar-v0.1.0-preview.1-windows-amd64.zip"}
+  "calendar": {"repository":"oneworkspacestudio/calendar","tag":"v0.1.0-preview.1","asset":"calendar-v0.1.0-preview.1-windows-amd64.zip"},
+  "notes": {"repository":"oneworkspacestudio/notes","tag":"v0.1.0-preview.2","asset":"notes-0.1.0-preview.2-windows-amd64.zip"}
 }

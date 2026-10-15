@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.18',
+ [string]$Version='0.3.0-preview.19',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
@@ -52,6 +52,11 @@ $calendarStage=Join-Path $Cache ('calendar-stage-'+[guid]::NewGuid().ToString('N
 Expand-Archive -LiteralPath $calendarZip -DestinationPath $calendarStage
 $calendarRoot=(Get-ChildItem -LiteralPath $calendarStage -Filter Calendar.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $calendarRoot){throw 'Calendar package is missing Calendar.exe'}
+$notesZip=Get-OrgAsset $lock.notes
+$notesStage=Join-Path $Cache ('notes-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $notesZip -DestinationPath $notesStage
+$notesRoot=(Get-ChildItem -LiteralPath $notesStage -Filter MyNotes.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $notesRoot){throw 'Notes package is missing MyNotes.exe'}
 $notices=Join-Path $Cache 'component-notices'
 New-Item -ItemType Directory -Force $notices|Out-Null
 Copy-Item -Path (Join-Path $seedDir 'licenses/components/*') -Destination $notices -Force
@@ -63,7 +68,7 @@ $versions=@{};foreach($app in $seedCat.apps){$versions[$app.id]=$app.version}
 $seedSource='https://github.com/'+$lock.suiteSeed.repository+'/releases/tag/'+$lock.suiteSeed.tag
 # Use the newer upload repairs already published by the organization. Do not
 # regress to the older Drive repository EXE simply to change a source URL.
-& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive (Join-Path $seedDir 'FileBrowser.exe') -DriveVersion $versions.drive -DriveSource $seedSource -Photos (Join-Path $seedDir 'Photos.exe') -PhotosVersion $versions.photos -PhotosSource $seedSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -Music $music -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -ComponentNotices $notices
+& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive (Join-Path $seedDir 'FileBrowser.exe') -DriveVersion $versions.drive -DriveSource $seedSource -Photos (Join-Path $seedDir 'Photos.exe') -PhotosVersion $versions.photos -PhotosSource $seedSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -Music $music -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -ComponentNotices $notices
 if($LASTEXITCODE -ne 0){throw 'Organization suite build failed'}
 & (Join-Path $PSScriptRoot 'check-org-catalog.ps1') -Catalog (Join-Path $root 'dist/catalog.json')
 Copy-Item -LiteralPath (Join-Path $notices 'organization-components.json') -Destination (Join-Path $root 'dist/organization-components.json') -Force

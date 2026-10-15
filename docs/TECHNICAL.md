@@ -59,7 +59,7 @@ For the included apps and installation steps, start with the main README.
 The [organization releases](https://github.com/oneworkspacestudio/one-workspace/releases)
 provide the installer and verified application bundle. The complete organization
 build includes every currently released application listed in [Organization apps](ORG-APPS.md).
-Notes is awaiting its first release. Setup uses one parent folder, supports
+Notes is included in the complete organization build. Setup uses one parent folder, supports
 Cloudflare domain hosting and reports installation/startup progress.
 
 Normal setup downloads the latest published compatible suite bundle and resolves
