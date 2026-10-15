@@ -52,3 +52,24 @@ and unrelated histories/screenshots remain unstaged. Keep Actions disabled.
 Both README previews were rendered and visually inspected at1440/430px;
 referenced images loaded and local Markdown targets resolved. Preserve all
 unrelated working-tree implementation. Publish docs through a normal main push.
+
+## Consumer README revision
+
+User requested a consumer-friendly, nicely formatted Workspace README with
+technical details linked separately. Replaced the long technical entry page
+with a centred brand header, existing showcase, plain-language benefits/app
+table, four setup steps, practical FAQ and help links. Kept Windows/storage,
+shared-folder and preview/backup information that affects ordinary users.
+Separate editor/Mail availability remains clear; no new installer is claimed.
+
+Moved detailed administration, session behaviour, hosting, extension commands,
+backup/removal, development and branding guidance to docs/TECHNICAL.md. Added
+requirements/package boundaries and links to existing specialist guides; rebased
+relative paths for the docs directory. Only README.md, TECHNICAL.md and this
+handoff belong to the change. Source/runtime/installer work remains untouched.
+Continuation of the requested GitHub README upkeep; publish to main normally
+with Actions disabled after checking desktop/mobile renders and local links.
+Verified 1440px and430px renders: one H1, no code blocks, all images loaded,
+no horizontal page overflow; visually inspected the complete page. Relative
+Markdown/HTML targets and fenced blocks in both files validated. No runtime
+tests/rebuild are needed for this documentation-only change.
