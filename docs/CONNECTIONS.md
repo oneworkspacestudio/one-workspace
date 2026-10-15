@@ -1,5 +1,8 @@
 # Public connection setup
 
+For the domain-first installer flow, see [Automatic hosting](HOSTING.md).
+The instructions below describe the advanced connection modes.
+
 Use two stable HTTPS hostnames. Workspace is the application origin; MyAccounts
 must have its own origin because discovery and callback registrations use its
 issuer URL. Do not expose the individual Drive or Photos loopback ports.
@@ -29,7 +32,9 @@ a fresh, separate suite.
 Failed provisioning attempts roll back only the tunnel/records they created.
 If rollback fails, setup identifies the tunnel to remove manually. Resource IDs
 are saved in private data after successful provisioning. The manager retains
-only the tunnel connector token in DPAPI, not the setup API token. Revoking the
+the tunnel connector token in DPAPI. Advanced tunnel-only setup does not save
+the setup API token; automatic Mail hosting also retains its DNS credential in
+DPAPI for certificate/key renewal. Revoking the
 setup token afterwards does not stop an existing connector; rotate/revoke the
 connector token through Cloudflare as appropriate.
 

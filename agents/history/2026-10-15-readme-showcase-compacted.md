@@ -31,3 +31,24 @@ README refresh commits pushed and remote refs verified:
 All final consumed assets are tracked. FileBrowser uses its custom drive-reskin
 branch; its upstream-tracking main/default branch is intentionally preserved.
 No new executable release created.
+
+## GitHub README follow-up
+
+User reported the latest Workspace README changes were not live and requested
+updating the FileBrowser app picture. GitHub main was verified at 07dd5fa; the
+generated showcase blob already matched local exactly (76c9ce88f8a416b22be99ea53f4e51d0b0a49475),
+but newer setup/hosting wording was still uncommitted locally. User now authorizes
+publishing these documentation changes. The fork's Drive default is now master,
+superseding the branch note above.
+
+README now uses the general releases page, removes stale edition marketing,
+links Drive/Office/Photos to master, and explains published setup separately from
+the one-folder/domain/progress local preview. Preserved the generated showcase.
+Publish the supporting HOSTING.md, CONNECTIONS.md, MAIL.md and three referenced
+setup screenshots with README, so local links work on GitHub. The hosting guide
+and Mail guide explicitly identify pending local implementation; this docs-only
+update does not publish installer/source changes or replace EXEs. Source changes
+and unrelated histories/screenshots remain unstaged. Keep Actions disabled.
+Both README previews were rendered and visually inspected at1440/430px;
+referenced images loaded and local Markdown targets resolved. Preserve all
+unrelated working-tree implementation. Publish docs through a normal main push.

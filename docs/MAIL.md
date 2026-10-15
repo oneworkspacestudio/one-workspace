@@ -5,6 +5,9 @@ adds a Gmail-style native Windows client and a pinned Stalwart 0.16.26 engine.
 It can also run standalone. See that project's README and notices for the mail
 setup wizard, licensing, portable runtime and current preview limits.
 
+Automatic domain hosting described below is a local development preview. This
+documentation update does not publish its manager changes or a new installer.
+
 ## Add to an existing installation
 
 Build Mail.exe locally in the fork, then use this repository's current manager:
@@ -34,10 +37,18 @@ Accounts, Drive, Photos and Cloudflared arguments. Git/Music may still be includ
 using their existing optional arguments. Build locally; do not use Actions.
 
 The installer assigns Mail base port +6, engine +7 and SMTP +8 and registers
-the client automatically. The owner opens Mail, signs in and completes its
-wizard. The suite manager reserves those ports before startup.
+the client automatically. With **Host on my domain**, it also supplies the
+mail domain and protected DNS connection: Mail configures itself on first launch.
+The owner sees hosting progress and any blocker, then signs in. Local and advanced
+installations retain the manual wizard. The suite manager reserves the internal
+ports before startup. Use `-MailVersion` to identify the bundled Mail build.
 
 ## Domain and delivery
+
+See [Automatic hosting](HOSTING.md) for the domain-first path and remaining
+SMTP network requirements. The form-based instructions below are advanced
+options for existing installations; this change does not migrate their domains.
+
 
 The wizard accepts a webmail hostname, email domain, Cloudflare Zone ID and
 request-only DNS token, with a review step before record creation. Existing
