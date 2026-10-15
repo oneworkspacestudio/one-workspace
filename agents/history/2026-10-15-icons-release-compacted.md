@@ -86,3 +86,10 @@ miss beside older screenshots. README now leads with a112px labelled logo.
 Workspace also has a current-logo overview and explicit organization repository
 links for every app. Documentation-only follow-up; published binaries/tags and
 current preview limitations are unchanged. No Actions or runtime tests needed.
+
+The documentation correction is pushed to the default branches of all nine
+organization app repositories. Live GitHub browser checks confirm every header
+logo loads (natural width256, displayed112px); Workspace's overview loads at its
+original1440px width and its app table includes explicit repository links.
+Public-page proof and per-repository push receipts remain outside Git in the
+release tooling folder. These are README image checks, not app runtime tests.
