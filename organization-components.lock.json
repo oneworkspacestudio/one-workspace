@@ -45,9 +45,9 @@
   },
   "notes": {
     "repository": "oneworkspacestudio/notes",
-    "tag": "v0.1.0-preview.3",
-    "asset": "notes-0.1.0-preview.3-windows-amd64.zip",
-    "sha256": "aaa0d71c220f4b97bc5174345070bfb3bd1cef4f1dbff66e519d1d5eb68965e5"
+    "tag": "v0.1.0-preview.4",
+    "asset": "notes-0.1.0-preview.4-windows-amd64.zip",
+    "sha256": "e7ec8c75801d5ba0a8cc9c459bcb523783f671451519fcd44953bc3b1a81584c"
   },
   "drive": {
     "repository": "oneworkspacestudio/drive",

@@ -19,7 +19,7 @@ param(
  [string]$Studio='',
  [string]$StudioVersion='studio-v0.1.0',
  [string]$Notes='',
- [string]$NotesVersion='0.1.0-preview.2',
+ [string]$NotesVersion='0.1.0-preview.4',
  [string]$NotesNotices='',
  [string]$DriveSource='https://github.com/oneworkspacestudio/drive',
  [string]$PhotosSource='https://github.com/oneworkspacestudio/drive',
