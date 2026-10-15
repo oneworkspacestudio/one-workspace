@@ -69,6 +69,11 @@ foreach($name in @('LICENSE.txt','NOTICE.md','THIRD-PARTY-LICENSES.txt')){if(Tes
 # Studio's MIT notice is also present in its bundled assets and source release.
 [IO.File]::WriteAllText((Join-Path $notices 'Photo-Editor-source.txt'),"Photo Editor (miniPaint), MIT license. https://github.com/oneworkspacestudio/Photo-Editor/releases/tag/studio-v0.1.1`nhttps://github.com/oneworkspacestudio/Photo-Editor/blob/master/MIT-LICENSE.txt`n",[Text.UTF8Encoding]::new($false))
 Copy-Item -LiteralPath (Join-Path $root 'docs/RELEASE-STATUS.md') -Destination (Join-Path $notices 'Workspace-release-status.md') -Force
+$sourceNotice=Join-Path $notices 'Git-Music-SOURCES.txt'
+if(Test-Path -LiteralPath $sourceNotice){
+ $sourceText=[IO.File]::ReadAllText($sourceNotice).Replace('https://github.com/fahimc/gitea/tree/main/integrations/workspace',('https://github.com/oneworkspacestudio/gitea/tree/'+$lock.gitea.tag+'/integrations/workspace')).Replace('https://github.com/fahimc/swingmusic',('https://github.com/oneworkspacestudio/Music/tree/'+$lock.music.tag))
+ [IO.File]::WriteAllText($sourceNotice,$sourceText,[Text.UTF8Encoding]::new($false))
+}
 [IO.File]::WriteAllText((Join-Path $notices 'organization-components.json'),($records|ConvertTo-Json -Depth 6),[Text.UTF8Encoding]::new($false))
 $versions=@{};foreach($app in $seedCat.apps){$versions[$app.id]=$app.version}
 $driveSource='https://github.com/'+$lock.drive.repository+'/releases/tag/'+$lock.drive.tag
