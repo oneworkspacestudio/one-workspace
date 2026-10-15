@@ -1,10 +1,10 @@
 {
   "repository": "oneworkspacestudio/one-workspace",
-  "release": "v0.3.0-preview.15",
+  "release": "v0.3.0-preview.16",
   "asset": "workspace-bundle.zip",
   "drive": "drive-upload-preview.3",
   "photos": "photos-upload-preview.2",
   "accounts": "preview-20261014.2",
-  "mail": "0.1.0-preview.12",
-  "sha256": "914970e1c4389ff680759ef5fd8485f239aea1d2fcf4a5bf636d4e1953934005"
+  "mail": "0.1.0-preview.13",
+  "sha256": "7ca90638fa1be194ffe2382756f17568f727f345248ea9e95fcf4e5b7a0af906"
 }

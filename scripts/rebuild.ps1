@@ -1,4 +1,4 @@
-param([string]$Go='go',[string]$Version='0.3.0-preview.15')
+param([string]$Go='go',[string]$Version='0.3.0-preview.16')
 $ErrorActionPreference='Stop'
 if($Version -notmatch '^\d+\.\d+\.\d+-preview\.\d+$'){throw 'Use a semantic preview version'}
 $root=Split-Path $PSScriptRoot -Parent
