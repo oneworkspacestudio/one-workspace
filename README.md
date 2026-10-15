@@ -5,9 +5,9 @@
   <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
 </div>
 
-![Current One Workspace and app logos](docs/branding/app-suite.png)
+![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase.png)
 
-*The current project logos. Open an app repository below for its source, README and downloads.*
+*An illustrated look at the workspace. Check the download notes for the apps included in each package.*
 
 ## A place for your everyday work
 
@@ -18,6 +18,10 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 - **Room to grow.** Add more apps as your needs change.
 
 ## Meet your apps
+
+![Current One Workspace and app logos](docs/branding/app-suite.png)
+
+*The current project logos. Open an app repository below for its source, README and downloads.*
 
 | App | What you can do | Repository |
 | --- | --- | --- |

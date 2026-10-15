@@ -93,3 +93,7 @@ logo loads (natural width256, displayed112px); Workspace's overview loads at its
 original1440px width and its app table includes explicit repository links.
 Public-page proof and per-repository push receipts remain outside Git in the
 release tooling folder. These are README image checks, not app runtime tests.
+
+Owner requested retaining the original illustrated showcase too. Its image file
+was never deleted; restore it as the README hero and keep the new logo overview
+under Meet your apps. Future branding edits must retain both images.
