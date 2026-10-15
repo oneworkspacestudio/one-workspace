@@ -61,3 +61,14 @@ Mail delivery, clean-host, service/reboot or full identity acceptance run.
 
 Back up private configuration, databases, history and ordinary files before
 upgrading. An existing workspace is not silently migrated by the new installer.
+
+## Update and recovery window
+
+Preview23 adds local owner maintenance for existing installations: select compatible
+Workspace/app releases, verify downloads, snapshot private/program/file storage,
+health-check startup and restore on failure. A durable journal and cached controller
+support interrupted recovery and legacy launchers. Newer app releases without a
+managed-update contract are shown for review. See UPDATES.md and UPDATE-PUBLISHING.md.
+Backups remain until explicitly removed. Existing storage, identity, private Mail
+and withheld-Music constraints remain. This does not claim clean-host, real reboot,
+power-loss or Windows service acceptance.

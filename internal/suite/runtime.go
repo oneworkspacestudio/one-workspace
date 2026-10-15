@@ -42,6 +42,9 @@ func (rt *Runtime) Status() map[string]string {
 	return out
 }
 func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
+	if e := CheckUpdateRecovery(c); e != nil {
+		return e
+	}
 	lock, e := platform.Lock(filepath.Join(c.Data, "runtime.lock"))
 	if e != nil {
 		return e

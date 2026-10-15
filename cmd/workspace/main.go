@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/fahimc/one-workspace/internal/maintenance"
 	"github.com/fahimc/one-workspace/internal/platform"
 	"github.com/fahimc/one-workspace/internal/suite"
 	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -52,6 +54,12 @@ func run() error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 	switch action {
+	case "updates":
+		exe, _ := os.Executable()
+		if strings.EqualFold(filepath.Clean(exe), filepath.Join(c.Data, "Workspace.exe")) {
+			return suite.LaunchUpdates(c)
+		}
+		return maintenance.Serve(ctx, c.Data, true)
 	case "run":
 		if len(args) == 0 {
 			go func() {

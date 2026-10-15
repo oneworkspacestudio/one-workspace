@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/fahimc/one-workspace/internal/branding"
 	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/fahimc/one-workspace/internal/maintenance"
 	"github.com/fahimc/one-workspace/internal/platform"
 	"github.com/fahimc/one-workspace/internal/suite"
 	"io"
@@ -114,6 +115,26 @@ func (s *Server) Handler() http.Handler {
 		_ = json.NewEncoder(w).Encode(state)
 	})
 	mux.HandleFunc("POST /api/hosting/connect", s.connectHosting)
+	mux.HandleFunc("POST /api/updates/open", func(w http.ResponseWriter, r *http.Request) {
+		var in struct {
+			Folder string `json:"folder"`
+		}
+		if json.NewDecoder(http.MaxBytesReader(w, r.Body, 8<<10)).Decode(&in) != nil {
+			http.Error(w, "Choose the existing Workspace parent folder", 400)
+			return
+		}
+		request := suite.Request{Folder: in.Folder}
+		if e := request.ResolveStorage(); e != nil {
+			http.Error(w, e.Error(), 400)
+			return
+		}
+		if _, e := suite.LoadUpdateConfig(request.Data); e != nil {
+			http.Error(w, e.Error(), 400)
+			return
+		}
+		go func() { _ = maintenance.Serve(context.Background(), request.Data, true) }()
+		w.WriteHeader(202)
+	})
 	mux.HandleFunc("POST /api/browse", func(w http.ResponseWriter, r *http.Request) {
 		if !s.pickerMu.TryLock() {
 			http.Error(w, "The folder picker is already open", 409)
