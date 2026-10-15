@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/fahimc/one-workspace/internal/distribution"
 	"github.com/fahimc/one-workspace/internal/platform"
 	"net/http"
 	"os"
@@ -16,8 +17,43 @@ import (
 
 func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog, progress func(string)) (Config, error) {
 	var empty Config
+	if e := r.ResolveStorage(); e != nil {
+		return empty, e
+	}
+	if _, e := r.PreflightStorage(); e != nil {
+		return empty, e
+	}
+	if r.Mode == "automatic" {
+		if !r.Authorize {
+			return empty, errors.New("authorize automatic domain hosting before installation")
+		}
+		if r.CFCertFile == "" {
+			var e error
+			r.CFCertFile, e = CloudflareLoginPath()
+			if e != nil {
+				return empty, e
+			}
+		}
+		progress("Discovering your domain and Cloudflare settings")
+		h, e := ResolveHosting(ctx, r.Domain, r.CFCertFile)
+		if e != nil {
+			return empty, e
+		}
+		r.Mode, r.Domain, r.Origin, r.Issuer = h.Mode, h.Domain, h.Origin, h.Issuer
+		r.CFToken, r.AccountID, r.ZoneID, r.Authorize = h.CFToken, h.AccountID, h.ZoneID, true
+	}
 	if e := r.Validate(); e != nil {
 		return empty, e
+	}
+	if !r.Offline {
+		bundle, err := distribution.Latest(ctx, progress)
+		if err != nil {
+			return empty, err
+		}
+		defer bundle.Close()
+		z, cat = bundle.ZIP, bundle.Catalog
+	} else {
+		progress("Using this installer’s bundled versions (offline mode)")
 	}
 	c := NewConfig(r, cat)
 	if e := CheckPorts(c); e != nil {
@@ -49,7 +85,7 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		progress(phase)
 		_ = platform.SaveJSON(filepath.Join(c.Data, "install-state.json"), map[string]string{"phase": phase, "version": c.Version})
 	}
-	state("Verifying and extracting the offline application bundle")
+	state("Verifying and extracting Workspace " + cat.Version + " applications")
 	if e = catalog.Extract(z, cat, c.Programs); e != nil {
 		return empty, e
 	}
@@ -127,6 +163,9 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		if e != nil {
 			return empty, e
 		}
+		if c.HostingDomain != "" {
+			s.MailDNSToken = r.CFToken
+		}
 	}
 	if e = Save(c, s); e != nil {
 		return empty, e
@@ -152,22 +191,54 @@ func writeDrive(c Config, s Secrets) error {
 	config := map[string]any{"http": map[string]any{"listen": "127.0.0.1", "port": app.Port, "baseURL": "/drive", "trustProxyHeaders": true}, "server": map[string]any{"database": map[string]string{"path": filepath.Join(c.Data, "drive", "settings.sqlite")}, "cacheDir": filepath.Join(c.Data, "drive", "cache"), "disableUpdateCheck": true, "sources": []any{map[string]any{"path": c.Files, "name": "My Drive", "config": map[string]any{"defaultEnabled": true, "defaultPermissions": map[string]bool{"view": true, "download": true, "modify": true, "create": true, "delete": true}}}}}, "frontend": map[string]any{"name": "Workspace Drive", "oidcLoginButtonText": "Sign in with MyAccounts"}, "auth": map[string]any{"methods": map[string]any{"noauth": false, "password": map[string]any{"enabled": true, "signup": false, "adminUsername": "workspace-recovery"}, "oidc": map[string]any{"enabled": true, "issuerUrl": c.Issuer, "clientId": s.Clients["drive"].ID, "scopes": "openid profile email", "userIdentifier": "sub", "disableVerifyTLS": false, "adminGroup": ""}}}, "userDefaults": map[string]any{"account": map[string]any{"permissions": map[string]bool{"admin": false, "api": false}}}}
 	return platform.SaveJSON(filepath.Join(c.Data, "drive", "config.yaml"), config)
 }
-func WaitHTTP(ctx context.Context, url string, timeout time.Duration) error {
+func WaitHTTP(ctx context.Context, target string, timeout time.Duration) error {
+	return WaitHTTPDetailed(ctx, target, timeout, nil, nil)
+}
+
+// Report observed reachability, and stop waiting immediately if the child exits.
+func WaitHTTPDetailed(ctx context.Context, target string, timeout time.Duration, exit <-chan error, progress func(string)) error {
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 	client := &http.Client{Timeout: 2 * time.Second}
+	last := "No successful response yet"
+	reported := ""
+	lastReport := time.Time{}
 	for {
-		req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+		select {
+		case e := <-exit:
+			if e == nil {
+				return errors.New("application exited before it became ready")
+			}
+			return fmt.Errorf("application exited before it became ready: %w", e)
+		default:
+		}
+		req, e := http.NewRequestWithContext(ctx, "GET", target, nil)
+		if e != nil {
+			return e
+		}
 		if resp, e := client.Do(req); e == nil {
 			resp.Body.Close()
 			if resp.StatusCode == 200 {
 				return nil
 			}
+			last = fmt.Sprintf("HTTP %d from %s", resp.StatusCode, target)
+		} else if ctx.Err() == nil {
+			last = "Not reachable yet: " + target
+		}
+		if progress != nil && (last != reported || time.Since(lastReport) > 3*time.Second) {
+			progress(last)
+			reported = last
+			lastReport = time.Now()
 		}
 		select {
 		case <-ctx.Done():
-			return errors.New("application health check timed out; inspect its protected logs")
-		case <-time.After(250 * time.Millisecond):
+			return fmt.Errorf("health check timed out after %s; last result: %s", timeout, last)
+		case e := <-exit:
+			if e == nil {
+				return errors.New("application exited before it became ready")
+			}
+			return fmt.Errorf("application exited before it became ready: %w", e)
+		case <-time.After(500 * time.Millisecond):
 		}
 	}
 }

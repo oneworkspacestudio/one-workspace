@@ -15,18 +15,20 @@ import (
 )
 
 type Config struct {
-	Schema    int             `json:"schema"`
-	Version   string          `json:"version"`
-	Programs  string          `json:"programs"`
-	Data      string          `json:"data"`
-	Files     string          `json:"files"`
-	Origin    string          `json:"origin"`
-	Issuer    string          `json:"issuer"`
-	Port      int             `json:"port"`
-	Owner     string          `json:"owner"`
-	Autostart bool            `json:"autostart"`
-	Tunnel    bool            `json:"tunnel"`
-	Catalog   catalog.Catalog `json:"catalog"`
+	Schema        int             `json:"schema"`
+	Version       string          `json:"version"`
+	Programs      string          `json:"programs"`
+	Data          string          `json:"data"`
+	Files         string          `json:"files"`
+	Origin        string          `json:"origin"`
+	Issuer        string          `json:"issuer"`
+	Port          int             `json:"port"`
+	Owner         string          `json:"owner"`
+	Autostart     bool            `json:"autostart"`
+	Tunnel        bool            `json:"tunnel"`
+	Catalog       catalog.Catalog `json:"catalog"`
+	HostingDomain string          `json:"hostingDomain,omitempty"`
+	DNSZoneID     string          `json:"dnsZoneId,omitempty"`
 }
 type Client struct {
 	ID     string `json:"id"`
@@ -38,28 +40,39 @@ type Secrets struct {
 	RecoveryPassword string            `json:"recoveryPassword"`
 	Clients          map[string]Client `json:"clients"`
 	TunnelToken      string            `json:"tunnelToken,omitempty"`
+	MailDNSToken     string            `json:"mailDnsToken,omitempty"`
 }
 type Request struct {
-	Programs  string `json:"programs"`
-	Data      string `json:"data"`
-	Files     string `json:"files"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	Confirm   string `json:"confirm"`
-	Port      int    `json:"port"`
-	Mode      string `json:"mode"`
-	Origin    string `json:"origin"`
-	Issuer    string `json:"issuer"`
-	Photos    bool   `json:"photos"`
-	Autostart bool   `json:"autostart"`
-	CFToken   string `json:"cfToken"`
-	AccountID string `json:"accountId"`
-	ZoneID    string `json:"zoneId"`
-	Authorize bool   `json:"authorize"`
+	Offline    bool   `json:"-"`
+	Folder     string `json:"folder,omitempty"`
+	Programs   string `json:"programs"`
+	Data       string `json:"data"`
+	Files      string `json:"files"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	Confirm    string `json:"confirm"`
+	Port       int    `json:"port"`
+	Mode       string `json:"mode"`
+	Origin     string `json:"origin"`
+	Issuer     string `json:"issuer"`
+	Photos     bool   `json:"photos"`
+	Autostart  bool   `json:"autostart"`
+	CFToken    string `json:"cfToken"`
+	AccountID  string `json:"accountId"`
+	ZoneID     string `json:"zoneId"`
+	Authorize  bool   `json:"authorize"`
+	Domain     string `json:"domain,omitempty"`
+	CFCertFile string `json:"-"`
 }
 
 func (r Request) Validate() error {
+	if r.Domain != "" {
+		domain, e := NormalizeDomain(r.Domain)
+		if e != nil || domain != r.Domain {
+			return errors.New("enter a valid lowercase hosting domain")
+		}
+	}
 	if r.Name == "" || len(r.Name) > 100 {
 		return errors.New("enter your name")
 	}
@@ -67,8 +80,8 @@ func (r Request) Validate() error {
 	if e != nil || email.Address != r.Email {
 		return errors.New("enter a valid email address")
 	}
-	if len(r.Password) < 12 || len(r.Password) > 128 || r.Password != r.Confirm {
-		return errors.New("use matching passwords of 12 to 128 characters")
+	if len(r.Password) < 8 || len(r.Password) > 128 || r.Password != r.Confirm {
+		return errors.New("use matching passwords of 8 to 128 characters")
 	}
 	if r.Port < 1024 || r.Port > 65530 {
 		return errors.New("choose a base port between 1024 and 65530")
@@ -136,6 +149,12 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 		apps = append(apps, app)
 	}
 	conf.Catalog.Apps = apps
+	if r.Domain != "" && r.Mode == "cloudflare" {
+		if _, ok := conf.Catalog.Find("mail"); ok {
+			conf.HostingDomain = r.Domain
+			conf.DNSZoneID = r.ZoneID
+		}
+	}
 	return conf
 }
 func Load(data string) (Config, Secrets, error) {

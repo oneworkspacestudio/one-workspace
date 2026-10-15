@@ -1,0 +1,50 @@
+package catalog
+
+import (
+	"archive/zip"
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
+	"github.com/fahimc/one-workspace/internal/platform"
+	"io"
+	"os"
+	"strings"
+)
+
+// Verify checks every executable and license before an online install writes files.
+func Verify(z *zip.Reader, c Catalog) error {
+	if err := c.Validate(); err != nil {
+		return err
+	}
+	entries := map[string]*zip.File{}
+	for _, f := range z.File {
+		if f.Mode()&os.ModeSymlink != 0 {
+			return errors.New("package links are not accepted")
+		}
+		if _, err := platform.Inside("root", f.Name); err != nil {
+			return err
+		}
+		key := strings.ToLower(f.Name)
+		if entries[key] != nil {
+			return errors.New("duplicate archive path")
+		}
+		entries[key] = f
+	}
+	for _, p := range c.Packages {
+		f := entries[strings.ToLower(p.File)]
+		if f == nil || int64(f.UncompressedSize64) != p.Size {
+			return errors.New("payload missing or size mismatch")
+		}
+		in, err := f.Open()
+		if err != nil {
+			return err
+		}
+		hash := sha256.New()
+		n, err := io.Copy(hash, io.LimitReader(in, p.Size+1))
+		in.Close()
+		if err != nil || n != p.Size || hex.EncodeToString(hash.Sum(nil)) != p.SHA256 {
+			return errors.New("payload checksum verification failed")
+		}
+	}
+	return nil
+}

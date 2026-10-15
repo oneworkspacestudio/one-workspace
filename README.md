@@ -2,7 +2,7 @@
   <img src="internal/branding/icons/one_workspace.svg" alt="" width="64" height="64">
   <h1>One Workspace</h1>
   <p>Your apps and files, together on your own Windows PC.</p>
-  <p><a href="https://github.com/fahimc/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
+  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
 </div>
 
 ![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase.png)
@@ -28,18 +28,18 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_git.svg" alt="" width="28" height="28"> **Git** | Keep code projects organised and collaborate. |
 | **MyAccounts** | Manage people, sign-ins and passwords. |
 
-**More options:** [Photo Editor](https://github.com/fahimc/miniPaint) adds drawing, layers and image editing as a separate integration. Mail is being developed as an optional addition.
+**More options:** [Photo Editor](https://github.com/fahimc/miniPaint) adds drawing, layers and image editing as a separate integration. Mail includes a Gmail-style inbox, automatic MyAccounts mailboxes and guided hosting setup.
 
-Included apps vary by download. The [release notes](https://github.com/fahimc/one-workspace/releases) show what is available now.
+Included apps vary by download. The [release notes](https://github.com/oneworkspacestudio/one-workspace/releases) show what is available now.
 
 ## Get started
 
 You need a **64-bit Windows PC** and at least **2 GB of free space**, plus room for your files. See the [storage requirements](docs/TECHNICAL.md#requirements-and-storage) before choosing your installation folders.
 
-1. **Download the installer.** Open [Downloads](https://github.com/fahimc/one-workspace/releases) and choose `WorkspaceSetup-windows-amd64.exe`.
+1. **Download the installer.** Open [Downloads](https://github.com/oneworkspacestudio/one-workspace/releases) and choose `WorkspaceSetup-windows-amd64.exe`.
 2. **Make it yours.** Run the setup wizard and enter your name, email address and a password.
-3. **Choose your folders.** Pick where to keep the apps, private settings and your files. Choose local access to start using Workspace on this PC.
-4. **Open your workspace.** Finish installation, launch One Workspace and sign in to choose an app.
+3. **Choose one folder.** Workspace organises apps, private settings and your files inside it. Choose local access or connect your domain with Cloudflare.
+4. **Install the latest apps.** Setup downloads the newest published Workspace bundle from GitHub, verifies its checksums, and shows progress. Launch Workspace and sign in.
 
 Your computer needs to stay on while you use the apps. Access through your own web address is optional; the [online setup guide](docs/TECHNICAL.md#local-and-public-addresses) explains what is needed.
 
@@ -51,6 +51,21 @@ Your computer needs to stay on while you use the apps. Access through your own w
 </details>
 
 > **Currently in preview.** One Workspace is still being developed. Keep backups of important files and read the download notes before installing or changing an existing workspace.
+
+### Keeping new installs current
+
+Normal installation checks the public GitHub releases each time and downloads the
+newest published Workspace application bundle, including preview releases. Each
+bundle declares the versions of its apps as a compatible set. An installer you
+saved earlier will therefore install the latest published bundle. Unreleased Git
+commits are not installed. Setup stops with a retry message if GitHub or checksum
+verification fails; it does not silently install the old embedded versions.
+
+For an intentional offline installation, run
+`WorkspaceSetup-windows-amd64.exe --offline`. This uses the versions bundled with
+that installer. Existing installations are not automatically upgraded by this
+new-install behavior. Mail hosting checks incoming SMTP connectivity separately
+and shows guidance for router, Windows firewall or ISP restrictions.
 
 ## A few useful things to know
 
@@ -74,7 +89,7 @@ Yes. Workspace can be extended with additional apps. Connecting a new app curren
 
 | Looking for… | Start here |
 | --- | --- |
-| A download or what changed | [Downloads and release notes](https://github.com/fahimc/one-workspace/releases) |
+| A download or what changed | [Downloads and release notes](https://github.com/oneworkspacestudio/one-workspace/releases) |
 | Setup, online access or backups | [Technical guide](docs/TECHNICAL.md) |
-| A problem to report | [Report an issue](https://github.com/fahimc/one-workspace/issues) |
+| A problem to report | [Report an issue](https://github.com/oneworkspacestudio/one-workspace/issues) |
 | Licensing and component information | [Licenses and sources](docs/COMPONENTS.md) |

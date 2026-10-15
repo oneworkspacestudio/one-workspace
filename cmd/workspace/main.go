@@ -55,7 +55,7 @@ func run() error {
 	case "run":
 		if len(args) == 0 {
 			go func() {
-				if suite.WaitHTTP(ctx, fmt.Sprintf("http://localhost:%d/healthz", c.Port), 2*time.Minute) == nil {
+				if suite.WaitHTTP(ctx, fmt.Sprintf("http://localhost:%d/healthz", c.Port), 10*time.Minute) == nil {
 					platform.OpenBrowser(c.Origin)
 				}
 			}()

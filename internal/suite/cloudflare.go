@@ -54,7 +54,7 @@ func (a cfAPI) call(ctx context.Context, method, path string, body any, out any)
 	return nil
 }
 func ProvisionCloudflare(ctx context.Context, r Request, c Config) (token string, err error) {
-	a := cfAPI{r.CFToken, &http.Client{Timeout: 25 * time.Second}}
+	a := cfAPI{r.CFToken, &http.Client{Timeout: 25 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}
 	var zone struct {
 		Name string `json:"name"`
 	}

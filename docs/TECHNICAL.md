@@ -180,3 +180,29 @@ the bundled editor retains its upstream AGPL terms and notices.
 The source includes coordinated SVG logos, browser icons and Windows executable icons. The showcase above is generated artwork; the setup capture and linked app guides show actual UI. Published installers retain the assets embedded when they were built.
 
 [Brand assets and rebuild steps](BRANDING.md) · [Showcase generation notes](branding/showcase-generation.md)
+
+
+## Latest release installation
+
+Normal GUI and headless installation fetch the newest non-draft release with a
+`workspace-bundle.zip` asset from `oneworkspacestudio/one-workspace` (previews
+included), ordered by publication date. The download must match the release
+asset's SHA256 and size, then every catalog package is checked before installation
+writes app/data folders. Requests use HTTPS with restricted GitHub redirects;
+API credentials, if explicitly provided through GH_TOKEN/GITHUB_TOKEN for a private
+build, are stripped from asset redirects. Public downloads need no GitHub account,
+Git, Go, Docker or installed CLI. No GitHub Actions are used for these builds.
+
+The bundle is a compatible published release set, not arbitrary branch HEADs or
+independently selected upstream binaries. A future incompatible catalog fails
+with instructions to download the latest installer. Network/rate-limit/download
+failure requires retry. `--offline` explicitly selects embedded versions. The
+`--check-updates` CLI downloads and verifies without installing. `--resume` only
+monitors the installed suite and does not fetch/upgrade it. Existing installations
+keep their pinned files and catalog until explicitly upgraded.
+
+Publish from a local build: upload installer, manager, catalog, SHA256SUMS and
+workspace-bundle.zip to a draft GitHub release; publish only after all assets are
+uploaded. `scripts/build.ps1` emits the bundle and supports `-ReleaseRepo` for an
+explicit alternate repository. Never embed tokens or select a partially uploaded
+release. Keep component license notices and corresponding source links/archives.

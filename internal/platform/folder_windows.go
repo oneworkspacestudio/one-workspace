@@ -5,12 +5,38 @@ package platform
 import (
 	"errors"
 	"golang.org/x/sys/windows"
+	"os"
+	"path/filepath"
 	"runtime"
 	"unsafe"
 )
 
+var pickerUser = windows.NewLazySystemDLL("user32.dll")
+var pickerInitialized = windows.NewCallback(func(hwnd, message, selection, initial uintptr) uintptr {
+	if message != 1 {
+		return 0
+	} // BFFM_INITIALIZED
+	if initial != 0 {
+		pickerUser.NewProc("SendMessageW").Call(hwnd, 0x467, 1, initial)
+	} // BFFM_SETSELECTIONW
+	foreground, _, _ := pickerUser.NewProc("GetForegroundWindow").Call()
+	thread, _, _ := pickerUser.NewProc("GetWindowThreadProcessId").Call(foreground, 0)
+	current := uintptr(windows.GetCurrentThreadId())
+	if thread != 0 && thread != current {
+		attached, _, _ := pickerUser.NewProc("AttachThreadInput").Call(current, thread, 1)
+		if attached != 0 {
+			defer pickerUser.NewProc("AttachThreadInput").Call(current, thread, 0)
+		}
+	}
+	pickerUser.NewProc("ShowWindow").Call(hwnd, 5)
+	pickerUser.NewProc("BringWindowToTop").Call(hwnd)
+	pickerUser.NewProc("SetForegroundWindow").Call(hwnd)
+	pickerUser.NewProc("SetFocus").Call(hwnd)
+	return 0
+})
+
 // Native Windows folder selection keeps first-run data placement independent of developer runtimes.
-func ChooseDataDir() (string, error) {
+func ChooseDataDir(initialPath string) (string, error) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 	ole := windows.NewLazySystemDLL("ole32.dll")
@@ -24,7 +50,24 @@ func ChooseDataDir() (string, error) {
 	shell := windows.NewLazySystemDLL("shell32.dll")
 	browse := shell.NewProc("SHBrowseForFolderW")
 	getPath := shell.NewProc("SHGetPathFromIDListW")
-	title, _ := windows.UTF16PtrFromString("Choose a folder for One Workspace. Programs and private data need separate, empty folders. Private data requires NTFS.")
+	title, _ := windows.UTF16PtrFromString("Choose your Workspace parent folder on a local NTFS drive (usually C:). All Workspace apps, settings and files will be kept here.")
+	owner, _, _ := pickerUser.NewProc("GetForegroundWindow").Call()
+	// Start at the current choice, or its closest existing parent.
+	for initialPath != "" {
+		if info, e := os.Stat(initialPath); e == nil && info.IsDir() {
+			break
+		}
+		next := filepath.Dir(initialPath)
+		if next == initialPath {
+			initialPath = ""
+			break
+		}
+		initialPath = next
+	}
+	var initial *uint16
+	if initialPath != "" {
+		initial, _ = windows.UTF16PtrFromString(initialPath)
+	}
 	display := make([]uint16, 260)
 	info := struct {
 		Owner    uintptr
@@ -35,8 +78,9 @@ func ChooseDataDir() (string, error) {
 		Callback uintptr
 		Param    uintptr
 		Image    int32
-	}{Display: &display[0], Title: title, Flags: 0x41}
+	}{Owner: owner, Display: &display[0], Title: title, Flags: 0x51, Callback: pickerInitialized, Param: uintptr(unsafe.Pointer(initial))}
 	pidl, _, _ := browse.Call(uintptr(unsafe.Pointer(&info)))
+	runtime.KeepAlive(initial)
 	if pidl == 0 {
 		return "", errors.New("no data folder was selected")
 	}

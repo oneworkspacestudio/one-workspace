@@ -7,12 +7,17 @@ param(
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261014.2',
  [string]$DriveVersion='photos-preview-local',
+ [string]$PhotosVersion='',
  [string]$ComponentNotices='',
  [string]$Gitea='',
  [string]$Music='',
- [string]$Mail=''
+ [string]$Mail='',
+ [string]$MailVersion='0.1.0-preview.1',
+ [string]$ReleaseRepo='oneworkspacestudio/one-workspace'
 )
 $ErrorActionPreference='Stop'
+if($ReleaseRepo -notmatch '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'){throw 'Invalid GitHub release repository'}
+if(-not $PhotosVersion){$PhotosVersion=$DriveVersion}
 $root=Split-Path $PSScriptRoot -Parent
 Push-Location $root
 try {
@@ -33,13 +38,13 @@ try {
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/fahimc/myaccounts/releases/tag/'+$AccountsVersion},
   @{id='drive';name='Drive';description='Browse, upload and share your files';version=$DriveVersion;kind='process';package='drive';executable='FileBrowser.exe';port=8992;route='/drive/';health='/drive/health';depends=@('accounts');args=@('-c','${DATA}/drive/config.yaml');source='https://github.com/fahimc/filebrowser/tree/drive-reskin'},
   @{id='docs';name='Docs';description='Create and edit documents, sheets and slides';version=$DriveVersion;kind='builtin';depends=@('drive');route='/drive/files/My%20Drive/Documents';source='https://github.com/fahimc/filebrowser/tree/drive-reskin'},
-  @{id='photos';name='Photos';description='Your photo library, powered by Drive';version=$DriveVersion;kind='process';package='photos';executable='Photos.exe';port=8993;route='/photos-app/';health='/photos';depends=@('drive');args=@('--server','${ORIGIN}/drive','--listen','127.0.0.1:${PORT}','--no-browser');source='https://github.com/fahimc/filebrowser/tree/drive-reskin'}
+  @{id='photos';name='Photos';description='Your photo library, powered by Drive';version=$PhotosVersion;kind='process';package='photos';executable='Photos.exe';port=8993;route='/photos-app/';health='/photos';depends=@('drive');args=@('--server','${ORIGIN}/drive','--listen','127.0.0.1:${PORT}','--no-browser');source='https://github.com/fahimc/filebrowser/tree/drive-reskin'}
  )
  if($Gitea){$apps+=@(
   @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version='28.1.0-workspace.1';kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/fahimc/gitea'},
   @{id='music';name='Music';description='Swing Music — your shared Music folder';version='3.0.0-workspace.1';kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/fahimc/swingmusic'}
  )}
- if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version='0.1.0-preview.1';kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/fahimc/stalwart/tree/main/workspace-mail'}}
+ if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version=$MailVersion;kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/oneworkspacestudio/stalwart/tree/main/workspace-mail'}}
  $catalog=@{schema=1;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  Add-Type -AssemblyName System.IO.Compression
@@ -50,9 +55,10 @@ try {
   $entry=$zip.CreateEntry('catalog.json');$out=$entry.Open();$bytes=[Text.Encoding]::UTF8.GetBytes($catalog);$out.Write($bytes,0,$bytes.Length);$out.Dispose()
   foreach($key in $inputs.Keys){$entry=$zip.CreateEntry($inputs[$key].file,[IO.Compression.CompressionLevel]::Optimal);$out=$entry.Open();$input=[IO.File]::OpenRead($inputs[$key].source);try{$input.CopyTo($out)}finally{$input.Dispose();$out.Dispose()}}
  }finally{$zip.Dispose();$stream.Dispose()}
- & $Go build -buildvcs=false -trimpath -ldflags "-s -w" -o dist/WorkspaceSetup-windows-amd64.exe ./cmd/setup
+ & $Go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/fahimc/one-workspace/internal/distribution.Repository=$ReleaseRepo" -o dist/WorkspaceSetup-windows-amd64.exe ./cmd/setup
  if($LASTEXITCODE -ne 0){throw 'Setup build failed'}
- $files=@('WorkspaceSetup-windows-amd64.exe','Workspace.exe','catalog.json');$sums=foreach($name in $files){$hash=(Get-FileHash -LiteralPath (Join-Path $root "dist/$name") -Algorithm SHA256).Hash.ToLowerInvariant();"$hash  $name"}
+ Copy-Item -LiteralPath $payload -Destination (Join-Path $root 'dist/workspace-bundle.zip') -Force
+ $files=@('WorkspaceSetup-windows-amd64.exe','Workspace.exe','catalog.json','workspace-bundle.zip');$sums=foreach($name in $files){$hash=(Get-FileHash -LiteralPath (Join-Path $root "dist/$name") -Algorithm SHA256).Hash.ToLowerInvariant();"$hash  $name"}
  [IO.File]::WriteAllLines((Join-Path $root 'dist/SHA256SUMS.txt'),$sums,[Text.UTF8Encoding]::new($false))
  Write-Output "Built $root/dist/WorkspaceSetup-windows-amd64.exe"
 } finally {Pop-Location}

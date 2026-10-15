@@ -71,6 +71,19 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 	if e := api.login(ctx, *s); e != nil {
 		return e
 	}
+	// Match the fresh Workspace organization's policy to the installer. The
+	// recovery administrator retains its generated long password.
+	var organization map[string]any
+	if e := api.call(ctx, "/api/get-organization?id=admin/myaccounts", nil, &organization); e != nil {
+		return e
+	}
+	if organization == nil {
+		return errors.New("Workspace account organization is unavailable")
+	}
+	organization["passwordOptions"] = []string{"AtLeast8"}
+	if e := api.call(ctx, "/api/update-organization?id=admin/myaccounts", organization, nil); e != nil {
+		return e
+	}
 	user := map[string]any{"owner": "myaccounts", "name": "owner", "displayName": r.Name, "email": r.Email, "emailVerified": false, "type": "normal-user", "isAdmin": true, "passwordType": "plain", "password": r.Password, "signupApplication": "myaccounts", "createdTime": time.Now().UTC().Format(time.RFC3339)}
 	if e := api.call(ctx, "/api/add-user", user, nil); e != nil {
 		return e

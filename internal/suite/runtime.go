@@ -18,12 +18,15 @@ import (
 )
 
 type Runtime struct {
-	Config  Config
-	Secrets Secrets
-	mu      sync.RWMutex
-	status  map[string]string
-	job     *platform.Job
-	cancel  context.CancelFunc
+	Config             Config
+	Secrets            Secrets
+	mu                 sync.RWMutex
+	status             map[string]string
+	job                *platform.Job
+	cancel             context.CancelFunc
+	progress           *ProgressTracker
+	tunnelExit         chan error
+	mailProvisionToken string
 }
 
 func (rt *Runtime) set(id, state string) { rt.mu.Lock(); rt.status[id] = state; rt.mu.Unlock() }
@@ -36,15 +39,25 @@ func (rt *Runtime) Status() map[string]string {
 	}
 	return out
 }
-func Run(ctx context.Context, c Config, s Secrets) error {
+func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	lock, e := platform.Lock(filepath.Join(c.Data, "runtime.lock"))
 	if e != nil {
 		return e
 	}
 	defer lock.Close()
+	progress := NewProgress("starting", StartupSteps(c), filepath.Join(c.Data, "startup-progress.json"))
+	progress.Step("checks", "running", "Checking the selected installation")
+	defer func() {
+		if runErr != nil {
+			progress.Finish("failed", "Workspace could not start", runErr)
+		} else {
+			progress.Finish("stopped", "Workspace has stopped", nil)
+		}
+	}()
 	if e = CheckPorts(c); e != nil {
 		return e
 	}
+	progress.Step("checks", "done", "Storage and ports are available")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	job, e := platform.NewJob()
@@ -52,15 +65,18 @@ func Run(ctx context.Context, c Config, s Secrets) error {
 		return e
 	}
 	defer job.Close()
-	rt := &Runtime{Config: c, Secrets: s, status: map[string]string{}, job: job, cancel: cancel}
+	rt := &Runtime{Config: c, Secrets: s, status: map[string]string{}, job: job, cancel: cancel, progress: progress, tunnelExit: make(chan error, 1)}
+	rt.mailProvisionToken = platform.Token()
 	token := platform.Token()
 	if e = platform.SaveSecret(filepath.Join(c.Data, "control.dpapi"), map[string]string{"token": token}); e != nil {
 		return e
 	}
 	if c.Tunnel {
+		progress.Step("tunnel", "running", "Starting your dedicated Cloudflare connector")
 		if e = rt.startTunnel(ctx); e != nil {
 			return e
 		}
+		progress.Step("tunnel", "done", "Connector process started; domain reachability is checked next")
 	}
 	apps, e := c.Catalog.Order()
 	if e != nil {
@@ -74,11 +90,17 @@ func Run(ctx context.Context, c Config, s Secrets) error {
 			return fmt.Errorf("start %s: %w", app.ID, e)
 		}
 		if app.ID == "accounts" && c.Tunnel {
-			if e = WaitHTTP(ctx, c.Issuer+"/healthz", 2*time.Minute); e != nil {
-				return e
+			progress.Step("public-accounts", "running", "Waiting for DNS, HTTPS and the secure sign-in connection")
+			if e = WaitHTTPDetailed(ctx, c.Issuer+"/healthz", 5*time.Minute, rt.tunnelExit, func(detail string) { progress.Step("public-accounts", "running", detail) }); e != nil {
+				return fmt.Errorf("public sign-in at %s: %w", c.Issuer, e)
 			}
+			progress.Step("public-accounts", "done", "Your secure sign-in address is reachable")
 		}
 	}
+	if _, ok := c.Catalog.Find("mail"); ok {
+		go rt.maintainMailboxes(ctx)
+	}
+	progress.Step("portal", "running", "Connecting the Workspace portal to MyAccounts")
 	portal, e := NewPortal(ctx, rt)
 	if e != nil {
 		return e
@@ -91,6 +113,8 @@ func Run(ctx context.Context, c Config, s Secrets) error {
 	server := &http.Server{Handler: handler, ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 20}
 	errc := make(chan error, 1)
 	go func() { errc <- server.Serve(listener) }()
+	progress.Step("portal", "done", "Workspace is listening and ready to open")
+	progress.Finish("ready", "Your Workspace is running", nil)
 	_ = platform.SaveJSON(filepath.Join(c.Data, "running.json"), map[string]any{"pid": os.Getpid(), "origin": c.Origin, "started": time.Now().UTC()})
 	select {
 	case <-ctx.Done():
@@ -127,6 +151,10 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		}
 		if app.ID == "mail" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
+			cmd.Env = append(cmd.Env, "WORKSPACE_MAIL_PROVISION_TOKEN="+rt.mailProvisionToken)
+			if c.HostingDomain != "" {
+				cmd.Env = append(cmd.Env, "WORKSPACE_MAIL_DOMAIN="+c.HostingDomain, "WORKSPACE_MAIL_DNS_ZONE="+c.DNSZoneID, "WORKSPACE_MAIL_DNS_TOKEN="+s.MailDNSToken)
+			}
 		}
 	}
 	log := &platform.Log{Path: filepath.Join(c.Data, "logs", app.ID+".log")}
@@ -135,6 +163,7 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	return cmd
 }
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
+	rt.progress.Step(app.ID, "running", "Verifying the app and starting its process")
 	held, e := platform.LockedBinary(filepath.Join(rt.Config.Programs, filepath.FromSlash(app.Executable)), rt.Config.Catalog.Packages[app.Package].SHA256)
 	if e != nil {
 		return e
@@ -152,14 +181,18 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 		health = "/"
 	}
 	startupTimeout := 90 * time.Second
-	if app.ID == "gitea" {
+	if app.ID == "gitea" || app.ID == "mail" {
 		startupTimeout = 3 * time.Minute
 	}
-	if e = WaitHTTP(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout); e != nil {
+	if e = WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
 		held.Close()
 		return e
 	}
 	rt.set(app.ID, "running")
+	rt.progress.Step(app.ID, "done", "App health check passed")
+	if app.ID == "mail" && rt.Config.HostingDomain != "" {
+		rt.mailHostingProgress(ctx, app)
+	}
 	go func() {
 		defer held.Close()
 		delay := time.Second
@@ -210,6 +243,7 @@ func (rt *Runtime) startTunnel(ctx context.Context) error {
 	cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+rt.Secrets.TunnelToken)
 	cmd.Dir = rt.Config.Data
 	log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", "cloudflare.log")}
+	_, _ = fmt.Fprintln(log, "Starting the dedicated Workspace secure connector")
 	cmd.Stdout = log
 	cmd.Stderr = log
 	if e = rt.job.Start(cmd); e != nil {
@@ -217,7 +251,13 @@ func (rt *Runtime) startTunnel(ctx context.Context) error {
 		return e
 	}
 	rt.set("cloudflare", "running")
-	go func() { defer held.Close(); _ = cmd.Wait(); rt.set("cloudflare", "stopped: see logs") }()
+	go func() {
+		defer held.Close()
+		e := cmd.Wait()
+		_, _ = fmt.Fprintf(log, "Workspace secure connector exited: %v\n", e)
+		rt.tunnelExit <- e
+		rt.set("cloudflare", "stopped: see logs")
+	}()
 	return nil
 }
 func Stop(ctx context.Context, c Config) error {

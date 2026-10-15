@@ -38,6 +38,7 @@ type Portal struct {
 }
 
 func NewPortal(ctx context.Context, rt *Runtime) (*Portal, error) {
+	ctx = oidc.ClientContext(ctx, &http.Client{Timeout: 45 * time.Second})
 	provider, e := oidc.NewProvider(ctx, rt.Config.Issuer)
 	if e != nil {
 		return nil, fmt.Errorf("Accounts discovery failed: %w", e)

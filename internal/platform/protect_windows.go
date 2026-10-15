@@ -13,21 +13,63 @@ import (
 	"unsafe"
 )
 
-func ProtectDir(dir string) error {
-	path, e := windows.UTF16PtrFromString(dir)
+type DataVolume struct {
+	Root       string `json:"root"`
+	FileSystem string `json:"fileSystem"`
+}
+
+// CheckDataVolume is read-only and supports folders which do not exist yet.
+// Setup calls it before creating files or starting any installation work.
+func CheckDataVolume(dir string) (DataVolume, error) {
+	var result DataVolume
+	abs, e := filepath.Abs(dir)
 	if e != nil {
-		return e
+		return result, e
+	}
+	probe := abs
+	for {
+		info, err := os.Stat(probe)
+		if err == nil {
+			if !info.IsDir() {
+				return result, fmt.Errorf("choose a folder, not a file")
+			}
+			break
+		}
+		if !os.IsNotExist(err) {
+			return result, fmt.Errorf("cannot access the selected folder: %w", err)
+		}
+		parent := filepath.Dir(probe)
+		if parent == probe {
+			return result, fmt.Errorf("the selected drive is not available")
+		}
+		probe = parent
+	}
+	path, e := windows.UTF16PtrFromString(probe)
+	if e != nil {
+		return result, e
 	}
 	root := make([]uint16, 32768)
 	if e = windows.GetVolumePathName(path, &root[0], uint32(len(root))); e != nil {
-		return e
+		return result, fmt.Errorf("cannot identify the selected drive: %w", e)
 	}
 	var flags uint32
-	if e = windows.GetVolumeInformation(&root[0], nil, 0, nil, nil, &flags, nil, 0); e != nil {
-		return e
+	fileSystem := make([]uint16, 260)
+	if e = windows.GetVolumeInformation(&root[0], nil, 0, nil, nil, &flags, &fileSystem[0], uint32(len(fileSystem))); e != nil {
+		return result, fmt.Errorf("cannot read the selected drive's storage format: %w", e)
+	}
+	result = DataVolume{Root: windows.UTF16ToString(root), FileSystem: windows.UTF16ToString(fileSystem)}
+	if windows.GetDriveType(&root[0]) == windows.DRIVE_REMOTE {
+		return result, fmt.Errorf("choose a folder on a local NTFS drive; network drives cannot hold Workspace's protected account data")
 	}
 	if flags&windows.FILE_PERSISTENT_ACLS == 0 {
-		return fmt.Errorf("live data requires persistent Windows ACLs; choose an NTFS folder (detected volume %s, flags %x)", windows.UTF16ToString(root), flags)
+		return result, fmt.Errorf("%s uses %s and cannot protect Workspace's account data. Choose a folder on an NTFS drive, such as C:", result.Root, result.FileSystem)
+	}
+	return result, nil
+}
+
+func ProtectDir(dir string) error {
+	if _, e := CheckDataVolume(dir); e != nil {
+		return e
 	}
 	u, e := user.Current()
 	if e != nil {
