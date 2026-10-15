@@ -46,3 +46,35 @@ No new full E2E/clean-host acceptance was requested for this branding release.
 Current integration and browser security limits are in docs/RELEASE-STATUS.md;
 include it in the bundle and release notes. The previous complete release is
 untouched. Preserve the active installation; no new test installation is needed.
+
+## Publication completed
+
+Seven component previews are published in oneworkspacestudio: Mail preview16,
+Photo Editor studio-v0.1.1, Git workspace-20261015, Calendar/Contacts preview2,
+MyAccounts preview-20261015.1, Drive/Docs/Photos drive-v0.5.0-preview.2, and Notes
+preview3. Their GitHub asset SHA256 digests and byte sizes matched the staged
+source/license/build-info/checksum files. Music source was pushed, with no new
+Music binary release. All nine repository Actions settings are disabled.
+
+During packaging, an independently authorized Notes editor fix advanced Notes
+main to4c6e422 and published preview4. Its new complete Workspace preview21 retains
+all supplied branding and the previous Music pin. Stopped this task's preview20
+publisher before publication; its tag/assets remain in a clearly superseded,
+unpublished draft. Do not publish/reuse20 or rewrite its existing tag/assets.
+
+Final complete release:
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.21
+Published2026-10-15T21:28:47Z. All11 release asset sizes and GitHub SHA256 digests
+were independently checked against its checksum file. Local package checks confirm
+all11 org app sections, Notes preview4 matches the published Notes executable,
+the earlier Music hash is used, and the flagged Music build is excluded. The
+source archive's Workspace SVG matches the separately supplied original artwork,
+Windows icon resources match, and README references the new logo. Preview21 is
+the newest published complete bundle; online installation therefore selects it.
+
+Detailed receipts remain outside Git in workspace-release-20261015, including
+preview21-local-verification.json and suite-publication-receipt.json. New build
+checks do not replace the earlier sampled functional acceptance or clear current
+limits. Microsoft's Music determination is still pending. No active installation
+was replaced by publication. Named Studio/Music C: build caches were removed after
+source/output preservation, canonical-path/reparse and process-reference checks.
