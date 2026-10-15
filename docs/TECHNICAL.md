@@ -206,3 +206,10 @@ workspace-bundle.zip to a draft GitHub release; publish only after all assets ar
 uploaded. `scripts/build.ps1` emits the bundle and supports `-ReleaseRepo` for an
 explicit alternate repository. Never embed tokens or select a partially uploaded
 release. Keep component license notices and corresponding source links/archives.
+
+
+For source rebuilds, `components.lock.json` pins a verified public release seed.
+`scripts/rebuild.ps1` downloads that seed without GitHub login, preserves all app
+versions (including Mail/Git/Music), and compiles the current Workspace source.
+This reproducible build seed is separate from the installer's online latest-release
+selection. Update the lock when changing the released component set.
