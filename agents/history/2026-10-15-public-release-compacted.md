@@ -56,3 +56,16 @@ syntax checked; no second full rebuild run for this build-only follow-up.
 Anonymous compiled --check-updates initially saw no release during GitHub's brief
 publication propagation delay, failed closed, then selected the correct release
 and started downloading without a token. Completion verification recorded below.
+
+
+Final anonymous compiled installer --check-updates completed successfully (exit0):
+selected0.3.0-preview.15, downloaded all500MiB from the public GitHub asset API/CDN,
+verified archive SHA256/size and all catalog components before reporting versions:
+Accounts preview-20261014.2; Drive/Docs drive-upload-preview.3; Photos
+photos-upload-preview.2; Git28.1.0-workspace.1; Music3.0.0-workspace.1;
+Mail0.1.0-preview.12. GH_TOKEN/GITHUB_TOKEN removed for the check; no installed CLI
+login is read by the downloader. Actual download/verification path is proven;
+a full fresh GUI installation/clean host/reboot remains untested in this task.
+Log outside Git: C:/Projects/.cache/workspace-public-release/dist/
+public-download-verification.txt. Existing running suite untouched. Unit go test
+./... on full packaged source passed. Both public repos confirmed Actions disabled.
