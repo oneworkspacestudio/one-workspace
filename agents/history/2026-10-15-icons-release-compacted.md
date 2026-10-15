@@ -97,3 +97,10 @@ release tooling folder. These are README image checks, not app runtime tests.
 Owner requested retaining the original illustrated showcase too. Its image file
 was never deleted; restore it as the README hero and keep the new logo overview
 under Meet your apps. Future branding edits must retain both images.
+
+Owner subsequently requested removing the old standalone OW badge at the showcase's
+upper left. The built-in imagegen edit removes that badge, retaining the adjacent
+title/tagline and illustrated app composition. The edited project PNG replaces
+the same showcase asset; README adds a cache version query. App-logo overview and
+the actual product branding remain. This is illustrative artwork, not a runtime
+screenshot or new binary release.

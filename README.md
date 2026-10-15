@@ -5,7 +5,7 @@
   <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
 </div>
 
-![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase.png)
+![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase.png?v=2)
 
 *An illustrated look at the workspace. Check the download notes for the apps included in each package.*
 
