@@ -79,3 +79,15 @@ Installed Mail updated to14 with verified stop/backup/hash/config/restart. A
 further authorized Gmail delivery completed at15:00:13 BST. Final Chrome sign-in
 is currently stopped on a browser security page, requiring the user's inspection;
 do not bypass it. Prior signed-in receipt screenshot proves the lease-window test.
+
+User screenshot confirms a Google Safe Browsing phishing interstitial. Mail15
+corrects identity cues (own One Workspace logo, independent-app notice, actual
+MyAccounts host). No security bypass or ownership grants were made. Public Google
+status reports no unsafe content, which does not override Chrome. Search Console
+property is not verified for the current user, so a Google report-error request
+with public callback path and remediation details is prepared. User approval is
+required before submitting; no report sent yet. See Mail router-recovery handoff.
+Installed/released Mail15, five asset digests checked; normal public entry page
+visually confirms own branding/version15. Sign-in callback warning remains until
+Google resolves classification. No Go networking/auth changes in14/15. Installer
+resolver14 real upgrade test passed; same supported manifest integration1 for15.

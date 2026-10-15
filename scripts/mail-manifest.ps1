@@ -1,7 +1,7 @@
 param(
  [Parameter(Mandatory)][string]$Exe,
  [int]$Port=8996,
- [string]$Version='0.1.0-preview.14',
+ [string]$Version='0.1.0-preview.15',
  [string]$Output='dist/mail.json'
 )
 $ErrorActionPreference='Stop'

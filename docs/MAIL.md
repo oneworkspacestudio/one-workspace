@@ -13,7 +13,7 @@ independently verifies the current Mail release in the organization repository.
 Build Mail.exe locally in the fork, then use this repository's current manager:
 
 ```powershell
-./scripts/mail-manifest.ps1 -Exe C:/Downloads/Mail.exe -Version 0.1.0-preview.14 -Port 8996 -Output C:/Downloads/mail.json
+./scripts/mail-manifest.ps1 -Exe C:/Downloads/Mail.exe -Version 0.1.0-preview.15 -Port 8996 -Output C:/Downloads/mail.json
 ./Workspace.exe --data C:/WorkspacePrivate stop
 ./Workspace.exe --data C:/WorkspacePrivate add-app --manifest C:/Downloads/mail.json --package C:/Downloads/Mail.exe
 ./Workspace.exe --data C:/WorkspacePrivate run
@@ -60,3 +60,12 @@ Public-domain settings must be completed by the installation owner.
 This is an evaluation integration. Inbox/compose/search/labels/drafts/attachments
 are implemented; it does not claim all Gmail behavior. Do not test against the
 live MyAccounts or FileBrowser installations. Use fresh private NTFS state.
+
+## Browser identity and reputation
+
+Mail15 uses One Workspace's own identity and names the MyAccounts server on the
+sign-in page. A Chrome Safe Browsing warning needs investigation and Google's
+review process; SMTP delivery alone cannot clear a website classification.
+See [Mail browser-warning recovery](https://github.com/oneworkspacestudio/mail/blob/main/workspace-mail/RECOVERY.md).
+Keep browser protections enabled. Online setup resolves the newest compatible
+organization Mail release; deliberate offline16 retains bundled13.
