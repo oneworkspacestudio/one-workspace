@@ -135,3 +135,33 @@ publication and verify one normal restart reuses a bounded single extraction.
 Actual Note integration backup is Private/backups/install-apps-20261015T154635.450712300.
 The initial recovery launch temporarily inherited private TEMP for all children;
 final manager restart must use normal parent environment (Music sets its own).
+## Final installed verification
+
+Final corrected manager19 installed with normal stop, child-exit verification,
+backup and normal-parent-environment hidden restart. Backup:
+Private/backups/install-apps-20261015T160228.753290200. Startup ready100%; nine app
+processes and connector running. All11 catalog sources belong to the organization.
+Notes2 health200 and unauthenticated private API401; managed configuration and
+explicit owner administration verified without printing credentials/subjects.
+Music's old private extraction removed and a single new _MEI directory created;
+its loaded DLLs point inside the dedicated private temp root. No global TEMP
+inheritance override remains in the final manager. C: has about0.55GB free after
+recovery; unrelated older preview caches were preserved. All media/files retained.
+Mail incoming reachable, hosting/identity errors empty. No browser login retest.
+
+Final manager SHA256 a0a3a4593113b15cc1c7fde3ce80645c4866f0e8a5987d31d5293d7f0cbf26b3.
+Prepared release19 assets are in I:/Projects/tooling/workspace-org-release-19.
+Source implementation dfdb0e0. Draft upload underway; verify all six digests/sizes
+before publication. Do not treat older18 as complete Notes coverage. Its anonymous
+download check is valid transport/contract evidence;19 still needs hosted-asset
+verification, not a claimed second full anonymous download.
+Final publication completed: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.19
+Six hosted asset SHA256/size/state checks passed before publication, source tag
+dfdb0e0. Public anonymous catalog fetch confirms19/integration2/all11 apps and
+all org sources; every installed package digest/size matches that public catalog.
+No second full19 anonymous archive download was claimed:18's compiled full
+anonymous download passed, Notes2 was independently downloaded/verified, and19
+was verified locally plus all GitHub-hosted digests. Actions remain disabled in
+Workspace; Notes2/its handoffs were locally built and committed with [skip ci].
+All actual suite checks above remain the final state. No required publication work
+remains; future work is ordinary preview acceptance and component feature work.
