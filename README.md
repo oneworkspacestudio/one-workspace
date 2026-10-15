@@ -78,6 +78,10 @@ installation and records the exact Mail version and release source. An invalid,
 unavailable or incompatible Mail release stops online installation with guidance.
 Download an updated installer if a future Mail integration version is unsupported.
 
+The complete Calendar/Contacts bundle requires installer integration2. Setup17
+or earlier stops before installing this bundle and asks for the current installer.
+Download the current installer once to move to this application set.
+
 For an intentional offline installation, run
 `WorkspaceSetup-windows-amd64.exe --offline`. This uses the versions bundled with
 that installer. Existing installations are not automatically upgraded by this

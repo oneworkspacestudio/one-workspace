@@ -68,7 +68,7 @@ try {
   if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data',('${DATA}/'+$dependent.id),'--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base',('/'+$dependent.id),'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar/releases/tag/v'+$CalendarVersion}}
  }
  foreach($app in $apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/'){throw ('App source must be an organization repository: '+$app.id)}}
- $catalog=@{schema=1;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
+ $catalog=@{schema=1;installerIntegration=2;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  Add-Type -AssemblyName System.IO.Compression
  $payload=Join-Path $root 'internal/payload/bundle/payload.zip'

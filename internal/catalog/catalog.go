@@ -40,16 +40,20 @@ type App struct {
 	Source      string            `json:"source,omitempty"`
 }
 type Catalog struct {
-	Schema   int                `json:"schema"`
-	Version  string             `json:"version"`
-	Packages map[string]Package `json:"packages"`
-	Apps     []App              `json:"apps"`
+	Schema               int                `json:"schema"`
+	InstallerIntegration int                `json:"installerIntegration,omitempty"`
+	Version              string             `json:"version"`
+	Packages             map[string]Package `json:"packages"`
+	Apps                 []App              `json:"apps"`
 }
 
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
 func (c Catalog) Validate() error {
+	if c.InstallerIntegration < 0 || c.InstallerIntegration > 2 {
+		return errors.New("this application bundle needs a newer Workspace installer")
+	}
 	if c.Schema != 1 || c.Version == "" {
 		return errors.New("unsupported or unversioned app catalog")
 	}

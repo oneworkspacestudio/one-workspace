@@ -6,6 +6,11 @@ belong to `https://github.com/oneworkspacestudio/`. Download URLs, byte sizes an
 GitHub SHA256 digests are verified, including cached downloads. The package
 contains `licenses/components/organization-components.json` with exact provenance.
 
+The catalog declares installer integration2. Older setup executables reject this
+field before installing and tell the user to download the current installer.
+They cannot safely register shared-service clients or reassign Calendar ports.
+Always download the current full installer when updating from setup17 or earlier.
+
 | App | Organization repository | Packaged version |
 | --- | --- | --- |
 | MyAccounts | [myaccounts](https://github.com/oneworkspacestudio/myaccounts) | preview-20261014.2 |

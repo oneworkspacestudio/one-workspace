@@ -78,3 +78,19 @@ Prepare/publish preview17 with source, complete installer, manager, catalog,
 bundle, provenance and checksum manifest. Confirm asset sizes/digests before
 publishing, then run the anonymous compiled online update check against it.
 Notes remains the only missing application pending its own first release.
+
+## Older-installer compatibility correction
+
+After the first publication check, source review proved setup16 could accept the
+schema1 catalog but could not provision shared-service identity or remap the new
+Calendar ports. Preview17 was immediately returned to draft; its assets/tag were
+not overwritten. The 17 download-only check was canceled as superseded, with no
+installation changes. Final publication must be preview18.
+
+Catalog now declares installerIntegration2, supported by current code and rejected
+by setup16's strict decoder before installation. Future unknown integrations fail
+with newest-installer guidance. Unit test reproduces the exact old strict field
+set, verifies rejection, verifies integration2 support and rejects integration3.
+Full Go tests/vet pass again. Build/catalog validation requires the guard. Existing
+installed apps remain functional; update the manager/catalog to18 before final
+release verification. Older saved setup files must be replaced once, as documented.

@@ -4,12 +4,43 @@ import (
 	"archive/zip"
 	"bytes"
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 )
+
+func TestInstallerIntegrationGate(t *testing.T) {
+	c := fixture()
+	c.InstallerIntegration = 2
+	data, err := json.Marshal(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = Read(data); err != nil {
+		t.Fatal(err)
+	}
+	// Setup16's exact strict field set must reject the new integration before
+	// extraction/identity configuration. Merely retaining schema1 was unsafe.
+	var legacy struct {
+		Schema   int                `json:"schema"`
+		Version  string             `json:"version"`
+		Packages map[string]Package `json:"packages"`
+		Apps     []App              `json:"apps"`
+	}
+	d := json.NewDecoder(bytes.NewReader(data))
+	d.DisallowUnknownFields()
+	if err = d.Decode(&legacy); err == nil {
+		t.Fatal("older installer accepted a shared-service catalog")
+	}
+	c.InstallerIntegration = 3
+	data, _ = json.Marshal(c)
+	if _, err = Read(data); err == nil {
+		t.Fatal("future integration accepted")
+	}
+}
 
 func fixture() Catalog {
 	b := []byte("test executable")
