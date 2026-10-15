@@ -1,11 +1,68 @@
 {
   "schema": 1,
-  "suiteSeed": {"repository":"oneworkspacestudio/one-workspace","tag":"v0.3.0-preview.16","asset":"workspace-bundle.zip","sha256":"7ca90638fa1be194ffe2382756f17568f727f345248ea9e95fcf4e5b7a0af906"},
-  "accounts": {"repository":"oneworkspacestudio/myaccounts","tag":"preview-20261014.2","asset":"MyAccounts-windows-amd64.exe"},
-  "studio": {"repository":"oneworkspacestudio/Photo-Editor","tag":"studio-v0.1.0","asset":"Studio.exe"},
-  "gitea": {"repository":"oneworkspacestudio/gitea","tag":"workspace-20261014","asset":"Gitea.exe"},
-  "music": {"repository":"oneworkspacestudio/Music","tag":"workspace-20261014","asset":"Music.exe"},
-  "mail": {"repository":"oneworkspacestudio/mail","tag":"workspace-mail-v0.1.0-preview.15","asset":"Mail.exe"},
-  "calendar": {"repository":"oneworkspacestudio/calendar","tag":"v0.1.0-preview.1","asset":"calendar-v0.1.0-preview.1-windows-amd64.zip"},
-  "notes": {"repository":"oneworkspacestudio/notes","tag":"v0.1.0-preview.2","asset":"notes-0.1.0-preview.2-windows-amd64.zip"}
+  "suiteSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.16",
+    "asset": "workspace-bundle.zip",
+    "sha256": "7ca90638fa1be194ffe2382756f17568f727f345248ea9e95fcf4e5b7a0af906"
+  },
+  "accounts": {
+    "repository": "oneworkspacestudio/myaccounts",
+    "tag": "preview-20261015.1",
+    "asset": "MyAccounts-windows-amd64.exe",
+    "sha256": "ed3b21f6fabab89b4298c5d9a98dc479a2f0350171d145c2794a2e8eccb740ca"
+  },
+  "studio": {
+    "repository": "oneworkspacestudio/Photo-Editor",
+    "tag": "studio-v0.1.1",
+    "asset": "Studio.exe",
+    "sha256": "9c24a9f62093d3385b10f6c993c5740dedc0e215fd771d709d2955cb510c21f8"
+  },
+  "gitea": {
+    "repository": "oneworkspacestudio/gitea",
+    "tag": "workspace-20261015",
+    "asset": "Gitea.exe",
+    "sha256": "cabc040856ae1ef19e934179d9353e2d8c1c93ce25e9437cdf64682d208fbc5b"
+  },
+  "music": {
+    "repository": "oneworkspacestudio/Music",
+    "tag": "workspace-20261014",
+    "asset": "Music.exe",
+    "version": "3.0.0-workspace.1",
+    "sha256": "6029a71ee44a22d856e980c7328e6912a48a98978acc5b51509e03217ede9782"
+  },
+  "mail": {
+    "repository": "oneworkspacestudio/mail",
+    "tag": "workspace-mail-v0.1.0-preview.16",
+    "asset": "Mail.exe",
+    "sha256": "b0a757a02125eb12d8e3fdbe1fc1fd16501a281eae5a9b510397a687720fbd31"
+  },
+  "calendar": {
+    "repository": "oneworkspacestudio/calendar",
+    "tag": "v0.1.0-preview.2",
+    "asset": "calendar-v0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "cddde0f91e68394da60537ed8069252152543237ad433838c1e31f28638497e1"
+  },
+  "notes": {
+    "repository": "oneworkspacestudio/notes",
+    "tag": "v0.1.0-preview.3",
+    "asset": "notes-0.1.0-preview.3-windows-amd64.zip",
+    "sha256": "aaa0d71c220f4b97bc5174345070bfb3bd1cef4f1dbff66e519d1d5eb68965e5"
+  },
+  "drive": {
+    "repository": "oneworkspacestudio/drive",
+    "tag": "drive-v0.5.0-preview.2",
+    "asset": "filebrowser.exe",
+    "sha256": "c77740cf4180601ff43058e09b037e7d71e05cb45d1178cf4ae285649d36fa78"
+  },
+  "photos": {
+    "repository": "oneworkspacestudio/drive",
+    "tag": "drive-v0.5.0-preview.2",
+    "asset": "Photos.exe",
+    "sha256": "7b447a09babe970aab02d860b08f2c6135ea71117f611578a4f2e3f09cdf4e8b"
+  },
+  "withheldMusic": {
+    "reason": "New Music build awaiting Microsoft analysis; bundle the previous published release.",
+    "sha256": "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
+  }
 }

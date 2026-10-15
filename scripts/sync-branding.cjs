@@ -15,7 +15,7 @@ function copy(source, target) {
 async function main() {
   const generated = path.join(root, 'docs/branding');
   fs.mkdirSync(generated, { recursive: true });
-  for (const name of ['one_workspace', 'my_drive', 'my_office', 'my_photos', 'my_git', 'my_music', 'photo_editor']) {
+  for (const name of ['one_workspace', 'my_drive', 'my_office', 'my_photos', 'my_git', 'my_music', 'photo_editor', 'my_mail', 'my_accounts', 'my_notes', 'my_calendar', 'my_contacts']) {
     const svg = path.join(icons, name + '.svg');
     const sizes = [16, 24, 32, 48, 64, 128, 256];
     const images = await Promise.all(sizes.map(size => sharp(svg).resize(size, size).png().toBuffer()));
@@ -63,6 +63,11 @@ async function main() {
   for (const size of [192, 512]) {
     copy(asset('my_music', `-${size}.png`), at('swingmusic', `src/swingmusic/assets/my_music-${size}.png`));
   }
+  copy(svg('my_mail'), at('stalwart-mail', 'workspace-mail/assets/mail.svg'));
+  copy(svg('my_calendar'), at('my-calendar', 'web/public/calendar.svg'));
+  copy(svg('my_contacts'), at('my-calendar', 'web/public/contacts.svg'));
+  copy(svg('my_notes'), path.join(process.env.NOTES_ROOT || at('notes', ''), 'web/public/notes.svg'));
+  copy(svg('my_accounts'), path.join(process.env.MYACCOUNTS_ROOT || at('myaccounts', ''), 'web/public/myaccounts.svg'));
   console.log('Updated suite branding assets in ' + projects);
 }
 

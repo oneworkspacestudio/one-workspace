@@ -26,6 +26,10 @@ param(
  [switch]$PrivateMail,
  [string]$CalendarVersion='0.1.0-preview.1',
  [string]$MailVersion='0.1.0-preview.1',
+ [string]$GiteaVersion='28.1.0-workspace.2',
+ [string]$GiteaTag='workspace-20261015',
+ [string]$MusicVersion='3.0.0-workspace.2',
+ [string]$MusicTag='workspace-20261015',
  [string]$ReleaseRepo='oneworkspacestudio/one-workspace'
 )
 $ErrorActionPreference='Stop'
@@ -62,8 +66,8 @@ try {
   @{id='photos';name='Photos';description='Your photo library, powered by Drive';version=$PhotosVersion;kind='process';package='photos';executable='Photos.exe';port=8993;route='/photos-app/';health='/photos';depends=@('drive');args=@('--server','${ORIGIN}/drive','--listen','127.0.0.1:${PORT}','--no-browser');source=$PhotosSource}
  )
  if($Gitea){$apps+=@(
-  @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version='28.1.0-workspace.1';kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/oneworkspacestudio/gitea/releases/tag/workspace-20261014'},
-  @{id='music';name='Music';description='Swing Music — your shared Music folder';version='3.0.0-workspace.1';kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/oneworkspacestudio/Music/releases/tag/workspace-20261014'}
+  @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version=$GiteaVersion;kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/oneworkspacestudio/gitea/releases/tag/'+$GiteaTag},
+  @{id='music';name='Music';description='Swing Music — your shared Music folder';version=$MusicVersion;kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/oneworkspacestudio/Music/releases/tag/'+$MusicTag}
  )}
  if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version=$MailVersion;kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/oneworkspacestudio/mail/releases/tag/workspace-mail-v'+$MailVersion}}
  if($Mail -and $PrivateMail){($apps|Where-Object id -eq 'mail').env=@{WORKSPACE_MAIL_BACKEND='private'}}

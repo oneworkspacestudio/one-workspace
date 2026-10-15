@@ -153,3 +153,27 @@ func registerClientRedirects(ctx context.Context, api *identityAPI, id, name str
 	app["scopes"] = []any{}
 	return result, api.call(ctx, "/api/add-application", app, nil)
 }
+
+func ensurePortalLogoutRedirect(ctx context.Context, rt *Runtime) error {
+	api := newIdentity(rt.Config)
+	if err := api.login(ctx, rt.Secrets); err != nil {
+		return fmt.Errorf("configure Workspace sign-out: %w", err)
+	}
+	id := "admin/workspace-portal"
+	var app map[string]any
+	if err := api.call(ctx, "/api/get-application?id="+id, nil, &app); err != nil {
+		return err
+	}
+	if app["clientId"] != rt.Secrets.Clients["portal"].ID {
+		return errors.New("Workspace sign-out client did not match")
+	}
+	target := rt.Config.Origin + "/auth/signed-out"
+	redirects, _ := app["redirectUris"].([]any)
+	for _, value := range redirects {
+		if value == target {
+			return nil
+		}
+	}
+	app["redirectUris"] = append(redirects, target)
+	return api.call(ctx, "/api/update-application?id="+id, app, nil)
+}

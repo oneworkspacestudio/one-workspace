@@ -1,6 +1,7 @@
 package suite
 
 import (
+	"bytes"
 	"context"
 	"crypto/subtle"
 	"encoding/json"
@@ -10,31 +11,35 @@ import (
 	"github.com/fahimc/one-workspace/internal/platform"
 	"golang.org/x/oauth2"
 	"html/template"
+	"io"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
 
 type loginFlow struct {
-	Verifier, Nonce string
-	Expires         time.Time
+	Verifier, Nonce, ReturnTo string
+	Expires                   time.Time
 }
 type session struct {
-	Subject, Name, Email string
-	Expires              time.Time
+	Subject, Name, Email, IDToken string
+	Expires                       time.Time
 }
 type Portal struct {
-	rt       *Runtime
-	oauth    oauth2.Config
-	verifier *oidc.IDTokenVerifier
-	mu       sync.Mutex
-	flows    map[string]loginFlow
-	sessions map[string]session
-	secure   bool
+	rt             *Runtime
+	oauth          oauth2.Config
+	verifier       *oidc.IDTokenVerifier
+	mu             sync.Mutex
+	flows          map[string]loginFlow
+	sessions       map[string]session
+	secure         bool
+	logoutEndpoint string
 }
 
 func NewPortal(ctx context.Context, rt *Runtime) (*Portal, error) {
@@ -43,8 +48,24 @@ func NewPortal(ctx context.Context, rt *Runtime) (*Portal, error) {
 	if e != nil {
 		return nil, fmt.Errorf("Accounts discovery failed: %w", e)
 	}
+	var metadata struct {
+		Logout string `json:"end_session_endpoint"`
+	}
+	if err := provider.Claims(&metadata); err != nil {
+		return nil, err
+	}
+	if metadata.Logout != "" {
+		endpoint, err := url.Parse(metadata.Logout)
+		issuer, _ := url.Parse(rt.Config.Issuer)
+		if err != nil || endpoint.Scheme != issuer.Scheme || endpoint.Host != issuer.Host {
+			return nil, fmt.Errorf("MyAccounts sign-out endpoint has an unexpected origin")
+		}
+		if err := ensurePortalLogoutRedirect(ctx, rt); err != nil {
+			return nil, err
+		}
+	}
 	client := rt.Secrets.Clients["portal"]
-	return &Portal{rt: rt, oauth: oauth2.Config{ClientID: client.ID, ClientSecret: client.Secret, Endpoint: provider.Endpoint(), RedirectURL: rt.Config.Origin + "/auth/callback", Scopes: []string{oidc.ScopeOpenID, "profile", "email"}}, verifier: provider.Verifier(&oidc.Config{ClientID: client.ID}), flows: map[string]loginFlow{}, sessions: map[string]session{}, secure: strings.HasPrefix(rt.Config.Origin, "https://")}, nil
+	return &Portal{rt: rt, oauth: oauth2.Config{ClientID: client.ID, ClientSecret: client.Secret, Endpoint: provider.Endpoint(), RedirectURL: rt.Config.Origin + "/auth/callback", Scopes: []string{oidc.ScopeOpenID, "profile", "email"}}, verifier: provider.Verifier(&oidc.Config{ClientID: client.ID}), flows: map[string]loginFlow{}, sessions: map[string]session{}, secure: strings.HasPrefix(rt.Config.Origin, "https://"), logoutEndpoint: metadata.Logout}, nil
 }
 func (p *Portal) cookie(w http.ResponseWriter, name, value string, age int) {
 	http.SetCookie(w, &http.Cookie{Name: name, Value: value, Path: "/", Secure: p.secure, HttpOnly: true, SameSite: http.SameSiteLaxMode, MaxAge: age})
@@ -63,6 +84,16 @@ func (p *Portal) user(r *http.Request) (session, bool) {
 	}
 	return s, ok
 }
+func safeReturnPath(raw string) string {
+	u, err := url.Parse(raw)
+	if err != nil || u.IsAbs() || u.Host != "" || !strings.HasPrefix(u.Path, "/") || strings.HasPrefix(u.Path, "//") || strings.ContainsAny(raw+u.Path, "\\\r\n") {
+		return "/"
+	}
+	if strings.HasPrefix(u.Path, "/auth/") || strings.HasPrefix(u.Path, "/_control/") {
+		return "/"
+	}
+	return u.RequestURI()
+}
 func (p *Portal) login(w http.ResponseWriter, r *http.Request) {
 	state, nonce, v := platform.Token(), platform.Token(), oauth2.GenerateVerifier()
 	p.mu.Lock()
@@ -76,7 +107,7 @@ func (p *Portal) login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Try again later", 429)
 		return
 	}
-	p.flows[state] = loginFlow{v, nonce, time.Now().Add(5 * time.Minute)}
+	p.flows[state] = loginFlow{Verifier: v, Nonce: nonce, ReturnTo: safeReturnPath(r.URL.Query().Get("returnTo")), Expires: time.Now().Add(5 * time.Minute)}
 	p.mu.Unlock()
 	p.cookie(w, "workspace_flow", state, 300)
 	http.Redirect(w, r, p.oauth.AuthCodeURL(state, oidc.Nonce(nonce), oauth2.S256ChallengeOption(v)), http.StatusFound)
@@ -115,10 +146,14 @@ func (p *Portal) callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var claims struct {
-		Name  string `json:"name"`
-		Email string `json:"email"`
+		Name        string `json:"name"`
+		DisplayName string `json:"displayName"`
+		Email       string `json:"email"`
 	}
 	_ = id.Claims(&claims)
+	if strings.TrimSpace(claims.DisplayName) != "" {
+		claims.Name = claims.DisplayName
+	}
 	expiry := time.Now().Add(8 * time.Hour)
 	if id.Expiry.Before(expiry) {
 		expiry = id.Expiry
@@ -130,28 +165,42 @@ func (p *Portal) callback(w http.ResponseWriter, r *http.Request) {
 			delete(p.sessions, k)
 		}
 	}
-	p.sessions[key] = session{id.Subject, claims.Name, claims.Email, expiry}
+	p.sessions[key] = session{Subject: id.Subject, Name: claims.Name, Email: claims.Email, IDToken: raw, Expires: expiry}
 	p.mu.Unlock()
+	clearAppCookies(w, r, p.secure)
 	p.cookie(w, "workspace_session", key, int(time.Until(expiry).Seconds()))
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, safeReturnPath(f.ReturnTo), http.StatusSeeOther)
 }
 func (p *Portal) Handler(control string) http.Handler {
 	mux := http.NewServeMux()
+	p.navigationRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
 	mux.HandleFunc("GET /auth/login", p.login)
 	mux.HandleFunc("GET /auth/callback", p.callback)
+	mux.HandleFunc("GET /auth/signed-out", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/?signedOut=1", http.StatusSeeOther)
+	})
 	mux.HandleFunc("POST /auth/logout", func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("Origin") != p.rt.Config.Origin {
 			http.Error(w, "Origin rejected", 403)
 			return
 		}
+		current, _ := p.user(r)
 		if c, e := r.Cookie("workspace_session"); e == nil {
 			p.mu.Lock()
 			delete(p.sessions, c.Value)
 			p.mu.Unlock()
 		}
 		p.cookie(w, "workspace_session", "", -1)
-		http.Redirect(w, r, "/", 303)
+		clearAppCookies(w, r, p.secure)
+		if p.logoutEndpoint != "" && current.IDToken != "" {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.Header().Set("Cache-Control", "no-store")
+			w.Header().Set("Referrer-Policy", "no-referrer")
+			_ = logoutPage.Execute(w, map[string]string{"Endpoint": p.logoutEndpoint, "Hint": current.IDToken, "Client": p.rt.Secrets.Clients["portal"].ID, "Return": p.rt.Config.Origin + "/auth/signed-out"})
+			return
+		}
+		http.Redirect(w, r, "/?signedOut=1", http.StatusSeeOther)
 	})
 	mux.HandleFunc("POST /_control/stop", func(w http.ResponseWriter, r *http.Request) {
 		if r.RemoteAddr == "" || subtle.ConstantTimeCompare([]byte(r.Header.Get("Authorization")), []byte("Bearer "+control)) != 1 {
@@ -231,7 +280,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		h := proxy(fmt.Sprintf("http://127.0.0.1:%d", a.Port), p.rt.Config.Origin, route, a.StripPrefix, false)
 		mux.Handle(route+"/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if _, ok := p.user(r); !ok && a.ID != "gitea" && a.ID != "music" {
-				http.Redirect(w, r, "/auth/login", 302)
+				http.Redirect(w, r, "/auth/login?"+url.Values{"returnTo": {r.URL.RequestURI()}}.Encode(), 302)
 				return
 			}
 			h.ServeHTTP(w, r)
@@ -248,7 +297,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		user, ok := p.user(r)
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_ = home.Execute(w, map[string]any{"LoggedIn": ok, "User": user, "Tiles": p.tiles(), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version})
+		_ = home.Execute(w, map[string]any{"LoggedIn": ok, "User": user, "Tiles": p.tiles(), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
 	})
 	origin, _ := url.Parse(p.rt.Config.Origin)
 	local := fmt.Sprintf("localhost:%d", p.rt.Config.Port)
@@ -260,6 +309,21 @@ func (p *Portal) Handler(control string) http.Handler {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("Referrer-Policy", "same-origin")
 		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
+		if p.isAppRequest(r) {
+			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) {
+				if r.Method == "GET" && strings.Contains(r.Header.Get("Accept"), "text/html") {
+					http.Redirect(w, r, "/?returnTo="+url.QueryEscape(safeReturnPath(r.URL.RequestURI())), http.StatusSeeOther)
+				} else {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(401)
+					fmt.Fprint(w, `{"error":"Sign in to One Workspace","login":"/auth/login"}`)
+				}
+				return
+			}
+		}
+		if _, ok := p.user(r); !ok && publicDriveRoute(r.URL.Path) {
+			anonymousShareCookies(r)
+		}
 		mux.ServeHTTP(w, r)
 	})
 }
@@ -270,6 +334,9 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 	director := p.Director
 	p.Director = func(r *http.Request) {
 		director(r)
+		if strings.Contains(r.Header.Get("Accept"), "text/html") || r.Header.Get("Sec-Fetch-Dest") == "document" {
+			r.Header.Set("Accept-Encoding", "identity")
+		}
 		if strip && strings.HasPrefix(r.URL.Path, prefix) {
 			r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
 			if r.URL.Path == "" {
@@ -285,17 +352,62 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 	p.ErrorHandler = func(w http.ResponseWriter, r *http.Request, e error) {
 		http.Error(w, "Application is starting or unavailable. Check Workspace logs.", 502)
 	}
-	if cookies {
-		p.ModifyResponse = func(resp *http.Response) error {
+
+	p.ModifyResponse = func(resp *http.Response) error {
+		// Preserve the mounted app path on native redirects (for example Flask's
+		// canonical trailing slash), without changing external identity redirects.
+		if strip && resp.Header.Get("Location") != "" {
+			if location, err := url.Parse(resp.Header.Get("Location")); err == nil &&
+				(location.Host == "" || location.Host == external.Host || location.Host == u.Host) &&
+				strings.HasPrefix(location.Path, "/") && !strings.HasPrefix(location.Path, "//") &&
+				location.Path != prefix && !strings.HasPrefix(location.Path, prefix+"/") {
+				location.Path = prefix + location.Path
+				location.RawPath = ""
+				if location.Host != "" {
+					location.Scheme, location.Host = external.Scheme, external.Host
+				}
+				resp.Header.Set("Location", location.String())
+			}
+		}
+		if cookies {
 			values := resp.Cookies()
 			resp.Header.Del("Set-Cookie")
 			for _, c := range values {
 				c.Path = "/"
 				resp.Header.Add("Set-Cookie", c.String())
 			}
+		}
+		if resp.StatusCode != 200 || !strings.Contains(resp.Header.Get("Content-Type"), "text/html") || resp.Header.Get("Content-Encoding") != "" {
 			return nil
 		}
+		body, err := io.ReadAll(io.LimitReader(resp.Body, 4*1024*1024+1))
+		if err != nil {
+			return err
+		}
+		if len(body) > 4*1024*1024 {
+			resp.Body = io.NopCloser(io.MultiReader(bytes.NewReader(body), resp.Body))
+			return nil
+		}
+		resp.Body.Close()
+		nonce := ""
+		if match := regexp.MustCompile(`nonce=["']([^"']+)["']`).FindSubmatch(body); len(match) == 2 {
+			nonce = ` nonce="` + template.HTMLEscapeString(string(match[1])) + `"`
+		}
+		script := []byte(`<script defer src="/_workspace/navigation.js"` + nonce + `></script>`)
+		if i := bytes.LastIndex(bytes.ToLower(body), []byte("</body>")); i >= 0 {
+			body = append(append(append([]byte{}, body[:i]...), script...), body[i:]...)
+		} else {
+			body = append(body, script...)
+		}
+		resp.Body = io.NopCloser(bytes.NewReader(body))
+		resp.ContentLength = int64(len(body))
+		resp.Header.Set("Content-Length", strconv.Itoa(len(body)))
+		resp.Header.Del("ETag")
+		resp.Header.Del("Content-MD5")
+		resp.Header.Set("Cache-Control", "no-store")
+		return nil
 	}
+
 	return p
 }
 
@@ -309,13 +421,12 @@ func (p *Portal) tiles() []catalogTile {
 			link = p.rt.Config.Issuer
 		}
 		icon := branding.Icon(a.ID)
-		if a.ID == "accounts" {
-			icon = ""
-		}
 		tiles = append(tiles, catalogTile{a.Name, a.Description, link, icon})
 	}
 	sort.SliceStable(tiles, func(i, j int) bool { return tiles[i].Name < tiles[j].Name })
 	return tiles
 }
 
-var home = template.Must(template.New("home").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One Workspace</title><link rel="icon" type="image/svg+xml" href="/branding/icons/one_workspace.svg"><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px system-ui,sans-serif}header,main{max-width:1040px;margin:auto;padding:32px}header{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;flex:none}.app-logo{display:block;width:56px;height:56px;margin-bottom:18px}h1{font-size:44px;letter-spacing:-1.5px;margin-bottom:12px}.muted,p{color:#5e6c84;line-height:1.65}a{color:#345de5;text-decoration:none}button,.button{display:inline-block;background:#345de5;color:white;border:0;padding:13px 22px;border-radius:12px;font:inherit;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:32px 0}.tile{background:white;border:1px solid #e3e8f4;border-radius:20px;padding:26px;box-shadow:0 5px 24px #23397605}.tile h2{color:#18233b;margin-top:0;font-size:23px}.tile:hover{border-color:#345de5}.right{margin-left:auto}footer{margin-top:40px;font-size:13px;color:#6e7890}.admin{background:#eaf0ff;padding:22px;border-radius:16px}</style><header><img class="logo" src="/branding/icons/one_workspace.svg" alt="" width="48" height="48"><b>One Workspace</b><span class="right muted">Your apps, together</span></header><main>{{if .LoggedIn}}<h1>Your workspace.</h1><p>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}{{.User.Email}}{{end}}. Open an app to continue.</p><div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if .Owner}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{.Issuer}}/organizations/myaccounts/users">Manage accounts →</a></div>{{end}}<form action="/auth/logout" method="post" style="margin-top:24px"><button>Sign out of Workspace</button></form>{{else}}<h1>One account.<br>Your whole workspace.</h1><p>Files, documents and photos in one place.<br>Sign in with your MyAccounts account to get started.</p><a class="button" href="/auth/login">Sign in with MyAccounts →</a>{{end}}<footer>One Workspace {{.Version}} · Self-hosted evaluation build. Apps retain their own sessions; use Accounts to revoke access.</footer></main></html>`))
+var home = template.Must(template.New("home").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One Workspace</title><link rel="icon" type="image/svg+xml" href="/branding/icons/one_workspace.svg"><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px system-ui,sans-serif}header,main{max-width:1040px;margin:auto;padding:32px}header{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;flex:none}.app-logo{display:block;width:56px;height:56px;margin-bottom:18px}h1{font-size:44px;letter-spacing:-1.5px;margin-bottom:12px}.muted,p{color:#5e6c84;line-height:1.65}a{color:#345de5;text-decoration:none}button,.button{display:inline-block;background:#345de5;color:white;border:0;padding:13px 22px;border-radius:12px;font:inherit;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:32px 0}.tile{background:white;border:1px solid #e3e8f4;border-radius:20px;padding:26px;box-shadow:0 5px 24px #23397605}.tile h2{color:#18233b;margin-top:0;font-size:23px}.tile:hover{border-color:#345de5}.right{margin-left:auto}footer{margin-top:40px;font-size:13px;color:#6e7890}.admin{background:#eaf0ff;padding:22px;border-radius:16px}</style><header><img class="logo" src="/branding/icons/one_workspace.svg" alt="" width="48" height="48"><b>One Workspace</b><span class="right muted">Your apps, together</span></header><main>{{if .LoggedIn}}<h1>Your workspace.</h1><p>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}{{.User.Email}}{{end}}. Open an app to continue.</p><div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if .Owner}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{.Issuer}}/organizations/myaccounts/users">Manage accounts →</a></div>{{end}}<form action="/auth/logout" method="post" style="margin-top:24px"><button>Sign out of Workspace</button></form>{{else}}<h1>One account.<br>Your whole workspace.</h1><p>Files, documents and photos in one place.<br>Sign in with your MyAccounts account to get started.</p><a class="button" href="{{.LoginURL}}">Sign in with MyAccounts →</a>{{end}}<footer>One Workspace {{.Version}} · Self-hosted evaluation build. Signing out closes Workspace app access and opens MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately. App access tokens and public sharing links are managed separately.</footer></main><script defer src="/_workspace/navigation.js"></script></html>`))
+
+var logoutPage = template.Must(template.New("logout").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><title>Signing out of One Workspace</title><h1>Signing out</h1><p>Workspace app access is closed. Opening MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately.</p><form id="workspace-provider-logout" method="post" action="{{.Endpoint}}"><input type="hidden" name="id_token_hint" value="{{.Hint}}"><input type="hidden" name="client_id" value="{{.Client}}"><input type="hidden" name="post_logout_redirect_uri" value="{{.Return}}"><button>Continue sign-out</button></form><script src="/_workspace/logout.js" defer></script></html>`))

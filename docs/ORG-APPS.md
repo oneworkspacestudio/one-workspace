@@ -1,17 +1,24 @@
 # Organization apps
 
-`scripts/rebuild.ps1` now calls `scripts/build-org.ps1`, which packages every
-currently released organization application. Every app's catalog source must
+`scripts/rebuild.ps1` calls `scripts/build-org.ps1`, which packages the pinned
+organization applications. Every app's catalog source must
 belong to `https://github.com/oneworkspacestudio/`. Download URLs, byte sizes and
 GitHub SHA256 digests are verified, including cached downloads. The package
 contains `licenses/components/organization-components.json` with exact provenance.
+
+The October 15 bundle selects the updated individual app previews and the
+previous published Music version. The new Music executable is withheld pending
+Microsoft analysis; the build script rejects that exact binary. Current feature
+and acceptance limits are documented in [release status](RELEASE-STATUS.md).
 
 The catalog declares installer integration2. Older setup executables reject this
 field before installing and tell the user to download the current installer.
 They cannot safely register shared-service clients or reassign Calendar ports.
 Always download the current full installer when updating from setup17 or earlier.
 
-| App | Organization repository | Packaged version |
+The last published complete bundle uses these versions:
+
+| App | Organization repository | Previously packaged version |
 | --- | --- | --- |
 | MyAccounts | [myaccounts](https://github.com/oneworkspacestudio/myaccounts) | preview-20261014.2 |
 | Drive / Office | [drive](https://github.com/oneworkspacestudio/drive) | drive-upload-preview.3 |
