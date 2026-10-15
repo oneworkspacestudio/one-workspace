@@ -27,11 +27,43 @@ independent Mail check under app verification. Reused existing Drive/Photos and
 all other component binaries, retained extended Git/Music payload and licenses;
 no unrelated Drive work included.
 
-Release plan: v0.3.0-preview.16 with Mail0.1.0-preview.13. Mail release published
+Published release: v0.3.0-preview.16 with Mail0.1.0-preview.13. Mail release published
 first at https://github.com/oneworkspacestudio/mail/releases/tag/workspace-mail-v0.1.0-preview.13
 Mail SHA256 4ab76b887b0d33aa9b2a6b062b8ccb4f00dc96a87f5fc282c2d81ec4b889a44e.
 Installed dedicated Workspace manager and Mail updated with backups, normal stop,
 verified child exit, checksums/config update and hidden restart; retained existing
 core+Mail app set and ordinary files, without adding Git/Music to that install.
 Both forwarding hops now verified and external SMTP reachable; authorized Gmail
-receipt checked. Final anonymous downloads and lease-duration checks pending.
+receipt checked. Anonymous compiled download and lease-duration delivery checks completed successfully.
+## Published artifacts and additional checks
+Public release v0.3.0-preview.16 at
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.16
+Published program/catalog/bundle assets all matched local size and GitHub SHA256.
+Bundle SHA256 7ca90638fa1be194ffe2382756f17568f727f345248ea9e95fcf4e5b7a0af906.
+The compiled installer downloaded all500MiB anonymously, verified every package,
+then resolved organization Mail0.1.0-preview.13. Exit0; log outside Git at
+C:/Projects/.cache/workspace-public-release/dist/public-download-verification-v16.txt.
+A separate live anonymous test used the older bundle, downloaded newer published
+Mail, verified the complete catalog with the override, and extracted the new EXE
+into a fresh temporary directory. Exit0. No existing installation used for that
+extraction. Native fresh Mail provisioning fixture also passed with ephemeral
+loopback ports and NTFS temp data, without sending messages or changing live Mail.
+
+Rebuild seed now pins preview.16 and current Mail. Optional manual manifest helper
+accepts an explicit version; generated current-version manifest/hash/provenance
+checked. Current Mail docs/notices now link organization source. A small external
+Mail-NOTICE.md release asset corrects the older embedded notice's former source
+URL; immutable binary/bundle assets were retained and release notes explain it.
+Drive/Photos source remains the matching preview.15 source asset linked in notes.
+
+Installed manager and Mail match release/bundle hashes. Local ignored artifacts
+are version-suffixed preview.16 to avoid the existing locked canonical installer.
+No unrelated preview or live MyAccounts/FileBrowser process was stopped.
+
+Final running-suite verification: startup ready8/8, current Mail incoming state
+reachable, no hosting/identity errors. Autonomous router observation exceeded the
+original30-minute lease with no manual changes. The final authorized Gmail test
+was ingested and visibly received at14:55:20 BST. Evidence is stored outside Git
+under C:/Projects/artifacts/mail-repair-20261015/. Actions remain disabled in both
+organization repositories. Both corresponding source trees are published; future
+builds use the corrected public organization Mail notice and manual helper links.

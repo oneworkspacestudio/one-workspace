@@ -1,7 +1,7 @@
 # Optional Mail component
 
 One Workspace Mail is an independent Gmail-style client licensed AGPL-3.0-only.
-Source: https://github.com/fahimc/stalwart/tree/main/workspace-mail
+Source: https://github.com/oneworkspacestudio/mail/tree/main/workspace-mail
 
 Mail.exe embeds the **unmodified official Stalwart 0.16.26 Windows engine**,
 not a locally rebuilt Rust engine. Stalwart is copyright Stalwart Labs LLC.

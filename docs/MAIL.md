@@ -1,19 +1,19 @@
 # Mail (Stalwart)
 
-[One Workspace Mail source](https://github.com/fahimc/stalwart/tree/main/workspace-mail)
+[One Workspace Mail source](https://github.com/oneworkspacestudio/mail/tree/main/workspace-mail)
 adds a Gmail-style native Windows client and a pinned Stalwart 0.16.26 engine.
 It can also run standalone. See that project's README and notices for the mail
 setup wizard, licensing, portable runtime and current preview limits.
 
-Automatic domain hosting described below is a local development preview. This
-documentation update does not publish its manager changes or a new installer.
+Automatic domain hosting is included in the public preview release. Online setup
+independently verifies the current Mail release in the organization repository.
 
 ## Add to an existing installation
 
 Build Mail.exe locally in the fork, then use this repository's current manager:
 
 ```powershell
-./scripts/mail-manifest.ps1 -Exe C:/Downloads/Mail.exe -Port 8996 -Output C:/Downloads/mail.json
+./scripts/mail-manifest.ps1 -Exe C:/Downloads/Mail.exe -Version 0.1.0-preview.13 -Port 8996 -Output C:/Downloads/mail.json
 ./Workspace.exe --data C:/WorkspacePrivate stop
 ./Workspace.exe --data C:/WorkspacePrivate add-app --manifest C:/Downloads/mail.json --package C:/Downloads/Mail.exe
 ./Workspace.exe --data C:/WorkspacePrivate run
