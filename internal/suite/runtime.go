@@ -18,6 +18,8 @@ import (
 )
 
 type Runtime struct {
+	sharedOnce         sync.Once
+	sharedErr          error
 	Config             Config
 	Secrets            Secrets
 	mu                 sync.RWMutex
@@ -97,7 +99,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 			progress.Step("public-accounts", "done", "Your secure sign-in address is reachable")
 		}
 	}
-	if _, ok := c.Catalog.Find("mail"); ok {
+	if _, ok := c.Catalog.Find("mail"); ok && !SharedEnabled(c) {
 		go rt.maintainMailboxes(ctx)
 	}
 	progress.Step("portal", "running", "Connecting the Workspace portal to MyAccounts")
@@ -152,10 +154,13 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "mail" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			cmd.Env = append(cmd.Env, "WORKSPACE_MAIL_PROVISION_TOKEN="+rt.mailProvisionToken)
-			if c.HostingDomain != "" {
+			if c.HostingDomain != "" && !SharedEnabled(c) {
 				cmd.Env = append(cmd.Env, "WORKSPACE_MAIL_DOMAIN="+c.HostingDomain, "WORKSPACE_MAIL_DNS_ZONE="+c.DNSZoneID, "WORKSPACE_MAIL_DNS_TOKEN="+s.MailDNSToken)
 			}
 		}
+	}
+	if SharedEnabled(c) && sharedConsumer(app.ID) {
+		cmd.Env = append(cmd.Env, "WORKSPACE_SHARED_DATA="+filepath.Join(c.Data, "shared"))
 	}
 	log := &platform.Log{Path: filepath.Join(c.Data, "logs", app.ID+".log")}
 	cmd.Stdout = log
@@ -163,6 +168,11 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	return cmd
 }
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
+	if SharedEnabled(rt.Config) && sharedConsumer(app.ID) {
+		if e := rt.ensureShared(ctx); e != nil {
+			return e
+		}
+	}
 	rt.progress.Step(app.ID, "running", "Verifying the app and starting its process")
 	held, e := platform.LockedBinary(filepath.Join(rt.Config.Programs, filepath.FromSlash(app.Executable)), rt.Config.Catalog.Packages[app.Package].SHA256)
 	if e != nil {
@@ -190,7 +200,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	}
 	rt.set(app.ID, "running")
 	rt.progress.Step(app.ID, "done", "App health check passed")
-	if app.ID == "mail" && rt.Config.HostingDomain != "" {
+	if app.ID == "mail" && rt.Config.HostingDomain != "" && !SharedEnabled(rt.Config) {
 		rt.mailHostingProgress(ctx, app)
 	}
 	go func() {

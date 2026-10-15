@@ -12,6 +12,11 @@ param(
  [string]$Gitea='',
  [string]$Music='',
  [string]$Mail='',
+ [string]$Calendar='',
+ [string]$Contacts='',
+ [string]$Services='',
+ [string]$Stalwart='',
+ [string]$CalendarVersion='0.1.0-preview.1',
  [string]$MailVersion='0.1.0-preview.1',
  [string]$ReleaseRepo='oneworkspacestudio/one-workspace'
 )
@@ -33,6 +38,11 @@ try {
   $inputs['mail-license']=@{source=(Join-Path $root 'docs/licenses/stalwart-AGPL-3.0-only.txt');file='licenses/Mail-AGPL-3.0-only.txt'}
   $inputs['mail-notice']=@{source=(Join-Path $root 'docs/MAIL-NOTICE.md');file='licenses/Mail-NOTICE.md'}
  }
+ if(($Calendar -or $Contacts) -and (-not $Services -or -not $Stalwart)){throw 'Calendar/Contacts require the one shared service package'}
+ if([bool]$Services -ne [bool]$Stalwart){throw 'Supply Services and Stalwart together'}
+ if($Services){$inputs['services-shared']=@{source=$Services;file='services/WorkspaceServices.exe'};$inputs['stalwart-shared']=@{source=$Stalwart;file='services/stalwart.exe'}}
+ if($Calendar){$inputs['calendar']=@{source=$Calendar;file='Calendar.exe'}}
+ if($Contacts){$inputs['contacts']=@{source=$Contacts;file='Contacts.exe'}}
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/fahimc/myaccounts/releases/tag/'+$AccountsVersion},
@@ -45,6 +55,9 @@ try {
   @{id='music';name='Music';description='Swing Music — your shared Music folder';version='3.0.0-workspace.1';kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/fahimc/swingmusic'}
  )}
  if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version=$MailVersion;kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/oneworkspacestudio/mail/tree/main/workspace-mail'}}
+ foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){
+  if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data','${DATA}/'+$dependent.id,'--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base','/'+$dependent.id,'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar'}}
+ }
  $catalog=@{schema=1;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  Add-Type -AssemblyName System.IO.Compression

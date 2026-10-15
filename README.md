@@ -30,6 +30,12 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 **More options:** [Photo Editor](https://github.com/fahimc/miniPaint) adds drawing, layers and image editing as a separate integration. Mail includes a Gmail-style inbox, automatic MyAccounts mailboxes and guided hosting setup.
 
+[My Calendar and My Contacts](https://github.com/oneworkspacestudio/calendar) are
+available as a separate Windows preview. Calendar, Mail and Contacts can reuse
+one shared service while remaining independently installable. The next suite
+bundle can opt into this support; it is not included in the currently published
+Workspace installer. [Shared-service integration](docs/SHARED-SERVICES.md).
+
 Included apps vary by download. The [release notes](https://github.com/oneworkspacestudio/one-workspace/releases) show what is available now.
 
 ## Get started

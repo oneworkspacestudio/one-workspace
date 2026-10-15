@@ -145,6 +145,10 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 5
 		case "mail":
 			app.Port = r.Port + 6
+		case "calendar":
+			app.Port = r.Port + 9
+		case "contacts":
+			app.Port = r.Port + 10
 		}
 		apps = append(apps, app)
 	}
@@ -181,10 +185,13 @@ func Save(c Config, s Secrets) error {
 }
 func CheckPorts(c Config) error {
 	ports := []int{c.Port}
+	if SharedEnabled(c) {
+		ports = append(ports, c.Port+11)
+	}
 	for _, a := range c.Catalog.Apps {
 		if a.Kind == "process" {
 			ports = append(ports, a.Port)
-			if a.ID == "mail" {
+			if a.ID == "mail" && !SharedEnabled(c) {
 				ports = append(ports, a.Port+1, a.Port+2)
 			}
 		}

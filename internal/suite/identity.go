@@ -106,7 +106,7 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 		s.Clients[entry.id] = client
 	}
 	for _, app := range c.Catalog.Apps {
-		if !app.OIDC || app.ID == "drive" {
+		if !app.OIDC || app.ID == "drive" || (SharedEnabled(*c) && sharedConsumer(app.ID)) {
 			continue
 		}
 		client, e := registerClient(ctx, api, app.ID, app.Name, c.Origin+app.Callback)
@@ -115,9 +115,24 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 		}
 		s.Clients[app.ID] = client
 	}
+	if SharedEnabled(*c) {
+		client, e := registerSharedClient(ctx, api, *c)
+		if e != nil {
+			return e
+		}
+		s.Clients["shared"] = client
+		for _, app := range c.Catalog.Apps {
+			if sharedConsumer(app.ID) {
+				s.Clients[app.ID] = client
+			}
+		}
+	}
 	return nil
 }
 func registerClient(ctx context.Context, api *identityAPI, id, name, callback string) (Client, error) {
+	return registerClientRedirects(ctx, api, id, name, []string{callback})
+}
+func registerClientRedirects(ctx context.Context, api *identityAPI, id, name string, callbacks []string) (Client, error) {
 	var app map[string]any
 	var result Client
 	if e := api.call(ctx, "/api/get-application?id=admin/myaccounts", nil, &app); e != nil {
@@ -128,7 +143,7 @@ func registerClient(ctx context.Context, api *identityAPI, id, name, callback st
 	app["clientId"] = result.ID
 	app["clientSecret"] = result.Secret
 	app["displayName"] = name
-	app["redirectUris"] = []string{callback}
+	app["redirectUris"] = callbacks
 	app["grantTypes"] = []string{"authorization_code"}
 	app["enableSignUp"] = false
 	app["disableSelfSignup"] = true
