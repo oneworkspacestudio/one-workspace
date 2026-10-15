@@ -17,6 +17,7 @@ import (
 
 func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog, progress func(string)) (Config, error) {
 	var empty Config
+	var overrides map[string]string
 	if e := r.ResolveStorage(); e != nil {
 		return empty, e
 	}
@@ -52,6 +53,7 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		}
 		defer bundle.Close()
 		z, cat = bundle.ZIP, bundle.Catalog
+		overrides = bundle.Overrides
 	} else {
 		progress("Using this installer’s bundled versions (offline mode)")
 	}
@@ -86,7 +88,7 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		_ = platform.SaveJSON(filepath.Join(c.Data, "install-state.json"), map[string]string{"phase": phase, "version": c.Version})
 	}
 	state("Verifying and extracting Workspace " + cat.Version + " applications")
-	if e = catalog.Extract(z, cat, c.Programs); e != nil {
+	if e = catalog.Extract(z, cat, c.Programs, overrides); e != nil {
 		return empty, e
 	}
 	// Keep the trusted manager and catalog on the protected data volume. Large

@@ -42,9 +42,10 @@ type Release struct {
 	Assets    []Asset   `json:"assets"`
 }
 type Bundle struct {
-	ZIP     *zip.Reader
-	Catalog catalog.Catalog
-	close   func()
+	ZIP       *zip.Reader
+	Catalog   catalog.Catalog
+	Overrides map[string]string
+	close     func()
 }
 
 func (b *Bundle) Close() {
@@ -185,8 +186,16 @@ func Latest(ctx context.Context, progress func(string)) (*Bundle, error) {
 		archive.Close()
 		return nil, fmt.Errorf("Latest bundle could not be verified: %w. Download the newest installer if its catalog format has changed", err)
 	}
+	overrides, err := latestMail(ctx, httpClient, token, dir, &cat, progress)
+	if err == nil {
+		err = catalog.Verify(&archive.Reader, cat, overrides)
+	}
+	if err != nil {
+		archive.Close()
+		return nil, fmt.Errorf("Latest organization Mail could not be verified: %w. No older Mail was installed", err)
+	}
 	success = true
-	return &Bundle{ZIP: &archive.Reader, Catalog: cat, close: func() { archive.Close(); os.RemoveAll(dir) }}, nil
+	return &Bundle{ZIP: &archive.Reader, Catalog: cat, Overrides: overrides, close: func() { archive.Close(); os.RemoveAll(dir) }}, nil
 }
 func choose(releases []Release) (Release, Asset, error) {
 	sort.SliceStable(releases, func(i, j int) bool { return releases[i].Published.After(releases[j].Published) })
@@ -203,7 +212,10 @@ func choose(releases []Release) (Release, Asset, error) {
 	return Release{}, Asset{}, errors.New("No published Workspace application bundle is available yet. Retry after the publisher finishes the release, or deliberately use --offline")
 }
 func validAsset(a Asset, repository, tag string) bool {
-	if a.Name != bundleName || a.State != "uploaded" || a.Size <= 0 || a.Size > maxBundleSize || !strings.HasPrefix(a.Digest, "sha256:") {
+	return validNamedAsset(a, repository, tag, bundleName, maxBundleSize)
+}
+func validNamedAsset(a Asset, repository, tag, name string, maxSize int64) bool {
+	if a.Name != name || a.State != "uploaded" || a.Size <= 0 || a.Size > maxSize || !strings.HasPrefix(a.Digest, "sha256:") {
 		return false
 	}
 	digest, err := hex.DecodeString(strings.TrimPrefix(a.Digest, "sha256:"))
@@ -219,7 +231,7 @@ func validAsset(a Asset, repository, tag string) bool {
 	if !strings.HasPrefix(api.Path, prefix) || id == "" || strings.Trim(id, "0123456789") != "" {
 		return false
 	}
-	expected := "https://github.com/" + repository + "/releases/download/" + url.PathEscape(tag) + "/" + bundleName
+	expected := "https://github.com/" + repository + "/releases/download/" + url.PathEscape(tag) + "/" + name
 	return a.URL == expected
 }
 func bundleCatalog(z *zip.Reader) (catalog.Catalog, error) {

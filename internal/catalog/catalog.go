@@ -184,7 +184,7 @@ func Read(data []byte) (Catalog, error) {
 	}
 	return c, e
 }
-func Extract(z *zip.Reader, c Catalog, dest string) error {
+func Extract(z *zip.Reader, c Catalog, dest string, overrides ...map[string]string) error {
 	if e := c.Validate(); e != nil {
 		return e
 	}
@@ -203,10 +203,6 @@ func Extract(z *zip.Reader, c Catalog, dest string) error {
 		entries[key] = f
 	}
 	for _, p := range c.Packages {
-		f := entries[strings.ToLower(p.File)]
-		if f == nil || int64(f.UncompressedSize64) != p.Size {
-			return errors.New("payload missing or size mismatch")
-		}
 		path, e := platform.Inside(dest, p.File)
 		if e != nil {
 			return e
@@ -218,7 +214,7 @@ func Extract(z *zip.Reader, c Catalog, dest string) error {
 		if e != nil {
 			return e
 		}
-		in, e := f.Open()
+		in, e := openPackage(entries, p, overrides)
 		if e != nil {
 			out.Close()
 			return e

@@ -61,6 +61,13 @@ saved earlier will therefore install the latest published bundle. Unreleased Git
 commits are not installed. Setup stops with a retry message if GitHub or checksum
 verification fails; it does not silently install the old embedded versions.
 
+Setup also checks [Mail's organization releases](https://github.com/oneworkspacestudio/mail/releases)
+independently, and installs the newest published Mail executable with a supported
+Workspace compatibility manifest. It verifies GitHub's SHA256 and size before
+installation and records the exact Mail version and release source. An invalid,
+unavailable or incompatible Mail release stops online installation with guidance.
+Download an updated installer if a future Mail integration version is unsupported.
+
 For an intentional offline installation, run
 `WorkspaceSetup-windows-amd64.exe --offline`. This uses the versions bundled with
 that installer. Existing installations are not automatically upgraded by this

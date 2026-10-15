@@ -107,7 +107,7 @@ func InstallProgress(tunnel bool) *ProgressTracker {
 func (p *ProgressTracker) InstallPhase(phase string) {
 	id := "prepare"
 	switch {
-	case strings.HasPrefix(phase, "Checking GitHub"), strings.HasPrefix(phase, "Downloading"), strings.HasPrefix(phase, "Verifying"), strings.HasPrefix(phase, "Using this installer"):
+	case strings.HasPrefix(phase, "Checking GitHub"), strings.HasPrefix(phase, "Checking oneworkspacestudio/mail"), strings.HasPrefix(phase, "Verified Mail"), strings.HasPrefix(phase, "Downloading"), strings.HasPrefix(phase, "Verifying"), strings.HasPrefix(phase, "Using this installer"):
 		id = "extract"
 	case strings.HasPrefix(phase, "Creating Accounts"):
 		id = "identity"

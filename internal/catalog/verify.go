@@ -12,7 +12,7 @@ import (
 )
 
 // Verify checks every executable and license before an online install writes files.
-func Verify(z *zip.Reader, c Catalog) error {
+func Verify(z *zip.Reader, c Catalog, overrides ...map[string]string) error {
 	if err := c.Validate(); err != nil {
 		return err
 	}
@@ -31,11 +31,7 @@ func Verify(z *zip.Reader, c Catalog) error {
 		entries[key] = f
 	}
 	for _, p := range c.Packages {
-		f := entries[strings.ToLower(p.File)]
-		if f == nil || int64(f.UncompressedSize64) != p.Size {
-			return errors.New("payload missing or size mismatch")
-		}
-		in, err := f.Open()
+		in, err := openPackage(entries, p, overrides)
 		if err != nil {
 			return err
 		}
@@ -47,4 +43,28 @@ func Verify(z *zip.Reader, c Catalog) error {
 		}
 	}
 	return nil
+}
+
+// Overrides are verified release files owned by the downloader, never user paths.
+// Both verification and extraction hash them against the updated catalog.
+func openPackage(entries map[string]*zip.File, p Package, overrides []map[string]string) (io.ReadCloser, error) {
+	if len(overrides) > 0 {
+		if path, ok := overrides[0][p.File]; ok {
+			in, err := os.Open(path)
+			if err != nil {
+				return nil, err
+			}
+			info, err := in.Stat()
+			if err != nil || !info.Mode().IsRegular() || info.Size() != p.Size {
+				in.Close()
+				return nil, errors.New("release override missing or size mismatch")
+			}
+			return in, nil
+		}
+	}
+	f := entries[strings.ToLower(p.File)]
+	if f == nil || int64(f.UncompressedSize64) != p.Size {
+		return nil, errors.New("payload missing or size mismatch")
+	}
+	return f.Open()
 }
