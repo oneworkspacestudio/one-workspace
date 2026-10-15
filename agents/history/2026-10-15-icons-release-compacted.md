@@ -104,3 +104,8 @@ title/tagline and illustrated app composition. The edited project PNG replaces
 the same showcase asset; README adds a cache version query. App-logo overview and
 the actual product branding remain. This is illustrative artwork, not a runtime
 screenshot or new binary release.
+
+The owner still saw the old image after the query-version update. README now
+references one-workspace-showcase-94fac59e.png, a byte-identical copy of the edited
+PNG with a content-derived filename. This gives GitHub a genuinely new image URL.
+Use a fresh filename for future artwork changes instead of a query-only refresh.
