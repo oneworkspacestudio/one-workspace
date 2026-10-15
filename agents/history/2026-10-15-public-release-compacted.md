@@ -69,3 +69,9 @@ a full fresh GUI installation/clean host/reboot remains untested in this task.
 Log outside Git: C:/Projects/.cache/workspace-public-release/dist/
 public-download-verification.txt. Existing running suite untouched. Unit go test
 ./... on full packaged source passed. Both public repos confirmed Actions disabled.
+
+
+Rename follow-up: user renamed the public Stalwart fork to oneworkspacestudio/mail.
+Future build catalog source now points there. Existing Mail release assets remain
+at the renamed repo; published binaries were not rebuilt just for URL changes.
+See Mail repository agents/history/2026-10-15-mail-rename-compacted.md.
