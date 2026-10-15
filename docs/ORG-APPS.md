@@ -16,24 +16,23 @@ field before installing and tell the user to download the current installer.
 They cannot safely register shared-service clients or reassign Calendar ports.
 Always download the current full installer when updating from setup17 or earlier.
 
-The last published complete bundle uses these versions:
+The My Tube bundle pins these published organization components:
 
-| App | Organization repository | Previously packaged version |
+| App | Organization repository | Packaged version |
 | --- | --- | --- |
-| MyAccounts | [myaccounts](https://github.com/oneworkspacestudio/myaccounts) | preview-20261014.2 |
-| Drive / Office | [drive](https://github.com/oneworkspacestudio/drive) | drive-upload-preview.3 |
-| Photos | [drive](https://github.com/oneworkspacestudio/drive) | photos-upload-preview.2 |
-| Photo Editor | [Photo-Editor](https://github.com/oneworkspacestudio/Photo-Editor) | studio-v0.1.0 |
-| Git | [gitea](https://github.com/oneworkspacestudio/gitea) | workspace-20261014 |
+| MyAccounts | [myaccounts](https://github.com/oneworkspacestudio/myaccounts) | preview-20261015.1 |
+| Drive / Office | [drive](https://github.com/oneworkspacestudio/drive) | drive-v0.5.0-preview.2 |
+| Photos | [drive](https://github.com/oneworkspacestudio/drive) | drive-v0.5.0-preview.2 |
+| Photo Editor | [Photo-Editor](https://github.com/oneworkspacestudio/Photo-Editor) | studio-v0.1.1 |
+| Git | [gitea](https://github.com/oneworkspacestudio/gitea) | workspace-20261015 |
 | Music | [Music](https://github.com/oneworkspacestudio/Music) | workspace-20261014 |
-| Mail | [mail](https://github.com/oneworkspacestudio/mail) | 0.1.0-preview.15; independently resolved online |
-| Calendar / Contacts | [calendar](https://github.com/oneworkspacestudio/calendar) | 0.1.0-preview.1 |
-| Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.2 |
+| Mail | [mail](https://github.com/oneworkspacestudio/mail) | 0.1.0-preview.16; independently resolved online |
+| Calendar / Contacts | [calendar](https://github.com/oneworkspacestudio/calendar) | 0.1.0-preview.2 |
+| Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.4 |
+| My Tube | [my-tube](https://github.com/oneworkspacestudio/my-tube) | 0.1.0-preview.1 |
 
-Drive/Photos use the newer upload fixes already published in the organization's
-Workspace16 bundle. Their catalog sources name that exact organization release;
-the matching source snapshot is linked from Workspace15. The older executable
-in the Drive repository is deliberately not substituted for the upload repairs.
+Drive/Photos use their own current pinned organization release, retaining the
+upload fixes and new artwork. All previous pins are preserved when adding My Tube.
 Office and the integrated Photo Editor run inside Drive. Studio.exe is installed
 as well for standalone local editing. The integrated tile uses Drive's existing
 MyAccounts authentication and file permission checks.
@@ -60,14 +59,35 @@ Private Mail never silently switches to the shared Calendar/Contacts store.
 
 ## Notes
 
-Notes became available during this integration. The bundle uses preview2, which
-corrects Workspace callback configuration and managed localhost URLs. Its actual
+Notes became available during this integration. The bundle uses preview4, which
+retains the Workspace callback fixes and includes the editor crash hotfix. Its actual
 CLI, OIDC environment and `/notes` proxy contract were checked against source.
 Workspace generates a separate protected `notes-settings.json`, gives the
 Workspace owner Notes administration, and keeps the SQLite data in `Private/notes`.
 Existing settings are preserved. Notes remains in managed MyAccounts mode; no
 local-login fallback is enabled. Full Joplin sync/E2EE is outside this app's
 current preview; see the Notes repository's documented feature boundaries.
+
+## My Tube
+
+MyTube.exe is a verified component of the full offline/online installer payload,
+not an optional post-install download. It appears in the home and shared app
+switcher at `/my-tube`, with the supplied My Tube artwork. Its backend uses the
+selected Workspace port plus13, depends on Accounts/Drive startup, and receives
+a dedicated confidential OIDC client through the protected secret store.
+
+The manager creates `Private/my-tube-settings.json` outside the dedicated
+`Private/my-tube` data/media directory. The Workspace owner is an explicit My Tube
+administrator; existing settings are preserved. Mode stays managed, so no local
+owner link or duplicate setup wizard is enabled. Public access/uploads default
+off. Drive requests use its direct loopback `/drive` mount with the calling
+user's Drive cookie/token, never a shared administrator credential or a shortcut
+around the portal's browser session. Workspace logout clears My Tube's cookies.
+
+The package includes My Tube's AGPL license, notice and third-party notices.
+FFmpeg/FFprobe are optional separate helpers and are not bundled. Compatible MP4
+upload/playback works without them. See the app's own release for the tested
+features and remaining preview acceptance gates.
 
 ## Music runtime storage
 

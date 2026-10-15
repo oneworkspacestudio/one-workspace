@@ -179,6 +179,11 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 			return e
 		}
 	}
+	if app.ID == "my-tube" {
+		if e := ensureMyTubeConfig(rt.Config); e != nil {
+			return e
+		}
+	}
 	if usesShared(rt.Config, app.ID) {
 		if e := rt.ensureShared(ctx); e != nil {
 			return e

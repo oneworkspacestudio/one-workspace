@@ -4,6 +4,12 @@ The supplied eleven app SVGs are applied to app headers, favicons, Windows icons
 and repository README logos. Component executables were built locally; GitHub
 Actions is disabled for all nine organization repositories.
 
+My Tube is now included as a twelfth app entry, pinned to its published
+0.1.0-preview.1 release. Its separately supplied logo is used in the README,
+launcher and switcher. This suite update is built locally; the previously
+verified My Tube component binary is reused without modification. Its optional
+FFmpeg/FFprobe helpers remain separate and are not shipped in the suite.
+
 ## Music uses the previous published version
 
 Defender detected `Trojan:Win32/FakeFolder!pz` while staging the newly built

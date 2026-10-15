@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.21',
+ [string]$Version='0.3.0-preview.22',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
@@ -62,6 +62,11 @@ $notesStage=Join-Path $Cache ('notes-stage-'+[guid]::NewGuid().ToString('N'))
 Expand-Archive -LiteralPath $notesZip -DestinationPath $notesStage
 $notesRoot=(Get-ChildItem -LiteralPath $notesStage -Filter MyNotes.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $notesRoot){throw 'Notes package is missing MyNotes.exe'}
+$myTubeZip=Get-OrgAsset $lock.myTube
+$myTubeStage=Join-Path $Cache ('my-tube-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $myTubeZip -DestinationPath $myTubeStage
+$myTubeRoot=(Get-ChildItem -LiteralPath $myTubeStage -Filter MyTube.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $myTubeRoot){throw 'My Tube package is missing MyTube.exe'}
 $notices=Join-Path $Cache 'component-notices'
 New-Item -ItemType Directory -Force $notices|Out-Null
 Copy-Item -Path (Join-Path $seedDir 'licenses/components/*') -Destination $notices -Force
@@ -79,7 +84,7 @@ $versions=@{};foreach($app in $seedCat.apps){$versions[$app.id]=$app.version}
 $driveSource='https://github.com/'+$lock.drive.repository+'/releases/tag/'+$lock.drive.tag
 $photosSource='https://github.com/'+$lock.photos.repository+'/releases/tag/'+$lock.photos.tag
 # Every application comes from its own pinned organization release.
-& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -ComponentNotices $notices
+& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -ComponentNotices $notices
 if($LASTEXITCODE -ne 0){throw 'Organization suite build failed'}
 & (Join-Path $PSScriptRoot 'check-org-catalog.ps1') -Catalog (Join-Path $root 'dist/catalog.json')
 Copy-Item -LiteralPath (Join-Path $notices 'organization-components.json') -Destination (Join-Path $root 'dist/organization-components.json') -Force

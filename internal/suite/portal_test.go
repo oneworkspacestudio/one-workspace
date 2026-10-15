@@ -165,11 +165,14 @@ func TestLogoutClearsScopedCookiesAndDomainDriveCookie(t *testing.T) {
 		if cookie.Name == "notes_session" && cookie.Path == "/notes/" {
 			found["notes"] = true
 		}
+		if cookie.Name == "mytube_session" && cookie.Path == "/my-tube/" {
+			found["my-tube"] = true
+		}
 		if cookie.Name == "mail_session" && cookie.Path == "/mail/" {
 			found["mail"] = true
 		}
 	}
-	for _, key := range []string{"drive-domain", "notes", "mail"} {
+	for _, key := range []string{"drive-domain", "notes", "mail", "my-tube"} {
 		if !found[key] {
 			t.Error("cookie expiry missing", key)
 		}

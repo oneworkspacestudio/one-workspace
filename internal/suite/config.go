@@ -151,6 +151,8 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 10
 		case "notes":
 			app.Port = r.Port + 12
+		case "my-tube":
+			app.Port = r.Port + 13
 		}
 		apps = append(apps, app)
 	}
