@@ -111,3 +111,10 @@ logo overview. Remaining production acceptance gates stay open. The computer-use
 skill excludes automating password-manager desktop apps; desktop/clean-host checks
 need manual acceptance, and browser testing awaits explicit local test-certificate
 approval. Mobile was deferred, not silently counted as tested.
+
+Local origin was still the earlier fahimc repository. Corrected it to
+https://github.com/oneworkspacestudio/one-workspace.git and confirmed README/history
+follow-up2bd05bf on the org main branch. Release25 remains pinned to42363fb;
+follow-up edits are documentation only. Keep future pulls/pushes on the org.
+The initial follow-up also reached the legacy remote; no history was reset or
+release created there. Preserve existing legacy history rather than force-pushing.
