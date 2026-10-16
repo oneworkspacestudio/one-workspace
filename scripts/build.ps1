@@ -24,6 +24,9 @@ param(
  [string]$MyTube='',
  [string]$MyTubeVersion='0.1.0-preview.1',
  [string]$MyTubeNotices='',
+ [string]$MyVault='',
+ [string]$MyVaultVersion='0.1.0-preview.1',
+ [string]$MyVaultNotices='',
  [string]$DriveSource='https://github.com/oneworkspacestudio/drive',
  [string]$PhotosSource='https://github.com/oneworkspacestudio/drive',
  [switch]$PrivateMail,
@@ -62,6 +65,8 @@ try {
  if($Notes){$inputs['notes']=@{source=$Notes;file='MyNotes.exe'};if(-not $NotesNotices){throw 'Notes requires its license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['notes-'+$name]=@{source=(Join-Path $NotesNotices $name);file='licenses/Notes-'+$name}}}
  if($MyTube){$inputs['my-tube']=@{source=$MyTube;file='MyTube.exe'};if(-not $MyTubeNotices){throw 'My Tube requires its license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['my-tube-'+$name]=@{source=(Join-Path $MyTubeNotices $name);file='licenses/MyTube-'+$name}}}
  if($Calendar -or $Contacts){$inputs['calendar-license']=@{source=(Join-Path $root 'docs/licenses/stalwart-AGPL-3.0-only.txt');file='licenses/Calendar-AGPL-3.0-only.txt'}}
+ if($MyVault){$inputs['vault']=@{source=$MyVault;file='MyVault.exe'};if(-not $MyVaultNotices){throw 'My Vault requires its corresponding license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['vault-'+$name]=@{source=(Join-Path $MyVaultNotices $name);file='licenses/MyVault-'+$name}}}
+ if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/oneworkspacestudio/myaccounts/releases/tag/'+$AccountsVersion},
@@ -78,6 +83,7 @@ try {
  if($Studio){$apps+=@{id='studio';name='Photo Editor';description='Edit images and layers; open and save in Drive';version=$StudioVersion;kind='builtin';depends=@('drive');route='/drive/studio';source='https://github.com/oneworkspacestudio/Photo-Editor/releases/tag/'+$StudioVersion}}
  if($Notes){$apps+=@{id='notes';name='Notes';description='Private notes, notebooks and ideas';version=$NotesVersion;kind='process';package='notes';executable='MyNotes.exe';port=9002;route='/notes';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/notes/auth/callback';args=@('--config','${DATA}/notes-settings.json','--port','${PORT}');env=@{NOTES_DATA_DIR='${DATA}/notes';NOTES_PUBLIC_URL='${ORIGIN}/notes';NOTES_LISTEN='127.0.0.1:${PORT}'};source='https://github.com/oneworkspacestudio/notes/releases/tag/v'+$NotesVersion}}
  if($MyTube){$apps+=@{id='my-tube';name='My Tube';description='Your videos, channels and community';version=$MyTubeVersion;kind='process';package='my-tube';executable='MyTube.exe';port=9003;route='/my-tube';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/my-tube/auth/callback';args=@('--config','${DATA}/my-tube-settings.json','--no-browser','--port','${PORT}');env=@{MYTUBE_DATA_DIR='${DATA}/my-tube';MYTUBE_PUBLIC_URL='${ORIGIN}/my-tube';MYTUBE_LISTEN='127.0.0.1:${PORT}'};source='https://github.com/oneworkspacestudio/my-tube/releases/tag/v'+$MyTubeVersion}}
+ if($MyVault){$apps+=@{id='vault';name='My Vault';description='Independent password vault, offline clients and encrypted recovery';version=$MyVaultVersion;kind='process';package='vault';executable='MyVault.exe';port=9004;route='/vault';health='/healthz';env=@{MYVAULT_WORKSPACE_ORIGIN='${ORIGIN}'};args=@('run','--data','${DATA}/my-vault','--listen','127.0.0.1:${PORT}','--no-browser');source='https://github.com/oneworkspacestudio/my-vault/releases/tag/v'+$MyVaultVersion}}
  foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){
   if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data',('${DATA}/'+$dependent.id),'--shared-data','${DATA}/shared','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base',('/'+$dependent.id),'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar/releases/tag/v'+$CalendarVersion}}
  }

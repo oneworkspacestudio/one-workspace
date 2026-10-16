@@ -85,6 +85,7 @@ var updateGroups = []updateGroup{
 	{"calendar", "Calendar and Contacts", "calendar", []string{"calendar", "contacts"}},
 	{"notes", "Notes", "notes", []string{"notes"}},
 	{"my-tube", "My Tube", "my-tube", []string{"my-tube"}},
+	{"vault", "My Vault", "my-vault", []string{"vault"}},
 }
 
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
@@ -195,6 +196,9 @@ func groupPackages(g updateGroup, c catalog.Catalog) map[string]catalog.Package 
 	return out
 }
 func updatePackageOwner(id string) string {
+	if id == "vault" || strings.HasPrefix(id, "vault-") {
+		return "vault"
+	}
 	fixed := map[string]string{"manager": "workspace", "cloudflared": "workspace", "license": "workspace", "notice": "workspace", "accounts": "accounts", "drive": "drive", "photos": "drive", "gitea": "gitea", "music": "music", "mail": "mail", "mail-license": "mail", "mail-notice": "mail", "studio": "studio", "studio-license": "studio", "services-shared": "calendar", "stalwart-shared": "calendar", "calendar": "calendar", "contacts": "calendar", "calendar-license": "calendar", "notes": "notes", "notes-LICENSE": "notes", "notes-NOTICE": "notes", "notes-THIRD-PARTY-LICENSES.txt": "notes", "my-tube": "my-tube", "my-tube-LICENSE": "my-tube", "my-tube-NOTICE": "my-tube", "my-tube-THIRD-PARTY-LICENSES.txt": "my-tube"}
 	if owner := fixed[id]; owner != "" {
 		return owner

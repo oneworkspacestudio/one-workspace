@@ -119,12 +119,24 @@ func OpenBrowser(url string) {
 	_ = cmd.Start()
 }
 func Autostart(exe, data string, enabled bool) error {
-	k, _, e := registry.CreateKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE)
+	k, _, e := registry.CreateKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE|registry.QUERY_VALUE)
 	if e != nil {
 		return e
 	}
 	defer k.Close()
 	if !enabled {
+		existing, _, readErr := k.GetStringValue("OneWorkspace")
+		if readErr == registry.ErrNotExist {
+			return nil
+		}
+		if readErr != nil {
+			return readErr
+		}
+		// A new portable/test installation must not disable another installation's
+		// existing autostart registration when its own checkbox is off.
+		if existing != `"`+exe+`" --data "`+data+`" run` {
+			return nil
+		}
 		e = k.DeleteValue("OneWorkspace")
 		if e == registry.ErrNotExist {
 			return nil

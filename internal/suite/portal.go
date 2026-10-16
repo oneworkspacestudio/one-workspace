@@ -174,6 +174,7 @@ func (p *Portal) callback(w http.ResponseWriter, r *http.Request) {
 func (p *Portal) Handler(control string) http.Handler {
 	mux := http.NewServeMux()
 	p.navigationRoutes(mux)
+	p.vaultRoutes(mux)
 	p.updateRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
 	mux.HandleFunc("GET /auth/login", p.login)
@@ -274,7 +275,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		})
 	}
 	for _, a := range p.rt.Config.Catalog.Apps {
-		if a.ID == "accounts" || a.ID == "drive" || a.ID == "photos" || a.Kind != "process" {
+		if a.ID == "accounts" || a.ID == "drive" || a.ID == "photos" || a.ID == "vault" || a.Kind != "process" {
 			continue
 		}
 		route := strings.TrimRight(a.Route, "/")

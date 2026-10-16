@@ -80,3 +80,17 @@ content-addressed SVG filenames. Setup and update windows use those filenames to
 A new SVG receives a new URL, so browser/CDN entries for previous artwork cannot
 hide a branding change. Versioned files have immutable caching and ETags; legacy
 filenames remain available with revalidation. App component pins are unchanged.
+
+## My Vault Windows preview
+
+My Vault is the thirteenth app in fresh installations, pinned to the public org
+release. Its separate HTTPS origin and independent master-password route do not
+require MyAccounts. Portable encrypted export/import, offline CLI access and full
+age-encrypted server restore with attachment checks passed in isolated same-host
+Windows fixtures. Clean-host, desktop/extension, browser trust/registration,
+service/reboot and independent security review remain open. Read the installed
+docs/MyVault/acceptance.json and SECURITY-REVIEW.md. This is an unsigned preview
+and is not approved for important production credentials. Mobile is deferred.
+Existing installations keep their selected app set during update; no new vault
+or account is silently enabled. The installer does not update a live suite as
+part of building or publishing this release.

@@ -37,11 +37,13 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_contacts.svg" alt="Contacts logo" width="40" height="40"> **Contacts** | Your address book, sharing Calendar's local service. | [calendar](https://github.com/oneworkspacestudio/calendar) |
 | <img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"> **Notes** | Private notes and notebooks, with Markdown editing and history. | [notes](https://github.com/oneworkspacestudio/notes) |
 | <img src="internal/branding/icons/my_tube.svg" alt="My Tube logo" width="40" height="40"> **My Tube** | Upload and watch videos, create channels and playlists, and follow your community. | [my-tube](https://github.com/oneworkspacestudio/my-tube) |
+| <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
 
 The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
 Notes is included from its [organization release](https://github.com/oneworkspacestudio/notes/releases).
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
+My Vault keeps its own vault login and master password. Its launcher opens a separate secure address; independent recovery works without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
 Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its
 existing private engine and mailboxes until an explicit supported migration.
 [Shared-service integration](docs/SHARED-SERVICES.md).

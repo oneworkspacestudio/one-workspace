@@ -70,5 +70,11 @@
   "withheldMusic": {
     "reason": "New Music build awaiting Microsoft analysis; bundle the previous published release.",
     "sha256": "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
+  },
+  "myVault": {
+    "repository": "oneworkspacestudio/my-vault",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-vault-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "d0912e0f7780f4dbb4d4525480147f7b1079d1f45627d704a3aee7318064da1d"
   }
 }

@@ -153,6 +153,8 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 12
 		case "my-tube":
 			app.Port = r.Port + 13
+		case "vault":
+			app.Port = r.Port + 14
 		}
 		apps = append(apps, app)
 	}
@@ -195,6 +197,9 @@ func CheckPorts(c Config) error {
 	for _, a := range c.Catalog.Apps {
 		if a.Kind == "process" {
 			ports = append(ports, a.Port)
+			if a.ID == "vault" {
+				ports = append(ports, a.Port+1)
+			}
 			if a.ID == "mail" && !usesShared(c, "mail") {
 				ports = append(ports, a.Port+1, a.Port+2)
 			}

@@ -8,7 +8,7 @@ const apps = [
   ['my_photos', 'Photos'], ['my_music', 'Music'], ['my_git', 'Git'],
   ['my_accounts', 'MyAccounts'], ['photo_editor', 'Photo Editor'], ['my_mail', 'Mail'],
   ['my_calendar', 'Calendar'], ['my_contacts', 'Contacts'], ['my_notes', 'Notes'],
-  ['my_tube', 'My Tube'],
+  ['my_tube', 'My Tube'], ['my_vault', 'My Vault'],
 ];
 
 async function main() {

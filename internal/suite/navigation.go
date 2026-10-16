@@ -51,7 +51,7 @@ func (p *Portal) isAppRequest(r *http.Request) bool {
 	}
 	for _, app := range p.rt.Config.Catalog.Apps {
 		route := strings.TrimRight(app.Route, "/")
-		if app.ID != "accounts" && app.Kind == "process" && route != "" && (r.URL.Path == route || strings.HasPrefix(r.URL.Path, route+"/")) {
+		if app.ID != "accounts" && app.ID != "vault" && app.Kind == "process" && route != "" && (r.URL.Path == route || strings.HasPrefix(r.URL.Path, route+"/")) {
 			return true
 		}
 	}
