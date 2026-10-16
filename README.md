@@ -14,7 +14,7 @@
 Browse files, edit documents, enjoy your photos and music, and move between apps with one account. One Workspace brings them together in a browser, while your files stay on the computer and in the folders you choose.
 
 - **Your files stay yours.** Work with ordinary folders on your own storage.
-- **Connected sign-in.** Use MyAccounts across connected apps. My Vault keeps its independent master password.
+- **Connected sign-in.** Sign in once with MyAccounts and open connected apps without repeating their sign-in buttons. My Vault keeps its independent master password. [How sign-in works](docs/SIGN-IN.md).
 - **Room to grow.** Add more apps as your needs change.
 
 ## Meet your apps
@@ -45,9 +45,13 @@ Notes is included from its [organization release](https://github.com/oneworkspac
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
 My Vault uses optional MyAccounts sign-in on its own secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
 
-**Preview 26 includes [My Vault 0.2.0 RC2](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.2)**
-in the installer and app launcher, with My Vault branding, optional MyAccounts
-session reuse, independent password access and encrypted recovery tools.
+**Preview 27 adds automatic app sign-in** using an existing MyAccounts session,
+with direct app entry, return-page handling and a retry option if sign-in cannot
+finish. It includes all thirteen apps and the same
+[My Vault 0.2.0 RC2](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.2)
+with independent password access and encrypted recovery tools. Mail’s browser
+sign-in remains unverified because the browser blocked the request; fresh local
+Vault access still requires certificate trust. [Recorded review](docs/SIGN-IN.md#recorded-local-review-16-october-2026).
 
 **My Vault is a preview:** do not store important credentials until its remaining client, clean-computer and security acceptance checks are complete. [Recorded checks and limitations](https://github.com/oneworkspacestudio/my-vault/blob/main/docs/acceptance.json).
 Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its

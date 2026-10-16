@@ -7,7 +7,7 @@
   if ('serviceWorker' in navigator) {
    const music=catalog.apps.find(app=>app.Name==='Music');
    if (music) {
-    const scope=new URL(music.URL.replace(/\/$/,'')+'/',location.origin).href;
+    const scope=new URL('/music/',location.origin).href;
     navigator.serviceWorker.getRegistration(scope)
      .then(registration=>registration?.scope===scope ? registration.update() : undefined).catch(()=>{});
    }

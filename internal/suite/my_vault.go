@@ -1,6 +1,7 @@
 package suite
 
 import (
+	"crypto/tls"
 	"fmt"
 	"html/template"
 	"net"
@@ -8,6 +9,7 @@ import (
 	"net/url"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/fahimc/one-workspace/internal/platform"
 )
@@ -40,7 +42,22 @@ func (p *Portal) vaultRoutes(mux *http.ServeMux) {
 		if e == nil && u.Scheme == "https" && u.User == nil && u.RawQuery == "" && u.Fragment == "" {
 			localBase = strings.TrimRight(u.EscapedPath(), "/")
 		}
-		_ = vaultLanding.Execute(w, map[string]string{"Local": fmt.Sprintf("https://localhost:%d%s/?workspace=1", app.Port+1, localBase)})
+		local := fmt.Sprintf("https://localhost:%d%s/?workspace=1", app.Port+1, localBase)
+		requestHost, _, err := net.SplitHostPort(r.Host)
+		if err != nil {
+			requestHost = r.Host
+		}
+		if localVaultHostname(requestHost) {
+			// First-run trust instructions must remain reachable. Once the local
+			// certificate is trusted, subsequent launches skip this extra page.
+			dialer := tls.Dialer{NetDialer: &net.Dialer{Timeout: 2 * time.Second}, Config: &tls.Config{ServerName: "localhost", MinVersion: tls.VersionTLS12}}
+			if conn, err := dialer.DialContext(r.Context(), "tcp", fmt.Sprintf("localhost:%d", app.Port+1)); err == nil {
+				conn.Close()
+				http.Redirect(w, r, local, http.StatusSeeOther)
+				return
+			}
+		}
+		_ = vaultLanding.Execute(w, map[string]string{"Local": local})
 	}
 	mux.HandleFunc("GET /vault", handler)
 	mux.HandleFunc("GET /vault/", handler)

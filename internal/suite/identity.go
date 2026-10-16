@@ -10,6 +10,8 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -176,4 +178,34 @@ func ensurePortalLogoutRedirect(ctx context.Context, rt *Runtime) error {
 	}
 	app["redirectUris"] = append(redirects, target)
 	return api.call(ctx, "/api/update-application?id="+id, app, nil)
+}
+
+// Upgrade only the clients owned by this installation. Preserve their secrets,
+// callbacks, consent requirements, roles and every other administrator setting.
+func ensureSharedSignIn(ctx context.Context, rt *Runtime) error {
+	api := newIdentity(rt.Config)
+	if err := api.login(ctx, rt.Secrets); err != nil {
+		return fmt.Errorf("configure shared sign-in: %w", err)
+	}
+	for _, client := range rt.Secrets.Clients {
+		if !strings.HasPrefix(client.ID, "workspace-") {
+			continue
+		}
+		id := "admin/" + client.ID
+		var app map[string]any
+		if err := api.call(ctx, "/api/get-application?id="+url.QueryEscape(id), nil, &app); err != nil {
+			return fmt.Errorf("check shared sign-in for %s: %w", client.ID, err)
+		}
+		if app["clientId"] != client.ID || app["organization"] != "myaccounts" {
+			return fmt.Errorf("shared sign-in client %s did not match this installation", client.ID)
+		}
+		if app["enableAutoSignin"] == true && app["enableSigninSession"] == true {
+			continue
+		}
+		app["enableAutoSignin"], app["enableSigninSession"] = true, true
+		if err := api.call(ctx, "/api/update-application?id="+url.QueryEscape(id), app, nil); err != nil {
+			return fmt.Errorf("enable shared sign-in for %s: %w", client.ID, err)
+		}
+	}
+	return nil
 }

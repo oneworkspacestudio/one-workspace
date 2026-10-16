@@ -97,3 +97,27 @@ and is not approved for important production credentials. Mobile is deferred.
 Existing installations keep their selected app set during update; no new vault
 or account is silently enabled. The installer does not update a live suite as
 part of building or publishing this release.
+
+## Preview 27: shared browser sign-in
+
+The Workspace manager opens connected apps through their own OIDC clients when
+their native session is absent or expired, reusing the existing MyAccounts
+browser session. App tiles, the shared switcher and browser bookmarks avoid
+another local sign-in button. Cookie path canonicalization, bounded return-page
+handling and one-attempt recovery prevent repeat redirects; explicit app logout
+pauses automatic sign-in until a deliberate reopen/retry. Startup repairs shared
+sign-in flags on this installation’s registered clients without replacing their
+secrets, callback addresses, permissions or consent requirements.
+
+All thirteen apps remain bundled from the same verified organization component
+pins as preview26. No component executable or encryption implementation changes.
+Local Vault launch skips its instruction page only after ordinary Windows TLS
+validation succeeds; independent login and master-password unlock remain.
+
+Isolated browser review reached authenticated Workspace, Drive/Docs/Photos/Studio,
+Calendar/Contacts, Notes, MyTube, Music, Git and MyAccounts, and checked Notes
+logout/pause/retry. Mail navigation was blocked with ERR_BLOCKED_BY_CLIENT; the
+fresh Vault certificate was not trusted. These two full browser acceptance gates
+remain open. The final Vault TLS gate was compile-checked after that review.
+No new automated tests, real account exercise, live upgrade, clean-computer,
+service/reboot, mail-delivery or all-features acceptance is claimed. See SIGN-IN.md.

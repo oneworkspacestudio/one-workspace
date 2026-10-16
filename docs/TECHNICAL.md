@@ -75,11 +75,18 @@ reset passwords. Email delivery is disabled initially; administrators can reset
 passwords without email. Configure an email service separately in MyAccounts if
 you want verification emails or self-service recovery.
 
-Apps share an identity. An existing MyAccounts session is reused when opening
-Drive's **Sign in with MyAccounts** link; Docs and Photos reuse Drive's session.
-Each app retains its own session. Portal sign-out clears the portal session;
-sign out of Drive and Accounts as well on shared computers. Immediate global
-session revocation across all apps is not implemented in this preview.
+Workspace starts each connected app’s normal MyAccounts sign-in automatically
+when its native browser session is missing or expired. An existing MyAccounts
+session completes that handoff without another sign-in button or password.
+Docs, Photos and Photo Editor reuse Drive’s session. My Vault stays on its own
+HTTPS origin and still requires its encryption unlock. [Sign-in behavior and
+recovery](SIGN-IN.md).
+
+Each app retains its own session. Workspace sign-out closes portal access,
+clears the known app cookies and requests MyAccounts browser sign-out. A browser
+may block the provider step; follow the sign-out guidance then. Independently
+issued app tokens, native clients and public sharing links are not globally
+revoked by browser sign-out.
 
 ## Local and public addresses
 Default local addresses are `http://localhost:8990` for Workspace and

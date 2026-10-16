@@ -78,6 +78,10 @@ func clearAppCookies(w http.ResponseWriter, r *http.Request, secure bool) {
 		"workspace_gitea": {"/", "/git", "/git/"},
 	}
 	domain := r.Host
+	for _, app := range suiteSignIns {
+		names["workspace_sso_"+app.id] = []string{"/"}
+		names["workspace_return_"+app.id] = []string{"/"}
+	}
 	if host, _, err := net.SplitHostPort(domain); err == nil {
 		domain = host
 	}

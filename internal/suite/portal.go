@@ -65,6 +65,9 @@ func NewPortal(ctx context.Context, rt *Runtime) (*Portal, error) {
 		}
 	}
 	client := rt.Secrets.Clients["portal"]
+	if err := ensureSharedSignIn(ctx, rt); err != nil {
+		return nil, err
+	}
 	return &Portal{rt: rt, oauth: oauth2.Config{ClientID: client.ID, ClientSecret: client.Secret, Endpoint: provider.Endpoint(), RedirectURL: rt.Config.Origin + "/auth/callback", Scopes: []string{oidc.ScopeOpenID, "profile", "email"}}, verifier: provider.Verifier(&oidc.Config{ClientID: client.ID}), flows: map[string]loginFlow{}, sessions: map[string]session{}, secure: strings.HasPrefix(rt.Config.Origin, "https://"), logoutEndpoint: metadata.Logout}, nil
 }
 func (p *Portal) cookie(w http.ResponseWriter, name, value string, age int) {
@@ -95,6 +98,11 @@ func safeReturnPath(raw string) string {
 	return u.RequestURI()
 }
 func (p *Portal) login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "no-store")
+	if _, ok := p.user(r); ok {
+		http.Redirect(w, r, safeReturnPath(r.URL.Query().Get("returnTo")), http.StatusSeeOther)
+		return
+	}
 	state, nonce, v := platform.Token(), platform.Token(), oauth2.GenerateVerifier()
 	p.mu.Lock()
 	for k, f := range p.flows {
@@ -174,6 +182,7 @@ func (p *Portal) callback(w http.ResponseWriter, r *http.Request) {
 func (p *Portal) Handler(control string) http.Handler {
 	mux := http.NewServeMux()
 	p.navigationRoutes(mux)
+	mux.HandleFunc("GET /_workspace/open/{id}", p.appOpen)
 	p.vaultRoutes(mux)
 	p.updateRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
@@ -297,6 +306,10 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		user, ok := p.user(r)
+		if !ok && r.URL.Query().Get("signedOut") != "1" {
+			p.login(w, r)
+			return
+		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		_ = home.Execute(w, map[string]any{"LoggedIn": ok, "User": user, "Tiles": p.tiles(), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
@@ -318,7 +331,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		if p.isAppRequest(r) {
 			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) {
 				if r.Method == "GET" && strings.Contains(r.Header.Get("Accept"), "text/html") {
-					http.Redirect(w, r, "/?returnTo="+url.QueryEscape(safeReturnPath(r.URL.RequestURI())), http.StatusSeeOther)
+					http.Redirect(w, r, "/auth/login?returnTo="+url.QueryEscape(safeReturnPath(r.URL.RequestURI())), http.StatusSeeOther)
 				} else {
 					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(401)
@@ -326,6 +339,9 @@ func (p *Portal) Handler(control string) http.Handler {
 				}
 				return
 			}
+		}
+		if _, ok := p.user(r); ok && p.seamlessApp(w, r) {
+			return
 		}
 		if _, ok := p.user(r); !ok && publicDriveRoute(r.URL.Path) {
 			anonymousShareCookies(r)
@@ -422,7 +438,7 @@ type catalogTile struct{ Name, Description, URL, Icon string }
 func (p *Portal) tiles() []catalogTile {
 	tiles := []catalogTile{}
 	for _, a := range p.rt.Config.Catalog.Apps {
-		link := a.Route
+		link := "/_workspace/open/" + a.ID
 		if a.ID == "accounts" {
 			link = p.rt.Config.Issuer
 		}
