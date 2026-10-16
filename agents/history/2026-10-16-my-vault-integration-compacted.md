@@ -118,3 +118,90 @@ follow-up2bd05bf on the org main branch. Release25 remains pinned to42363fb;
 follow-up edits are documentation only. Keep future pulls/pushes on the org.
 The initial follow-up also reached the legacy remote; no history was reset or
 release created there. Preserve existing legacy history rather than force-pushing.
+
+## Optional Vault identity and local release candidate
+
+Owner requested branded production completion and existing-session sign-in. Local
+changes only; no new commit/push/release, public preview25 and org lock unchanged.
+Live installation untouched. My Vault remains independently recoverable, with no
+required Accounts catalog dependency and a separate HTTPS browser origin.
+
+prepareVaultIdentity registers only dedicated admin/workspace-vault MyAccounts
+client using existing local recovery-admin API, standard JWT/code/PKCE and exact
+vault /identity/connect/oidc-signin callback. Saves protected optional config, honors
+explicit disabled state, preserves unrelated clients and continues independent
+startup on failure. Native fixture registration and unit checks passed. /vault
+remains anonymous launcher; workspace=1 triggers standard optional SSO. Existing
+identity browser session reused successfully, vault master unlock still separate.
+No vault keys/passwords or portal cookies cross origins. Guides/README/build docs
+updated. Current source tests/vet passed; targeted tests passed after final URL fix.
+
+scripts/build-candidate.go verifies seed catalog/package size/SHA, copies unchanged
+compressed components, replaces only manager/vault/guides and rejects extra entries.
+RC labels/new output directory required. Existing dist/workspace-bundle.zip remains
+published25. Ignored internal/payload/bundle/payload.zip now holds local RC: beware
+before future setup builds. Candidate manager version0.3.0-rc.1 and vault0.2.0-rc.1.
+Final artifact tooling/my-vault/candidate-suite-final/WorkspaceSetup-windows-amd64.exe
+is675388928bytes; exact vault SHA572da2056458614f131eac9f6145795b47e6905d94dd29fea9827bd4f2738ce6.
+
+Actual final offline installer passed fresh isolated13app installation, all11process
+health checks, exact vault binary, optional MyAccounts auto-configuration, anonymous
+dedicated HTTPS launcher, installed recovery/sign-in guides and unchanged prior
+autostart. Receipt tooling/my-vault/rc-workspace-suite/acceptance.json. Programs,
+private test root and files removed after supervisor/shared helpers stopped and
+no remaining process references. Local testing uses --offline; online still fetches
+the public preview25, not unpublished RC. No clean-host/reboot/all-app-flow claim.
+
+Vault final candidate passed independent encrypted recovery/export/import/offline
+CLI and exact attachments with MyAccounts stopped. UI/SSO tested in synthetic browser
+fixture only. Manual new-account registration pending human credentials; user saw
+no page, IAB visibility enabled and blank password form captured for handoff. Current
+preview C:/Projects/.cache/my-vault-build/sso-fixture/my-vault on HTTPS localhost18935,
+PID79588 (verify), older same-UI RC dist executable. Synthetic identity19951 stopped.
+Previous native-final-recovered root is deleted; approved test cert retained. Never
+publish fixture secrets or automate new credential entry. Production eligibility
+remains false for manual registration, desktop/extension, clean physical host,
+elevated service/reboot, MFA/passkeys/collections and independent security review.
+Mobile deferred. Preserve unrelated installed-preview22 handoff.
+
+## RC2 first-run testing and final local installer
+
+Owner requested disposable-password testing instead of manual registration. Vault
+native SDK account creation, browser sign-in/create/edit, independent CLI decrypt,
+same-root executable replacement and retained original password/item/certificate
+passed. Browser Create account final submission remains outside automated UI
+acceptance; no owner account/password or live state was used. New screenshot caught
+dark dialog/card surfaces with light text: complete pinned upstream light-token
+palette now fixes OS-dark first-run screens without client crypto/settings changes.
+Public recovery page HTTP example corrected and regression-tested.
+
+Current local manager0.3.0-rc.2 and My Vault0.2.0-rc.2 are bundled in
+tooling/my-vault/candidate-suite-rc2/WorkspaceSetup-windows-amd64.exe (675386368bytes,
+SHA3ee9447043f721fe45a06a4b50516bda14753b56dac62516bcbc51eea27ff818). Vault SHA
+bf8ec3ec6fd5a73ab35946d926efd00cd3b1ffe537b38a1b2c7e4f6e787916fe. Seed packages
+verified and unchanged components copied verbatim. Actual offline installer passed
+fresh isolated13app install/11process health, exact vault, auto identity settings,
+anonymous dedicated HTTPS launcher/guides, autostart unchanged/live install untouched.
+Receipt tooling/my-vault/rc2-workspace-suite/acceptance.json and package sidecar
+ACCEPTANCE.json. Embedded guides record pre-test acceptance; sidecar has final RC2.
+Online launch still fetches public preview25; run this unpublished RC with --offline.
+
+Exact RC2 vault repeated stopped-source independent encrypted restore, attachments,
+export/import and offline CLI unlock. Tests/vet pass; no production sign-off claimed.
+All owned previews/suite/shared helpers stopped and RC2 temporary private/program/
+files/recovered/client-profile roots removed after boundary/reparse/process checks.
+Retained one stopped synthetic sso-fixture source for reproducibility; manual handoff
+is cancelled. Ignored internal/payload/bundle/payload.zip is now RC2, dist baseline
+bundle still public25. No org lock change, commit/push/release or Actions. Use this
+state for later publication only after explicit authorization and open production
+gates; preserve unrelated installed-preview22 history and live user installation.
+
+## Preview 26 publication authorized
+
+Owner explicitly requested My Vault included in app/README and all current work
+pushed/released. Target v0.3.0-preview.26 keeps13apps and pins My Vault v0.2.0-rc.2
+from the org, retaining all other pins. Update normal rebuild defaults and shipped
+guides/README to match. Build locally with no Actions; publish exact source,
+component provenance, checksums, installer/bundle and independent vault contract.
+Releases remain previews and must disclose open production gates. Never stage
+the unrelated installed-preview22 handoff or change the live installation.

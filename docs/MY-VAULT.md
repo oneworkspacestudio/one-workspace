@@ -1,5 +1,9 @@
 # My Vault integration
 
+One Workspace preview 26 includes My Vault 0.2.0 RC2 from the public organization
+release, with its own app tile/logo, light interface, optional MyAccounts session
+reuse and independent recovery guides. Fresh installations include it by default.
+
 My Vault is a native Windows Vaultwarden companion from
 [oneworkspacestudio/my-vault](https://github.com/oneworkspacestudio/my-vault).
 It preserves the established vault protocol/client encryption and provides
@@ -10,7 +14,9 @@ The installed MyVault.exe runs one supervised loopback-only engine, with state i
 `Private/my-vault`. The fixed gateway port is Workspace base+14; the following
 port serves dedicated local HTTPS. Trust the app's unique localhost certificate
 explicitly through its local owner tools before browser use. Its catalog has
-no MyAccounts dependency, OIDC client or identity secret. The process lock prevents
+no required MyAccounts dependency. The updated manager configures an optional,
+dedicated upstream OIDC client without sharing the portal cookie or encryption
+keys. Independent email/master-password sign-in stays available. The process lock prevents
 another standalone/service instance from adopting that same root concurrently.
 
 The `/vault` entry is a launcher. It never proxies cryptographic HTML through the
@@ -19,6 +25,17 @@ dedicated configured HTTPS vault hostname is linked directly. Until remote hosti
 is configured, the entry explains setup and provides the local computer's direct
 loopback link. Configure a trusted HTTPS proxy/tunnel to that fixed listener using
 the app's owner tools. Saving a hostname does not create DNS/certificates.
+
+On startup the updated manager registers only its dedicated `workspace-vault`
+application, using the vault's exact OIDC callback, standard signed ID tokens and
+PKCE. It stores the optional client in protected `my-vault/myvault-sso.json`.
+Create the independent vault account first and verify its matching MyAccounts
+email. Workspace launches with a sign-in hint; the unmodified client reuses its
+vault session before starting OIDC. Locked clients still need their encryption
+unlock. Local owner opt-out persists across starts, and identity setup failure
+does not stop the independent vault. No public SSO signup or unverified-email
+linking is enabled. The browser's independent-login route works with MyAccounts
+stopped; recovery archives intentionally exclude the OIDC client file.
 
 If Workspace or MyAccounts is unavailable, stop any remaining supervised vault
 and run the installed MyVault.exe directly. Its adjacent workspace-location.json

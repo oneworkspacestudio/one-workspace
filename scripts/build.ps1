@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.1.0-preview.1',
+ [string]$Version='0.3.0-preview.26',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261014.2',
  [string]$DriveVersion='photos-preview-local',
@@ -25,7 +25,7 @@ param(
  [string]$MyTubeVersion='0.1.0-preview.1',
  [string]$MyTubeNotices='',
  [string]$MyVault='',
- [string]$MyVaultVersion='0.1.0-preview.1',
+ [string]$MyVaultVersion='0.2.0-rc.2',
  [string]$MyVaultNotices='',
  [string]$DriveSource='https://github.com/oneworkspacestudio/drive',
  [string]$PhotosSource='https://github.com/oneworkspacestudio/drive',
@@ -66,7 +66,7 @@ try {
  if($MyTube){$inputs['my-tube']=@{source=$MyTube;file='MyTube.exe'};if(-not $MyTubeNotices){throw 'My Tube requires its license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['my-tube-'+$name]=@{source=(Join-Path $MyTubeNotices $name);file='licenses/MyTube-'+$name}}}
  if($Calendar -or $Contacts){$inputs['calendar-license']=@{source=(Join-Path $root 'docs/licenses/stalwart-AGPL-3.0-only.txt');file='licenses/Calendar-AGPL-3.0-only.txt'}}
  if($MyVault){$inputs['vault']=@{source=$MyVault;file='MyVault.exe'};if(-not $MyVaultNotices){throw 'My Vault requires its corresponding license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['vault-'+$name]=@{source=(Join-Path $MyVaultNotices $name);file='licenses/MyVault-'+$name}}}
- if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
+ if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","SIGN-IN.md","PRODUCTION-GATES.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/oneworkspacestudio/myaccounts/releases/tag/'+$AccountsVersion},

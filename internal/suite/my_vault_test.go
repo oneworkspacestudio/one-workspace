@@ -39,7 +39,7 @@ func TestVaultUsesIndependentOriginWithoutPortalSession(t *testing.T) {
 	platform.SaveJSON(filepath.Join(root, "my-vault", "myvault.json"), map[string]string{"origin": "https://vault.example.test"})
 	w := httptest.NewRecorder()
 	mux.ServeHTTP(w, r)
-	if w.Code != 303 || w.Header().Get("Location") != "https://vault.example.test/" {
+	if w.Code != 303 || w.Header().Get("Location") != "https://vault.example.test/?workspace=1" {
 		t.Fatal("dedicated vault origin not linked directly")
 	}
 }

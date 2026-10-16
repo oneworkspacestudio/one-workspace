@@ -31,12 +31,16 @@ func (p *Portal) vaultRoutes(mux *http.ServeMux) {
 		u, e := url.Parse(settings.Origin)
 		workspace, _ := url.Parse(p.rt.Config.Origin)
 		if e == nil && u.Scheme == "https" && u.Host != "" && u.User == nil && u.RawQuery == "" && u.Fragment == "" && !localVaultHostname(u.Hostname()) && !sameVaultOrigin(u, workspace) {
-			http.Redirect(w, r, strings.TrimRight(u.String(), "/")+"/", http.StatusSeeOther)
+			http.Redirect(w, r, strings.TrimRight(u.String(), "/")+"/?workspace=1", http.StatusSeeOther)
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-store")
-		_ = vaultLanding.Execute(w, map[string]string{"Local": fmt.Sprintf("https://localhost:%d/", app.Port+1)})
+		localBase := ""
+		if e == nil && u.Scheme == "https" && u.User == nil && u.RawQuery == "" && u.Fragment == "" {
+			localBase = strings.TrimRight(u.EscapedPath(), "/")
+		}
+		_ = vaultLanding.Execute(w, map[string]string{"Local": fmt.Sprintf("https://localhost:%d%s/?workspace=1", app.Port+1, localBase)})
 	}
 	mux.HandleFunc("GET /vault", handler)
 	mux.HandleFunc("GET /vault/", handler)
@@ -57,4 +61,4 @@ func sameVaultOrigin(a, b *url.URL) bool {
 	return strings.EqualFold(a.Scheme, b.Scheme) && strings.EqualFold(strings.TrimSuffix(a.Hostname(), "."), strings.TrimSuffix(b.Hostname(), ".")) && port(a) == port(b)
 }
 
-var vaultLanding = template.Must(template.New("vault-launcher").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Vault · One Workspace</title><style>body{margin:60px auto;padding:25px;max-width:720px;background:#f5f7fc;color:#17233b;font:16px/1.8 system-ui}h1{font-size:42px;letter-spacing:-1.7px}a{color:#6550cc}code{background:#ede9fa;padding:4px 7px;border-radius:5px}.card{background:white;border:1px solid #e2e6f2;border-radius:20px;padding:32px}</style><div class="card"><h1>Your vault. Independently.</h1><p>My Vault uses its own master password and a separate secure address to protect its browser storage. MyAccounts is not required to unlock or recover it.</p><p><a href="{{.Local}}">Open the local vault on this computer →</a></p><p>Trust the unique local certificate through My Vault’s owner tools before local sign-in. Trust the unique local certificate through My Vault’s owner tools before local sign-in. For access from another device, run <code>MyVault.exe manage</code> on the server and configure a dedicated HTTPS hostname, such as <code>vault.example.com</code>. Point its trusted proxy at My Vault's fixed loopback listener.</p><p>Keep a verified encrypted backup, a password-protected portable export and an offline client copy outside the server. Recovery &amp; Portability explains each step.</p><p>If Workspace or MyAccounts is unavailable, run the installed MyVault.exe directly with the same private data folder. Only one instance can own it.</p><p><a href="/">Return to Workspace</a></p></div></html>`))
+var vaultLanding = template.Must(template.New("vault-launcher").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Vault · One Workspace</title><link rel="icon" href="/branding/icons/my_vault.svg"><style>body{margin:60px auto;padding:25px;max-width:720px;background:#f8fafd;color:#202124;font:16px/1.8 Arial,system-ui}h1{font-size:36px;font-weight:400;letter-spacing:-1px}a{color:#0b57d0}code{background:#edf2fa;padding:4px 7px;border-radius:5px}.card{background:white;border:1px solid #e2e6f2;border-radius:28px;padding:36px}.logo{width:48px}.button{display:inline-block;border-radius:24px;padding:10px 22px;background:#0b57d0;color:#fff;text-decoration:none}</style><div class="card"><img class="logo" src="/branding/icons/my_vault.svg" alt="My Vault"><h1>Your passwords, together.</h1><p>My Vault reuses its active session when you open it. When connected, MyAccounts handles sign-in and your vault master password unlocks the encrypted items.</p><p><a class="button" href="{{.Local}}">Open My Vault on this computer →</a></p><p>For local access, trust the unique certificate through My Vault’s owner tools. To use another device, configure a dedicated HTTPS address such as <code>vault.example.com</code> in those tools and point its trusted proxy at the vault’s loopback listener.</p><p>Independent vault sign-in remains available if MyAccounts is down. Keep a verified encrypted backup, a portable encrypted export and an offline client copy outside the server.</p><p><a href="/">Return to Workspace</a></p></div></html>`))

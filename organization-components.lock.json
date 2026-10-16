@@ -73,8 +73,8 @@
   },
   "myVault": {
     "repository": "oneworkspacestudio/my-vault",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-vault-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "d0912e0f7780f4dbb4d4525480147f7b1079d1f45627d704a3aee7318064da1d"
+    "tag": "v0.2.0-rc.2",
+    "asset": "my-vault-0.2.0-rc.2-windows-amd64.zip",
+    "sha256": "c5829d27f217d57f300f8dd045851c41b1f20985938091532c40e555eed14b56"
   }
 }

@@ -43,7 +43,12 @@ The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
 Notes is included from its [organization release](https://github.com/oneworkspacestudio/notes/releases).
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
-My Vault keeps its own vault login and master password. Its launcher opens a separate secure address; independent recovery works without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
+My Vault uses optional MyAccounts sign-in on its own secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
+
+**Preview 26 includes [My Vault 0.2.0 RC2](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.2)**
+in the installer and app launcher, with My Vault branding, optional MyAccounts
+session reuse, independent password access and encrypted recovery tools.
+
 **My Vault is a preview:** do not store important credentials until its remaining client, clean-computer and security acceptance checks are complete. [Recorded checks and limitations](https://github.com/oneworkspacestudio/my-vault/blob/main/docs/acceptance.json).
 Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its
 existing private engine and mailboxes until an explicit supported migration.

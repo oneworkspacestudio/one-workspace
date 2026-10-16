@@ -1,4 +1,4 @@
-# October 15 release status
+# October 16 release status
 
 The supplied eleven app SVGs are applied to app headers, favicons, Windows icons
 and repository README logos. Component executables were built locally; GitHub
@@ -83,12 +83,15 @@ filenames remain available with revalidation. App component pins are unchanged.
 
 ## My Vault Windows preview
 
-My Vault is the thirteenth app in fresh installations, pinned to the public org
-release. Its separate HTTPS origin and independent master-password route do not
-require MyAccounts. Portable encrypted export/import, offline CLI access and full
-age-encrypted server restore with attachment checks passed in isolated same-host
-Windows fixtures. Clean-host, desktop/extension, browser trust/registration,
-service/reboot and independent security review remain open. Read the installed
+My Vault is the thirteenth app in fresh installations. Preview 26 pins the public
+organization release 0.2.0 RC2, with branded light screens and optional MyAccounts
+OIDC/session reuse. Its separate HTTPS origin and independent master-password
+route do not require MyAccounts. Browser sign-in/save/edit/unlock, official SDK
+registration, retained-data executable replacement, encrypted export/import,
+offline CLI access and full age-encrypted restore/attachment checks passed in
+isolated same-host Windows fixtures. Browser Create account submission, clean-host,
+desktop/extension, service/reboot and independent security review remain open.
+Read the installed
 docs/MyVault/acceptance.json and SECURITY-REVIEW.md. This is an unsigned preview
 and is not approved for important production credentials. Mobile is deferred.
 Existing installations keep their selected app set during update; no new vault

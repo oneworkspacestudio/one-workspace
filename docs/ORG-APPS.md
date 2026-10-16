@@ -16,7 +16,7 @@ field before installing and tell the user to download the current installer.
 They cannot safely register shared-service clients or reassign Calendar ports.
 Always download the current full installer when updating from setup17 or earlier.
 
-The My Tube bundle pins these published organization components:
+The preview 26 bundle pins these published organization components:
 
 | App | Organization repository | Packaged version |
 | --- | --- | --- |
@@ -30,9 +30,10 @@ The My Tube bundle pins these published organization components:
 | Calendar / Contacts | [calendar](https://github.com/oneworkspacestudio/calendar) | 0.1.0-preview.2 |
 | Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.4 |
 | My Tube | [my-tube](https://github.com/oneworkspacestudio/my-tube) | 0.1.0-preview.1 |
+| My Vault | [my-vault](https://github.com/oneworkspacestudio/my-vault) | 0.2.0-rc.2 |
 
 Drive/Photos use their own current pinned organization release, retaining the
-upload fixes and new artwork. All previous pins are preserved when adding My Tube.
+upload fixes and new artwork. Preview 26 updates My Vault; the other app pins are preserved.
 Office and the integrated Photo Editor run inside Drive. Studio.exe is installed
 as well for standalone local editing. The integrated tile uses Drive's existing
 MyAccounts authentication and file permission checks.

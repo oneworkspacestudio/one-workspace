@@ -172,6 +172,15 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	return cmd
 }
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
+	if app.ID == "vault" {
+		identityContext, cancel := context.WithTimeout(ctx, 20*time.Second)
+		err := rt.prepareVaultIdentity(identityContext)
+		cancel()
+		if err != nil {
+			// An optional identity provider must never block independent vault access.
+			rt.progress.Step(app.ID, "running", "MyAccounts connection needs attention; starting independent vault access")
+		}
+	}
 	if app.ID == "music" {
 		if e := prepareMusicTemp(rt.Config); e != nil {
 			return e
