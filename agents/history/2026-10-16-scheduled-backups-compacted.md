@@ -122,3 +122,36 @@ README and backup/update guides now identify28; release status explicitly record
 pending runtime backup/restore acceptance. Refresh the bundled release-status
 notice, installer, exact committed-source ZIP, provenance and checksums before
 publication. Leave the unrelated untracked installed-preview22 handoff untouched.
+
+## Preview 28 published
+
+Published https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.28
+from source/tag `712efb40ee563115037c63c6dc560dfbe554fc56`. Source is pushed to the
+org main branch. All18 public release asset sizes and GitHub SHA256 digests match
+the staged Windows build. Anonymous release discovery selects28 as the newest
+complete release, the installer HEAD returns200, and the public README includes
+Backups/Preview28. Actions remained disabled and were not used.
+
+Release binaries were rebuilt from the exact committed Git archive on isolated
+NTFS, replacing the earlier local candidate. The bundle includes13 component app
+entries and59 verified packages. App definitions and component binaries are
+unchanged from27. Only manager/release-status notice bytes changed, plus JSON
+ordering in component provenance (semantic equality verified). The new backup
+guide, limitations, exact source ZIP, component manifest, licenses and checksums
+are attached. Runtime install/app-selection/backup/restore acceptance remains
+explicitly pending; no new automated tests, live upgrade or app processes ran.
+
+Installer674938880bytes, SHA256
+`494a66d08401d1c8ad2a13f4a536566ccfcb5e00aaac6ecdf6245e124b906d1a`.
+Manager SHA256
+`0c03a49681731857254e9af86c12ed2fbf313591ff0d0dc2e9ec069ae7162792`.
+Bundle SHA256
+`9f14e0eac4f58e6952cf948b467295cf65713d98251b3945ae6c19c5e9c929d2`.
+
+Authoritative release staging and package/publication/final-verification receipts
+are under `tooling/workspace-backups-release28`. Dist release files and embedded
+payload match that stage. The exact temporary NTFS build root was removed after
+artifact/source preservation and canonical/reparse/process checks. C: free space
+returned to about18.1GB. Earlier candidate artifacts remain separate; do not confuse
+their hashes with the published build. No live storage, accounts, DNS, trust or
+autostart changed. This history follow-up does not retag or replace release assets.
