@@ -88,3 +88,26 @@ stopped by the harness. Receipt: tooling/my-vault/workspace-suite/acceptance.jso
 This verifies installation/health/integration, not renewed full flows in every app,
 clean physical host, real reboot/service, browser vault or desktop acceptance.
 No live installation or certificate trust was changed.
+
+## Published and public download verified
+
+Published v0.3.0-preview.25 from42363fb72cec752b327b6e6e5f5ce87757d976e1.
+All16GitHub assets matched local sizes/SHA256 before publication; no Actions.
+Final manager SHA118928429fada318a322fecbce832423dabdf1b68d342b33ffb031ff45e50013.
+The released installer then anonymously downloaded and verified the latest public
+preview25 bundle and reported all13app versions including vault0.1.0-preview.1.
+Receipt tooling/my-vault/public-install-check.json. No live update was performed.
+
+Removed compiler tools/cache and duplicate synthetic C: installations after
+canonical/reparse/process checks. Official rustup's twelve relative file symlinks
+were individually validated/removed without following them before recursive cache
+cleanup. C: free space afterward8,221,650,944bytes. Retained only one stopped
+synthetic native-final-recovered root for the unanswered certificate/browser
+check; no Windows trust modification. Shared fixture service and Stalwart were
+explicitly stopped; no fixture process remained.
+
+README follow-up clarifies vault sign-in/preview status and cache-busts the updated
+logo overview. Remaining production acceptance gates stay open. The computer-use
+skill excludes automating password-manager desktop apps; desktop/clean-host checks
+need manual acceptance, and browser testing awaits explicit local test-certificate
+approval. Mobile was deferred, not silently counted as tested.

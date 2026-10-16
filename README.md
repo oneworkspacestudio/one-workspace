@@ -14,12 +14,12 @@
 Browse files, edit documents, enjoy your photos and music, and move between apps with one account. One Workspace brings them together in a browser, while your files stay on the computer and in the folders you choose.
 
 - **Your files stay yours.** Work with ordinary folders on your own storage.
-- **One account across your apps.** Sign in and open what you need from the workspace.
+- **Connected sign-in.** Use MyAccounts across connected apps. My Vault keeps its independent master password.
 - **Room to grow.** Add more apps as your needs change.
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite.png)
+![Current One Workspace and app logos](docs/branding/app-suite.png?v=my-vault-20261016)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 
@@ -44,6 +44,7 @@ release URLs and checksums recorded in the package. [App sources and installatio
 Notes is included from its [organization release](https://github.com/oneworkspacestudio/notes/releases).
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
 My Vault keeps its own vault login and master password. Its launcher opens a separate secure address; independent recovery works without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
+**My Vault is a preview:** do not store important credentials until its remaining client, clean-computer and security acceptance checks are complete. [Recorded checks and limitations](https://github.com/oneworkspacestudio/my-vault/blob/main/docs/acceptance.json).
 Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its
 existing private engine and mailboxes until an explicit supported migration.
 [Shared-service integration](docs/SHARED-SERVICES.md).
