@@ -205,3 +205,33 @@ guides/README to match. Build locally with no Actions; publish exact source,
 component provenance, checksums, installer/bundle and independent vault contract.
 Releases remain previews and must disclose open production gates. Never stage
 the unrelated installed-preview22 handoff or change the live installation.
+
+## Preview 26 publication complete
+
+Published https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.26
+from1132329eaaa5590603879e7686686d5a577092a7; all16GitHub assets size/SHA verified.
+Windows installer674960384bytes, SHA
+bd9659e9519a59819df89c99565c5181a83fea5a1ccb957c654eb150f0f19441.
+Org build and release source include13apps and exact pinned My Vault RC2, all
+catalog sources in oneworkspacestudio. READMEs, app logo/tile, normal rebuild defaults,
+org lock and installed sign-in/recovery/production guides are published. My Vault
+tag v0.2.0-rc.2 points to9e12239bd841729c51ac4a477ba262112eb20219; binary hash remains
+bf8ec3ec6fd5a73ab35946d926efd00cd3b1ffe537b38a1b2c7e4f6e787916fe. Its release has27
+verified assets, corresponding sources and scoped12package update contract.
+
+The actual preview26 offline installer passed fresh isolated13app installation,
+all11process health, exact vault/optional identity setup, anonymous dedicated HTTPS
+launcher, guides and unchanged existing autostart. Then the released installer
+--check-updates anonymously selected published preview26/VaultRC2, downloaded and
+verified every package without GitHub credentials or performing an installation.
+Normal online use no longer needs --offline to obtain these changes. Receipts:
+tooling/my-vault/workspace-suite26/acceptance.json, workspace-publication26.json and
+public-install26-check.json. Full source/provenance/checksums ship with the release.
+
+All fixture supervisors/shared helpers stopped; temporary C:private and I:Apps/Files
+trees removed after canonical/reparse/process checks, receipt workspace26-cleanup.json.
+No live installation, real accounts, registry autostart, trust store or public DNS
+changed. No Actions; release remains a prerelease with production gates open.
+Repo dist and ignored embedded payload now hold preview26 (not the previous RC2
+or preview25). Source history follow-up commits do not move published tags or
+replace binaries. Preserve unrelated untracked installed-preview22 history.
