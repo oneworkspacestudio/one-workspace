@@ -85,3 +85,38 @@ README, normal build defaults and release/sign-in docs now identify preview27.
 No Actions, live installation update or real-account testing. Preserve the
 unrelated untracked installed-preview22 handoff. Build, source/tag/checksum and
 public-release receipts will be appended after publication is confirmed.
+
+## Preview 27 publication complete
+
+Published https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.27
+from source/tag 03a623bdf98645e057d1ce71fa0840a83fc1747b. All17 public release
+asset sizes and GitHub SHA256 digests match the local Windows build. Installer,
+manager, full bundle/catalog, exact Git source ZIP, component provenance,
+licenses, sign-in/update guides, limitations and checksums are attached. README
+and normal build defaults identify preview27. No individual app source/binary
+changed, so existing component releases remain pinned; all13 app entries and59
+packages are verified. Only manager and release/provenance notice bytes changed;
+organization provenance JSON is semantically identical to preview26.
+
+Installer674976256bytes, SHA256
+f510b1e9ecc9663479622ee3cbcc70a208888a8330cffcaba34e393d145fd5b6.
+Manager SHA256
+3c793782be24554de688217a1a696f26a8ece43de62923694e82eb334224ccd4.
+Bundle SHA256
+6703605f5c8cd83384d19c6fbe1d59aa392c8bc414b30585a9e06cde39052d5c.
+
+Anonymous released-installer --check-updates selected preview27/MyVaultRC2,
+downloaded and verified every package, and removed its scratch data. Public
+installer HEAD returned200. No installation was performed. No new automated
+tests, live-account exercise, trust/DNS/autostart change or live suite upgrade.
+Mail/Vault browser gates and earlier production limitations remain in the public
+notes/build-info. GitHub Actions is disabled and was not used.
+
+Release/tag/source are immutable. This history-only follow-up does not retag or
+replace release assets. Local dist and embedded ignored payload now contain27.
+Receipts/staged assets outside Git: tooling/workspace-auth-release27, including
+publication.json, final-verification.json, public-installer-check.json and
+package-receipt.json. Old26 stage is preserved. Four exact task-owned component
+extraction folders and empty download scratch were removed after canonical,
+reparse and process checks. No app preview was started during publication.
+The unrelated installed-preview22 history remains untracked and untouched.
