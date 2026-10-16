@@ -103,7 +103,7 @@ func (s *Server) Handler() http.Handler {
 	mux.Handle("GET /branding/", branding.Handler())
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		io.WriteString(w, page)
+		io.WriteString(w, branding.VersionHTML(page))
 	})
 	mux.HandleFunc("GET /api/state", func(w http.ResponseWriter, r *http.Request) {
 		s.mu.Lock()

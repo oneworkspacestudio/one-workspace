@@ -72,3 +72,11 @@ managed-update contract are shown for review. See UPDATES.md and UPDATE-PUBLISHI
 Backups remain until explicitly removed. Existing storage, identity, private Mail
 and withheld-Music constraints remain. This does not claim clean-host, real reboot,
 power-loss or Windows service acceptance.
+
+## Branding cache refresh
+
+Workspace app tiles, the shared switcher, the hub logo and favicon now use
+content-addressed SVG filenames. Setup and update windows use those filenames too.
+A new SVG receives a new URL, so browser/CDN entries for previous artwork cannot
+hide a branding change. Versioned files have immutable caching and ETags; legacy
+filenames remain available with revalidation. App component pins are unchanged.

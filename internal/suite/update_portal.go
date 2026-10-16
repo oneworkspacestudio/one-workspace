@@ -3,6 +3,8 @@ package suite
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/fahimc/one-workspace/internal/branding"
 )
 
 func (p *Portal) updateRoutes(mux *http.ServeMux) {
@@ -19,7 +21,7 @@ func (p *Portal) updateRoutes(mux *http.ServeMux) {
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprint(w, updatePortalPage)
+		fmt.Fprint(w, branding.VersionHTML(updatePortalPage))
 	})
 	mux.HandleFunc("POST /updates/open", func(w http.ResponseWriter, r *http.Request) {
 		if !owner(w, r) {

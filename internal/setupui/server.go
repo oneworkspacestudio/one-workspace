@@ -83,7 +83,7 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_, _ = io.WriteString(w, page)
+		_, _ = io.WriteString(w, branding.VersionHTML(page))
 	})
 	mux.HandleFunc("GET /api/state", func(w http.ResponseWriter, r *http.Request) {
 		s.mu.Lock()
