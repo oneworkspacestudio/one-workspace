@@ -3,6 +3,7 @@
 package platform
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
@@ -12,10 +13,39 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+	"time"
 	"unsafe"
 )
 
 type Job struct{ handle windows.Handle }
+
+// Stop waits for the whole job, including descendants, to release file handles.
+// Waiting for just the launcher's main process is not enough for a snapshot.
+func (j *Job) Stop(ctx context.Context) error {
+	if j == nil || j.handle == 0 {
+		return nil
+	}
+	if e := windows.TerminateJobObject(j.handle, 0); e != nil {
+		return e
+	}
+	for {
+		var info struct {
+			User, Kernel, PeriodUser, PeriodKernel    int64
+			PageFaults, Processes, Active, Terminated uint32
+		}
+		if e := windows.QueryInformationJobObject(j.handle, windows.JobObjectBasicAccountingInformation, uintptr(unsafe.Pointer(&info)), uint32(unsafe.Sizeof(info)), nil); e != nil {
+			return e
+		}
+		if info.Active == 0 {
+			return nil
+		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(50 * time.Millisecond):
+		}
+	}
+}
 
 func NewJob() (*Job, error) {
 	h, e := windows.CreateJobObject(nil, nil)

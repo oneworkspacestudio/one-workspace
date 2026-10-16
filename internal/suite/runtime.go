@@ -25,6 +25,14 @@ type Runtime struct {
 	mu                 sync.RWMutex
 	status             map[string]string
 	job                *platform.Job
+	tunnelJob          *platform.Job
+	appCancel          context.CancelFunc
+	supervisors        sync.WaitGroup
+	children           sync.WaitGroup
+	appTasks           sync.WaitGroup
+	operations         sync.Mutex
+	rootContext        context.Context
+	backups            *backupController
 	cancel             context.CancelFunc
 	progress           *ProgressTracker
 	tunnelExit         chan error
@@ -62,6 +70,11 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	if e = CheckPorts(c); e != nil {
 		return e
 	}
+	restoreTemp, tempErr := setWorkspaceTemp(c)
+	if tempErr != nil {
+		return tempErr
+	}
+	defer restoreTemp()
 	progress.Step("checks", "done", "Storage and ports are available")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -69,41 +82,35 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	if e != nil {
 		return e
 	}
-	defer job.Close()
+
 	rt := &Runtime{Config: c, Secrets: s, status: map[string]string{}, job: job, cancel: cancel, progress: progress, tunnelExit: make(chan error, 1)}
+	rt.rootContext = ctx
+	rt.backups = newBackupController(c)
+	defer func() {
+		cancel()
+		rt.operations.Lock()
+		defer rt.operations.Unlock()
+		rt.stopApps()
+		rt.tunnelJob.Close()
+	}()
 	rt.mailProvisionToken = platform.Token()
 	token := platform.Token()
 	if e = platform.SaveSecret(filepath.Join(c.Data, "control.dpapi"), map[string]string{"token": token}); e != nil {
 		return e
 	}
 	if c.Tunnel {
+		rt.tunnelJob, e = platform.NewJob()
+		if e != nil {
+			return e
+		}
 		progress.Step("tunnel", "running", "Starting your dedicated Cloudflare connector")
 		if e = rt.startTunnel(ctx); e != nil {
 			return e
 		}
 		progress.Step("tunnel", "done", "Connector process started; domain reachability is checked next")
 	}
-	apps, e := c.Catalog.Order()
-	if e != nil {
+	if e = rt.startApps(ctx, true); e != nil {
 		return e
-	}
-	for _, app := range apps {
-		if app.Kind != "process" {
-			continue
-		}
-		if e = rt.start(ctx, app); e != nil {
-			return fmt.Errorf("start %s: %w", app.ID, e)
-		}
-		if app.ID == "accounts" && c.Tunnel {
-			progress.Step("public-accounts", "running", "Waiting for DNS, HTTPS and the secure sign-in connection")
-			if e = WaitHTTPDetailed(ctx, c.Issuer+"/healthz", 5*time.Minute, rt.tunnelExit, func(detail string) { progress.Step("public-accounts", "running", detail) }); e != nil {
-				return fmt.Errorf("public sign-in at %s: %w", c.Issuer, e)
-			}
-			progress.Step("public-accounts", "done", "Your secure sign-in address is reachable")
-		}
-	}
-	if _, ok := c.Catalog.Find("mail"); ok && !usesShared(c, "mail") {
-		go rt.maintainMailboxes(ctx)
 	}
 	progress.Step("portal", "running", "Connecting the Workspace portal to MyAccounts")
 	portal, e := NewPortal(ctx, rt)
@@ -121,6 +128,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	progress.Step("portal", "done", "Workspace is listening and ready to open")
 	progress.Finish("ready", "Your Workspace is running", nil)
 	_ = platform.SaveJSON(filepath.Join(c.Data, "running.json"), map[string]any{"pid": os.Getpid(), "origin": c.Origin, "started": time.Now().UTC()})
+	go rt.backupSchedule(ctx)
 	select {
 	case <-ctx.Done():
 	case e = <-errc:
@@ -141,8 +149,8 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		args = append(args, vars.Replace(v))
 	}
 	cmd := exec.Command(filepath.Join(c.Programs, filepath.FromSlash(app.Executable)), args...)
-	cmd.Dir = c.Data
-	cmd.Env = os.Environ()
+	cmd.Dir = appWorkingDir(c, app.ID)
+	cmd.Env = append(os.Environ(), "TEMP="+runtimeTemp(c, app.ID), "TMP="+runtimeTemp(c, app.ID))
 	for k, v := range app.Env {
 		cmd.Env = append(cmd.Env, k+"="+vars.Replace(v))
 	}
@@ -172,6 +180,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	return cmd
 }
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
+	if e := prepareRuntimeTemp(rt.Config, app.ID); e != nil {
+		return e
+	}
 	if app.ID == "vault" {
 		identityContext, cancel := context.WithTimeout(ctx, 20*time.Second)
 		err := rt.prepareVaultIdentity(identityContext)
@@ -212,7 +223,8 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 		return e
 	}
 	done := make(chan error, 1)
-	go func() { done <- cmd.Wait() }()
+	rt.children.Add(1)
+	go func() { defer rt.children.Done(); done <- cmd.Wait() }()
 	rt.set(app.ID, "starting")
 	health := app.Health
 	if health == "" {
@@ -231,7 +243,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	if app.ID == "mail" && rt.Config.HostingDomain != "" && !usesShared(rt.Config, "mail") {
 		rt.mailHostingProgress(ctx, app)
 	}
+	rt.supervisors.Add(1)
 	go func() {
+		defer rt.supervisors.Done()
 		defer held.Close()
 		delay := time.Second
 		for {
@@ -260,7 +274,8 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 				rt.set(app.ID, "failed: see logs")
 				return
 			}
-			go func(cmd *exec.Cmd) { done <- cmd.Wait() }(cmd)
+			rt.children.Add(1)
+			go func(cmd *exec.Cmd) { defer rt.children.Done(); done <- cmd.Wait() }(cmd)
 			if delay < 30*time.Second {
 				delay *= 2
 			}
@@ -270,6 +285,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	return nil
 }
 func (rt *Runtime) startTunnel(ctx context.Context) error {
+	if e := prepareRuntimeTemp(rt.Config, "cloudflare"); e != nil {
+		return e
+	}
 	p, ok := rt.Config.Catalog.Packages["cloudflared"]
 	if !ok {
 		return errors.New("connector is absent from this bundle")
@@ -284,13 +302,13 @@ func (rt *Runtime) startTunnel(ctx context.Context) error {
 		return e
 	}
 	cmd := exec.Command(filepath.Join(rt.Config.Programs, p.File), "tunnel", "--config", config, "--no-autoupdate", "run")
-	cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+rt.Secrets.TunnelToken)
+	cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+rt.Secrets.TunnelToken, "TEMP="+runtimeTemp(rt.Config, "cloudflare"), "TMP="+runtimeTemp(rt.Config, "cloudflare"))
 	cmd.Dir = rt.Config.Data
 	log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", "cloudflare.log")}
 	_, _ = fmt.Fprintln(log, "Starting the dedicated Workspace secure connector")
 	cmd.Stdout = log
 	cmd.Stderr = log
-	if e = rt.job.Start(cmd); e != nil {
+	if e = rt.tunnelJob.Start(cmd); e != nil {
 		held.Close()
 		return e
 	}
@@ -333,4 +351,48 @@ func Stop(ctx context.Context, c Config) error {
 		}
 	}
 	return errors.New("suite is still stopping; inspect launcher and app logs")
+}
+
+// Only called while holding operations, or during initial startup.
+func (rt *Runtime) startApps(ctx context.Context, publicCheck bool) error {
+	appContext, cancel := context.WithCancel(ctx)
+	rt.appCancel = cancel
+	apps, err := rt.Config.Catalog.Order()
+	if err != nil {
+		return err
+	}
+	for _, app := range apps {
+		if app.Kind != "process" {
+			continue
+		}
+		if err = rt.start(appContext, app); err != nil {
+			return fmt.Errorf("start %s: %w", app.ID, err)
+		}
+		if app.ID == "accounts" && publicCheck && rt.Config.Tunnel {
+			rt.progress.Step("public-accounts", "running", "Waiting for the secure sign-in connection")
+			if err = WaitHTTPDetailed(appContext, rt.Config.Issuer+"/healthz", 5*time.Minute, rt.tunnelExit, func(detail string) { rt.progress.Step("public-accounts", "running", detail) }); err != nil {
+				return err
+			}
+			rt.progress.Step("public-accounts", "done", "Your secure sign-in address is reachable")
+		}
+	}
+	if _, ok := rt.Config.Catalog.Find("mail"); ok && !usesShared(rt.Config, "mail") {
+		rt.appTasks.Add(1)
+		go func() { defer rt.appTasks.Done(); rt.maintainMailboxes(appContext) }()
+	}
+	return nil
+}
+func (rt *Runtime) stopApps() error {
+	if rt.appCancel != nil {
+		rt.appCancel()
+	}
+	// Let supervisors leave their restart loops before closing the job handle.
+	rt.supervisors.Wait()
+	stopContext, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	err := rt.job.Stop(stopContext)
+	rt.job.Close()
+	rt.children.Wait()
+	rt.appTasks.Wait()
+	return err
 }

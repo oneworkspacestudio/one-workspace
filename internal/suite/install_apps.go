@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/fahimc/one-workspace/internal/distribution"
 	"github.com/fahimc/one-workspace/internal/platform"
 )
 
@@ -49,6 +50,16 @@ func InstallApps(ctx context.Context, data, bundle string, report func(string)) 
 			r.Close()
 			if e != nil {
 				return e
+			}
+		}
+	}
+	if err = distribution.CheckInstallerBundle(c.Catalog, incoming); err != nil {
+		return err
+	}
+	if _, hadDrive := c.Catalog.Find("drive"); !hadDrive {
+		if _, addingDrive := incoming.Find("drive"); addingDrive {
+			if _, e := os.Lstat(filepath.Join(c.Data, "drive", "config.yaml")); !os.IsNotExist(e) {
+				return errors.New("Drive already has private settings; migrate that data explicitly before adding Drive")
 			}
 		}
 	}
@@ -197,6 +208,14 @@ func InstallApps(ctx context.Context, data, bundle string, report func(string)) 
 	if err = platform.CopyFile(filepath.Join(stage, "Workspace.exe"), manager); err != nil {
 		return err
 	}
+	if _, hadDrive := oldConfig.Catalog.Find("drive"); !hadDrive {
+		if _, hasDrive := c.Catalog.Find("drive"); hasDrive {
+			changes = append(changes, change{target: filepath.Join(c.Data, "drive", "config.yaml")})
+			if err = writeDrive(c, s); err != nil {
+				return err
+			}
+		}
+	}
 	if err = Save(c, s); err != nil {
 		return err
 	}
@@ -230,6 +249,9 @@ func connectAddedApps(ctx context.Context, c Config, s *Secrets) error {
 		return err
 	}
 	defer held.Close()
+	if err = prepareRuntimeTemp(c, a.ID); err != nil {
+		return err
+	}
 	cmd := rt.command(a)
 	if err = job.Start(cmd); err != nil {
 		return err
@@ -249,6 +271,16 @@ func connectAddedApps(ctx context.Context, c Config, s *Secrets) error {
 	api := newIdentity(c)
 	if err = api.login(ctx, *s); err != nil {
 		return err
+	}
+	if s.Clients == nil {
+		s.Clients = map[string]Client{}
+	}
+	if _, hasDrive := c.Catalog.Find("drive"); hasDrive && s.Clients["drive"].ID == "" {
+		client, e := registerClient(ctx, api, "drive", "Workspace Drive and Photos", c.Origin+"/drive/api/auth/oidc/callback")
+		if e != nil {
+			return e
+		}
+		s.Clients["drive"] = client
 	}
 	for _, app := range c.Catalog.Apps {
 		if !app.OIDC || usesShared(c, app.ID) || s.Clients[app.ID].ID != "" {

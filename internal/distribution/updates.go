@@ -229,6 +229,25 @@ func normalizedApps(apps []catalog.App) []catalog.App {
 	}
 	return out
 }
+
+// Scope coupled releases to the apps and packages the owner installed.
+// For example updating Drive must not extract an omitted Photos.exe.
+func scopeUpdateChoice(current catalog.Catalog, ch UpdateChoice) UpdateChoice {
+	apps := []catalog.App{}
+	for _, app := range ch.Apps {
+		if _, ok := current.Find(app.ID); ok {
+			apps = append(apps, app)
+		}
+	}
+	ch.Apps = apps
+	for id := range ch.Packages {
+		if _, ok := current.Packages[id]; !ok {
+			delete(ch.Packages, id)
+			delete(ch.Downloads, id)
+		}
+	}
+	return ch
+}
 func choiceChanged(g updateGroup, current catalog.Catalog, ch UpdateChoice) bool {
 	if g.id == "workspace" {
 		return current.Version != ch.Version || current.Packages["manager"] != ch.Packages["manager"]
@@ -338,6 +357,7 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 			ch = independent
 			break
 		}
+		ch = scopeUpdateChoice(current, ch)
 		ch.Available = choiceChanged(g, current, ch)
 		for _, p := range ch.Packages {
 			if p.SHA256 == withheldMusicSHA {
@@ -385,6 +405,19 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 	}
 	for id, p := range m.Packages {
 		old, ok := allowedPackages[id]
+		if !ok {
+			omitted := false
+			for _, a := range m.Apps {
+				if a.ID == id && a.Package == id && a.Executable == p.File && a.Kind == "process" {
+					if _, installed := current.Find(a.ID); !installed {
+						omitted = true
+					}
+				}
+			}
+			if omitted && updatePackageOwner(id) == g.id {
+				continue
+			}
+		}
 		if !ok || old.File != p.File {
 			return ch, errors.New("app update cannot replace another app's package or move its files")
 		}
@@ -428,7 +461,7 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 	if e := target.Validate(); e != nil {
 		return ch, e
 	}
-	return ch, nil
+	return scopeUpdateChoice(current, ch), nil
 }
 
 // SelectUpdates retains unselected apps, custom extensions, locations and ports.
@@ -539,6 +572,7 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 			}
 			ch.Version = ch.Apps[0].Version
 		}
+		ch = scopeUpdateChoice(current, ch)
 		ch.Available = choiceChanged(g, current, ch)
 		plan.Choices = append(plan.Choices, ch)
 	}

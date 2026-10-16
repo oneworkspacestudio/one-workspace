@@ -43,27 +43,28 @@ type Secrets struct {
 	MailDNSToken     string            `json:"mailDnsToken,omitempty"`
 }
 type Request struct {
-	Offline    bool   `json:"-"`
-	Folder     string `json:"folder,omitempty"`
-	Programs   string `json:"programs"`
-	Data       string `json:"data"`
-	Files      string `json:"files"`
-	Name       string `json:"name"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	Confirm    string `json:"confirm"`
-	Port       int    `json:"port"`
-	Mode       string `json:"mode"`
-	Origin     string `json:"origin"`
-	Issuer     string `json:"issuer"`
-	Photos     bool   `json:"photos"`
-	Autostart  bool   `json:"autostart"`
-	CFToken    string `json:"cfToken"`
-	AccountID  string `json:"accountId"`
-	ZoneID     string `json:"zoneId"`
-	Authorize  bool   `json:"authorize"`
-	Domain     string `json:"domain,omitempty"`
-	CFCertFile string `json:"-"`
+	SelectedApps []string `json:"selectedApps,omitempty"`
+	Offline      bool     `json:"-"`
+	Folder       string   `json:"folder,omitempty"`
+	Programs     string   `json:"programs"`
+	Data         string   `json:"data"`
+	Files        string   `json:"files"`
+	Name         string   `json:"name"`
+	Email        string   `json:"email"`
+	Password     string   `json:"password"`
+	Confirm      string   `json:"confirm"`
+	Port         int      `json:"port"`
+	Mode         string   `json:"mode"`
+	Origin       string   `json:"origin"`
+	Issuer       string   `json:"issuer"`
+	Photos       bool     `json:"photos"`
+	Autostart    bool     `json:"autostart"`
+	CFToken      string   `json:"cfToken"`
+	AccountID    string   `json:"accountId"`
+	ZoneID       string   `json:"zoneId"`
+	Authorize    bool     `json:"authorize"`
+	Domain       string   `json:"domain,omitempty"`
+	CFCertFile   string   `json:"-"`
 }
 
 func (r Request) Validate() error {
@@ -136,7 +137,7 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 2
 		case "photos":
 			app.Port = r.Port + 3
-			if !r.Photos {
+			if r.SelectedApps == nil && !r.Photos {
 				continue
 			}
 		case "gitea":

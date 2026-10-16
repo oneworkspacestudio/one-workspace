@@ -122,3 +122,9 @@ managed data, arguments, helper binaries and shared authentication. It becomes
 automatically available when a compatible Workspace bundle includes it, or the
 publisher supplies the contract in a new release. A partial/failed repository
 check is reported instead of silently installing an older fallback.
+
+## Optional scheduled backups (Preview 28)
+
+The internal owner **Backups** app adds full verified snapshots on a configurable
+interval, switched off by default. See [Backups](BACKUPS.md) for setup, downtime,
+storage and recovery limits. Its snapshots appear in the same local recovery list.

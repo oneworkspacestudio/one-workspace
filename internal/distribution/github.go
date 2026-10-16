@@ -96,7 +96,7 @@ func request(ctx context.Context, endpoint, token string) (*http.Request, error)
 	return req, nil
 }
 
-func Latest(ctx context.Context, progress func(string)) (*Bundle, error) {
+func Latest(ctx context.Context, progress func(string), temporaryRoots ...string) (*Bundle, error) {
 	if progress == nil {
 		progress = func(string) {}
 	}
@@ -129,7 +129,11 @@ func Latest(ctx context.Context, progress func(string)) (*Bundle, error) {
 		return nil, errors.New("Latest release has an invalid bundle URL, size or SHA256. Download the newest installer or contact the publisher")
 	}
 	progress("Downloading latest Workspace " + strings.TrimPrefix(release.Tag, "v"))
-	dir, err := os.MkdirTemp("", "workspace-download-")
+	temporaryRoot := ""
+	if len(temporaryRoots) > 0 {
+		temporaryRoot = temporaryRoots[0]
+	}
+	dir, err := os.MkdirTemp(temporaryRoot, "workspace-download-")
 	if err != nil {
 		return nil, err
 	}

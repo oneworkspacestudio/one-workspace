@@ -47,17 +47,28 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		return empty, e
 	}
 	if !r.Offline {
-		bundle, err := distribution.Latest(ctx, progress)
+		downloadRoot := filepath.Dir(r.Programs)
+		if err := os.MkdirAll(downloadRoot, 0700); err != nil {
+			return empty, err
+		}
+		bundle, err := distribution.Latest(ctx, progress, downloadRoot)
 		if err != nil {
 			return empty, err
 		}
 		defer bundle.Close()
+		if err = distribution.CheckInstallerBundle(cat, bundle.Catalog); err != nil {
+			return empty, err
+		}
 		z, cat = bundle.ZIP, bundle.Catalog
 		overrides = bundle.Overrides
 	} else {
 		progress("Using this installer’s bundled versions (offline mode)")
 	}
-	c := NewConfig(r, cat)
+	selected, selectionErr := SelectInstallApps(cat, r)
+	if selectionErr != nil {
+		return empty, selectionErr
+	}
+	c := NewConfig(r, selected)
 	if e := CheckPorts(c); e != nil {
 		return empty, e
 	}
@@ -88,7 +99,7 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		_ = platform.SaveJSON(filepath.Join(c.Data, "install-state.json"), map[string]string{"phase": phase, "version": c.Version})
 	}
 	state("Verifying and extracting Workspace " + cat.Version + " applications")
-	if e = catalog.Extract(z, cat, c.Programs, overrides); e != nil {
+	if e = catalog.Extract(z, c.Catalog, c.Programs, overrides); e != nil {
 		return empty, e
 	}
 	// Keep the trusted manager and catalog on the protected data volume. Large
@@ -125,6 +136,10 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	defer held.Close()
 	cmd := exec.Command(exe, "-data", filepath.Join(c.Data, "accounts"), "-no-browser")
 	cmd.Dir = c.Data
+	if e = prepareRuntimeTemp(c, "accounts"); e != nil {
+		return empty, e
+	}
+	cmd.Env = append(os.Environ(), "TEMP="+runtimeTemp(c, "accounts"), "TMP="+runtimeTemp(c, "accounts"))
 	log := &platform.Log{Path: filepath.Join(c.Data, "install-accounts.log")}
 	cmd.Stdout = log
 	cmd.Stderr = log
@@ -186,7 +201,10 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	return c, nil
 }
 func writeDrive(c Config, s Secrets) error {
-	app, _ := c.Catalog.Find("drive")
+	app, ok := c.Catalog.Find("drive")
+	if !ok {
+		return nil
+	}
 	if e := os.MkdirAll(filepath.Join(c.Data, "drive"), 0700); e != nil {
 		return e
 	}

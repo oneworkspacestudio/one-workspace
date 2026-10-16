@@ -20,7 +20,7 @@ func (p *Portal) navigationRoutes(mux *http.ServeMux) {
 		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]any{"apps": p.tiles(), "name": user.Name, "email": user.Email, "home": "/"})
+		json.NewEncoder(w).Encode(map[string]any{"apps": p.tiles(user.Subject == p.rt.Config.Owner), "name": user.Name, "email": user.Email, "home": "/"})
 	})
 	for _, name := range []string{"navigation.js", "navigation.css", "logout.js"} {
 		mux.HandleFunc("GET /_workspace/"+name, func(w http.ResponseWriter, r *http.Request) {

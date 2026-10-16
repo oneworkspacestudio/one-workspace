@@ -15,6 +15,8 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 - **Your files stay yours.** Work with ordinary folders on your own storage.
 - **Connected sign-in.** Sign in once with MyAccounts and open connected apps without repeating their sign-in buttons. My Vault keeps its independent master password. [How sign-in works](docs/SIGN-IN.md).
+- **Optional backups.** The owner’s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
+- **Choose your apps.** Advanced setup lets you uncheck apps and handles their dependencies.
 - **Room to grow.** Add more apps as your needs change.
 
 ## Meet your apps
@@ -38,6 +40,9 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"> **Notes** | Private notes and notebooks, with Markdown editing and history. | [notes](https://github.com/oneworkspacestudio/notes) |
 | <img src="internal/branding/icons/my_tube.svg" alt="My Tube logo" width="40" height="40"> **My Tube** | Upload and watch videos, create channels and playlists, and follow your community. | [my-tube](https://github.com/oneworkspacestudio/my-tube) |
 | <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
+| <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
+
+**Preview 28 adds Backups, app selection and per-app runtime storage.** Open the owner-only Backups tile to choose a local NTFS destination and interval. Scheduling starts off. Windows builds and package hashes were checked; runtime backup/restore acceptance remains pending. [Backup setup and limits](docs/BACKUPS.md).
 
 The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
@@ -66,7 +71,7 @@ You need a **64-bit Windows PC** and at least **4 GB of free space**, plus room 
 
 1. **Download the installer.** Open [Downloads](https://github.com/oneworkspacestudio/one-workspace/releases) and choose `WorkspaceSetup-windows-amd64.exe`.
 2. **Make it yours.** Run the setup wizard and enter your name, email address and a password.
-3. **Choose one folder.** Workspace organises apps, private settings and your files inside it. Choose local access or connect your domain with Cloudflare.
+3. **Choose one folder.** Workspace organises apps, protected per-app private data and ordinary files inside it. Expand **Advanced: choose your apps** to omit apps. Choose local access or connect your domain with Cloudflare.
 4. **Install the latest apps.** Setup downloads the newest published Workspace bundle from GitHub, verifies its checksums, and shows progress. Launch Workspace and sign in.
 
 Your computer needs to stay on while you use the apps. Access through your own web address is optional; the [online setup guide](docs/TECHNICAL.md#local-and-public-addresses) explains what is needed.

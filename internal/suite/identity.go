@@ -101,6 +101,11 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 	}
 	c.Owner = saved.ID
 	for _, entry := range []struct{ id, callback, name string }{{"portal", c.Origin + "/auth/callback", "One Workspace"}, {"drive", c.Origin + "/drive/api/auth/oidc/callback", "Workspace Drive and Photos"}} {
+		if entry.id == "drive" {
+			if _, ok := c.Catalog.Find("drive"); !ok {
+				continue
+			}
+		}
 		client, e := registerClient(ctx, api, entry.id, entry.name, entry.callback)
 		if e != nil {
 			return e

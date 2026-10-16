@@ -185,6 +185,7 @@ func (p *Portal) Handler(control string) http.Handler {
 	mux.HandleFunc("GET /_workspace/open/{id}", p.appOpen)
 	p.vaultRoutes(mux)
 	p.updateRoutes(mux)
+	p.backupRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
 	mux.HandleFunc("GET /auth/login", p.login)
 	mux.HandleFunc("GET /auth/callback", p.callback)
@@ -225,33 +226,34 @@ func (p *Portal) Handler(control string) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(map[string]any{"status": "ok", "apps": p.rt.Status()})
 	})
-	drive, _ := p.rt.Config.Catalog.Find("drive")
-	driveProxy := proxy(fmt.Sprintf("http://127.0.0.1:%d", drive.Port), p.rt.Config.Origin, "", false, true)
-	mux.Handle("/drive/", driveProxy)
-	mux.HandleFunc("/drive", func(w http.ResponseWriter, r *http.Request) { http.Redirect(w, r, "/drive/", 302) })
-	mux.Handle("/api/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		r.URL.Path = "/drive" + r.URL.Path
-		r.URL.RawPath = ""
-		driveProxy.ServeHTTP(w, r)
-	}))
-	// The bundled editor's converter worker uses a root-relative sdkjs URL.
-	// Keep the worker and its Wasm/importScripts on the same trusted origin.
-	for _, prefix := range []string{"/sdkjs/", "/fonts/"} {
-		mux.Handle(prefix, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	if drive, installed := p.rt.Config.Catalog.Find("drive"); installed {
+		driveProxy := proxy(fmt.Sprintf("http://127.0.0.1:%d", drive.Port), p.rt.Config.Origin, "", false, true)
+		mux.Handle("/drive/", driveProxy)
+		mux.HandleFunc("/drive", func(w http.ResponseWriter, r *http.Request) { http.Redirect(w, r, "/drive/", 302) })
+		mux.Handle("/api/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			r.URL.Path = "/drive" + r.URL.Path
 			r.URL.RawPath = ""
 			driveProxy.ServeHTTP(w, r)
 		}))
-	}
-	for _, prefix := range []string{"/settings", "/tools", "/files", "/photos"} {
-		for _, route := range []string{prefix, prefix + "/"} {
-			mux.Handle(route, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				target := "/drive" + r.URL.Path
-				if r.URL.RawQuery != "" {
-					target += "?" + r.URL.RawQuery
-				}
-				http.Redirect(w, r, target, http.StatusTemporaryRedirect)
+		// The bundled editor's converter worker uses a root-relative sdkjs URL.
+		// Keep the worker and its Wasm/importScripts on the same trusted origin.
+		for _, prefix := range []string{"/sdkjs/", "/fonts/"} {
+			mux.Handle(prefix, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				r.URL.Path = "/drive" + r.URL.Path
+				r.URL.RawPath = ""
+				driveProxy.ServeHTTP(w, r)
 			}))
+		}
+		for _, prefix := range []string{"/settings", "/tools", "/files", "/photos"} {
+			for _, route := range []string{prefix, prefix + "/"} {
+				mux.Handle(route, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					target := "/drive" + r.URL.Path
+					if r.URL.RawQuery != "" {
+						target += "?" + r.URL.RawQuery
+					}
+					http.Redirect(w, r, target, http.StatusTemporaryRedirect)
+				}))
+			}
 		}
 	}
 	if photos, ok := p.rt.Config.Catalog.Find("photos"); ok {
@@ -312,7 +314,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_ = home.Execute(w, map[string]any{"LoggedIn": ok, "User": user, "Tiles": p.tiles(), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
+		_ = home.Execute(w, map[string]any{"LoggedIn": ok, "User": user, "Tiles": p.tiles(ok && user.Subject == p.rt.Config.Owner), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
 	})
 	origin, _ := url.Parse(p.rt.Config.Origin)
 	local := fmt.Sprintf("localhost:%d", p.rt.Config.Port)
@@ -328,6 +330,11 @@ func (p *Portal) Handler(control string) http.Handler {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("Referrer-Policy", "same-origin")
 		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
+		if p.rt.backups.appsPaused() && backupAppPath(p.rt.Config, r.URL.Path) {
+			w.Header().Set("Retry-After", "30")
+			http.Error(w, "Apps are paused for a backup. Check progress in Workspace → Backups and retry when it finishes.", 503)
+			return
+		}
 		if p.isAppRequest(r) {
 			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) {
 				if r.Method == "GET" && strings.Contains(r.Header.Get("Accept"), "text/html") {
@@ -435,7 +442,7 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 
 type catalogTile struct{ Name, Description, URL, Icon string }
 
-func (p *Portal) tiles() []catalogTile {
+func (p *Portal) tiles(owner ...bool) []catalogTile {
 	tiles := []catalogTile{}
 	for _, a := range p.rt.Config.Catalog.Apps {
 		link := "/_workspace/open/" + a.ID
@@ -444,6 +451,9 @@ func (p *Portal) tiles() []catalogTile {
 		}
 		icon := branding.Icon(a.ID)
 		tiles = append(tiles, catalogTile{a.Name, a.Description, link, icon})
+	}
+	if len(owner) > 0 && owner[0] {
+		tiles = append(tiles, catalogTile{"Backups", "Protect your workspace with optional scheduled backups", "/backups", branding.Icon("backups")})
 	}
 	sort.SliceStable(tiles, func(i, j int) bool { return tiles[i].Name < tiles[j].Name })
 	return tiles

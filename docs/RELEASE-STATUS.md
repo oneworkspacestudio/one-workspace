@@ -121,3 +121,27 @@ fresh Vault certificate was not trusted. These two full browser acceptance gates
 remain open. The final Vault TLS gate was compile-checked after that review.
 No new automated tests, real account exercise, live upgrade, clean-computer,
 service/reboot, mail-delivery or all-features acceptance is claimed. See SIGN-IN.md.
+
+## Preview 28: optional scheduled backups and app selection
+
+The owner-only Backups app is built into the Workspace launcher and app switcher.
+Scheduling starts off. Choose a separate local NTFS folder, preferably on another
+physical drive, and an interval of1–168hours, or run a manual backup. Full snapshots
+include private app data, accounts, programs and ordinary files. The portal and
+connector stay running while apps are stopped for copying, hash verification and
+restart checks. Status, progress, errors and verified history are visible there.
+
+Advanced installation can omit apps and their executable payloads, with required
+MyAccounts and automatic dependency selection. Coupled updates retain omitted
+apps. Managed apps use private working/scratch folders on the selected drive;
+ordinary shared files keep their normal Files location. Existing data is not moved.
+All13 component app entries and their published org binaries remain unchanged.
+
+This release was built locally without Actions. Every bundled package size/SHA256
+was checked. No new automated tests, installation run, scheduled-backup/restore,
+clean-host, service/reboot or live-upgrade acceptance was performed. Backups are
+full copies with application downtime and no automatic retention pruning. Windows
+DPAPI still needs the original Windows security context; this is not a bare-disk
+or cross-machine recovery wizard. Keep independent Vault encrypted exports.
+Read BACKUPS.md before enabling the optional schedule. Prior component limitations,
+Mail/Vault browser gates and the withheld Music build remain unchanged.

@@ -49,7 +49,7 @@ type BackupReceipt struct {
 	RecoveryOnly bool      `json:"recoveryOnly,omitempty"`
 }
 
-var privateUpdateExclusions = map[string]bool{".owner-sid": true, "backups": true, "updates": true, "maintenance": true, "logs": true, "music-runtime-temp": true, "runtime.lock": true, "install.lock": true, "running.json": true, "startup-progress.json": true, "control.dpapi": true}
+var privateUpdateExclusions = map[string]bool{".owner-sid": true, "backups": true, "updates": true, "maintenance": true, "logs": true, "music-runtime-temp": true, "runtime": true, "runtime.lock": true, "install.lock": true, "running.json": true, "startup-progress.json": true, "control.dpapi": true}
 
 func updateRoots(c Config) error {
 	roots := []string{c.Data, c.Programs, c.Files}
@@ -176,6 +176,12 @@ func safeCopy(ctx context.Context, src, dst string) (BackupFile, error) {
 	return result, nil
 }
 func makeUpdateBackup(ctx context.Context, c Config, parent string, report func(string)) (BackupReceipt, error) {
+	return makeUpdateBackupDetailed(ctx, c, parent, report, nil)
+}
+func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, report func(string), copied func(int64, int64)) (BackupReceipt, error) {
+	if report == nil {
+		report = func(string) {}
+	}
 	var receipt BackupReceipt
 	partial := false
 	if actual, _, err := Load(c.Data); err == nil {
@@ -251,7 +257,9 @@ func makeUpdateBackup(ctx context.Context, c Config, parent string, report func(
 		return receipt, e
 	}
 	backup := UpdateBackup{Schema: 1, ID: id, Created: time.Now().UTC(), Config: c, RecoveryOnly: partial}
-	report("Backing up accounts, app data, programs and ordinary files")
+	report("Copying accounts, app data, programs and ordinary files")
+	var bytesDone int64
+	lastProgress := time.Time{}
 	e = walkBackup(c, func(area, root, src string, d fs.DirEntry) error {
 		rel, e := filepath.Rel(root, src)
 		if e != nil {
@@ -310,6 +318,14 @@ func makeUpdateBackup(ctx context.Context, c Config, parent string, report func(
 		}
 		file.Area, file.Path = area, filepath.ToSlash(rel)
 		backup.Files = append(backup.Files, file)
+		bytesDone += file.Size
+		for _, stream := range file.Streams {
+			bytesDone += stream.Size
+		}
+		if copied != nil && time.Since(lastProgress) > 250*time.Millisecond {
+			copied(bytesDone, size)
+			lastProgress = time.Now()
+		}
 		return nil
 	})
 	if e != nil {
@@ -323,6 +339,10 @@ func makeUpdateBackup(ctx context.Context, c Config, parent string, report func(
 		return receipt, e
 	}
 	receipt = BackupReceipt{ID: id, Path: path, SHA256: sum, Version: c.Version, Created: backup.Created, RecoveryOnly: partial}
+	if copied != nil {
+		copied(bytesDone, size)
+	}
+	report("Verifying every copied file and its checksum")
 	if _, e = verifyUpdateBackup(c, receipt); e != nil {
 		return receipt, e
 	}

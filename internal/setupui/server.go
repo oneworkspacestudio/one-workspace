@@ -90,6 +90,11 @@ func (s *Server) Handler() http.Handler {
 		defer s.mu.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		state := map[string]any{"busy": s.busy, "ready": s.ready, "phase": s.phase, "error": s.problem, "version": s.cat.Version, "origin": s.config.Origin, "connecting": s.connecting, "hostingPhase": s.hostingPhase, "hostingError": s.hostingError}
+		available := []map[string]any{}
+		for _, a := range s.cat.Apps {
+			available = append(available, map[string]any{"id": a.ID, "name": a.Name, "description": a.Description, "depends": a.Depends})
+		}
+		state["availableApps"] = available
 		state["offline"] = s.offline
 		state["launching"] = s.launching
 		state["launchError"] = s.launchError
@@ -212,6 +217,10 @@ func (s *Server) Handler() http.Handler {
 		}
 		s.mu.Unlock()
 		if e := request.Validate(); e != nil {
+			http.Error(w, e.Error(), 400)
+			return
+		}
+		if _, e := suite.SelectInstallApps(s.cat, request); e != nil {
 			http.Error(w, e.Error(), 400)
 			return
 		}
