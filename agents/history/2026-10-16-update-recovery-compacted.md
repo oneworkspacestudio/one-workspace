@@ -49,3 +49,52 @@ ordinary document still existed in the protected post-update archive. All fixtur
 processes were stopped; the synthetic fixture and its registration were removed
 after preservation, path/reparse and process checks. Repeat the complete run from
 an immutable source export and do not replace artifacts while their test runs.
+
+## Immutable acceptance completed
+
+Code commit `b90cd366027bc60d161343698552fb174ff96304` passed the full Go test
+suite and vet, then was exported before building or running final acceptance.
+Native Windows preview22 -> preview23 upgrade, rollback to22, restoration of
+post-update edits, and automatic rollback from an invalid Notes executable all
+passed. Every stage returned all twelve apps healthy. Real MyAccounts login and
+stable Notes/My Tube user IDs, note body, attachment, private video bytes and
+ordinary documents were verified. Added ordinary files survived rollback, and
+newer note/document edits were recoverable. Five full/recovery archives remained.
+All fixture supervisor, app, helper and shared-engine processes were stopped.
+
+The packaged full installer separately opened the existing fixture and its
+retained backups, exposed the first-screen existing-installation entry, and
+completed an anonymous per-app release metadata check. The release manager SHA256
+is `e645093cb3966e5893128df03ac1d0d14dc4a2323b6893a198cd245012eadd63`, identical
+to the fixed executable used throughout native acceptance. Every bundled byte,
+package size, twelve-app catalog and upstream release asset digest was verified.
+No clean-host, real reboot/power-loss or Windows-service acceptance is claimed.
+
+## Published release
+
+Pushed the implementation and immutable source tag, then published
+[v0.3.0-preview.23](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.23)
+from `b90cd366027bc60d161343698552fb174ff96304`. All 15 assets passed GitHub
+size/SHA256 comparison before publication. Local-only builds; Actions remained
+disabled. Both installation and update publishing guides accompany the complete
+installer, manager, twelve-app bundle/catalog, source/provenance, licenses and
+checksum manifest. Existing published assets and component release pins were
+preserved. The active installation and its live rollback backup were untouched.
+
+The released full installer then anonymously downloaded and verified the newest
+complete public preview23 bundle and reported all twelve app versions correctly.
+The task-owned native installation, all rollback snapshots and private fixture
+state were encrypted and read back with per-file hash verification before cleanup.
+The archive is under local `tooling/workspace-updater23`, with its key wrapped by
+current-user Windows DPAPI; it is not a public release asset. Temporary C: cache,
+owned native Apps/Files and the single fixture registration were removed only
+after exact-path, process and reparse checks. No fixture services remain.
+
+Verification receipts, fixed source export, release staging, screenshot and
+publication receipt are retained under local `tooling/workspace-updater23`.
+Implementation/publication is complete; this task did not upgrade the active
+preview22 installation. Existing users bootstrap through the new installer's
+**Already have One Workspace?** entry, then use owner **Updates and backups**.
+Future standalone app releases must publish the documented compatibility contract
+before they can be installed independently. No app repository release was changed
+by this task. Preserve the unrelated untracked installed-preview22 handoff.
