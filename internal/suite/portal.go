@@ -198,6 +198,7 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		current, _ := p.user(r)
+		p.closeChatSession(r)
 		if c, e := r.Cookie("workspace_session"); e == nil {
 			p.mu.Lock()
 			delete(p.sessions, c.Value)
