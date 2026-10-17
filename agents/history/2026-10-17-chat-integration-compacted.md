@@ -35,3 +35,20 @@ claim about unrelated free-space changes. No owner data/backups deleted.
 Component publication, full preview33 package/install and public download results
 will be appended after completion. Source history is not evidence of successful
 upload/publication. Existing unrelated older untracked histories must be retained.
+
+## Final integration review correction
+
+Before suite publication, component preview2 supersedes preview1. Chat preferences
+are namespaced (generic upstream keys could collide with other same-origin apps),
+malformed cached JSON is ignored and direct attachments receive a sandbox CSP.
+The manager explicitly calls the current Chat session's loopback logout before
+clearing suite cookies, because cookie deletion cannot close an upgraded socket.
+Chat cookie only is forwarded with the canonical Origin; timeout3seconds.
+
+Final component source d16b0f778f55b80bf9aa9c802a8efce6ba7bfb94, targetv0.1.0-preview.2,
+ZIP SHA2568a915049081d3099021abcb4bd191748113f8d8c31e8434093d804dcec1923f5.
+Preview1 immutable assets retained; no owner app runtime was launched or used as
+a fixture. Browser rebuild passed with size warnings; no automated/multi-user
+runtime acceptance claimed. Second named C browser cache verified/preserved on I
+and removed. Artifacts under tooling/chat-build-preview2. Workspace33 must include
+the new exact pin and the active-session sign-out patch, not the earlier draft.

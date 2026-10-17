@@ -31,7 +31,7 @@ The preview 33 bundle pins these organization components:
 | Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.4 |
 | My Tube | [my-tube](https://github.com/oneworkspacestudio/my-tube) | 0.1.0-preview.1 |
 | My Vault | [my-vault](https://github.com/oneworkspacestudio/my-vault) | 0.2.0-rc.3 |
-| Chat | [chat](https://github.com/oneworkspacestudio/chat) | 0.1.0-preview.1 |
+| Chat | [chat](https://github.com/oneworkspacestudio/chat) | 0.1.0-preview.2 |
 
 Drive/Photos use their own current pinned organization release, retaining the
 upload fixes and new artwork. Preview 33 adds Chat; all existing component executable pins are retained.

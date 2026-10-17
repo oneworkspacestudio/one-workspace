@@ -25,7 +25,7 @@ param(
  [string]$MyTubeVersion='0.1.0-preview.1',
  [string]$MyTubeNotices='',
  [string]$Chat='',
- [string]$ChatVersion='0.1.0-preview.1',
+ [string]$ChatVersion='0.1.0-preview.2',
  [string]$ChatNotices='',
  [string]$MyVault='',
  [string]$MyVaultVersion='0.2.0-rc.3',

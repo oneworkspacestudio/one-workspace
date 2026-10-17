@@ -15,7 +15,9 @@ Workspace registers a separate OIDC client and exact `/chat/auth/callback`. Chat
 validates the identity token, state, nonce and PKCE before issuing single-use
 engine tickets. Identity links use issuer plus subject; email is never the key.
 No second Chat password is created. Logout closes the Chat browser session and
-its active connections; Workspace sign-out also clears Chat cookies.
+its active connections; Workspace sign-out also ends the current Chat session before clearing its cookies.
+Chat preferences use their own browser-storage namespace; directly opened
+attachments are sandboxed on the shared Workspace origin.
 
 ## Storage and backup
 
