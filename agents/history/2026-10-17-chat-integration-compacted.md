@@ -125,3 +125,15 @@ updated. Workspace README contains Chat logo/table/guide and preview34 link.
 Documentation-only completion commits follow tagged source; no rebuild/retag.
 Actions remain disabled. No test suite, messaging/upload/browser OIDC acceptance
 claimed. No C browser-build cache remains; no owner data or backups deleted.
+
+## README icon overview follow-up
+
+Owner clarified the requested image is the app icon overview, not the illustrated
+hero. Hero and its README reference remain unchanged. Regenerated app-suite.png
+from the canonical SVGs with Chat and Backups, now sixteen evenly spaced entries
+in two rows. Renderer computes positions/height from its column and app counts.
+README cache query changed to chat-20261017. Replaced mixed inline icon/text
+Markdown cells with GitHub-compatible HTML: separate centered icon cells and
+valign=middle for all row content. GitHub Markdown API preserves these attributes.
+Visually inspected the rendered icon overview. Documentation only; existing
+release binaries/tags unchanged, no application runtime or automated tests run.

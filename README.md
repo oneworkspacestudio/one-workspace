@@ -21,27 +21,107 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite.png?v=my-vault-20261016)
+![Current One Workspace and app logos](docs/branding/app-suite.png?v=chat-20261017)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 
-| App | What you can do | Repository |
-| --- | --- | --- |
-| <img src="internal/branding/icons/my_drive.svg" alt="Drive logo" width="40" height="40"> **Drive** | Browse, upload, organise and share your files. | [drive](https://github.com/oneworkspacestudio/drive) |
-| <img src="internal/branding/icons/my_office.svg" alt="Docs logo" width="40" height="40"> **Docs** | Create and edit documents, spreadsheets, slides and PDFs. | [drive](https://github.com/oneworkspacestudio/drive) |
-| <img src="internal/branding/icons/my_photos.svg" alt="Photos logo" width="40" height="40"> **Photos** | Browse your pictures and explore folders as albums. | [drive](https://github.com/oneworkspacestudio/drive) |
-| <img src="internal/branding/icons/my_music.svg" alt="Music logo" width="40" height="40"> **Music** | Listen to your music collection. | [Music](https://github.com/oneworkspacestudio/Music) |
-| <img src="internal/branding/icons/my_git.svg" alt="Git logo" width="40" height="40"> **Git** | Keep code projects organised and collaborate. | [gitea](https://github.com/oneworkspacestudio/gitea) |
-| <img src="internal/branding/icons/my_accounts.svg" alt="MyAccounts logo" width="40" height="40"> **MyAccounts** | Manage people, sign-ins and passwords. | [myaccounts](https://github.com/oneworkspacestudio/myaccounts) |
-| <img src="internal/branding/icons/photo_editor.svg" alt="Photo Editor logo" width="40" height="40"> **Photo Editor** | Draw and edit images and layers, opening and saving directly in Drive. A standalone Studio.exe is also installed. | [Photo-Editor](https://github.com/oneworkspacestudio/Photo-Editor) |
-| <img src="internal/branding/icons/my_mail.svg" alt="Mail logo" width="40" height="40"> **Mail** | Your inbox, automatic MyAccounts mailboxes and guided hosting setup. | [mail](https://github.com/oneworkspacestudio/mail) |
-| <img src="internal/branding/icons/my_calendar.svg" alt="Calendar logo" width="40" height="40"> **Calendar** | Events, schedules and calendars with MyAccounts sign-in. | [calendar](https://github.com/oneworkspacestudio/calendar) |
-| <img src="internal/branding/icons/my_contacts.svg" alt="Contacts logo" width="40" height="40"> **Contacts** | Your address book, sharing Calendar's local service. | [calendar](https://github.com/oneworkspacestudio/calendar) |
-| <img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"> **Notes** | Private notes and notebooks, with Markdown editing and history. | [notes](https://github.com/oneworkspacestudio/notes) |
-| <img src="internal/branding/icons/my_tube.svg" alt="My Tube logo" width="40" height="40"> **My Tube** | Upload and watch videos, create channels and playlists, and follow your community. | [my-tube](https://github.com/oneworkspacestudio/my-tube) |
-| <img src="internal/branding/icons/my_chat.svg" alt="Chat logo" width="40" height="40"> **Chat** | Direct messages, group conversations and attachments, connected to MyAccounts. | [chat](https://github.com/oneworkspacestudio/chat) |
-| <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
-| <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
+<table>
+  <thead>
+    <tr><th colspan="2">App</th><th>What you can do</th><th>Repository</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_drive.svg" alt="Drive logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Drive</strong></td>
+      <td valign="middle">Browse, upload, organise and share your files.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/drive">drive</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_office.svg" alt="Docs logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Docs</strong></td>
+      <td valign="middle">Create and edit documents, spreadsheets, slides and PDFs.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/drive">drive</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_photos.svg" alt="Photos logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Photos</strong></td>
+      <td valign="middle">Browse your pictures and explore folders as albums.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/drive">drive</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_music.svg" alt="Music logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Music</strong></td>
+      <td valign="middle">Listen to your music collection.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/Music">Music</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_git.svg" alt="Git logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Git</strong></td>
+      <td valign="middle">Keep code projects organised and collaborate.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/gitea">gitea</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_accounts.svg" alt="MyAccounts logo" width="40" height="40"></td>
+      <td valign="middle"><strong>MyAccounts</strong></td>
+      <td valign="middle">Manage people, sign-ins and passwords.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/myaccounts">myaccounts</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/photo_editor.svg" alt="Photo Editor logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Photo Editor</strong></td>
+      <td valign="middle">Draw and edit images and layers, opening and saving directly in Drive. A standalone Studio.exe is also installed.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/Photo-Editor">Photo-Editor</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_mail.svg" alt="Mail logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Mail</strong></td>
+      <td valign="middle">Your inbox, automatic MyAccounts mailboxes and guided hosting setup.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/mail">mail</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_calendar.svg" alt="Calendar logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Calendar</strong></td>
+      <td valign="middle">Events, schedules and calendars with MyAccounts sign-in.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/calendar">calendar</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_contacts.svg" alt="Contacts logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Contacts</strong></td>
+      <td valign="middle">Your address book, sharing Calendar's local service.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/calendar">calendar</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Notes</strong></td>
+      <td valign="middle">Private notes and notebooks, with Markdown editing and history.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/notes">notes</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_tube.svg" alt="My Tube logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Tube</strong></td>
+      <td valign="middle">Upload and watch videos, create channels and playlists, and follow your community.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-tube">my-tube</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_chat.svg" alt="Chat logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Chat</strong></td>
+      <td valign="middle">Direct messages, group conversations and attachments, connected to MyAccounts.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/chat">chat</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Vault</strong></td>
+      <td valign="middle">An independent password vault with compatible clients, encrypted backups and portable recovery.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-vault">my-vault</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"></td>
+      <td valign="middle"><strong>Backups</strong></td>
+      <td valign="middle">Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default.</td>
+      <td valign="middle">Built into One Workspace</td>
+    </tr>
+  </tbody>
+</table>
 
 **[Preview 34 adds Chat](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.34).** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).
 
