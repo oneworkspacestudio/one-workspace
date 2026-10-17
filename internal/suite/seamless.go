@@ -217,6 +217,10 @@ func (p *Portal) appOpen(w http.ResponseWriter, r *http.Request) {
 		p.cookie(w, "workspace_return_"+signIn.id, "", -1)
 	}
 	w.Header().Set("Cache-Control", "no-store")
+	if app.ID == "music" {
+		musicOpening(w, target)
+		return
+	}
 	http.Redirect(w, r, target, http.StatusSeeOther)
 }
 

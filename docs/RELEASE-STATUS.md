@@ -1,4 +1,32 @@
-# October 16 release status
+# October 17 release status
+
+## Preview 29: app sign-in and Windows update restart repair
+
+The manager now respects Windows host job restrictions when starting maintenance
+or the restored runtime, fixing an Access is denied failure from unconditional
+job breakaway. Updates check executable launch before stopping apps. A completed
+rollback whose startup fails gives restart guidance instead of an unavailable
+Recover action. No Windows permissions or antivirus settings are weakened.
+
+Connected app entry reuses existing MyAccounts sessions. Music's scoped worker
+integration prevents an older offline shell from replacing login/callback pages;
+media caches, other workers and the approved Music executable are retained.
+All thirteen component app entries and their verified organization versions are
+unchanged from Preview 28.
+
+Full Go tests, vet and the Node worker simulation passed. An isolated Windows
+upgrade and real rollback under a restrictive host job preserved synthetic data,
+credentials and storage bindings. The local repair used the verified backup/update
+pipeline and preserved ordinary files and logical credentials. Chrome then opened
+all twelve entries in that existing installation and internal Backups without
+entering credentials or clicking sign-in, including Mail and Music. Vault was not
+installed there. See SIGN-IN.md for the exact scope.
+
+These are targeted update and existing-session checks. Fresh Mail/Vault login,
+email delivery, every editing/media flow, scheduled backup/restore, clean-host,
+service/reboot and independent security acceptance are not established. Earlier
+component limitations and the withheld newer Music binary remain unchanged.
+The Windows installer is built locally without GitHub Actions.
 
 The supplied eleven app SVGs are applied to app headers, favicons, Windows icons
 and repository README logos. Component executables were built locally; GitHub

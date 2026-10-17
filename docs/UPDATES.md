@@ -59,6 +59,22 @@ archived so changes remain recoverable. Failed or interrupted states are labelle
 as recovery archives and cannot be selected as healthy full-installation backups.
 Extra ordinary files are retained when an earlier snapshot is restored.
 
+### Windows could not restart Workspace
+
+The updater checks it can launch the installed manager before stopping apps.
+It respects Windows host process-group limits when starting maintenance or the
+replacement manager. A terminal or installer may forbid process breakaway;
+requesting that option unconditionally can produce an "Access is denied" error
+even when the executable has the correct file permissions.
+
+If an older updater reports **data restored, but startup needs attention**, the
+restore completed but the apps are stopped. Open the existing Private folder's
+Workspace.exe to start the restored version. Use a corrected installer/updater
+for the next attempt. **Recover installation** is for an unfinished transaction;
+it cannot fix a Windows launch restriction after a completed rollback. Keep both
+verified backup and recovery archives. If launch still fails, check the executable
+permissions and Windows Security's protection history; do not disable protection.
+
 To manually undo an update, choose a recorded backup and **Archive current state
 and restore backup**. This creates a verified snapshot of the current installation
 first. You can restore that newer snapshot again if you need post-update edits.

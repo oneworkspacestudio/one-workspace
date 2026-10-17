@@ -363,7 +363,7 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 	director := p.Director
 	p.Director = func(r *http.Request) {
 		director(r)
-		if strings.Contains(r.Header.Get("Accept"), "text/html") || r.Header.Get("Sec-Fetch-Dest") == "document" {
+		if strings.Contains(r.Header.Get("Accept"), "text/html") || r.Header.Get("Sec-Fetch-Dest") == "document" || (prefix == "/music" && r.URL.Path == "/music/sw.js") {
 			r.Header.Set("Accept-Encoding", "identity")
 		}
 		if strip && strings.HasPrefix(r.URL.Path, prefix) {
@@ -383,6 +383,9 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 	}
 
 	p.ModifyResponse = func(resp *http.Response) error {
+		if err := patchMusicWorker(resp, prefix, strip); err != nil {
+			return err
+		}
 		// Preserve the mounted app path on native redirects (for example Flask's
 		// canonical trailing slash), without changing external identity redirects.
 		if strip && resp.Header.Get("Location") != "" {

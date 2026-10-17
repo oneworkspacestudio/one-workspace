@@ -22,6 +22,13 @@ No Workspace password, portal session or provider cookie is sent to an app.
 | MyAccounts | Its existing provider browser session |
 | My Vault | Independent HTTPS origin; existing vault session or optional native SSO, followed by encryption unlock |
 
+Music also repairs older installed web-app controllers when opened from its
+Workspace tile or switcher. Only Music's controller is refreshed; cached media,
+app data and other apps are retained. Its updated worker sends navigations to the
+server for authentication and uses its cached shell only when offline. This
+prevents an old offline shell from replacing the MyAccounts login or callback
+with a blank player page. No additional sign-in button is needed.
+
 Workspace remembers the requested app path and query during its handoff.
 Existing installations also have their own registered clients’ session reuse
 flags repaired at startup. Client secrets, callbacks, roles and consent
@@ -84,3 +91,20 @@ sign-in; it does not establish mail delivery, editing, playback, service/reboot
 or every account/MFA policy. No automated test suite was added or run in this
 change. The candidate manager compiles successfully. The final Vault certificate-trust gate was compile-checked after the browser review. Preview services are stopped
 after review; publication and deployment are separate steps.
+
+## Recorded local review (17 October 2026)
+
+After installing the local Preview 29 repair through the backed-up update path,
+Chrome reused the existing Workspace/MyAccounts session. All twelve installed
+entries opened authenticated without credentials or a sign-in click: Drive,
+Docs, Photo Editor, Photos, Calendar, Contacts, Notes, My Tube, Mail, Git,
+MyAccounts and Music. The owner-only Backups page also opened. Calendar and
+Contacts briefly painted their loading/landing screen before session hydration.
+Music's previously blank native login URL returned automatically to the player.
+The worker repair preserved media caches and other apps' workers and cookies.
+
+Full Go tests, vet and the Node worker simulation passed. These checks concern
+existing-session navigation. Vault was outside this installation's selected app
+set; fresh logged-out Mail/Vault, email delivery, editing/playback, reboot and
+Windows service behavior were not tested in this review. The earlier fresh Vault
+trust and component acceptance limits remain. No live credentials were reset.

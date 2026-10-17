@@ -64,6 +64,41 @@ func fixtureTarget(t *testing.T, c Config) (catalog.Catalog, string) {
 	return target, stage
 }
 func quietUpdate(string) {}
+func TestUpdateLaunchPreflightFailureLeavesRuntimeAndDataUntouched(t *testing.T) {
+	c, s := updateFixture(t)
+	target, stage := fixtureTarget(t, c)
+	stops, starts := 0, 0
+	ops := updateOperations{
+		preflight: func(context.Context, Config) error { return errors.New("launch denied by fixture host") },
+		stop:      func(context.Context, Config) error { stops++; return nil },
+		start:     func(context.Context, Config, string) error { starts++; return nil },
+	}
+	err := applyStagedWith(context.Background(), c, s, target, stage, "", quietUpdate, ops)
+	if err == nil || !strings.Contains(err.Error(), "launch denied") || stops != 0 || starts != 0 {
+		t.Fatalf("preflight did not abort safely: %v stops=%d starts=%d", err, stops, starts)
+	}
+	if UpdatePending(c) {
+		t.Fatal("preflight created an unfinished transaction")
+	}
+	got, _, err := Load(c.Data)
+	if err != nil || got.Version != c.Version {
+		t.Fatal("preflight changed installation", err)
+	}
+}
+
+func TestCompletedRollbackWithLaunchFailureGivesRestartGuidance(t *testing.T) {
+	c, s := updateFixture(t)
+	target, stage := fixtureTarget(t, c)
+	ops := updateOperations{stop: func(context.Context, Config) error { return nil }, start: func(context.Context, Config, string) error { return errors.New("fixture access denied") }}
+	err := applyStagedWith(context.Background(), c, s, target, stage, "", quietUpdate, ops)
+	if !errors.Is(err, errRestoredNeedsStart) || !strings.Contains(err.Error(), "Recover is not needed") || strings.Contains(err.Error(), "choose Recover") {
+		t.Fatalf("completed restore gave incorrect recovery instructions: %v", err)
+	}
+	if UpdatePending(c) {
+		t.Fatal("completed restore should not be pending")
+	}
+}
+
 func TestUpdateCommitPreservesIdentityDataAndLocations(t *testing.T) {
 	c, s := updateFixture(t)
 	target, stage := fixtureTarget(t, c)

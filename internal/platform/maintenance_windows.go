@@ -4,6 +4,7 @@ package platform
 
 import (
 	"errors"
+	"fmt"
 	"golang.org/x/sys/windows"
 	"os"
 	"os/exec"
@@ -11,6 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+	"unsafe"
 )
 
 // Protect only the directory boundary; existing maintenance lock handles must
@@ -70,9 +72,41 @@ func FreeBytes(path string) (uint64, error) {
 	return available, e
 }
 
-// Maintenance must outlive the manager's kill-on-close job. Only a verified,
-// protected copy of the current manager is launched through this function.
+// The manager is outside its app kill-on-close job. Maintenance and restarted
+// managers must remain outside that app job too. A host (terminal, installer or
+// process supervisor) may put the manager itself in a separate job which forbids
+// breakaway. Respect that host job rather than requesting a forbidden flag: on
+// Windows that flag makes CreateProcess fail with ERROR_ACCESS_DENIED even when
+// the executable's ACL permits execution.
+var isProcessInJob = windows.NewLazySystemDLL("kernel32.dll").NewProc("IsProcessInJob")
+
+func detachedCreationFlags() (uint32, error) {
+	flags := uint32(windows.CREATE_NO_WINDOW)
+	var inJob uint32
+	if ok, _, e := isProcessInJob.Call(uintptr(windows.CurrentProcess()), 0, uintptr(unsafe.Pointer(&inJob))); ok == 0 {
+		return 0, fmt.Errorf("inspect Windows host process group: %w", e)
+	}
+	if inJob == 0 {
+		return flags, nil
+	}
+	var info windows.JOBOBJECT_EXTENDED_LIMIT_INFORMATION
+	if e := windows.QueryInformationJobObject(0, windows.JobObjectExtendedLimitInformation, uintptr(unsafe.Pointer(&info)), uint32(unsafe.Sizeof(info)), nil); e != nil {
+		return 0, fmt.Errorf("inspect Windows host process group limits: %w", e)
+	}
+	// A silent-breakaway job already lets ordinary children leave; it does not
+	// require the explicit flag. Request it only when explicitly permitted.
+	if info.BasicLimitInformation.LimitFlags&windows.JOB_OBJECT_LIMIT_BREAKAWAY_OK != 0 {
+		flags |= windows.CREATE_BREAKAWAY_FROM_JOB
+	}
+	return flags, nil
+}
+
+// Only a verified, protected maintenance/runtime executable is launched here.
 func StartDetached(cmd *exec.Cmd) error {
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, CreationFlags: windows.CREATE_NO_WINDOW | windows.CREATE_BREAKAWAY_FROM_JOB}
+	flags, e := detachedCreationFlags()
+	if e != nil {
+		return e
+	}
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, CreationFlags: flags}
 	return cmd.Start()
 }

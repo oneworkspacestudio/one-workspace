@@ -42,7 +42,9 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
 | <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
 
-**Preview 28 adds Backups, app selection and per-app runtime storage.** Open the owner-only Backups tile to choose a local NTFS destination and interval. Scheduling starts off. Windows builds and package hashes were checked; runtime backup/restore acceptance remains pending. [Backup setup and limits](docs/BACKUPS.md).
+**Preview 29 fixes app sign-in and Windows update restart failures.** Connected apps reuse your existing session, including Music when an older offline cache is present. Updates check that Workspace can launch before stopping apps and give clearer recovery guidance. All twelve entries in the existing installation opened without another login during the browser review. [Checks and remaining limits](docs/SIGN-IN.md#recorded-local-review-17-october-2026).
+
+Preview 28 introduced Backups, app selection and per-app runtime storage. Open the owner-only Backups tile to choose a local NTFS destination and interval. Scheduling starts off; scheduled backup/restore acceptance remains pending. [Backup setup and limits](docs/BACKUPS.md).
 
 The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
@@ -54,8 +56,8 @@ My Vault uses optional MyAccounts sign-in on its own secure address. An active M
 with direct app entry, return-page handling and a retry option if sign-in cannot
 finish. It includes all thirteen apps and the same
 [My Vault 0.2.0 RC2](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.2)
-with independent password access and encrypted recovery tools. Mail’s browser
-sign-in remains unverified because the browser blocked the request; fresh local
+with independent password access and encrypted recovery tools. The earlier Mail
+browser block was absent in the Preview 29 existing-session review; fresh local
 Vault access still requires certificate trust. [Recorded review](docs/SIGN-IN.md#recorded-local-review-16-october-2026).
 
 **My Vault is a preview:** do not store important credentials until its remaining client, clean-computer and security acceptance checks are complete. [Recorded checks and limitations](https://github.com/oneworkspacestudio/my-vault/blob/main/docs/acceptance.json).

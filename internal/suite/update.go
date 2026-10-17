@@ -28,6 +28,8 @@ type UpdateJournal struct {
 	Updated  time.Time      `json:"updated"`
 }
 
+var errRestoredNeedsStart = errors.New("original data and programs restored, but Workspace could not start")
+
 func updateJournalPath(c Config) string { return filepath.Join(c.Data, "updates", "transaction.json") }
 func LoadUpdateConfig(data string) (Config, error) {
 	data = filepath.Clean(data)
@@ -219,11 +221,28 @@ type UpdateRequest struct {
 }
 
 type updateOperations struct {
-	stop  func(context.Context, Config) error
-	start func(context.Context, Config, string) error
+	preflight func(context.Context, Config) error
+	stop      func(context.Context, Config) error
+	start     func(context.Context, Config, string) error
 }
 
-var nativeUpdateOperations = updateOperations{stop: stopUpdateRuntime, start: startUpdatedRuntime}
+// Check process creation from the updater itself before taking working apps
+// offline. "version" reads no private data and starts no app processes.
+func preflightUpdateRestart(ctx context.Context, c Config) error {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, filepath.Join(c.Data, "Workspace.exe"), "version")
+	cmd.Dir = c.Data
+	if e := platform.StartDetached(cmd); e != nil {
+		return fmt.Errorf("Windows could not launch Workspace; your apps have not been stopped. Check executable permissions or Windows security protection: %w", e)
+	}
+	if e := cmd.Wait(); e != nil {
+		return fmt.Errorf("Workspace launch check failed; your apps have not been stopped: %w", e)
+	}
+	return nil
+}
+
+var nativeUpdateOperations = updateOperations{preflight: preflightUpdateRestart, stop: stopUpdateRuntime, start: startUpdatedRuntime}
 
 func verifyInstalledPrograms(c Config) error {
 	if p, ok := c.Catalog.Packages["manager"]; !ok || p.File != "Workspace.exe" {
@@ -426,6 +445,12 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if target.Packages["manager"].File != "Workspace.exe" {
 		return errors.New("manager update changes its executable location")
 	}
+	if ops.preflight != nil {
+		report("Checking Windows can restart Workspace before stopping your apps")
+		if e := ops.preflight(ctx, c); e != nil {
+			return e
+		}
+	}
 	if e := cacheUpdateController(c, target, stage); e != nil {
 		return e
 	}
@@ -481,7 +506,11 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		}
 		report("Update did not finish; restoring the verified backup")
 		if rollbackErr := recoverUpdateWith(context.Background(), c, &j, report, ops); rollbackErr != nil {
-			result = fmt.Errorf("%v; automatic recovery needs attention: %w. Open Workspace updates and choose Recover", result, rollbackErr)
+			if errors.Is(rollbackErr, errRestoredNeedsStart) {
+				result = fmt.Errorf("update failed: %v; %w", result, rollbackErr)
+			} else {
+				result = fmt.Errorf("%v; automatic recovery needs attention: %w. Open Workspace updates and choose Recover", result, rollbackErr)
+			}
 		} else {
 			result = fmt.Errorf("update was rolled back; original data and programs restored: %w", result)
 		}
@@ -633,7 +662,7 @@ func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report f
 	lock.Close()
 	lock = nil
 	if e = ops.start(ctx, restored, ""); e != nil {
-		return fmt.Errorf("data restored, but startup needs attention: %w", e)
+		return fmt.Errorf("%w: %w. Open %s to start the restored installation, then use a corrected updater for the next attempt. Keep your backups; Recover is not needed after this completed rollback", errRestoredNeedsStart, e, filepath.Join(c.Data, "Workspace.exe"))
 	}
 	report("Original installation restored. Newer state is retained in " + j.Recovery.Path)
 	return nil
