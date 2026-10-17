@@ -52,3 +52,27 @@ a fixture. Browser rebuild passed with size warnings; no automated/multi-user
 runtime acceptance claimed. Second named C browser cache verified/preserved on I
 and removed. Artifacts under tooling/chat-build-preview2. Workspace33 must include
 the new exact pin and the active-session sign-out patch, not the earlier draft.
+
+## Withheld33 / startup correction target34
+
+Supported actual install-apps deployment of33 took cold Accounts/config backup,
+retained old credentials/executable versions and registered Chat. First startup
+failed: native Tinode push.Init rejects missing push JSON. PostgreSQL initialization
+and schema116 succeeded; no agent-created Chat account/message. Publisher33 was
+stopped before publication, draft416008298 renamed WITHHELD; do not publish/reuse
+its partial assets or retag its source. Root/source tag33 remains historical.
+
+Restored normal13-app service by saving the failed config in protected maintenance
+and temporarily omitting only Chat app definition from installed33 catalog. Kept
+Chat keys/database/software/new OIDC client and all owner state/backups. Health200
+ready afterward. Account backups were not restored over possible owner changes.
+This is actual owner-authorized deployment diagnosis, not a development fixture.
+
+Component preview3 source260f138c0d19d6c7b2d75e796dc493b08680ca1b generates push:[]
+so all fresh starts have valid disabled-notification config. Video/plugin optional
+initializers inspected; they accept omission. Target fullWorkspacepreview34, with
+Chat preview3 exact ZIP pin and all prior component bytes unchanged. Gate public
+installer publication on its normal installed startup health; no messaging or
+automated/multi-user/recovery acceptance implied by health. No test fixtures used.
+
+Final Chat preview3 ZIP SHA256a0615356e0dca35c3c80bbd9d5f733eded0847bf7fb43f1b1f8f25d2adebaba8.

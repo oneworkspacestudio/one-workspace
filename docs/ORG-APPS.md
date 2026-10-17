@@ -16,7 +16,7 @@ field before installing and tell the user to download the current installer.
 They cannot safely register shared-service clients or reassign Calendar ports.
 Always download the current full installer when updating from setup17 or earlier.
 
-The preview 33 bundle pins these organization components:
+The preview 34 bundle pins these organization components:
 
 | App | Organization repository | Packaged version |
 | --- | --- | --- |
@@ -31,10 +31,10 @@ The preview 33 bundle pins these organization components:
 | Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.4 |
 | My Tube | [my-tube](https://github.com/oneworkspacestudio/my-tube) | 0.1.0-preview.1 |
 | My Vault | [my-vault](https://github.com/oneworkspacestudio/my-vault) | 0.2.0-rc.3 |
-| Chat | [chat](https://github.com/oneworkspacestudio/chat) | 0.1.0-preview.2 |
+| Chat | [chat](https://github.com/oneworkspacestudio/chat) | 0.1.0-preview.3 |
 
 Drive/Photos use their own current pinned organization release, retaining the
-upload fixes and new artwork. Preview 33 adds Chat; all existing component executable pins are retained.
+upload fixes and new artwork. Preview 34 adds Chat; all existing component executable pins are retained.
 Office and the integrated Photo Editor run inside Drive. Studio.exe is installed
 as well for standalone local editing. The integrated tile uses Drive's existing
 MyAccounts authentication and file permission checks.

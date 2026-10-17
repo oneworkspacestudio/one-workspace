@@ -43,7 +43,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
 | <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
 
-**Preview 33 adds Chat.** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).
+**Preview 34 adds Chat.** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).
 
 **[Preview 32 connects My Vault automatically](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.32).** Managed Cloudflare hosting provides a separate permanent Vault address and its sign-in callback, retained across updates.
 
@@ -61,7 +61,7 @@ Notes is included from its [organization release](https://github.com/oneworkspac
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
 My Vault automatically gets its own permanent HTTPS address when you use managed Cloudflare hosting. Its DNS, tunnel route and MyAccounts callback are handled by Workspace; updates keep the same link. My Vault uses optional MyAccounts sign-in on that separate secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
 
-The Preview 33 bundle adds Chat to the thirteen existing apps, including
+The Preview 34 bundle adds Chat to the thirteen existing apps, including
 [My Vault 0.2.0 RC3](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.3).
 My Vault keeps independent password access and encrypted recovery tools.
 Local recovery uses owner-approved localhost certificate trust; its remote address uses trusted HTTPS.

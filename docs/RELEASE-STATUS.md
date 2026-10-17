@@ -1,6 +1,12 @@
 # October 17 release status
 
-## Preview 33: Chat
+## Preview 34: Chat
+
+The preview33 installer draft was withheld after the first actual installation
+exposed Tinode's required empty push-notification configuration. Preview34 pins
+Chat preview3 with that generated startup setting fixed for fresh installations.
+The existing thirteen apps were restored while the corrected app was prepared.
+No account data or user files were removed.
 
 Adds the Tinode-based Chat app to the organization installer and shared launcher.
 It uses One Workspace styling and a matching icon, automatically registered
