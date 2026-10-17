@@ -167,3 +167,35 @@ Build a newly versioned full offline installer, manager, bundle and exact commit
 source archive on isolated NTFS; preserve notices/provenance and verify all package
 hashes. Publish to the org without Actions. Do not replace28 or modify the live
 installation while publishing. README/build defaults and release notes identify29.
+
+## Preview 29 published
+
+Published https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.29
+from source/tag `1141462dc22ad29ea537832f9276dd868f46c194`. Org main contains the
+repair, updated README/guides and build defaults29. No component repository was
+changed; only Workspace needed a new release. GitHub Actions remained disabled
+and was not used. Previous28 assets were untouched.
+
+Exact committed source was archived and compiled on isolated NTFS. Every Go input
+matched the accepted repair snapshot; docs/version metadata were refreshed. The
+complete installer embeds the exact verified bundle. All59 package sizes/SHA256s
+passed; all13 app definitions, component binaries and provenance are unchanged
+from28. Only manager and release-status notice packages changed. All18 uploaded
+asset sizes and GitHub SHA256 digests match local artifacts. Public anonymous
+discovery selects29, installer HEAD is200, and public README identifies29.
+
+Final artifacts and package/publication/public-verification/cleanup receipts are
+retained outside Git under `tooling/workspace-login-release29`. Ignored dist and
+embedded payload are aligned to these final bytes. Installer674951680bytes, SHA256
+`7b822c89b1821fd6592052b6c8e1a11fc9f15e3692e8d64bead33715607367ee`.
+Manager SHA256 `8303bbaec55ed532a0db1fb20305b096e7ee6937b3850a9123be2bf33be126ef`.
+Bundle SHA256 `50be46b8c9bb1b4135c2e5ddddd8acebd98e56eea22155f652618c5c73f97e2d`.
+The exact `C:/Projects/.cache/workspace-release29` build root was removed after
+source/artifact preservation and canonical/reparse/active-process checks.
+
+Publication did not update or restart the live suite. It remains the previously
+installed local28+restart.2 repair until the owner chooses the published29 update.
+User data, rollback backups, accounts, optional subset, DNS, trust and autostart
+were preserved. No extra test suite or new live app exercise ran during packaging;
+release notes retain the earlier targeted test evidence and limits. This history
+follow-up records publication without retagging or replacing release source/assets.
