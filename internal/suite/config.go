@@ -40,6 +40,7 @@ type Secrets struct {
 	RecoveryPassword string            `json:"recoveryPassword"`
 	Clients          map[string]Client `json:"clients"`
 	TunnelToken      string            `json:"tunnelToken,omitempty"`
+	HostingToken     string            `json:"hostingToken,omitempty"`
 	MailDNSToken     string            `json:"mailDnsToken,omitempty"`
 }
 type Request struct {

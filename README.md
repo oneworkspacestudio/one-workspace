@@ -42,7 +42,9 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
 | <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
 
-**Preview 31 makes completion unambiguous.** Progress bars appear while an operation is running. Finished updates show a static completion summary and duration, with their completed steps and activity details. [Update guide](docs/UPDATES.md#follow-update-progress).
+**Preview 32 connects My Vault automatically.** Managed Cloudflare hosting provides a separate permanent Vault address and its sign-in callback, retained across updates.
+
+**Clear update completion.** Progress bars appear while an operation is running. Finished updates show a static completion summary and duration, with their completed steps and activity details. [Update guide](docs/UPDATES.md#follow-update-progress).
 
 Preview 30 added download, backup, verification, installation and app startup progress with a checklist, speed and approximate stage time remaining. Small notices use matching verified release files when available, avoiding a complete bundle download.
 
@@ -54,15 +56,15 @@ The organization build includes all currently released apps above, with exact
 release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
 Notes is included from its [organization release](https://github.com/oneworkspacestudio/notes/releases).
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
-My Vault uses optional MyAccounts sign-in on its own secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
+My Vault automatically gets its own permanent HTTPS address when you use managed Cloudflare hosting. Its DNS, tunnel route and MyAccounts callback are handled by Workspace; updates keep the same link. My Vault uses optional MyAccounts sign-in on that separate secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
 
 **Preview 27 adds automatic app sign-in** using an existing MyAccounts session,
 with direct app entry, return-page handling and a retry option if sign-in cannot
 finish. It includes all thirteen apps and the same
-[My Vault 0.2.0 RC2](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.2)
+[My Vault 0.2.0 RC3](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.3)
 with independent password access and encrypted recovery tools. The earlier Mail
 browser block was absent in the Preview 29 existing-session review; fresh local
-Vault access still requires certificate trust. [Recorded review](docs/SIGN-IN.md#recorded-local-review-16-october-2026).
+Local Vault recovery uses owner-approved localhost certificate trust; its remote address uses trusted HTTPS. [Recorded review](docs/SIGN-IN.md#recorded-local-review-16-october-2026).
 
 **My Vault is a preview:** do not store important credentials until its remaining client, clean-computer and security acceptance checks are complete. [Recorded checks and limitations](https://github.com/oneworkspacestudio/my-vault/blob/main/docs/acceptance.json).
 Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its

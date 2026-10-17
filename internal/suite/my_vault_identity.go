@@ -45,6 +45,9 @@ func (rt *Runtime) prepareVaultIdentity(ctx context.Context) error {
 	if e != nil && !os.IsNotExist(e) {
 		return e
 	}
+	if e = platform.LoadJSON(filepath.Join(root, "myvault-pending.json"), &settings); e != nil && !os.IsNotExist(e) {
+		return e
+	}
 	if settings.Origin == "" {
 		settings.Origin = fmt.Sprintf("https://localhost:%d", app.Port+1)
 	}
@@ -106,5 +109,5 @@ func (rt *Runtime) prepareVaultIdentity(ctx context.Context) error {
 	if !ok || secret == "" {
 		return errors.New("My Vault identity client has no secret")
 	}
-	return platform.SaveJSON(path, map[string]any{"enabled": true, "issuer": rt.Config.Issuer, "clientId": "workspace-vault", "clientSecret": secret})
+	return platform.SaveJSON(path, map[string]any{"enabled": true, "issuer": rt.Config.Issuer, "clientId": "workspace-vault", "clientSecret": secret, "provisionAccounts": true})
 }

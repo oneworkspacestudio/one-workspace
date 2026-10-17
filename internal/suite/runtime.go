@@ -184,6 +184,14 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 		return e
 	}
 	if app.ID == "vault" {
+		rt.progress.Step(app.ID, "running", "Preparing My Vault's permanent secure address")
+		hostingContext, cancelHosting := context.WithTimeout(ctx, 90*time.Second)
+		if err := rt.ensureVaultHosting(hostingContext); err != nil {
+			rt.progress.Step(app.ID, "running", "Remote Vault setup needs attention; local access is retained")
+			log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", "vault-hosting.log")}
+			_, _ = log.Write([]byte(err.Error() + "\n"))
+		}
+		cancelHosting()
 		identityContext, cancel := context.WithTimeout(ctx, 20*time.Second)
 		err := rt.prepareVaultIdentity(identityContext)
 		cancel()
@@ -240,6 +248,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	}
 	rt.set(app.ID, "running")
 	rt.progress.Step(app.ID, "done", "App health check passed")
+	if app.ID == "vault" {
+		rt.vaultHostingProgress(ctx, app)
+	}
 	if app.ID == "mail" && rt.Config.HostingDomain != "" && !usesShared(rt.Config, "mail") {
 		rt.mailHostingProgress(ctx, app)
 	}

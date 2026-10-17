@@ -180,6 +180,7 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		if e != nil {
 			return empty, e
 		}
+		s.HostingToken = r.CFToken
 		if c.HostingDomain != "" {
 			s.MailDNSToken = r.CFToken
 		}

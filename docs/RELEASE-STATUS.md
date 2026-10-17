@@ -1,5 +1,22 @@
 # October 17 release status
 
+## Preview 32: automatic Vault hosting and sign-in
+
+Workspace provisions a separate permanent HTTPS hostname for My Vault through
+its existing managed Cloudflare connection. It selects an unused name, preserves
+existing DNS/tunnel routes and retains the chosen address on updates. Local-only
+and manually configured hosting remain available; origin changes retain the
+existing encrypted database and keys. Managed upstream SSO permits verified
+members to initialize their vault and uses the native canonical SSO identifier.
+The extra independent email form is reserved for explicit recovery sign-in.
+
+Builds and packaging are local, without GitHub Actions. Historical acceptance
+below remains labelled historical. Current release build/asset verification and
+remote deployment observations are recorded separately; no new automated tests,
+clean-host, recovery or browser credential-submission acceptance is implied.
+Vault remains a prerelease with its outstanding production gates.
+
+
 ## Preview 31: finished updates stop showing progress bars
 
 The updater now enforces hidden elements even when other CSS sets their display

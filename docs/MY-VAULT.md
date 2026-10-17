@@ -1,6 +1,6 @@
 # My Vault integration
 
-One Workspace preview 26 includes My Vault 0.2.0 RC2 from the public organization
+One Workspace preview 32 includes My Vault 0.2.0 RC3 from the public organization
 release, with its own app tile/logo, light interface, optional MyAccounts session
 reuse and independent recovery guides. Fresh installations include it by default.
 
@@ -21,20 +21,29 @@ another standalone/service instance from adopting that same root concurrently.
 
 The `/vault` entry is a launcher. It never proxies cryptographic HTML through the
 shared Workspace origin or injects Workspace navigation into that client. A
-dedicated configured HTTPS vault hostname is linked directly. Until remote hosting
-is configured, the entry explains setup and provides the local computer's direct
-loopback link. Configure a trusted HTTPS proxy/tunnel to that fixed listener using
-the app's owner tools. Saving a hostname does not create DNS/certificates.
+dedicated configured HTTPS vault hostname is linked directly. With managed
+Cloudflare hosting, Workspace automatically chooses an unused first-level Vault
+hostname, adds its DNS and tunnel route, and configures the matching MyAccounts
+callback. Occupied DNS names and unrelated routes are preserved. The address and
+private data survive app updates and restarts. Remote browsers use Cloudflare's
+trusted HTTPS certificate and need no localhost certificate installation.
+
+Local-only installations retain the local computer link. Manual public addresses
+are preserved. If automatic hosting is interrupted, its saved intent retries the
+same chosen address on the next start. Local independent recovery remains
+available while remote setup needs attention.
 
 On startup the updated manager registers only its dedicated `workspace-vault`
 application, using the vault's exact OIDC callback, standard signed ID tokens and
 PKCE. It stores the optional client in protected `my-vault/myvault-sso.json`.
-Create the independent vault account first and verify its matching MyAccounts
-email. Workspace launches with a sign-in hint; the unmodified client reuses its
-vault session before starting OIDC. Locked clients still need their encryption
-unlock. Local owner opt-out persists across starts, and identity setup failure
-does not stop the independent vault. No public SSO signup or unverified-email
-linking is enabled. The browser's independent-login route works with MyAccounts
+The managed connection enables `provisionAccounts` for verified MyAccounts users:
+upstream OIDC authenticates the user before creating their first vault account.
+The compatible client then asks for the one-time master password/encryption setup.
+Workspace launches with a sign-in hint; the client reuses its vault session before
+starting OIDC automatically. Locked clients still need their encryption unlock.
+Local owner opt-out persists across starts, and identity setup failure does not
+stop the independent vault. Anonymous registration and unverified-email linking
+remain disabled. The browser's independent-login route works with MyAccounts
 stopped; recovery archives intentionally exclude the OIDC client file.
 
 If Workspace or MyAccounts is unavailable, stop any remaining supervised vault
@@ -71,5 +80,5 @@ Workspace.exe --data YOUR_PRIVATE_FOLDER install-apps --bundle workspace-bundle.
 Existing component versions must match the bundle; update them first if the
 command reports a mismatch. The command retains account state, files and existing
 app data. Start Workspace again, then open the My Vault entry. Its independent
-account and certificate setup are separate owner actions. Do not reinstall over
+master-password and certificate setup are separate owner actions. Do not reinstall over
 or delete existing private data to add a new app.
