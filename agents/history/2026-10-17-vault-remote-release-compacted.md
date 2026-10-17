@@ -56,3 +56,52 @@ Artifacts/scripts outside Git: local tooling/my-vault/release-rc3-build and
 tooling/workspace-vault-release32. Preserve real backups and older untracked
 histories. Use only the exact named disposable NTFS workspace-release32 build root
 when needed, then preserve source/artifacts and check paths/processes before cleanup.
+
+## Completed publication and owner deployment
+
+Published locally built prereleases (Actions remain disabled):
+- [Workspace preview32](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.32), source fbb4294cd2baaf07584d5a58ceec93ae9217d80b, 18 assets.
+- [Vault RC3](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.3), source732e782a8ae26f073c3d11701368a5adfaecea44, 26 assets.
+All asset sizes and GitHub SHA256 digests match packaging receipts. Anonymous
+release metadata and main Windows downloads return200. Installer embeds the exact
+verified13-app/59-package bundle. Workspace.exe SHA256
+cd10c28aaf0c721fc890b1a8061ddd3400d1a3ea4a49e1f821a244ffbd647382;
+setup SHA256c5067bf4a2223d168fb1489107183f2c03a117bc9d4d3f5ffb56cc4f3843352f.
+
+Initial installer compile exhausted C temporary storage; retried successfully with
+GOTMPDIR/TEMP/TMP on I. Preserved source/artifacts and safely removed only the
+named NTFS workspace-release32 build root (652MiB). A read-only inactive software
+cache plan was made but no cache deletion executed. Existing user data/backups
+were retained; latest C free about5GiB. Do not attribute recovered space to an
+unverified cause or delete unrelated caches/snapshots.
+
+Owner deployment used coordinated stopped-state replacement with a newly created
+and verified encrypted native Vault backup on I, machine-DPAPI backup key only in
+protected private maintenance, cold Accounts/settings backup and changed-program
+copies. Prior verified full-suite snapshot remains retained. This was not a new
+native full-suite update transaction/clean-install acceptance. First attempt
+rolled back because local upstream DNS still cached the old pre-provisioning
+address; authoritative Google/Cloudflare DNS already had the new proxied record.
+After cache expiry a separate attempt made fresh backups and completed. Do not
+blindly rerun one-use deployment scripts.
+
+Installed preview32/RC3 runs with local, public Workspace and dedicated public
+Vault health200/ok; Workspace launcher303 points to its saved permanent origin.
+Suite logical credentials/settings,13 apps and local certificate are unchanged.
+Protected before/after Cloudflare comparison confirms all90 earlier DNS records,
+all3 earlier ingress entries and unrelated tunnel configuration unchanged; only
+one owned proxied CNAME and Vault route were added. Address survives updates.
+
+Normal owner Chrome launch from authenticated Workspace reached remote native
+#/lock with no additional account login/security warning. Owner master-password
+unlock is still required; it was neither read nor entered. Screenshot retained
+only in private maintenance; browser left as owner handoff. No encrypted-item,
+clean-host, service/reboot, full recovery or new automated acceptance claimed.
+Existing Mail network warning remains unrelated. Original18935 fixture stays off.
+
+Public README retains logos/showcase and describes managed remote hosting. A
+post-publication README cleanup links preview32 explicitly and removes a malformed
+historical paragraph. Follow-up documentation commits do not retag release source
+or replace immutable published assets. Completion receipts/scripts remain under
+local tooling/workspace-vault-release32; encrypted private archives stay outside
+release stage/Git. No credentials, personal screenshots or full DNS data in Git.
