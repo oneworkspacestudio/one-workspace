@@ -137,3 +137,40 @@ User's publication expectation applies to this correction: build/publish31
 locally without Actions, keep30 untouched, verify all packages/assets and update
 README/build defaults. No unattended live upgrade is authorized. Preserve real
 backups despite limited C: space; never prune user snapshots to build a release.
+
+## Preview31 published and local updater corrected
+
+Published https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.31
+from source/tag `ee2380bf0629db18fec2da99fe0cd6808aa38518`. Source, README and build
+defaults are pushed to org main. Build was local with Actions disabled/unused.
+Completed screenshot and running/failed DOM reviews used synthetic state only;
+Go build, combined JavaScript syntax and all59 package hashes passed. No test
+suite or actual app/update/rollback acceptance was run. The installer embeds
+the exact verified bundle. All18 public asset sizes/GitHub digests match local
+files; anonymous discovery selects31, installer HEAD is200, public README is31.
+
+Only manager and release-status notice packages changed; all13 app definitions
+and org component binaries are unchanged. Final staging, source, scripts and
+receipts are outside Git under tooling/workspace-terminal-release31. Screenshot
+complete.png is the synthetic corrected completion view; no user credentials or
+private filenames were captured. The disposable review server and temporary tab
+were stopped/closed. Dist and embedded payload match public31.
+
+Installer675002368bytes, SHA256
+`5c8e597dc0825aa082287299cb197679e45011fbed6323103528830ebad40988`.
+Manager SHA256 `be17192a76d6789cc23f264873c1a6f18abc55efb9ea6e447b6775f520459dc1`.
+Bundle SHA256 `f475efebdd47fb04cc15d06e42b2497d65eecf4ca16ea009816daf306da2d5ca`.
+After source/artifact preservation and canonical/reparse/process checks, the
+exact named NTFS build root was removed. No real backup or unknown data removed.
+
+The idle completed public30 maintenance helper was closed through its capability
+API after checking busy/pending and exact helper SHA. Public31 stage/Workspace.exe
+now hosts the user's local maintenance window (receipt local-window.json) and
+is intentionally retained for the next user update. Its normal read-only release
+check completed without error and offers31 to installed30. No unattended live
+upgrade occurred; accounts, app data, ordinary files, backups, domains, autostart
+and selected apps are retained. Capability fragments/logs stay in protected
+Private storage; never print/upload them. The installed manager remains30 until
+the owner applies the offered update; closing the helper before that reverts
+future launcher copies to installed30's UI. Publication history follow-up does
+not retag or replace published assets. Preserve older untracked histories.
