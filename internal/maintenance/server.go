@@ -19,6 +19,7 @@ import (
 
 	"github.com/fahimc/one-workspace/internal/branding"
 	"github.com/fahimc/one-workspace/internal/distribution"
+	"github.com/fahimc/one-workspace/internal/operationprogress"
 	"github.com/fahimc/one-workspace/internal/platform"
 	"github.com/fahimc/one-workspace/internal/suite"
 )
@@ -29,6 +30,7 @@ type Server struct {
 	Data, Token, Origin string
 	Busy                bool
 	Phase, Problem      string
+	Operation           *operationState
 	Plan                *distribution.UpdatePlan
 	Context             context.Context
 	Close               context.CancelFunc
@@ -81,20 +83,49 @@ func Serve(ctx context.Context, data string, open bool) error {
 	}
 	return e
 }
-func (s *Server) progress(phase string) { s.mu.Lock(); s.Phase = phase; s.mu.Unlock() }
-func (s *Server) work(fn func() error) {
+func (s *Server) progress(phase string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.Phase = phase
+	if p := s.Operation; p != nil {
+		if len(p.History) == 0 || p.History[len(p.History)-1].Text != phase {
+			p.History = append(p.History, operationLog{At: time.Now().UTC(), Text: phase})
+			if len(p.History) > 40 {
+				p.History = p.History[len(p.History)-40:]
+			}
+		}
+	}
+}
+func (s *Server) work(kind string, fn func(context.Context) error) {
 	s.mu.Lock()
 	s.Busy = true
 	s.Problem = ""
+	s.beginLocked(kind)
 	s.mu.Unlock()
 	go func() {
-		e := fn()
+		e := fn(operationprogress.Observe(s.Context, s.detail))
 		s.mu.Lock()
 		defer s.mu.Unlock()
 		s.Busy = false
 		if e != nil {
 			s.Problem = e.Error()
 			s.Phase = "Update needs attention. Your verified backups are retained."
+		}
+		p := s.Operation
+		p.FinishedAt = time.Now().UTC()
+		p.Status = "complete"
+		p.Detail = s.Phase
+		if e != nil {
+			p.Status = "failed"
+		} else {
+			p.Done, p.Total, p.Unit = 0, 0, ""
+		}
+		for i := range p.Steps {
+			if e == nil {
+				p.Steps[i].State = "done"
+			} else if p.Steps[i].State == "running" {
+				p.Steps[i].State = "failed"
+			}
 		}
 	}()
 }
@@ -118,16 +149,17 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, e.Error(), 500)
 			return
 		}
-		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin})
+		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked()})
 	})
 	mux.HandleFunc("POST /api/check", func(w http.ResponseWriter, r *http.Request) {
-		s.work(func() error {
+		s.work("check", func(ctx context.Context) error {
 			c, e := suite.LoadUpdateConfig(s.Data)
 			if e != nil {
 				return e
 			}
 			s.progress("Checking Workspace and each installed app repository")
-			p, e := distribution.CheckUpdates(s.Context, c.Catalog)
+			operationprogress.Report(ctx, "check", "Checking published releases for installed apps", 0, 0, "")
+			p, e := distribution.CheckUpdates(ctx, c.Catalog)
 			if e != nil {
 				return e
 			}
@@ -157,8 +189,8 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, "Release check expired; check again", 409)
 			return
 		}
-		s.work(func() error {
-			e := suite.ApplyUpdates(s.Context, s.Data, plan, in, s.progress)
+		s.work("apply", func(ctx context.Context) error {
+			e := suite.ApplyUpdates(ctx, s.Data, plan, in, s.progress)
 			if e == nil {
 				s.mu.Lock()
 				s.Plan = nil
@@ -169,7 +201,7 @@ func (s *Server) Handler() http.Handler {
 		w.WriteHeader(202)
 	})
 	mux.HandleFunc("POST /api/recover", func(w http.ResponseWriter, r *http.Request) {
-		s.work(func() error { return suite.RecoverUpdate(s.Context, s.Data, s.progress) })
+		s.work("recover", func(ctx context.Context) error { return suite.RecoverUpdate(ctx, s.Data, s.progress) })
 		w.WriteHeader(202)
 	})
 	mux.HandleFunc("POST /api/rollback", func(w http.ResponseWriter, r *http.Request) {
@@ -180,7 +212,7 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, "Invalid backup", 400)
 			return
 		}
-		s.work(func() error { return suite.RollbackUpdate(s.Context, s.Data, in.ID, s.progress) })
+		s.work("rollback", func(ctx context.Context) error { return suite.RollbackUpdate(ctx, s.Data, in.ID, s.progress) })
 		w.WriteHeader(202)
 	})
 	mux.HandleFunc("POST /api/close", func(w http.ResponseWriter, r *http.Request) {

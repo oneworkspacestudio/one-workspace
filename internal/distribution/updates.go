@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/fahimc/one-workspace/internal/operationprogress"
 	"github.com/fahimc/one-workspace/internal/platform"
 )
 
@@ -260,6 +261,13 @@ func choiceChanged(g updateGroup, current catalog.Catalog, ch UpdateChoice) bool
 func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, error) {
 	ctx, cancel := context.WithTimeout(ctx, 2*time.Minute)
 	defer cancel()
+	totalGroups := 0
+	for _, g := range updateGroups {
+		if g.id == "workspace" || len(groupApps(g, current)) > 0 {
+			totalGroups++
+		}
+	}
+	operationprogress.Report(ctx, "check", "Checking One Workspace releases", 0, int64(totalGroups), "repositories")
 	h, token := client(), githubToken(ctx)
 	plan := UpdatePlan{CheckedAt: time.Now().UTC(), BaseCatalogSHA256: catalogIdentity(current)}
 	rs, e := releasesFor(ctx, h, token, Repository)
@@ -285,11 +293,14 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 	if latest.Version != strings.TrimPrefix(suiteRelease.Tag, "v") || !validAsset(bundle, Repository, suiteRelease.Tag) {
 		return plan, errors.New("invalid Workspace release version or bundle")
 	}
+	checked := 0
 	for _, g := range updateGroups {
 		oldApps := groupApps(g, current)
 		if g.id != "workspace" && len(oldApps) == 0 {
 			continue
 		}
+		operationprogress.Report(ctx, "check", "Checking "+g.name+" releases", int64(checked), int64(totalGroups), "repositories")
+		checked++
 		ch := UpdateChoice{ID: g.id, Name: g.name, Current: current.Version, Version: latest.Version, Source: "https://github.com/" + Repository + "/releases/tag/" + suiteRelease.Tag, Apps: groupApps(g, latest), Packages: groupPackages(g, latest), Downloads: map[string]UpdateDownload{}}
 		repo := "oneworkspacestudio/" + g.repo
 		var appReleases []Release
@@ -319,8 +330,12 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		}
 		for id, p := range ch.Packages {
 			d := UpdateDownload{Asset: bundle, Repository: Repository, Tag: suiteRelease.Tag, Member: p.File}
-			if id == "manager" {
-				if a, ok := releaseAsset(suiteRelease, "Workspace.exe"); ok && validNamedAsset(a, Repository, suiteRelease.Tag, a.Name, 2<<30) && a.Digest == "sha256:"+p.SHA256 && a.Size == p.Size {
+			// A small notice must not force a full application-bundle download.
+			// Use a published direct asset only when its digest and length match
+			// this exact catalog package; otherwise retain the verified bundle.
+			direct := map[string]string{"manager": "Workspace.exe", "license": "LICENSE.txt", "notice": "NOTICE.txt", "notice-Workspace-release-status.md": "KNOWN-LIMITATIONS.md", "notice-organization-components.json": "organization-components.json"}
+			if name := direct[id]; name != "" {
+				if a, ok := releaseAsset(suiteRelease, name); ok && validNamedAsset(a, Repository, suiteRelease.Tag, name, 2<<30) && a.Digest == "sha256:"+p.SHA256 && a.Size == p.Size {
 					d.Asset = a
 					d.Member = ""
 				}
@@ -367,6 +382,7 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		}
 		plan.Choices = append(plan.Choices, ch)
 	}
+	operationprogress.Report(ctx, "check", "Published release checks complete", int64(totalGroups), int64(totalGroups), "repositories")
 	return plan, nil
 }
 
@@ -593,21 +609,49 @@ func StageUpdateFiles(ctx context.Context, target catalog.Catalog, sources map[s
 		return e
 	}
 	h, token := client(), githubToken(ctx)
+	// Download each actual release asset once, in a deterministic order. Package
+	// map order must never label a complete bundle as an internal notice file.
+	ids := make([]string, 0, len(sources))
+	for id := range sources {
+		ids = append(ids, id)
+	}
+	sort.Strings(ids)
 	downloads := map[string]string{}
-	for id, d := range sources {
-		p := target.Packages[id]
+	assets := 0
+	for _, id := range ids {
+		d := sources[id]
 		if !validNamedAsset(d.Asset, d.Repository, d.Tag, d.Asset.Name, 2<<30) {
 			return errors.New("invalid staged asset")
 		}
-		archivePath, ok := downloads[d.Asset.APIURL]
-		if !ok {
-			archivePath = filepath.Join(dir, "download-"+platform.Token())
-			report("Downloading verified release for " + id)
-			if e := downloadMailAsset(ctx, h, token, d.Asset, archivePath); e != nil {
-				return e
-			}
-			downloads[d.Asset.APIURL] = archivePath
+		if _, ok := downloads[d.Asset.APIURL]; !ok {
+			downloads[d.Asset.APIURL] = ""
+			assets++
 		}
+	}
+	number := 0
+	for _, id := range ids {
+		d := sources[id]
+		if downloads[d.Asset.APIURL] != "" {
+			continue
+		}
+		number++
+		label := fmt.Sprintf("Downloading %s %s — file %d of %d (%s)", strings.TrimPrefix(d.Repository, "oneworkspacestudio/"), strings.TrimPrefix(d.Tag, "v"), number, assets, d.Asset.Name)
+		report(label)
+		archivePath := filepath.Join(dir, "download-"+platform.Token())
+		transferCtx := operationprogress.Observe(ctx, func(e operationprogress.Event) {
+			operationprogress.Report(ctx, e.Stage, label, e.Done, e.Total, e.Unit)
+		})
+		if e := downloadMailAsset(transferCtx, h, token, d.Asset, archivePath); e != nil {
+			return e
+		}
+		downloads[d.Asset.APIURL] = archivePath
+	}
+	report("Preparing and verifying the downloaded update packages")
+	for index, id := range ids {
+		d := sources[id]
+		p := target.Packages[id]
+		archivePath := downloads[d.Asset.APIURL]
+		operationprogress.Report(ctx, "stage", "Verifying downloaded update packages", int64(index), int64(len(ids)), "packages")
 		path, e := platform.Inside(filepath.Join(dir, "packages"), p.File)
 		if e != nil {
 			return e
@@ -667,6 +711,7 @@ func StageUpdateFiles(ctx context.Context, target catalog.Catalog, sources map[s
 		if e != nil || st.Size() != p.Size {
 			return errors.New("staged package size mismatch")
 		}
+		operationprogress.Report(ctx, "stage", "Verifying downloaded update packages", int64(index+1), int64(len(ids)), "packages")
 	}
 	return nil
 }

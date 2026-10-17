@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/fahimc/one-workspace/internal/operationprogress"
 )
 
 const mailRepository = "oneworkspacestudio/mail"
@@ -138,6 +139,7 @@ func readMailManifest(data []byte, tag string) (mailManifest, error) {
 }
 
 func downloadMailAsset(ctx context.Context, client *http.Client, token string, asset Asset, path string) error {
+	meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, asset.Size)
 	req, err := request(ctx, asset.APIURL, token)
 	if err != nil {
 		return err
@@ -149,17 +151,18 @@ func downloadMailAsset(ctx context.Context, client *http.Client, token string, a
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return fmt.Errorf("Mail asset download failed (HTTP %d)", resp.StatusCode)
+		return fmt.Errorf("Release download failed (HTTP %d)", resp.StatusCode)
 	}
 	out, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
 	if err != nil {
 		return err
 	}
 	hash := sha256.New()
-	n, copyErr := io.Copy(io.MultiWriter(out, hash), io.LimitReader(resp.Body, asset.Size+1))
+	n, copyErr := io.Copy(io.MultiWriter(out, hash, meter), io.LimitReader(resp.Body, asset.Size+1))
+	meter.Finish()
 	closeErr := out.Close()
 	if copyErr != nil || closeErr != nil || n != asset.Size || "sha256:"+hex.EncodeToString(hash.Sum(nil)) != asset.Digest {
-		return errors.New("Mail download incomplete or SHA256 verification failed")
+		return errors.New("Release download incomplete or SHA256 verification failed")
 	}
 	return nil
 }

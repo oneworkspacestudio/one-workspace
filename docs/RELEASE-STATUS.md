@@ -1,5 +1,30 @@
 # October 17 release status
 
+## Preview 30: visible update progress
+
+The Windows-local updater shows its current phase, completed and remaining
+stages, actual transfer bytes/speed, elapsed time and approximate current-stage
+remaining time. Backup copying and verification, package installation and native
+app startup report their own progress. An inactive transfer or lost browser
+connection has explicit feedback. A transfer reaching100% does not declare the
+update finished; completion follows successful transaction and startup checks.
+The local capability, origin and operation guards remain in place.
+
+Download labels identify the actual release and asset, rather than an arbitrary
+internal package ID. Matching published manager/license/notice/provenance assets
+can be downloaded directly when both catalog size and SHA256 agree, with the
+verified complete bundle retained as fallback. This avoids fetching an entire
+bundle solely for a small changed release notice in supporting updaters.
+
+This version is built locally from committed source; browser JavaScript syntax
+and release package hashes are checked. No new tests, full progress UI review,
+real update/rollback, clean-host, reboot or service acceptance is claimed for
+these progress changes. Earlier Preview29 checks are historical evidence for
+that repair, not a full acceptance run of this version. All13 component app
+entries and their organization binaries remain unchanged from Preview29.
+Prior preview limits, including Vault acceptance and the withheld newer Music
+binary, remain. GitHub Actions is disabled and unused.
+
 ## Preview 29: app sign-in and Windows update restart repair
 
 The manager now respects Windows host job restrictions when starting maintenance

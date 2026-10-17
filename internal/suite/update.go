@@ -14,6 +14,7 @@ import (
 
 	"github.com/fahimc/one-workspace/internal/catalog"
 	"github.com/fahimc/one-workspace/internal/distribution"
+	"github.com/fahimc/one-workspace/internal/operationprogress"
 	"github.com/fahimc/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/calendar/shared"
 )
@@ -200,7 +201,12 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 			}
 		}
 	}()
-	if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d/healthz", c.Port), 8*time.Minute, done, nil); e != nil {
+	if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d/healthz", c.Port), 8*time.Minute, done, func(_ string) {
+		var p Progress
+		if platform.LoadJSON(filepath.Join(c.Data, "startup-progress.json"), &p) == nil && p.PID == cmd.Process.Pid {
+			operationprogress.Report(ctx, "restart", p.Phase, int64(p.Completed), int64(p.Total), "checks")
+		}
+	}); e != nil {
 		return e
 	}
 	// Run writes the ready marker after all app checks and the portal have passed.
@@ -411,6 +417,7 @@ func applyStagedUpdate(ctx context.Context, c Config, s Secrets, target catalog.
 	return applyStagedWith(ctx, c, s, target, stage, backupRoot, report, nativeUpdateOperations)
 }
 func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Catalog, stage, backupRoot string, report func(string), ops updateOperations) (result error) {
+	operationprogress.Report(ctx, "preflight", "Checking installed programs and update compatibility", 0, 0, "")
 	if e := verifyInstalledPrograms(c); e != nil {
 		return e
 	}
@@ -446,6 +453,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		return errors.New("manager update changes its executable location")
 	}
 	if ops.preflight != nil {
+		operationprogress.Report(ctx, "preflight", "Checking files, storage and Windows restart permissions", 0, 0, "")
 		report("Checking Windows can restart Workspace before stopping your apps")
 		if e := ops.preflight(ctx, c); e != nil {
 			return e
@@ -458,6 +466,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e != nil {
 		return e
 	}
+	operationprogress.Report(ctx, "backup", "Stopping apps to create a consistent backup", 0, 0, "")
 	report("Stopping this Workspace and its apps for a consistent backup")
 	if e = ops.stop(ctx, c); e != nil {
 		return e
@@ -504,8 +513,9 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 			lock.Close()
 			lock = nil
 		}
+		operationprogress.Report(ctx, "recovery", "Update failed; restoring your verified backup", 0, 0, "")
 		report("Update did not finish; restoring the verified backup")
-		if rollbackErr := recoverUpdateWith(context.Background(), c, &j, report, ops); rollbackErr != nil {
+		if rollbackErr := recoverUpdateWith(context.WithoutCancel(ctx), c, &j, report, ops); rollbackErr != nil {
 			if errors.Is(rollbackErr, errRestoredNeedsStart) {
 				result = fmt.Errorf("update failed: %v; %w", result, rollbackErr)
 			} else {
@@ -520,6 +530,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	next.Version = target.Version
 	// Callbacks are part of identity configuration. Changing them requires a
 	// publisher migration rather than silently invalidating existing OIDC clients.
+	operationprogress.Report(ctx, "install", "Installing verified program files", 0, 0, "")
 	report("Installing verified program files; retaining existing locations and identities")
 	ids := make([]string, 0, len(target.Packages))
 	for id := range target.Packages {
@@ -534,6 +545,13 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		}
 		return ids[i] < ids[j]
 	})
+	changed := 0
+	for _, id := range ids {
+		if c.Catalog.Packages[id] != target.Packages[id] {
+			changed++
+		}
+	}
+	installed := 0
 	for _, id := range ids {
 		p := target.Packages[id]
 		if c.Catalog.Packages[id] == p {
@@ -560,6 +578,8 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 				return e
 			}
 		}
+		installed++
+		operationprogress.Report(ctx, "install", "Installing verified program files", int64(installed), int64(changed), "packages")
 	}
 	if e = Save(next, s); e != nil {
 		return e
@@ -570,6 +590,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	}
 	lock.Close()
 	lock = nil
+	operationprogress.Report(ctx, "restart", "Restarting Workspace and checking your apps", 0, 0, "")
 	report("Restarting and checking every app before completing the update")
 	if e = ops.start(ctx, next, j.Token); e != nil {
 		return e
@@ -606,6 +627,7 @@ func recoverUpdate(ctx context.Context, c Config, j *UpdateJournal, report func(
 	return recoverUpdateWith(ctx, c, j, report, nativeUpdateOperations)
 }
 func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report func(string), ops updateOperations) error {
+	operationprogress.Report(ctx, "recovery", "Verifying the backup before restoring your installation", 0, 0, "")
 	if report == nil {
 		report = func(string) {}
 	}

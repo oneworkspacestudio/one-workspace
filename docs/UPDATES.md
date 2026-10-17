@@ -19,8 +19,8 @@ Remote visitors cannot receive its local maintenance capability or run updates.
 3. Select Workspace, individual apps, or all available updates. Drive/Docs/Photos
    update together; Calendar/Contacts and their shared engine update together.
 4. Optionally choose a larger local NTFS backup folder. The default is Private/backups.
-5. Choose **Back up and install selected updates**. Wait for verification and
-   startup checks, then open Workspace and sign in again.
+5. Choose **Back up and install selected updates**. Wait for **Update complete**
+   after verification and startup checks, then choose **Open Workspace**.
 
 Downloads and every extracted executable/helper/notice are SHA256 and size
 verified before downtime. Installed program hashes are checked too. A stale plan
@@ -32,6 +32,25 @@ The updater retains your Programs, Private and Files locations, owner, identitie
 OIDC clients, hosting settings, disabled optional apps and custom extensions.
 It refuses an automatic change to existing data paths, storage environment
 bindings, private Mail backend or OIDC callbacks. Those need an explicit migration.
+
+## Follow update progress
+
+The local updater shows the current stage and a checklist of completed and
+remaining work: download, package checks, restart preflight, backup, backup
+verification, installation and app startup. Downloads name the actual release
+asset, including the complete application bundle when a changed release notice
+comes from that bundle. Internal package IDs are not download descriptions.
+
+The current-stage bar shows measured bytes or completed files/packages/checks.
+Download and backup stages show speed and an approximate remaining time after
+work begins. These estimates apply to that stage; later stages need additional
+time. Overall elapsed time and activity details remain visible. Slow operations
+show how long progress has been unchanged; a disconnected browser reconnects
+without declaring the update failed or enabling another operation.
+
+A transfer reaching100% means its bytes have arrived. **Update complete** appears
+only after the transaction and app startup checks succeed. Failures retain the
+error and recovery guidance instead of presenting a completed update.
 
 ## Backups and rollback
 

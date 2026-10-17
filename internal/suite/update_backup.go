@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fahimc/one-workspace/internal/operationprogress"
 	"github.com/fahimc/one-workspace/internal/platform"
 )
 
@@ -237,6 +238,7 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 	if e := os.MkdirAll(parent, 0700); e != nil {
 		return receipt, e
 	}
+	operationprogress.Report(ctx, "backup", "Calculating backup size and checking free space", 0, 0, "")
 	size, e := snapshotSize(c)
 	if e != nil {
 		return receipt, e
@@ -258,6 +260,7 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 	}
 	backup := UpdateBackup{Schema: 1, ID: id, Created: time.Now().UTC(), Config: c, RecoveryOnly: partial}
 	report("Copying accounts, app data, programs and ordinary files")
+	operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", 0, size, "bytes")
 	var bytesDone int64
 	lastProgress := time.Time{}
 	e = walkBackup(c, func(area, root, src string, d fs.DirEntry) error {
@@ -322,8 +325,11 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 		for _, stream := range file.Streams {
 			bytesDone += stream.Size
 		}
-		if copied != nil && time.Since(lastProgress) > 250*time.Millisecond {
-			copied(bytesDone, size)
+		if time.Since(lastProgress) > 250*time.Millisecond {
+			if copied != nil {
+				copied(bytesDone, size)
+			}
+			operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", bytesDone, size, "bytes")
 			lastProgress = time.Now()
 		}
 		return nil
@@ -342,13 +348,17 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 	if copied != nil {
 		copied(bytesDone, size)
 	}
+	operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", bytesDone, size, "bytes")
 	report("Verifying every copied file and its checksum")
-	if _, e = verifyUpdateBackup(c, receipt); e != nil {
+	if _, e = verifyUpdateBackupProgress(ctx, c, receipt); e != nil {
 		return receipt, e
 	}
 	return receipt, nil
 }
 func verifyUpdateBackup(c Config, r BackupReceipt) (UpdateBackup, error) {
+	return verifyUpdateBackupProgress(context.Background(), c, r)
+}
+func verifyUpdateBackupProgress(ctx context.Context, c Config, r BackupReceipt) (UpdateBackup, error) {
 	var b UpdateBackup
 	if !filepath.IsAbs(r.Path) || r.ID == "" || filepath.Base(r.Path) != r.ID {
 		return b, errors.New("invalid backup receipt")
@@ -376,7 +386,11 @@ func verifyUpdateBackup(c Config, r BackupReceipt) (UpdateBackup, error) {
 		return b, errors.New("backup recovery type mismatch")
 	}
 	seen := map[string]bool{}
-	for _, f := range b.Files {
+	for i, f := range b.Files {
+		if e := ctx.Err(); e != nil {
+			return b, e
+		}
+		operationprogress.Report(ctx, "verify", "Verifying the backup before changing programs", int64(i), int64(len(b.Files)), "files")
 		if f.Area != "private" && f.Area != "programs" && f.Area != "files" {
 			return b, errors.New("invalid backup area")
 		}
@@ -422,6 +436,7 @@ func verifyUpdateBackup(c Config, r BackupReceipt) (UpdateBackup, error) {
 			return b, errors.New("backup file checksum mismatch")
 		}
 	}
+	operationprogress.Report(ctx, "verify", "Backup verification complete", int64(len(b.Files)), int64(len(b.Files)), "files")
 	for _, required := range []string{"private/workspace.json", "private/secrets.dpapi", "private/Workspace.exe"} {
 		if b.RecoveryOnly {
 			continue
