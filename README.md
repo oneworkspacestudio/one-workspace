@@ -42,7 +42,9 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
 | <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
 
-**Preview 30 shows what is happening during updates.** Follow downloads, backup, verification, installation and app startup with a stage checklist, elapsed time, download speed and approximate stage time remaining. Completion appears after startup checks pass. Small notices use matching verified release files when available, avoiding a complete bundle download. [Update guide](docs/UPDATES.md#follow-update-progress).
+**Preview 31 makes completion unambiguous.** Progress bars appear while an operation is running. Finished updates show a static completion summary and duration, with their completed steps and activity details. [Update guide](docs/UPDATES.md#follow-update-progress).
+
+Preview 30 added download, backup, verification, installation and app startup progress with a checklist, speed and approximate stage time remaining. Small notices use matching verified release files when available, avoiding a complete bundle download.
 
 Preview 29 fixed app sign-in and Windows update restart failures. Connected apps reuse your existing session, including Music when an older offline cache is present. Updates check that Workspace can launch before stopping apps and give clearer recovery guidance. All twelve entries in the existing installation opened without another login during the browser review. [Checks and remaining limits](docs/SIGN-IN.md#recorded-local-review-17-october-2026).
 

@@ -1,5 +1,23 @@
 # October 17 release status
 
+## Preview 31: finished updates stop showing progress bars
+
+The updater now enforces hidden elements even when other CSS sets their display
+style. Both progress bars appear only during running operations. Completed and
+failed operations show a static result, completed/stopped duration, steps and
+activity details. Duplicate phase/result text is removed; the visible detail
+retains its accessible status announcement. No transaction, backup, download or
+startup behavior changes.
+
+The completed screen was visually reviewed in a browser with synthetic data;
+running and failed snapshots were inspected as well. Running states retain their
+bars and busy controls; terminal snapshots have no visible progress bars. These
+are isolated UI previews, not a replay of a real update or rollback. The Go build,
+browser JavaScript syntax and release packaging hashes are checked. No new test
+suite, live app exercise, clean-host or reboot acceptance is claimed. All13 app
+entries and component binaries remain pinned to the same organization releases.
+Earlier preview limitations remain. Built locally without GitHub Actions.
+
 ## Preview 30: visible update progress
 
 The Windows-local updater shows its current phase, completed and remaining

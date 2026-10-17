@@ -49,8 +49,10 @@ show how long progress has been unchanged; a disconnected browser reconnects
 without declaring the update failed or enabling another operation.
 
 A transfer reaching100% means its bytes have arrived. **Update complete** appears
-only after the transaction and app startup checks succeed. Failures retain the
-error and recovery guidance instead of presenting a completed update.
+only after the transaction and app startup checks succeed. Both progress bars
+disappear when an operation finishes or fails. Completed updates show a static
+result and **Completed in** duration. Failures retain the error and recovery
+guidance instead of presenting a completed update.
 
 ## Backups and rollback
 

@@ -1,4 +1,4 @@
-param([string]$Go='go',[string]$Version='0.3.0-preview.30')
+param([string]$Go='go',[string]$Version='0.3.0-preview.31')
 $ErrorActionPreference='Stop'
 # The normal rebuild includes every currently released organization app.
 & (Join-Path $PSScriptRoot 'build-org.ps1') -Go $Go -Version $Version

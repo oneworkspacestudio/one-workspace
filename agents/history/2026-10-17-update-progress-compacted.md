@@ -109,3 +109,31 @@ protected Private storage and must not be printed or uploaded. Installed runtime
 stays29 until the owner applies the offered update. No app downtime, user data,
 identity, credentials, DNS, autostart or app-selection change occurred. The source
 history follow-up records completion without retagging or replacing any asset.
+
+## Preview31 terminal-state display correction
+
+User screenshot showed an indeterminate bar after a completed public30 update.
+Root cause: author `progress{display:block}` overrides the browser's normal
+[hidden] rule. In addition, the overall stage bar deliberately stayed visible
+on completion, and phase/detail repeated the same result. This is a30 UI bug;
+read-only live state confirms installed30, not busy, no pending transaction.
+
+Added author `[hidden]{display:none!important}`; both progress bars now render
+only while status is running. Terminal states retain steps/history but show a
+static result and Completed in/Stopped after duration. Legacy phase hides when
+structured progress is present, and visible detail retains status semantics.
+This changes presentation only, not transaction/backup/startup logic.
+
+Browser-screenshot skill used on isolated mock-state HTML generated from the
+actual page constants. Completed screenshot visibly has no bars/duplicate status;
+running and failed DOM snapshots respectively retain/hide bars as intended.
+No live app, account, update or rollback was exercised; no test suite was added
+or run. Synthetic screenshot/source/server receipt are outside Git under local
+tooling/workspace-terminal-release31. Temporary review tab was closed; review
+server must be stopped after capture. NTFS build root is the exact named
+C:/Projects/.cache/workspace-release31; preserve source/artifacts before cleanup.
+
+User's publication expectation applies to this correction: build/publish31
+locally without Actions, keep30 untouched, verify all packages/assets and update
+README/build defaults. No unattended live upgrade is authorized. Preserve real
+backups despite limited C: space; never prune user snapshots to build a release.
