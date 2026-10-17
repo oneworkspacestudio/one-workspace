@@ -76,3 +76,52 @@ installer publication on its normal installed startup health; no messaging or
 automated/multi-user/recovery acceptance implied by health. No test fixtures used.
 
 Final Chat preview3 ZIP SHA256a0615356e0dca35c3c80bbd9d5f733eded0847bf7fb43f1b1f8f25d2adebaba8.
+
+## Corrected actual installation now running
+
+Supported install-apps deployment of Workspace34/Chat preview3 completed after
+a second cold Accounts/config/program backup. All14 app definitions present;
+normal startup reaches ready and Chat's gateway health passes. Previous logical
+credentials, app executable versions, suite settings and Vault origin/certificate
+verified retained. Existing Chat keys/database and the registered OIDC client were
+reused. No cold Account backup was restored over current owner data. No agent test
+accounts/messages, browser identity flows, multi-user messaging, uploads or
+recovery exercise performed. Health/startup evidence is not full acceptance.
+
+Receipts/scripts: tooling/workspace-chat-release34/deployment.json and protected
+private maintenance directories; component artifacts tooling/chat-build-preview3.
+Final source: Chat260f138c0d19d6c7b2d75e796dc493b08680ca1b; suite387694983fd53df82790ce40edcaf62f737155ec.
+Chat ZIP SHA256a0615356e0dca35c3c80bbd9d5f733eded0847bf7fb43f1b1f8f25d2adebaba8;
+Workspace bundle SHA2562bc6f97fb049974b701f786624582f0c0ecb7e1c7d69e814ad207a89ed8c3fb6.
+Installer SHA256bb518ad842fe7ba854fa0f901e8c0ef0fc6b22f956b918ddd5302ad0e3fdd75c.
+Public release uploads still pending at this handoff edit; append confirmation
+after every remote asset is verified and the drafts are published. Actions stay
+disabled. Do not commit completion documentation while publisher HEAD checks run.
+
+Named NTFS browser build cache removed after both builds with source/output hash,
+reparse and process checks. No fixture service/tunnel left running. Only intended
+installed suite services run. C free space fluctuated during large local builds;
+read-only pagefile/process diagnostics only, no system-memory settings changed
+and no owner data/unknown caches or backups removed.
+
+## Final public delivery confirmed
+
+Published [Workspace v0.3.0-preview.34](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.34)
+from387694983fd53df82790ce40edcaf62f737155ec with19 assets and
+[Chat v0.1.0-preview.3](https://github.com/oneworkspacestudio/chat/releases/tag/v0.1.0-preview.3)
+from260f138c0d19d6c7b2d75e796dc493b08680ca1b with12 assets. All remote asset
+sizes/GitHub SHA256 digests match local receipts; anonymous Windows downloads and
+source-tag checks passed. Current installed Workspace34 has14 apps, Chat3 running
+and portal health200. Existing versions/credentials/settings/Vault hosting retained.
+
+Failed33 draft416008298 was deleted only after public34 verification; its source
+tag/commit and local diagnostic records remain. The draft API had an internal
+untagged name after renaming, but exact id/target SHA/name and four known assets
+were checked before deletion. No published tags/binaries replaced. Earlier Chat1/2
+remain public but explicitly superseded with their startup issue and Chat3 link.
+
+Chat repo remains a genuine fork of tinode/chat, branded description/README/icon
+updated. Workspace README contains Chat logo/table/guide and preview34 link.
+Documentation-only completion commits follow tagged source; no rebuild/retag.
+Actions remain disabled. No test suite, messaging/upload/browser OIDC acceptance
+claimed. No C browser-build cache remains; no owner data or backups deleted.
