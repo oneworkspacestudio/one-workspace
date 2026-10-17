@@ -137,3 +137,8 @@ Markdown cells with GitHub-compatible HTML: separate centered icon cells and
 valign=middle for all row content. GitHub Markdown API preserves these attributes.
 Visually inspected the rendered icon overview. Documentation only; existing
 release binaries/tags unchanged, no application runtime or automated tests run.
+
+Published browser review confirmed the table alignment. GitHub still served the
+old icon image despite the changed query string, so the README now references
+app-suite-d520ebb2.png (content-hashed filename). Renderer writes both the base
+image and a hashed sibling. Use unique filenames for future README image changes.

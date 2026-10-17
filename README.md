@@ -21,7 +21,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite.png?v=chat-20261017)
+![Current One Workspace and app logos](docs/branding/app-suite-d520ebb2.png)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 

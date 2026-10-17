@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
 const sharp = require(process.env.SHARP_MODULE || 'sharp');
 
 const root = path.resolve(__dirname, '..');
@@ -41,8 +42,13 @@ async function main() {
   })));
   const output = path.join(root, 'docs/branding/app-suite.png');
   fs.mkdirSync(path.dirname(output), { recursive: true });
-  await sharp(canvas).composite(layers).png().toFile(output);
+  const png = await sharp(canvas).composite(layers).png().toBuffer();
+  fs.writeFileSync(output, png);
+  const hash = createHash('sha256').update(png).digest('hex').slice(0, 8);
+  const versioned = path.join(root, `docs/branding/app-suite-${hash}.png`);
+  fs.writeFileSync(versioned, png);
   console.log(output);
+  console.log(versioned);
 }
 
 main().catch(error => { console.error(error); process.exitCode = 1; });
