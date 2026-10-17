@@ -16,7 +16,7 @@ field before installing and tell the user to download the current installer.
 They cannot safely register shared-service clients or reassign Calendar ports.
 Always download the current full installer when updating from setup17 or earlier.
 
-The preview 26 bundle pins these published organization components:
+The preview 33 bundle pins these organization components:
 
 | App | Organization repository | Packaged version |
 | --- | --- | --- |
@@ -30,10 +30,11 @@ The preview 26 bundle pins these published organization components:
 | Calendar / Contacts | [calendar](https://github.com/oneworkspacestudio/calendar) | 0.1.0-preview.2 |
 | Notes | [notes](https://github.com/oneworkspacestudio/notes) | 0.1.0-preview.4 |
 | My Tube | [my-tube](https://github.com/oneworkspacestudio/my-tube) | 0.1.0-preview.1 |
-| My Vault | [my-vault](https://github.com/oneworkspacestudio/my-vault) | 0.2.0-rc.2 |
+| My Vault | [my-vault](https://github.com/oneworkspacestudio/my-vault) | 0.2.0-rc.3 |
+| Chat | [chat](https://github.com/oneworkspacestudio/chat) | 0.1.0-preview.1 |
 
 Drive/Photos use their own current pinned organization release, retaining the
-upload fixes and new artwork. Preview 26 updates My Vault; the other app pins are preserved.
+upload fixes and new artwork. Preview 33 adds Chat; all existing component executable pins are retained.
 Office and the integrated Photo Editor run inside Drive. Studio.exe is installed
 as well for standalone local editing. The integrated tile uses Drive's existing
 MyAccounts authentication and file permission checks.
@@ -97,3 +98,19 @@ Music's packaged Python runtime extracts into an installation-owned private
 directories before the next Music start, so forced supervisor shutdowns do not
 accumulate copies in the Windows user's global temporary folder. User music,
 configuration and unrelated temporary files are preserved.
+
+## Chat
+
+Chat.exe embeds Tinode, its locally bundled web client and a private PostgreSQL
+runtime. No Docker or separate database installation is needed. Workspace passes
+Private/chat, base port+16, /chat and a dedicated OIDC client/callback. The normal
+installer app selection can omit Chat. Ordinary updates do not enable an app the
+owner omitted; use installer app selection to add Chat to an existing suite.
+
+The app uses MyAccounts identity tokens and one-minute single-use engine tickets;
+issuer/subject determines the stable native identity. Its own HttpOnly session
+protects messaging and attachments. The shared launcher starts normal OIDC when
+needed, and sign-out clears Chat cookies. Its messages and ordinary attachment
+files live in its own protected folder and are included in stopped suite backups.
+Chat's GPL/Apache and dependency notices accompany its exact org ZIP pin. See
+[Chat setup and limits](CHAT.md); initial runtime acceptance remains pending.

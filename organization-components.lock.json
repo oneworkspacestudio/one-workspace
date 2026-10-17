@@ -76,5 +76,11 @@
     "tag": "v0.2.0-rc.3",
     "asset": "my-vault-0.2.0-rc.3-windows-amd64.zip",
     "sha256": "9ff7dca32503a8354044b3054a100f1498704c0c64ccdceaea35a9c14bf27bdf"
+  },
+  "chat": {
+    "repository": "oneworkspacestudio/chat",
+    "tag": "v0.1.0-preview.1",
+    "asset": "chat-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "38a2350a0124276128840234be04179376b4f3a217a49f93dc0b203d59fb007c"
   }
 }

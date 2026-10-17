@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.32',
+ [string]$Version='0.3.0-preview.33',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261014.2',
  [string]$DriveVersion='photos-preview-local',
@@ -24,6 +24,9 @@ param(
  [string]$MyTube='',
  [string]$MyTubeVersion='0.1.0-preview.1',
  [string]$MyTubeNotices='',
+ [string]$Chat='',
+ [string]$ChatVersion='0.1.0-preview.1',
+ [string]$ChatNotices='',
  [string]$MyVault='',
  [string]$MyVaultVersion='0.2.0-rc.3',
  [string]$MyVaultNotices='',
@@ -63,6 +66,7 @@ try {
  if($Contacts){$inputs['contacts']=@{source=$Contacts;file='Contacts.exe'}}
  if($Studio){$inputs['studio']=@{source=$Studio;file='Studio.exe'};$inputs['studio-license']=@{source=(Join-Path $root 'docs/licenses/miniPaint-MIT.txt');file='licenses/Photo-Editor-MIT.txt'}}
  if($Notes){$inputs['notes']=@{source=$Notes;file='MyNotes.exe'};if(-not $NotesNotices){throw 'Notes requires its license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['notes-'+$name]=@{source=(Join-Path $NotesNotices $name);file='licenses/Notes-'+$name}}}
+ if($Chat){$inputs['chat']=@{source=$Chat;file='Chat.exe'};if(-not $ChatNotices){throw 'Chat requires its corresponding source/license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['chat-'+$name]=@{source=(Join-Path $ChatNotices $name);file='licenses/Chat-'+$name}}}
  if($MyTube){$inputs['my-tube']=@{source=$MyTube;file='MyTube.exe'};if(-not $MyTubeNotices){throw 'My Tube requires its license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['my-tube-'+$name]=@{source=(Join-Path $MyTubeNotices $name);file='licenses/MyTube-'+$name}}}
  if($Calendar -or $Contacts){$inputs['calendar-license']=@{source=(Join-Path $root 'docs/licenses/stalwart-AGPL-3.0-only.txt');file='licenses/Calendar-AGPL-3.0-only.txt'}}
  if($MyVault){$inputs['vault']=@{source=$MyVault;file='MyVault.exe'};if(-not $MyVaultNotices){throw 'My Vault requires its corresponding license/notice directory'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['vault-'+$name]=@{source=(Join-Path $MyVaultNotices $name);file='licenses/MyVault-'+$name}}}
@@ -76,12 +80,13 @@ try {
  )
  if($Gitea){$apps+=@(
   @{id='gitea';name='Git';description='Your repositories, connected to MyAccounts';version=$GiteaVersion;kind='process';package='gitea';executable='Gitea.exe';port=8994;route='/git';stripPrefix=$true;health='/api/healthz';depends=@('accounts');oidc=$true;callback='/git/user/oauth2/myaccounts/callback';args=@('--data','${DATA}/gitea','--port','${PORT}');env=@{WORKSPACE_GITEA_ROOT_URL='${ORIGIN}/git/'};source='https://github.com/oneworkspacestudio/gitea/releases/tag/'+$GiteaTag},
-  @{id='music';name='Music';description='Swing Music — your shared Music folder';version=$MusicVersion;kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/oneworkspacestudio/Music/releases/tag/'+$MusicTag}
+  @{id='music';name='Music';description='Swing Music â€” your shared Music folder';version=$MusicVersion;kind='process';package='music';executable='Music.exe';port=8995;route='/music';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/music/auth/myaccounts/callback';args=@('--host','127.0.0.1','--port','${PORT}','--config','${DATA}/music');source='https://github.com/oneworkspacestudio/Music/releases/tag/'+$MusicTag}
  )}
  if($Mail){$apps+=@{id='mail';name='Mail';description='Your inbox, connected to MyAccounts';version=$MailVersion;kind='process';package='mail';executable='Mail.exe';port=8996;route='/mail';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/mail/auth/callback';args=@('--data','${DATA}/mail','--port','${PORT}','--base','/mail','--no-browser');source='https://github.com/oneworkspacestudio/mail/releases/tag/workspace-mail-v'+$MailVersion}}
  if($Mail -and $PrivateMail){($apps|Where-Object id -eq 'mail').env=@{WORKSPACE_MAIL_BACKEND='private'}}
  if($Studio){$apps+=@{id='studio';name='Photo Editor';description='Edit images and layers; open and save in Drive';version=$StudioVersion;kind='builtin';depends=@('drive');route='/drive/studio';source='https://github.com/oneworkspacestudio/Photo-Editor/releases/tag/'+$StudioVersion}}
  if($Notes){$apps+=@{id='notes';name='Notes';description='Private notes, notebooks and ideas';version=$NotesVersion;kind='process';package='notes';executable='MyNotes.exe';port=9002;route='/notes';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/notes/auth/callback';args=@('--config','${DATA}/notes-settings.json','--port','${PORT}');env=@{NOTES_DATA_DIR='${DATA}/notes';NOTES_PUBLIC_URL='${ORIGIN}/notes';NOTES_LISTEN='127.0.0.1:${PORT}'};source='https://github.com/oneworkspacestudio/notes/releases/tag/v'+$NotesVersion}}
+ if($Chat){$apps+=@{id='chat';name='Chat';description='Direct messages, spaces and shared conversations';version=$ChatVersion;kind='process';package='chat';executable='Chat.exe';port=9006;route='/chat';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/chat/auth/callback';args=@('--data','${DATA}/chat','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/chat','--no-browser');source='https://github.com/oneworkspacestudio/chat/releases/tag/v'+$ChatVersion}}
  if($MyTube){$apps+=@{id='my-tube';name='My Tube';description='Your videos, channels and community';version=$MyTubeVersion;kind='process';package='my-tube';executable='MyTube.exe';port=9003;route='/my-tube';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/my-tube/auth/callback';args=@('--config','${DATA}/my-tube-settings.json','--no-browser','--port','${PORT}');env=@{MYTUBE_DATA_DIR='${DATA}/my-tube';MYTUBE_PUBLIC_URL='${ORIGIN}/my-tube';MYTUBE_LISTEN='127.0.0.1:${PORT}'};source='https://github.com/oneworkspacestudio/my-tube/releases/tag/v'+$MyTubeVersion}}
  if($MyVault){$apps+=@{id='vault';name='My Vault';description='Independent password vault, offline clients and encrypted recovery';version=$MyVaultVersion;kind='process';package='vault';executable='MyVault.exe';port=9004;route='/vault';health='/healthz';env=@{MYVAULT_WORKSPACE_ORIGIN='${ORIGIN}'};args=@('run','--data','${DATA}/my-vault','--listen','127.0.0.1:${PORT}','--no-browser');source='https://github.com/oneworkspacestudio/my-vault/releases/tag/v'+$MyVaultVersion}}
  foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){

@@ -87,6 +87,7 @@ var updateGroups = []updateGroup{
 	{"notes", "Notes", "notes", []string{"notes"}},
 	{"my-tube", "My Tube", "my-tube", []string{"my-tube"}},
 	{"vault", "My Vault", "my-vault", []string{"vault"}},
+	{"chat", "Chat", "chat", []string{"chat"}},
 }
 
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
@@ -200,7 +201,7 @@ func updatePackageOwner(id string) string {
 	if id == "vault" || strings.HasPrefix(id, "vault-") {
 		return "vault"
 	}
-	fixed := map[string]string{"manager": "workspace", "cloudflared": "workspace", "license": "workspace", "notice": "workspace", "accounts": "accounts", "drive": "drive", "photos": "drive", "gitea": "gitea", "music": "music", "mail": "mail", "mail-license": "mail", "mail-notice": "mail", "studio": "studio", "studio-license": "studio", "services-shared": "calendar", "stalwart-shared": "calendar", "calendar": "calendar", "contacts": "calendar", "calendar-license": "calendar", "notes": "notes", "notes-LICENSE": "notes", "notes-NOTICE": "notes", "notes-THIRD-PARTY-LICENSES.txt": "notes", "my-tube": "my-tube", "my-tube-LICENSE": "my-tube", "my-tube-NOTICE": "my-tube", "my-tube-THIRD-PARTY-LICENSES.txt": "my-tube"}
+	fixed := map[string]string{"chat": "chat", "chat-LICENSE": "chat", "chat-NOTICE": "chat", "chat-THIRD-PARTY-LICENSES.txt": "chat", "manager": "workspace", "cloudflared": "workspace", "license": "workspace", "notice": "workspace", "accounts": "accounts", "drive": "drive", "photos": "drive", "gitea": "gitea", "music": "music", "mail": "mail", "mail-license": "mail", "mail-notice": "mail", "studio": "studio", "studio-license": "studio", "services-shared": "calendar", "stalwart-shared": "calendar", "calendar": "calendar", "contacts": "calendar", "calendar-license": "calendar", "notes": "notes", "notes-LICENSE": "notes", "notes-NOTICE": "notes", "notes-THIRD-PARTY-LICENSES.txt": "notes", "my-tube": "my-tube", "my-tube-LICENSE": "my-tube", "my-tube-NOTICE": "my-tube", "my-tube-THIRD-PARTY-LICENSES.txt": "my-tube"}
 	if owner := fixed[id]; owner != "" {
 		return owner
 	}
@@ -635,7 +636,7 @@ func StageUpdateFiles(ctx context.Context, target catalog.Catalog, sources map[s
 			continue
 		}
 		number++
-		label := fmt.Sprintf("Downloading %s %s — file %d of %d (%s)", strings.TrimPrefix(d.Repository, "oneworkspacestudio/"), strings.TrimPrefix(d.Tag, "v"), number, assets, d.Asset.Name)
+		label := fmt.Sprintf("Downloading %s %s â€” file %d of %d (%s)", strings.TrimPrefix(d.Repository, "oneworkspacestudio/"), strings.TrimPrefix(d.Tag, "v"), number, assets, d.Asset.Name)
 		report(label)
 		archivePath := filepath.Join(dir, "download-"+platform.Token())
 		transferCtx := operationprogress.Observe(ctx, func(e operationprogress.Event) {

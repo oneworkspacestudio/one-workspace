@@ -2,7 +2,7 @@
   <img src="internal/branding/icons/one_workspace.svg" alt="One Workspace logo" width="112" height="112">
   <h1>One Workspace</h1>
   <p>Your apps and files, together on your own Windows PC.</p>
-  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
+  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> Â· <a href="#get-started">Get started</a> Â· <a href="docs/TECHNICAL.md">Technical guide</a></p>
 </div>
 
 ![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase-94fac59e.png)
@@ -15,7 +15,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 - **Your files stay yours.** Work with ordinary folders on your own storage.
 - **Connected sign-in.** Sign in once with MyAccounts and open connected apps without repeating their sign-in buttons. My Vault keeps its independent master password. [How sign-in works](docs/SIGN-IN.md).
-- **Optional backups.** The owner’s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
+- **Optional backups.** The ownerâ€™s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
 - **Choose your apps.** Advanced setup lets you uncheck apps and handles their dependencies.
 - **Room to grow.** Add more apps as your needs change.
 
@@ -39,8 +39,11 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 | <img src="internal/branding/icons/my_contacts.svg" alt="Contacts logo" width="40" height="40"> **Contacts** | Your address book, sharing Calendar's local service. | [calendar](https://github.com/oneworkspacestudio/calendar) |
 | <img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"> **Notes** | Private notes and notebooks, with Markdown editing and history. | [notes](https://github.com/oneworkspacestudio/notes) |
 | <img src="internal/branding/icons/my_tube.svg" alt="My Tube logo" width="40" height="40"> **My Tube** | Upload and watch videos, create channels and playlists, and follow your community. | [my-tube](https://github.com/oneworkspacestudio/my-tube) |
+| <img src="internal/branding/icons/my_chat.svg" alt="Chat logo" width="40" height="40"> **Chat** | Direct messages, group conversations and attachments, connected to MyAccounts. | [chat](https://github.com/oneworkspacestudio/chat) |
 | <img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"> **My Vault** | An independent password vault with compatible clients, encrypted backups and portable recovery. | [my-vault](https://github.com/oneworkspacestudio/my-vault) |
 | <img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"> **Backups** | Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default. | Built into One Workspace |
+
+**Preview 33 adds Chat.** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).
 
 **[Preview 32 connects My Vault automatically](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.32).** Managed Cloudflare hosting provides a separate permanent Vault address and its sign-in callback, retained across updates.
 
@@ -58,7 +61,7 @@ Notes is included from its [organization release](https://github.com/oneworkspac
 My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
 My Vault automatically gets its own permanent HTTPS address when you use managed Cloudflare hosting. Its DNS, tunnel route and MyAccounts callback are handled by Workspace; updates keep the same link. My Vault uses optional MyAccounts sign-in on that separate secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
 
-The current bundle includes all thirteen apps, including
+The Preview 33 bundle adds Chat to the thirteen existing apps, including
 [My Vault 0.2.0 RC3](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.3).
 My Vault keeps independent password access and encrypted recovery tools.
 Local recovery uses owner-approved localhost certificate trust; its remote address uses trusted HTTPS.
@@ -152,7 +155,7 @@ Yes. Workspace can be extended with additional apps. Connecting a new app curren
 
 ## Help and further reading
 
-| Looking for… | Start here |
+| Looking forâ€¦ | Start here |
 | --- | --- |
 | A download or what changed | [Downloads and release notes](https://github.com/oneworkspacestudio/one-workspace/releases) |
 | Setup, online access or backups | [Technical guide](docs/TECHNICAL.md) |

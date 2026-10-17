@@ -2,7 +2,7 @@ param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
 if($cat.installerIntegration -ne 2){throw 'Missing installer compatibility guard for shared-service apps'}
-$required=@('accounts','drive','docs','photos','gitea','music','mail','studio','calendar','contacts','notes','my-tube','vault')
+$required=@('accounts','drive','docs','photos','gitea','music','mail','studio','calendar','contacts','notes','my-tube','vault','chat')
 foreach($id in $required){if(@($cat.apps|Where-Object id -CEQ $id).Count -ne 1){throw ('Organization app missing or duplicated: '+$id)}}
 foreach($app in $cat.apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/[A-Za-z0-9_.-]+(/|$)'){throw ('Non-organization source: '+$app.id)}}
 foreach($id in @('calendar','contacts')){

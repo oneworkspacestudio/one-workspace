@@ -1,5 +1,19 @@
 # October 17 release status
 
+## Preview 33: Chat
+
+Adds the Tinode-based Chat app to the organization installer and shared launcher.
+It uses One Workspace styling and a matching icon, automatically registered
+MyAccounts OIDC, independent session-protected transport/attachments and a private
+PostgreSQL runtime started by one Windows executable. Browser dependencies are
+bundled locally. Chat is optional during advanced installation and has its own
+organization release/update contract. Existing app executable pins are retained.
+
+Built locally without GitHub Actions. Chat and Workspace Go builds and the themed
+browser bundle compile. No new automated/multi-user runtime, messaging, attachment,
+reconnection, service/reboot or database restore acceptance is claimed. Chat is a
+preview; its recorded acceptance scope and other apps' existing limits remain.
+
 ## Preview 32: automatic Vault hosting and sign-in
 
 Workspace provisions a separate permanent HTTPS hostname for My Vault through
@@ -194,7 +208,7 @@ browser session. App tiles, the shared switcher and browser bookmarks avoid
 another local sign-in button. Cookie path canonicalization, bounded return-page
 handling and one-attempt recovery prevent repeat redirects; explicit app logout
 pauses automatic sign-in until a deliberate reopen/retry. Startup repairs shared
-sign-in flags on this installation’s registered clients without replacing their
+sign-in flags on this installationâ€™s registered clients without replacing their
 secrets, callback addresses, permissions or consent requirements.
 
 All thirteen apps remain bundled from the same verified organization component
@@ -214,7 +228,7 @@ service/reboot, mail-delivery or all-features acceptance is claimed. See SIGN-IN
 
 The owner-only Backups app is built into the Workspace launcher and app switcher.
 Scheduling starts off. Choose a separate local NTFS folder, preferably on another
-physical drive, and an interval of1–168hours, or run a manual backup. Full snapshots
+physical drive, and an interval of1â€“168hours, or run a manual backup. Full snapshots
 include private app data, accounts, programs and ordinary files. The portal and
 connector stay running while apps are stopped for copying, hash verification and
 restart checks. Status, progress, errors and verified history are visible there.

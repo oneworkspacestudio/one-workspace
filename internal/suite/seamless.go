@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"chat", "Chat", "/chat", "/api/me", "/chat/auth/login", "/chat/auth/logout", []string{"chat_session"}},
 	{"drive", "Drive", "/drive", "/drive/api/users?username=self", "/drive/api/auth/oidc/login", "/drive/api/auth/logout", []string{"filebrowser_quantum_jwt"}},
 	{"gitea", "Git", "/git", "/user/settings", "/git/user/oauth2/myaccounts", "/git/user/logout", []string{"workspace_gitea"}},
 	{"music", "Music", "/music", "/auth/user", "/music/auth/myaccounts/login", "/music/auth/logout", []string{"access_token_cookie", "csrf_access_token"}},
@@ -224,4 +225,4 @@ func (p *Portal) appOpen(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, target, http.StatusSeeOther)
 }
 
-var signInRecovery = template.Must(template.New("app-sign-in").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in to {{.Name}} · One Workspace</title><style>body{max-width:600px;margin:15vh auto;padding:28px;font:17px/1.7 system-ui;color:#202124;background:#f8fafd}a{color:#0b57d0}.button{display:inline-block;padding:10px 24px;border-radius:24px;background:#0b57d0;color:white;text-decoration:none}</style><h1>Continue to {{.Name}}</h1><p>Automatic sign-in has paused because you signed out of this app or its last sign-in did not finish. Your Workspace account is still signed in.</p><p><a class="button" href="{{.Retry}}">Try MyAccounts again</a></p><p>If it keeps failing, check that MyAccounts is available and that this app is connected in Workspace settings. Any account verification required by MyAccounts will appear there.</p><a href="/">Back to Workspace</a></html>`))
+var signInRecovery = template.Must(template.New("app-sign-in").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in to {{.Name}} Â· One Workspace</title><style>body{max-width:600px;margin:15vh auto;padding:28px;font:17px/1.7 system-ui;color:#202124;background:#f8fafd}a{color:#0b57d0}.button{display:inline-block;padding:10px 24px;border-radius:24px;background:#0b57d0;color:white;text-decoration:none}</style><h1>Continue to {{.Name}}</h1><p>Automatic sign-in has paused because you signed out of this app or its last sign-in did not finish. Your Workspace account is still signed in.</p><p><a class="button" href="{{.Retry}}">Try MyAccounts again</a></p><p>If it keeps failing, check that MyAccounts is available and that this app is connected in Workspace settings. Any account verification required by MyAccounts will appear there.</p><a href="/">Back to Workspace</a></html>`))
