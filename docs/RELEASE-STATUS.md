@@ -1,4 +1,24 @@
-# October 17 release status
+# October 18 release status
+
+## Preview35: Chat member search and verified browser flows
+
+Pins Chat0.1.0-preview.4 and synchronizes the MyAccounts member directory every
+15 seconds through a private loopback credential. New accounts are discoverable
+before first Chat login. Native issuer+subject identity links remain unchanged.
+By ID no longer crashes; native IDs, copy/QR links and invalid-input guidance work.
+Attachment download paths and PostgreSQL recovery readiness are fixed. Raw engine
+authentication/message packets are no longer logged by the Workspace build.
+
+Separate synthetic MyAccounts/Chat Windows fixtures passed OIDC, people search
+(name, username, verified email, account ID), native/QR IDs, direct/group messages
+both ways, reload history, attachment exact bytes/anonymous denial, and forbidden
+account search/session revocation. Focused Go/Node regressions pass. No owner
+accounts or messages were used as development fixtures. All other app executable
+pins remain unchanged. Existing app and Vault limitations below still apply.
+
+Builds and releases are local; no GitHub Actions. Clean-host, full network/expiry/
+global-signout, service/reboot and database-restore acceptance remain pending.
+
 
 ## Preview 34: Chat
 

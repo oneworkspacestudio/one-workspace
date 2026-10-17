@@ -123,6 +123,8 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
   </tbody>
 </table>
 
+**[Preview 35 fixes Chat discovery and messaging](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.35).** MyAccounts members become searchable automatically, including before their first Chat login. Find by name, username, verified email or account ID; open native Chat IDs and QR links. Browser checks covered two-way direct/group messages, attachments and disabled-account access in a separate tester installation. [Chat checks and limits](https://github.com/oneworkspacestudio/chat/blob/master/docs/workspace/ACCEPTANCE.md).
+
 **[Preview 34 adds Chat](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.34).** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).
 
 **[Preview 32 connects My Vault automatically](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.32).** Managed Cloudflare hosting provides a separate permanent Vault address and its sign-in callback, retained across updates.

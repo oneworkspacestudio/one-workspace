@@ -19,6 +19,21 @@ its active connections; Workspace sign-out also ends the current Chat session be
 Chat preferences use their own browser-storage namespace; directly opened
 attachments are sandboxed on the shared Workspace origin.
 
+## Finding people and opening conversations
+
+Workspace35+ connects the MyAccounts directory to Chat automatically, checking
+new accounts every15 seconds. Search by display name, username, verified email,
+MyAccounts ID or native Chat ID. People can be found before they first open Chat.
+The Find field searches as you type and also has an explicit Search button.
+
+Open By ID to paste a native user/group/channel ID or tinode:///id/ link, or copy
+your own ID and QR code. Invalid entries show guidance rather than blanking Chat.
+Disabled members disappear from search and their gateway sessions are revoked.
+The private synchronization credential is never sent to the browser. Account
+links use issuer+subject, preserving existing messages and IDs across updates.
+Only verified email is matched; names/usernames also work without email validation.
+The current limit is10,000 members and50 matches per query.
+
 ## Storage and backup
 
 Private/chat holds PostgreSQL files, ordinary attachment files, protected secrets
@@ -33,9 +48,11 @@ omitted apps. Future Chat releases are offered from oneworkspacestudio/chat.
 
 ## Scope
 
-The initial package is a preview. Multi-user messaging, attachments, reconnection,
-Windows service/reboot, database restore and mobile clients need acceptance before
-a production claim. Calls, TURN/SFU hosting and external push services are not
+The package remains a preview. Separate synthetic Windows accounts passed browser
+OIDC, search, ID/QR lookup, two-way direct/group messaging, exact attachment bytes,
+history reload and disabled-user checks. Database startup waits for WAL recovery.
+Full network/expiry/global-signout, clean-host, Windows service/reboot, database
+restore and mobile acceptance remain open. [Recorded Chat checks](https://github.com/oneworkspacestudio/chat/blob/master/docs/workspace/ACCEPTANCE.md). Calls, TURN/SFU hosting and external push services are not
 configured by this installer. Tinode is not an end-to-end encrypted messenger by
 default. Keep the server and its backups private.
 

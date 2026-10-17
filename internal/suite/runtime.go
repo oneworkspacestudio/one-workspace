@@ -37,6 +37,7 @@ type Runtime struct {
 	progress           *ProgressTracker
 	tunnelExit         chan error
 	mailProvisionToken string
+	chatDirectoryToken string
 }
 
 func (rt *Runtime) set(id, state string) { rt.mu.Lock(); rt.status[id] = state; rt.mu.Unlock() }
@@ -94,6 +95,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 		rt.tunnelJob.Close()
 	}()
 	rt.mailProvisionToken = platform.Token()
+	rt.chatDirectoryToken = platform.Token()
 	token := platform.Token()
 	if e = platform.SaveSecret(filepath.Join(c.Data, "control.dpapi"), map[string]string{"token": token}); e != nil {
 		return e
@@ -162,6 +164,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "music" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_MUSIC_DIR="+filepath.Join(c.Files, "Music"), "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			cmd.Env = append(cmd.Env, "TEMP="+musicRuntimeTemp(c), "TMP="+musicRuntimeTemp(c))
+		}
+		if app.ID == "chat" {
+			cmd.Env = append(cmd.Env, "WORKSPACE_CHAT_DIRECTORY_TOKEN="+rt.chatDirectoryToken)
 		}
 		if app.ID == "mail" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
@@ -390,6 +395,10 @@ func (rt *Runtime) startApps(ctx context.Context, publicCheck bool) error {
 	if _, ok := rt.Config.Catalog.Find("mail"); ok && !usesShared(rt.Config, "mail") {
 		rt.appTasks.Add(1)
 		go func() { defer rt.appTasks.Done(); rt.maintainMailboxes(appContext) }()
+	}
+	if _, ok := rt.Config.Catalog.Find("chat"); ok {
+		rt.appTasks.Add(1)
+		go func() { defer rt.appTasks.Done(); rt.maintainChatDirectory(appContext) }()
 	}
 	return nil
 }
