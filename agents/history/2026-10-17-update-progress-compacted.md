@@ -69,3 +69,43 @@ transfer for supporting updaters. No component app binary changes. No new tests
 are requested or run; compile, JavaScript syntax and packaging checks are the
 release verification scope. The previous broader Preview29 checks must remain
 labelled historical. Publishing is not permission for unattended live upgrades.
+
+## Preview 30 publication complete
+
+Published https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.30
+from source/tag `287e07100ae37c248f73801498e2279cd75cdb50`. Source is pushed to org
+main; README and build defaults identify30. Exact committed source was compiled
+on isolated NTFS; combined browser JavaScript syntax passed. No new tests, full
+progress UI or real update/rollback acceptance is claimed. GitHub Actions stayed
+disabled and was not used. Historical29 evidence remains labelled separately.
+
+All13 app definitions and component pins are unchanged from29. All59 package
+size/SHA256 checks passed; only manager and Workspace release-status notice
+changed. The complete installer embeds the exact verified bundle. All18 uploaded
+asset sizes/digests match local files; anonymous discovery selects30, installer
+HEAD returns200, and public README identifies30. Prior releases are untouched.
+
+Artifacts, exact source archive, packaging/upload/verification/cleanup scripts
+and receipts are retained under local `tooling/workspace-progress-release30`.
+Ignored dist and embedded payload match the final public artifacts. Installer
+675001856bytes, SHA256
+`fd7468851f3539f3acddc8467c05a136503b5b1ac8d6b47af192748a5a95d723`.
+Manager SHA256 `562b1a1b5c07f7103e47c93cf4bd05801ff1ec68b39a403cd761977322ae5454`.
+Bundle SHA256 `7897181bcabef9e2b2a3f9d7b2bb962a7727b5d9ead9f84cf6de0d4b43428992`.
+The exact named NTFS build root was removed after source/artifact preservation
+and canonical/reparse/process checks. No unknown data or real backup was removed.
+
+After publication, the idle earlier local progress helper was closed through its
+capability API with busy/pending guards. The public30 stage/Workspace.exe opened
+the local maintenance window and ran the normal read-only release check. It
+completed with no error, offering30 to installed29 and selecting direct
+Workspace.exe plus KNOWN-LIMITATIONS.md for the two changed packages:11834313
+bytes instead of the665687763byte complete bundle. This is actual release-plan
+discovery, not an update/backup/rollback execution or browser UI acceptance.
+
+The published helper remains intentionally running for the owner's next update;
+its PID/receipt is in local-window.json. Capability fragments/logs remain in
+protected Private storage and must not be printed or uploaded. Installed runtime
+stays29 until the owner applies the offered update. No app downtime, user data,
+identity, credentials, DNS, autostart or app-selection change occurred. The source
+history follow-up records completion without retagging or replacing any asset.
