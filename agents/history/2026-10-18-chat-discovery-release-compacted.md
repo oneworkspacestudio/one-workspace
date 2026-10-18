@@ -55,3 +55,31 @@ it still needs the normal Workspace+Chat update. Read-only sizing showed its ful
 verified backup needs about6GB free on its local NTFS backup volume, more than
 available during this task. Do not bypass its normal backup checks. No Actions.
 These completion notes follow the immutable source tags; no binaries retagged.
+
+## Installed deployment completed after storage became available
+
+Owner requested E: working space and completion of publication/deployment. Both
+public preview releases above were already published; no retag or duplicate
+release was needed. E: is exFAT: suitable for public installer/bundle staging,
+but private live data and verified rollback backups require NTFS ACLs. The
+previous C: space blocker was no longer present (about8.4GB free before update).
+Staged installer35 and bundle35 under E:/Projects/one-workspace-release35 and
+verified their full SHA256 against the published receipts. Discarded an incomplete
+first installer copy; the completed replacement and bundle both matched exactly.
+
+Applied the supported packaged updater to the owner's existing installation,
+selecting only workspace,chat. It created and verified a normal protected cold
+backup, retained every installed app, upgraded34/3 to35/4, restarted, passed all
+startup checks and finished its transaction with exit0/phase complete. Keep this
+newest verified backup. No development fixture or owner message tests performed.
+
+Post-deployment: local and public tunneled health both OK, all app services
+running, startup16/16 ready, Chat member-directory sync ready. Installed manager
+and Chat executable digests exactly match catalog/release assets. Comparison
+receipts stored only inside protected installation maintenance storage confirm
+settings, logical DPAPI credentials, native Chat keys, Vault configuration and
+certificates, and all10 ordinary files preserved. Changed package keys are exactly
+the same five listed above; all other app pins retained. About5.5GB remained on C:
+after the backup/update. Existing acceptance limitations remain unchanged.
+Future large public working artifacts may use E: per owner's preference; do not
+move unencrypted private data/backups there or convert the drive.
