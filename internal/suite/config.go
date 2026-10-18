@@ -159,15 +159,15 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 14
 		case "chat":
 			app.Port = r.Port + 16
+		case "hosting":
+			app.Port = r.Port + 17
 		}
 		apps = append(apps, app)
 	}
 	conf.Catalog.Apps = apps
 	if r.Domain != "" && r.Mode == "cloudflare" {
-		if _, ok := conf.Catalog.Find("mail"); ok {
-			conf.HostingDomain = r.Domain
-			conf.DNSZoneID = r.ZoneID
-		}
+		conf.HostingDomain = r.Domain
+		conf.DNSZoneID = r.ZoneID
 	}
 	return conf
 }

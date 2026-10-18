@@ -89,7 +89,16 @@ func TestEveryAuthenticatedAppKeepsItsNativeSession(t *testing.T) {
 func TestDriveRelatedAppsShareNativeSignIn(t *testing.T) {
 	for _, path := range []string{"/drive/files/My%20Drive/Documents", "/drive/studio", "/photos-app/"} {
 		t.Run(path, func(t *testing.T) {
-			app := suiteSignIns[0]
+			var app appSignIn
+			for _, entry := range suiteSignIns {
+				if entry.id == "drive" {
+					app = entry
+					break
+				}
+			}
+			if app.id == "" {
+				t.Fatal("Drive sign-in contract missing")
+			}
 			p := signInFixture(t, app, http.StatusUnauthorized)
 			w := httptest.NewRecorder()
 			if !p.seamlessApp(w, signInRequest(path)) || !strings.HasPrefix(w.Header().Get("Location"), app.login+"?") {

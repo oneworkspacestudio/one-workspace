@@ -165,6 +165,12 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 			cmd.Env = append(cmd.Env, "WORKSPACE_MUSIC_DIR="+filepath.Join(c.Files, "Music"), "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			cmd.Env = append(cmd.Env, "TEMP="+musicRuntimeTemp(c), "TMP="+musicRuntimeTemp(c))
 		}
+		if app.ID == "hosting" {
+			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner)
+			if c.HostingDomain != "" {
+				cmd.Env = append(cmd.Env, hostingSiteEnvironment(c, s)...)
+			}
+		}
 		if app.ID == "chat" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_CHAT_DIRECTORY_TOKEN="+rt.chatDirectoryToken)
 		}

@@ -1,5 +1,27 @@
 # October 18 release status
 
+## Preview36: My Hosting and free site publishing
+
+Adds original Apache-2.0 My Hosting as an optional app from its organization
+release, with logo, app launcher, OIDC registration, data/backup/update contract
+and license/provenance packages. Existing component pins are retained. Free
+Cloudflare site publishing uses first-level flat hostnames, preserves unrelated
+DNS/ingress, verifies public HTTPS and avoids router/paid-certificate setup.
+Vault/Hosting provider writes share a named mutex. Provider logout uses the
+supported OIDC navigation and revokes the browser's path-scoped Hosting session.
+
+Full Hosting native suite passed192.843s including actual Next/Nuxt, static/Node,
+WebSocket echo, crash recovery, strict descendant cancellation, runtime repair,
+retention, canonical routing and encrypted new-folder recovery. Fresh selected
+Accounts/Hosting installer + actual MyAccounts browser SSO/logout and full suite
+Go regressions pass. No owner account data was used as a fixture.
+
+Preview for trusted administrators/projects only. SCM/ServerCore/reboot,
+unattended pre-login startup, other-machine recovery and hostile multi-tenancy
+are not accepted. Supported background path is the interactive Windows user's
+startup. See the packaged My Hosting acceptance/operations docs. Existing app
+limitations below remain. No GitHub Actions are used.
+
 ## Preview35: Chat member search and verified browser flows
 
 Pins Chat0.1.0-preview.4 and synchronizes the MyAccounts member directory every

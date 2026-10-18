@@ -170,7 +170,7 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	case <-time.After(10 * time.Second):
 		return empty, errors.New("Accounts did not stop after configuration")
 	}
-	state("Connecting Drive, Docs and Photos")
+	state("Connecting your selected Workspace apps")
 	if e = writeDrive(c, s); e != nil {
 		return empty, e
 	}

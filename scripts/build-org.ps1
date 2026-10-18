@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.35',
+ [string]$Version='0.3.0-preview.36',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
@@ -77,6 +77,14 @@ $myVaultStage=Join-Path $Cache ('my-vault-stage-'+[guid]::NewGuid().ToString('N'
 Expand-Archive -LiteralPath $myVaultZip -DestinationPath $myVaultStage
 $myVaultRoot=(Get-ChildItem -LiteralPath $myVaultStage -Filter MyVault.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $myVaultRoot){throw 'My Vault package is missing MyVault.exe'}
+if(-not $lock.myHosting){throw 'My Hosting must be pinned to a published organization release'}
+$hostingZip=Get-OrgAsset $lock.myHosting
+$hostingStage=Join-Path $Cache ('my-hosting-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $hostingZip -DestinationPath $hostingStage
+$hostingRoot=(Get-ChildItem -LiteralPath $hostingStage -Filter MyHosting.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $hostingRoot){throw 'My Hosting package is missing MyHosting.exe'}
+$hostingCompatibility=Get-Content -LiteralPath (Join-Path $hostingRoot 'compatibility.json') -Raw|ConvertFrom-Json
+if($hostingCompatibility.schema -ne 1 -or $hostingCompatibility.workspaceInstallerIntegration -ne 2 -or $hostingCompatibility.route -cne '/hosting' -or $hostingCompatibility.version -cne ($lock.myHosting.tag -replace '^v','')){throw 'Unsupported My Hosting integration contract'}
 $notices=Join-Path $Cache 'component-notices'
 New-Item -ItemType Directory -Force $notices|Out-Null
 Copy-Item -Path (Join-Path $seedDir 'licenses/components/*') -Destination $notices -Force
@@ -94,7 +102,7 @@ $versions=@{};foreach($app in $seedCat.apps){$versions[$app.id]=$app.version}
 $driveSource='https://github.com/'+$lock.drive.repository+'/releases/tag/'+$lock.drive.tag
 $photosSource='https://github.com/'+$lock.photos.repository+'/releases/tag/'+$lock.photos.tag
 # Every application comes from its own pinned organization release.
-& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -Chat (Join-Path $chatRoot 'Chat.exe') -ChatVersion ($lock.chat.tag -replace '^v','') -ChatNotices $chatRoot -MyVault (Join-Path $myVaultRoot 'MyVault.exe') -MyVaultVersion ($lock.myVault.tag -replace '^v','') -MyVaultNotices $myVaultRoot -ComponentNotices $notices
+& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -Chat (Join-Path $chatRoot 'Chat.exe') -ChatVersion ($lock.chat.tag -replace '^v','') -ChatNotices $chatRoot -MyVault (Join-Path $myVaultRoot 'MyVault.exe') -MyVaultVersion ($lock.myVault.tag -replace '^v','') -MyVaultNotices $myVaultRoot -MyHosting (Join-Path $hostingRoot 'MyHosting.exe') -MyHostingVersion ($lock.myHosting.tag -replace '^v','') -MyHostingNotices $hostingRoot -ComponentNotices $notices
 if($LASTEXITCODE -ne 0){throw 'Organization suite build failed'}
  & (Join-Path $PSScriptRoot 'check-org-catalog.ps1') -Catalog (Join-Path $root 'dist/catalog.json')
 Copy-Item -LiteralPath (Join-Path $notices 'organization-components.json') -Destination (Join-Path $root 'dist/organization-components.json') -Force

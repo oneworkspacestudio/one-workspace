@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"hosting", "My Hosting", "/hosting", "/api/me", "/hosting/auth/login", "/hosting/auth/logout", []string{"myhosting_session"}},
 	{"chat", "Chat", "/chat", "/api/me", "/chat/auth/login", "/chat/auth/logout", []string{"chat_session"}},
 	{"drive", "Drive", "/drive", "/drive/api/users?username=self", "/drive/api/auth/oidc/login", "/drive/api/auth/logout", []string{"filebrowser_quantum_jwt"}},
 	{"gitea", "Git", "/git", "/user/settings", "/git/user/oauth2/myaccounts", "/git/user/logout", []string{"workspace_gitea"}},

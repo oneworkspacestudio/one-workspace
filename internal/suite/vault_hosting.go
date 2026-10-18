@@ -125,6 +125,9 @@ func (rt *Runtime) ensureVaultHosting(ctx context.Context) (result error) {
 	if !id.MatchString(resources.AccountID) || !id.MatchString(resources.ZoneID) || !tunnelID.MatchString(resources.TunnelID) {
 		return errors.New("managed Cloudflare resource identifiers need repair")
 	}
+	unlock,lockErr:=platform.LockCloudflareTunnel(ctx,resources.AccountID,resources.TunnelID)
+	if lockErr!=nil{return lockErr}
+	defer unlock()
 	token := rt.Secrets.HostingToken
 	if token == "" {
 		token = rt.Secrets.MailDNSToken

@@ -88,6 +88,7 @@ var updateGroups = []updateGroup{
 	{"my-tube", "My Tube", "my-tube", []string{"my-tube"}},
 	{"vault", "My Vault", "my-vault", []string{"vault"}},
 	{"chat", "Chat", "chat", []string{"chat"}},
+	{"hosting", "My Hosting", "my-hosting", []string{"hosting"}},
 }
 
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
@@ -198,6 +199,9 @@ func groupPackages(g updateGroup, c catalog.Catalog) map[string]catalog.Package 
 	return out
 }
 func updatePackageOwner(id string) string {
+	if id == "hosting" || strings.HasPrefix(id, "hosting-") {
+		return "hosting"
+	}
 	if id == "vault" || strings.HasPrefix(id, "vault-") {
 		return "vault"
 	}

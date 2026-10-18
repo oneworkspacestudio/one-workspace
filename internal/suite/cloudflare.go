@@ -119,7 +119,7 @@ func ProvisionCloudflare(ctx context.Context, r Request, c Config) (token string
 	}
 	err = a.call(ctx, "GET", base+"/token", nil, &token)
 	if err == nil && c.Data != "" {
-		err = platform.SaveJSON(filepath.Join(c.Data, "cloudflare-resources.json"), map[string]any{"accountId": r.AccountID, "zoneId": r.ZoneID, "tunnelId": tunnel.ID, "dnsRecordIds": created, "hostnames": hosts})
+		err = platform.SaveJSON(filepath.Join(c.Data, "cloudflare-resources.json"), map[string]any{"accountId": r.AccountID, "zoneId": r.ZoneID, "zoneName": zone.Name, "tunnelId": tunnel.ID, "dnsRecordIds": created, "hostnames": hosts})
 	}
 	return
 }

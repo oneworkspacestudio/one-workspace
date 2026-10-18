@@ -21,7 +21,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite-d520ebb2.png)
+![Current One Workspace and app logos](docs/branding/app-suite-368eccf3.png)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 
@@ -115,6 +115,12 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
       <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-vault">my-vault</a></td>
     </tr>
     <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_hosting.svg" alt="My Hosting logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Hosting</strong></td>
+      <td valign="middle">Deploy websites and Node apps from GitHub or ZIP with previews and rollback.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-hosting">my-hosting</a></td>
+    </tr>
+    <tr>
       <td align="center" valign="middle" width="64"><img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"></td>
       <td valign="middle"><strong>Backups</strong></td>
       <td valign="middle">Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default.</td>
@@ -122,6 +128,11 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
     </tr>
   </tbody>
 </table>
+
+**Preview 36 adds My Hosting.** Deploy trusted static sites, Node/Express and
+tested Next/Nuxt builds with real logs, previews, rollback, encrypted backups and
+MyAccounts shared sign-in. Managed Cloudflare connections publish flat site
+addresses without router setup. [Setup, tests and limits](docs/MY-HOSTING.md).
 
 **[Preview 35 fixes Chat discovery and messaging](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.35).** MyAccounts members become searchable automatically, including before their first Chat login. Find by name, username, verified email or account ID; open native Chat IDs and QR links. Browser checks covered two-way direct/group messages, attachments and disabled-account access in a separate tester installation. [Chat checks and limits](https://github.com/oneworkspacestudio/chat/blob/master/docs/workspace/ACCEPTANCE.md).
 

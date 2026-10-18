@@ -2,7 +2,7 @@ param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
 if($cat.installerIntegration -ne 2){throw 'Missing installer compatibility guard for shared-service apps'}
-$required=@('accounts','drive','docs','photos','gitea','music','mail','studio','calendar','contacts','notes','my-tube','vault','chat')
+$required=@('accounts','drive','docs','photos','gitea','music','mail','studio','calendar','contacts','notes','my-tube','vault','chat','hosting')
 foreach($id in $required){if(@($cat.apps|Where-Object id -CEQ $id).Count -ne 1){throw ('Organization app missing or duplicated: '+$id)}}
 foreach($app in $cat.apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/[A-Za-z0-9_.-]+(/|$)'){throw ('Non-organization source: '+$app.id)}}
 foreach($id in @('calendar','contacts')){
@@ -23,4 +23,8 @@ $vault=$cat.apps|Where-Object id -eq 'vault'
 $vaultArgs=@('run','--data','${DATA}/my-vault','--listen','127.0.0.1:${PORT}','--no-browser')
 if($cat.packages.vault.file -cne 'MyVault.exe' -or -not $cat.packages.'vault-LICENSE' -or -not $cat.packages.'vault-NOTICE' -or -not $cat.packages.'vault-THIRD-PARTY-LICENSES.txt'){throw 'My Vault launcher or licenses missing'}
 if($vault.oidc -or $vault.callback -or $vault.depends -or $vault.stripPrefix -or $vault.route -cne '/vault' -or ($vault.args|ConvertTo-Json -Compress) -cne ($vaultArgs|ConvertTo-Json -Compress)){throw 'My Vault must retain independent authentication, storage and launcher-only integration'}
+$hosting=$cat.apps|Where-Object id -eq 'hosting'
+$hostingArgs=@('--data','${DATA}/my-hosting','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/hosting','--no-browser')
+if($cat.packages.hosting.file -cne 'MyHosting.exe' -or -not $cat.packages.'hosting-LICENSE' -or -not $cat.packages.'hosting-NOTICE' -or -not $cat.packages.'hosting-THIRD-PARTY-LICENSES.txt' -or -not $cat.packages.'hosting-compatibility.json'){throw 'My Hosting executable, attribution or integration contract missing'}
+if(-not $hosting.oidc -or $hosting.callback -cne '/hosting/auth/callback' -or $hosting.route -cne '/hosting' -or -not $hosting.stripPrefix -or @($hosting.depends).Count -ne 1 -or $hosting.depends[0] -cne 'accounts' -or ($hosting.args|ConvertTo-Json -Compress) -cne ($hostingArgs|ConvertTo-Json -Compress)){throw 'My Hosting managed authentication, data or launch contract is incorrect'}
 Write-Output ('Verified '+$required.Count+' organization app entries and launch arguments')

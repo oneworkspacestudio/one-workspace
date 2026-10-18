@@ -72,6 +72,7 @@ func clearAppCookies(w http.ResponseWriter, r *http.Request, secure bool) {
 		"mail_session":            {"/", "/mail/"}, "mail_login": {"/", "/mail/"},
 		"calendar_session": {"/", "/calendar/"}, "calendar_login": {"/", "/calendar/"},
 		"contacts_session": {"/", "/contacts/"}, "contacts_login": {"/", "/contacts/"},
+		"myhosting_session": {"/", "/hosting/"}, "myhosting_login": {"/", "/hosting/"},
 		"chat_session": {"/", "/chat/"}, "chat_login": {"/", "/chat/"},
 		"notes_session": {"/", "/notes/"}, "notes_login": {"/", "/notes/"},
 		"mytube_session": {"/", "/my-tube/"}, "mytube_login": {"/", "/my-tube/"},

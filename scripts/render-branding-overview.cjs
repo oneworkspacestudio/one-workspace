@@ -10,10 +10,10 @@ const apps = [
   ['my_accounts', 'MyAccounts'], ['photo_editor', 'Photo Editor'], ['my_mail', 'Mail'],
   ['my_calendar', 'Calendar'], ['my_contacts', 'Contacts'], ['my_notes', 'Notes'],
   ['my_tube', 'My Tube'], ['my_chat', 'Chat'], ['my_vault', 'My Vault'],
-  ['backups', 'Backups'],
+  ['my_hosting', 'My Hosting'], ['backups', 'Backups'],
 ];
 
-const columns = 8;
+const columns = 6;
 const cellWidth = 210;
 const width = columns * cellWidth;
 const rowHeight = 192;
