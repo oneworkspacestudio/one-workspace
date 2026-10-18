@@ -105,3 +105,37 @@ Source remains preview, no Actions. Next build full bundle, verify all members,
 install selected Accounts/Hosting from the actual final ZIP, verify session and
 manual uninstall preserving data, generate per-app update metadata, publish paired
 suite release. This is not yet a suite release/publication claim.
+
+
+## Published paired release and final verification
+
+Suite v0.3.0-preview.36 actually published, source33aa6dd4f74961d29483e9870398b22fa596b541.
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.36
+All20 GitHub asset hashes/sizes matched before draft=false. Bundle75 packages,
+15 app entries, embedded-payload hash and existing app binaries verified. Only
+prior Music description separator encoding differed, not its executable/contract.
+Installer SHA256042b6416601a08fbdf1f2dd2f6beead7b96fd670d5595785ea2b837f13672fa2;
+bundle SHA25676ee55c7e78d3644d52f18f804591a87a562cc648af9288fd7cdc16418e1fbac.
+Source/main and feature branch pushed. Anonymous public catalog15 entries verified.
+
+Fresh final full-bundle selected install passed; real browser shared login,
+project creation and ZIP publish9s, verified automatic Caddy and no Node download,
+logout sessions0. Program removal retained DB/other app, then fixture stopped and
+removed. Live owner Workspace healthok. Full Go suite had passed with NTFS tests.
+
+Publisher correction: current selection retains Hosting exe +3 notice packages,
+not the raw bundle's8 supplemental guides/inventories. Published app marker scopes
+to four with canonical9007 metadata, digest422f4d12db717b89e9f06a740d6e713111ee5b20c0fd6a52d04dca6fc4a9c879.
+The12-file raw marker was correctly rejected; no validator was weakened. Actual
+public manifest discovery/select/download/extract/hash and preserved custom port
+passed; public CheckUpdates now recognizes suite36 and org Hostingv1 as current.
+Read UPDATE-PUBLISHING.md before generating future markers.
+
+No remaining product publication work for this preview. SCM/ServerCore/reboot/
+cross-machine acceptance remains explicitly unsupported/pending. No Actions used.
+Current Hosting demo retained for requested review while keep/stop question is
+pending; all disposable suites removed. See app agents/history/2026-10-18-release-
+compacted.md for exact three owned DNS hosts, process/data receipts and teardown
+requirements. Preserve owner tunnel and C:/tmp/workspace; never test its accounts.
+External receipts: I:/Projects/tooling/workspace-hosting-release36 and my-hosting-
+work. Tagged source SHAs above predate post-release documentation-only handoffs.

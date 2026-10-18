@@ -60,3 +60,15 @@ Breaking migrations need a separately reviewed migration flow, not this marker.
 The organization release remains an unsigned preview until the separate platform
 acceptance gates are met. This metadata is a compatibility declaration and uses
 GitHub release integrity; it is not an executable code-signing certificate.
+
+
+## My Hosting first preview
+
+The installed group is its executable plus LICENSE, NOTICE and third-party
+notices. Supplemental guide/inventory files in the raw app/suite ZIP are not
+retained by current optional-app selection. Scope the managed-update marker to
+those four installed packages, using canonical app metadata (port9007); the
+consumer preserves an installation's own allocated port. Never publish a marker
+from a test installation's runtime catalog or require absent supplemental files.
+A real public manifest/ZIP download and custom-port preservation check passed
+for v0.1.0-preview.1. First installation discovers it through suite preview36.
