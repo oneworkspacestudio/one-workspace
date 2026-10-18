@@ -2,7 +2,7 @@ package suite
 
 import (
 	"encoding/json"
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"os"
 	"path/filepath"
 	"strings"

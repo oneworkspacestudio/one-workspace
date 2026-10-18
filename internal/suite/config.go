@@ -3,8 +3,8 @@ package suite
 import (
 	"errors"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net"
 	"net/mail"
 	"net/url"
@@ -131,6 +131,9 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 	}
 	apps := []catalog.App{}
 	for _, app := range conf.Catalog.Apps {
+		if app.Kind == "process" {
+			app.Port += r.Port - 8990
+		}
 		switch app.ID {
 		case "accounts":
 			app.Port = r.Port + 1
@@ -159,6 +162,14 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 14
 		case "chat":
 			app.Port = r.Port + 16
+		case "tasks":
+			app.Port = r.Port + 18
+		case "pdf":
+			app.Port = r.Port + 19
+		case "monitor":
+			app.Port = r.Port + 20
+		case "search":
+			app.Port = r.Port + 21
 		case "hosting":
 			app.Port = r.Port + 17
 		}

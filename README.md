@@ -16,12 +16,12 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 - **Your files stay yours.** Work with ordinary folders on your own storage.
 - **Connected sign-in.** Sign in once with MyAccounts and open connected apps without repeating their sign-in buttons. My Vault keeps its independent master password. [How sign-in works](docs/SIGN-IN.md).
 - **Optional backups.** The ownerâ€™s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
-- **Choose your apps.** Advanced setup lets you uncheck apps and handles their dependencies.
+- **Choose your apps.** Advanced setup remembers unchecked apps and handles their dependencies. Workspace updates automatically include newly added default apps.
 - **Room to grow.** Add more apps as your needs change.
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite-368eccf3.png)
+![Current One Workspace and app logos](docs/branding/app-suite-db81f244.png)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 
@@ -121,6 +121,30 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
       <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-hosting">my-hosting</a></td>
     </tr>
     <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_tasks.svg" alt="My Tasks logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Tasks</strong></td>
+      <td valign="middle">Private and shared lists, recurring tasks, reminders and Calendar/Notes links.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-tasks">my-tasks</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_pdf.svg" alt="My PDF logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My PDF</strong></td>
+      <td valign="middle">PDF viewing, copy-oriented tools, annotations and raster redaction; Drive open/save.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-pdf">my-pdf</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_monitor.svg" alt="My Monitor logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Monitor</strong></td>
+      <td valign="middle">Private service health, uptime history, incidents and opt-in public status.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-monitor">my-monitor</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_search.svg" alt="My Search logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Search</strong></td>
+      <td valign="middle">Permission-aware search across connected apps; Vault contents are excluded.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-search">my-search</a></td>
+    </tr>
+    <tr>
       <td align="center" valign="middle" width="64"><img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"></td>
       <td valign="middle"><strong>Backups</strong></td>
       <td valign="middle">Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default.</td>
@@ -128,6 +152,8 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
     </tr>
   </tbody>
 </table>
+
+**Preview 37 candidate adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. Build and acceptance work is in progress on this branch. See [delivery status](docs/FOUR-APPS-DELIVERY.md).
 
 **Preview 36 adds My Hosting.** Deploy trusted static sites, Node/Express and
 tested Next/Nuxt builds with real logs, previews, rollback, encrypted backups and

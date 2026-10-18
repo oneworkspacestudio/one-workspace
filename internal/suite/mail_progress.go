@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {

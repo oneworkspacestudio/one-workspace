@@ -4,7 +4,7 @@ import (
 	"archive/zip"
 	"embed"
 	"errors"
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"io"
 )
 

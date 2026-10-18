@@ -20,7 +20,17 @@ func (p *Portal) navigationRoutes(mux *http.ServeMux) {
 		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]any{"apps": p.tiles(user.Subject == p.rt.Config.Owner), "name": user.Name, "email": user.Email, "home": "/"})
+		apps := []map[string]any{}
+		for _, tile := range p.tiles(user.Subject == p.rt.Config.Owner) {
+			entry := map[string]any{"Name": tile.Name, "Description": tile.Description, "URL": tile.URL, "Icon": tile.Icon}
+			if a, ok := p.rt.Config.Catalog.Find(strings.TrimPrefix(tile.URL, "/_workspace/open/")); ok {
+				entry["ID"] = a.ID
+				entry["Route"] = strings.TrimRight(a.Route, "/") + "/"
+				entry["Version"] = a.Version
+			}
+			apps = append(apps, entry)
+		}
+		json.NewEncoder(w).Encode(map[string]any{"apps": apps, "name": user.Name, "email": user.Email, "subject": user.Subject, "issuer": p.rt.Config.Issuer, "home": "/"})
 	})
 	for _, name := range []string{"navigation.js", "navigation.css", "logout.js"} {
 		mux.HandleFunc("GET /_workspace/"+name, func(w http.ResponseWriter, r *http.Request) {
@@ -78,6 +88,10 @@ func clearAppCookies(w http.ResponseWriter, r *http.Request, secure bool) {
 		"mytube_session": {"/", "/my-tube/"}, "mytube_login": {"/", "/my-tube/"},
 		"access_token_cookie": {"/", "/music/"}, "csrf_access_token": {"/", "/music/"}, "swingmusic_oidc": {"/", "/music/"},
 		"workspace_gitea": {"/", "/git", "/git/"},
+	}
+	for _, id := range []string{"tasks", "pdf", "monitor", "search"} {
+		names[id+"_session"] = []string{"/", "/" + id + "/"}
+		names[id+"_login"] = []string{"/", "/" + id + "/"}
 	}
 	domain := r.Host
 	for _, app := range suiteSignIns {

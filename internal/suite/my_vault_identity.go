@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 // Configure only upstream OIDC authentication. The vault has its own origin,

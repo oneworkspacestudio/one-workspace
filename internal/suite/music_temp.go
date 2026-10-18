@@ -2,7 +2,7 @@ package suite
 
 import (
 	"errors"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"os"
 	"path/filepath"
 	"strings"

@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 // Set by the local release build; no credential is ever embedded.

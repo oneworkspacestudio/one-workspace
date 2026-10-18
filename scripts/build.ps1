@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.36',
+ [string]$Version='0.3.0-preview.37',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261014.2',
  [string]$DriveVersion='photos-preview-local',
@@ -27,6 +27,18 @@ param(
  [string]$Chat='',
  [string]$ChatVersion='0.1.0-preview.4',
  [string]$ChatNotices='',
+ [string]$MyTasks='',
+ [string]$MyTasksVersion='0.1.0-preview.1',
+ [string]$MyTasksNotices='',
+ [string]$MyPDF='',
+ [string]$MyPDFVersion='0.1.0-preview.1',
+ [string]$MyPDFNotices='',
+ [string]$MyMonitor='',
+ [string]$MyMonitorVersion='0.1.0-preview.1',
+ [string]$MyMonitorNotices='',
+ [string]$MySearch='',
+ [string]$MySearchVersion='0.1.0-preview.1',
+ [string]$MySearchNotices='',
  [string]$MyHosting='',
  [string]$MyHostingVersion='0.1.0-preview.1',
  [string]$MyHostingNotices='',
@@ -79,6 +91,10 @@ try {
   foreach($name in @('OPERATIONS.md','PUBLISHING.md','FRAMEWORKS.md','ACCEPTANCE.md','openapi.json')){$inputs['hosting-doc-'+$name]=@{source=(Join-Path $MyHostingNotices ('docs/'+$name));file=('docs/MyHosting/'+$name)}}
  }
  if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","SIGN-IN.md","PRODUCTION-GATES.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
+ if($MyTasks){$inputs['tasks']=@{source=$MyTasks;file='MyTasks.exe'};if(-not $MyTasksNotices){throw 'My Tasks requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['tasks-'+$name]=@{source=(Join-Path $MyTasksNotices $name);file='licenses/MyTasks-'+$name}}}
+ if($MyPDF){$inputs['pdf']=@{source=$MyPDF;file='MyPDF.exe'};if(-not $MyPDFNotices){throw 'My PDF requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['pdf-'+$name]=@{source=(Join-Path $MyPDFNotices $name);file='licenses/MyPDF-'+$name}}}
+ if($MyMonitor){$inputs['monitor']=@{source=$MyMonitor;file='MyMonitor.exe'};if(-not $MyMonitorNotices){throw 'My Monitor requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['monitor-'+$name]=@{source=(Join-Path $MyMonitorNotices $name);file='licenses/MyMonitor-'+$name}}}
+ if($MySearch){$inputs['search']=@{source=$MySearch;file='MySearch.exe'};if(-not $MySearchNotices){throw 'My Search requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['search-'+$name]=@{source=(Join-Path $MySearchNotices $name);file='licenses/MySearch-'+$name}}}
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/oneworkspacestudio/myaccounts/releases/tag/'+$AccountsVersion},
@@ -101,6 +117,10 @@ try {
  foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){
   if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data',('${DATA}/'+$dependent.id),'--shared-data','${DATA}/shared','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base',('/'+$dependent.id),'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar/releases/tag/v'+$CalendarVersion}}
  }
+ if($MyTasks){$apps+=@{id='tasks';name='My Tasks';description='Private and shared tasks, recurrence and reminders';version=$MyTasksVersion;kind='process';package='tasks';executable='MyTasks.exe';port=9008;route='/tasks';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/tasks/auth/callback';args=@('--data','${DATA}/tasks','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/tasks','--no-browser');source='https://github.com/oneworkspacestudio/my-tasks/releases/tag/v'+$MyTasksVersion}}
+ if($MyPDF){$apps+=@{id='pdf';name='My PDF';description='PDF viewing, annotations and copy-oriented tools';version=$MyPDFVersion;kind='process';package='pdf';executable='MyPDF.exe';port=9009;route='/pdf';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/pdf/auth/callback';args=@('--data','${DATA}/pdf','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/pdf','--no-browser');source='https://github.com/oneworkspacestudio/my-pdf/releases/tag/v'+$MyPDFVersion}}
+ if($MyMonitor){$apps+=@{id='monitor';name='My Monitor';description='Private uptime monitoring and opt-in public status';version=$MyMonitorVersion;kind='process';package='monitor';executable='MyMonitor.exe';port=9010;route='/monitor';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/monitor/auth/callback';args=@('--data','${DATA}/monitor','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/monitor','--no-browser');source='https://github.com/oneworkspacestudio/my-monitor/releases/tag/v'+$MyMonitorVersion}}
+ if($MySearch){$apps+=@{id='search';name='My Search';description='Search connected apps with your own permissions';version=$MySearchVersion;kind='process';package='search';executable='MySearch.exe';port=9011;route='/search';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/search/auth/callback';args=@('--data','${DATA}/search','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/search','--no-browser');source='https://github.com/oneworkspacestudio/my-search/releases/tag/v'+$MySearchVersion}}
  foreach($app in $apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/'){throw ('App source must be an organization repository: '+$app.id)}}
  $catalog=@{schema=1;installerIntegration=2;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
@@ -112,7 +132,7 @@ try {
   $entry=$zip.CreateEntry('catalog.json');$out=$entry.Open();$bytes=[Text.Encoding]::UTF8.GetBytes($catalog);$out.Write($bytes,0,$bytes.Length);$out.Dispose()
   foreach($key in $inputs.Keys){$entry=$zip.CreateEntry($inputs[$key].file,[IO.Compression.CompressionLevel]::Optimal);$out=$entry.Open();$input=[IO.File]::OpenRead($inputs[$key].source);try{$input.CopyTo($out)}finally{$input.Dispose();$out.Dispose()}}
  }finally{$zip.Dispose();$stream.Dispose()}
- & $Go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/fahimc/one-workspace/internal/distribution.Repository=$ReleaseRepo" -o dist/WorkspaceSetup-windows-amd64.exe ./cmd/setup
+ & $Go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/oneworkspacestudio/one-workspace/internal/distribution.Repository=$ReleaseRepo" -o dist/WorkspaceSetup-windows-amd64.exe ./cmd/setup
  if($LASTEXITCODE -ne 0){throw 'Setup build failed'}
  Copy-Item -LiteralPath $payload -Destination (Join-Path $root 'dist/workspace-bundle.zip') -Force
  $files=@('WorkspaceSetup-windows-amd64.exe','Workspace.exe','catalog.json','workspace-bundle.zip');$sums=foreach($name in $files){$hash=(Get-FileHash -LiteralPath (Join-Path $root "dist/$name") -Algorithm SHA256).Hash.ToLowerInvariant();"$hash  $name"}

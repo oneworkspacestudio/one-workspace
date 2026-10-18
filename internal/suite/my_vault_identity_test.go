@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 func TestVaultIdentityUsesDedicatedCallbackAndPreservesOptOut(t *testing.T) {

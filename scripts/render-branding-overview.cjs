@@ -10,7 +10,7 @@ const apps = [
   ['my_accounts', 'MyAccounts'], ['photo_editor', 'Photo Editor'], ['my_mail', 'Mail'],
   ['my_calendar', 'Calendar'], ['my_contacts', 'Contacts'], ['my_notes', 'Notes'],
   ['my_tube', 'My Tube'], ['my_chat', 'Chat'], ['my_vault', 'My Vault'],
-  ['my_hosting', 'My Hosting'], ['backups', 'Backups'],
+  ['my_hosting', 'My Hosting'], ['my_tasks', 'My Tasks'], ['my_pdf', 'My PDF'], ['my_monitor', 'My Monitor'], ['my_search', 'My Search'], ['backups', 'Backups'],
 ];
 
 const columns = 6;

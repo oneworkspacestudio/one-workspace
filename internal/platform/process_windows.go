@@ -175,3 +175,15 @@ func Autostart(exe, data string, enabled bool) error {
 	}
 	return k.SetStringValue("OneWorkspace", `"`+exe+`" --data "`+data+`" run`)
 }
+
+// WorkerLimits constrains document workers; ordinary suite jobs keep their
+// existing limits. Start still assigns the suspended primary process first.
+func (j *Job) WorkerLimits(memory uintptr) error {
+	info := windows.JOBOBJECT_EXTENDED_LIMIT_INFORMATION{}
+	info.BasicLimitInformation.LimitFlags = windows.JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE | windows.JOB_OBJECT_LIMIT_PROCESS_MEMORY | windows.JOB_OBJECT_LIMIT_ACTIVE_PROCESS | windows.JOB_OBJECT_LIMIT_PROCESS_TIME
+	info.ProcessMemoryLimit = memory
+	info.BasicLimitInformation.ActiveProcessLimit = 1
+	info.BasicLimitInformation.PerProcessUserTimeLimit = 60 * 10000000
+	_, e := windows.SetInformationJobObject(j.handle, windows.JobObjectExtendedLimitInformation, uintptr(unsafe.Pointer(&info)), uint32(unsafe.Sizeof(info)))
+	return e
+}

@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.36',
+ [string]$Version='0.3.0-preview.37',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
@@ -102,7 +102,35 @@ $versions=@{};foreach($app in $seedCat.apps){$versions[$app.id]=$app.version}
 $driveSource='https://github.com/'+$lock.drive.repository+'/releases/tag/'+$lock.drive.tag
 $photosSource='https://github.com/'+$lock.photos.repository+'/releases/tag/'+$lock.photos.tag
 # Every application comes from its own pinned organization release.
-& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -Chat (Join-Path $chatRoot 'Chat.exe') -ChatVersion ($lock.chat.tag -replace '^v','') -ChatNotices $chatRoot -MyVault (Join-Path $myVaultRoot 'MyVault.exe') -MyVaultVersion ($lock.myVault.tag -replace '^v','') -MyVaultNotices $myVaultRoot -MyHosting (Join-Path $hostingRoot 'MyHosting.exe') -MyHostingVersion ($lock.myHosting.tag -replace '^v','') -MyHostingNotices $hostingRoot -ComponentNotices $notices
+$tasksZip=Get-OrgAsset $lock.myTasks
+$tasksStage=Join-Path $Cache ('my-tasks-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $tasksZip -DestinationPath $tasksStage
+$tasksRoot=(Get-ChildItem -LiteralPath $tasksStage -Filter MyTasks.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $tasksRoot){throw 'My Tasks package is missing MyTasks.exe'}
+$tasksContract=Get-Content -LiteralPath (Join-Path $tasksRoot 'compatibility.json') -Raw|ConvertFrom-Json
+if($tasksContract.schema -ne 1 -or $tasksContract.workspaceInstallerIntegration -ne 2 -or $tasksContract.route -cne '/tasks' -or $tasksContract.version -cne ($lock.myTasks.tag -replace '^v','')){throw 'Unsupported My Tasks integration contract'}
+$pdfZip=Get-OrgAsset $lock.myPDF
+$pdfStage=Join-Path $Cache ('my-pdf-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $pdfZip -DestinationPath $pdfStage
+$pdfRoot=(Get-ChildItem -LiteralPath $pdfStage -Filter MyPDF.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $pdfRoot){throw 'My PDF package is missing MyPDF.exe'}
+$pdfContract=Get-Content -LiteralPath (Join-Path $pdfRoot 'compatibility.json') -Raw|ConvertFrom-Json
+if($pdfContract.schema -ne 1 -or $pdfContract.workspaceInstallerIntegration -ne 2 -or $pdfContract.route -cne '/pdf' -or $pdfContract.version -cne ($lock.myPDF.tag -replace '^v','')){throw 'Unsupported My PDF integration contract'}
+$monitorZip=Get-OrgAsset $lock.myMonitor
+$monitorStage=Join-Path $Cache ('my-monitor-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $monitorZip -DestinationPath $monitorStage
+$monitorRoot=(Get-ChildItem -LiteralPath $monitorStage -Filter MyMonitor.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $monitorRoot){throw 'My Monitor package is missing MyMonitor.exe'}
+$monitorContract=Get-Content -LiteralPath (Join-Path $monitorRoot 'compatibility.json') -Raw|ConvertFrom-Json
+if($monitorContract.schema -ne 1 -or $monitorContract.workspaceInstallerIntegration -ne 2 -or $monitorContract.route -cne '/monitor' -or $monitorContract.version -cne ($lock.myMonitor.tag -replace '^v','')){throw 'Unsupported My Monitor integration contract'}
+$searchZip=Get-OrgAsset $lock.mySearch
+$searchStage=Join-Path $Cache ('my-search-stage-'+[guid]::NewGuid().ToString('N'))
+Expand-Archive -LiteralPath $searchZip -DestinationPath $searchStage
+$searchRoot=(Get-ChildItem -LiteralPath $searchStage -Filter MySearch.exe -File -Recurse | Select-Object -First 1).DirectoryName
+if(-not $searchRoot){throw 'My Search package is missing MySearch.exe'}
+$searchContract=Get-Content -LiteralPath (Join-Path $searchRoot 'compatibility.json') -Raw|ConvertFrom-Json
+if($searchContract.schema -ne 1 -or $searchContract.workspaceInstallerIntegration -ne 2 -or $searchContract.route -cne '/search' -or $searchContract.version -cne ($lock.mySearch.tag -replace '^v','')){throw 'Unsupported My Search integration contract'}
+& (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -Chat (Join-Path $chatRoot 'Chat.exe') -ChatVersion ($lock.chat.tag -replace '^v','') -ChatNotices $chatRoot -MyVault (Join-Path $myVaultRoot 'MyVault.exe') -MyVaultVersion ($lock.myVault.tag -replace '^v','') -MyVaultNotices $myVaultRoot -MyHosting (Join-Path $hostingRoot 'MyHosting.exe') -MyHostingVersion ($lock.myHosting.tag -replace '^v','') -MyHostingNotices $hostingRoot -MyTasks (Join-Path $tasksRoot 'MyTasks.exe') -MyTasksVersion ($lock.myTasks.tag -replace '^v','') -MyTasksNotices $tasksRoot -MyPDF (Join-Path $pdfRoot 'MyPDF.exe') -MyPDFVersion ($lock.myPDF.tag -replace '^v','') -MyPDFNotices $pdfRoot -MyMonitor (Join-Path $monitorRoot 'MyMonitor.exe') -MyMonitorVersion ($lock.myMonitor.tag -replace '^v','') -MyMonitorNotices $monitorRoot -MySearch (Join-Path $searchRoot 'MySearch.exe') -MySearchVersion ($lock.mySearch.tag -replace '^v','') -MySearchNotices $searchRoot -ComponentNotices $notices
 if($LASTEXITCODE -ne 0){throw 'Organization suite build failed'}
  & (Join-Path $PSScriptRoot 'check-org-catalog.ps1') -Catalog (Join-Path $root 'dist/catalog.json')
 Copy-Item -LiteralPath (Join-Path $notices 'organization-components.json') -Destination (Join-Path $root 'dist/organization-components.json') -Force

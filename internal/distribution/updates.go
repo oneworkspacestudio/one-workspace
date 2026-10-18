@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -18,9 +19,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/operationprogress"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/operationprogress"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 // AppUpdateManifest is a publisher's explicit Windows managed-integration
@@ -54,6 +55,7 @@ type UpdateChoice struct {
 	Available bool                       `json:"available"`
 	Reason    string                     `json:"reason,omitempty"`
 	ReviewURL string                     `json:"reviewUrl,omitempty"`
+	NewApps   []string                   `json:"newApps,omitempty"`
 	Apps      []catalog.App              `json:"apps,omitempty"`
 	Packages  map[string]catalog.Package `json:"packages,omitempty"`
 	Downloads map[string]UpdateDownload  `json:"downloads,omitempty"`
@@ -76,6 +78,7 @@ type updateGroup struct {
 }
 
 var updateGroups = []updateGroup{
+
 	{"workspace", "One Workspace", "one-workspace", nil},
 	{"accounts", "MyAccounts", "myaccounts", []string{"accounts"}},
 	{"drive", "Drive, Docs and Photos", "drive", []string{"drive", "docs", "photos"}},
@@ -89,6 +92,10 @@ var updateGroups = []updateGroup{
 	{"vault", "My Vault", "my-vault", []string{"vault"}},
 	{"chat", "Chat", "chat", []string{"chat"}},
 	{"hosting", "My Hosting", "my-hosting", []string{"hosting"}},
+	{"tasks", "My Tasks", "my-tasks", []string{"tasks"}},
+	{"pdf", "My PDF", "my-pdf", []string{"pdf"}},
+	{"monitor", "My Monitor", "my-monitor", []string{"monitor"}},
+	{"search", "My Search", "my-search", []string{"search"}},
 }
 
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
@@ -191,14 +198,68 @@ func UpdateControllerSupported(version string) bool {
 }
 func groupPackages(g updateGroup, c catalog.Catalog) map[string]catalog.Package {
 	out := map[string]catalog.Package{}
+	fixedGroup := false
+	for _, existing := range updateGroups {
+		if existing.id == g.id {
+			fixedGroup = true
+			break
+		}
+	}
 	for id, p := range c.Packages {
 		if updatePackageOwner(id) == g.id {
 			out[id] = p
 		}
+		// Forward-compatible suite additions use the publisher's app package
+		// namespace. Existing fixed coupled groups retain their ownership rules.
+		if !fixedGroup && updatePackageOwner(id) == "" {
+			for _, aid := range g.apps {
+				if a, ok := c.Find(aid); ok && (id == a.Package || strings.HasPrefix(id, aid+"-")) {
+					out[id] = p
+				}
+			}
+		}
 	}
 	return out
 }
+
+func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
+	groups := append([]updateGroup(nil), updateGroups...)
+	known := map[string]bool{}
+	for _, g := range groups {
+		for _, id := range g.apps {
+			known[id] = true
+		}
+	}
+	for _, a := range latest.Apps {
+		if known[a.ID] {
+			continue
+		}
+		u, err := url.Parse(a.Source)
+		if err != nil || u.Scheme != "https" || u.Host != "github.com" || u.User != nil || u.RawQuery != "" || u.Fragment != "" {
+			continue
+		}
+		parts := strings.Split(strings.Trim(u.Path, "/"), "/")
+		if len(parts) != 5 || parts[0] != "oneworkspacestudio" || parts[2] != "releases" || parts[3] != "tag" || parts[4] == "" {
+			continue
+		}
+		groups = append(groups, updateGroup{a.ID, a.Name, parts[1], []string{a.ID}})
+	}
+	return groups
+}
 func updatePackageOwner(id string) string {
+	if id == "tasks" || id == "tasks-LICENSE" || id == "tasks-NOTICE" || id == "tasks-THIRD-PARTY-LICENSES.txt" {
+		return "tasks"
+	}
+	if id == "pdf" || id == "pdf-LICENSE" || id == "pdf-NOTICE" || id == "pdf-THIRD-PARTY-LICENSES.txt" {
+		return "pdf"
+	}
+	if id == "monitor" || id == "monitor-LICENSE" || id == "monitor-NOTICE" || id == "monitor-THIRD-PARTY-LICENSES.txt" {
+		return "monitor"
+	}
+	if id == "search" || id == "search-LICENSE" || id == "search-NOTICE" || id == "search-THIRD-PARTY-LICENSES.txt" {
+		return "search"
+	}
+
 	if id == "hosting" || strings.HasPrefix(id, "hosting-") {
 		return "hosting"
 	}
@@ -236,18 +297,47 @@ func normalizedApps(apps []catalog.App) []catalog.App {
 	return out
 }
 
-// Scope coupled releases to the apps and packages the owner installed.
-// For example updating Drive must not extract an omitted Photos.exe.
+// Only the verified Workspace catalog can introduce app IDs. Standalone app
+// manifests remain limited to their existing managed package contract.
+func newDefaultIDs(current, latest catalog.Catalog) map[string]bool {
+	out := map[string]bool{}
+	for _, a := range latest.DefaultApps(current.EffectiveSelection()) {
+		if _, installed := current.Find(a.ID); !installed {
+			out[a.ID] = true
+		}
+	}
+	return out
+}
+func markNewDefaults(current, latest catalog.Catalog, ch UpdateChoice) UpdateChoice {
+	allowed := newDefaultIDs(current, latest)
+	for _, a := range ch.Apps {
+		if allowed[a.ID] {
+			ch.NewApps = append(ch.NewApps, a.ID)
+		}
+	}
+	return ch
+}
 func scopeUpdateChoice(current catalog.Catalog, ch UpdateChoice) UpdateChoice {
 	apps := []catalog.App{}
+	selected := map[string]bool{}
+	for _, a := range current.Apps {
+		selected[a.ID] = true
+	}
+	for _, id := range ch.NewApps {
+		if !current.EffectiveSelection().Excludes(id) {
+			selected[id] = true
+		}
+	}
 	for _, app := range ch.Apps {
-		if _, ok := current.Find(app.ID); ok {
+		if selected[app.ID] {
 			apps = append(apps, app)
 		}
 	}
 	ch.Apps = apps
+	keep := catalog.InstallPackageIDs(catalog.Catalog{Apps: apps, Packages: ch.Packages}, selected)
+	hasNew := len(ch.NewApps) > 0
 	for id := range ch.Packages {
-		if _, ok := current.Packages[id]; !ok {
+		if _, ok := current.Packages[id]; !ok && !(hasNew && keep[id]) {
 			delete(ch.Packages, id)
 			delete(ch.Downloads, id)
 		}
@@ -298,10 +388,27 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 	if latest.Version != strings.TrimPrefix(suiteRelease.Tag, "v") || !validAsset(bundle, Repository, suiteRelease.Tag) {
 		return plan, errors.New("invalid Workspace release version or bundle")
 	}
+	totalGroups = 1
+	newIDs := newDefaultIDs(current, latest)
+	for _, g := range suiteUpdateGroups(latest) {
+		if g.id != "workspace" {
+			included := len(groupApps(g, current)) > 0
+			for _, id := range g.apps {
+				included = included || newIDs[id]
+			}
+			if included {
+				totalGroups++
+			}
+		}
+	}
 	checked := 0
-	for _, g := range updateGroups {
+	for _, g := range suiteUpdateGroups(latest) {
 		oldApps := groupApps(g, current)
-		if g.id != "workspace" && len(oldApps) == 0 {
+		included := g.id == "workspace" || len(oldApps) > 0
+		for _, id := range g.apps {
+			included = included || newIDs[id]
+		}
+		if !included {
 			continue
 		}
 		operationprogress.Report(ctx, "check", "Checking "+g.name+" releases", int64(checked), int64(totalGroups), "repositories")
@@ -309,7 +416,14 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		ch := UpdateChoice{ID: g.id, Name: g.name, Current: current.Version, Version: latest.Version, Source: "https://github.com/" + Repository + "/releases/tag/" + suiteRelease.Tag, Apps: groupApps(g, latest), Packages: groupPackages(g, latest), Downloads: map[string]UpdateDownload{}}
 		repo := "oneworkspacestudio/" + g.repo
 		var appReleases []Release
-		if g.id != "workspace" {
+		ch = markNewDefaults(current, latest, ch)
+		if g.id != "workspace" && len(oldApps) == 0 {
+			if len(ch.Apps) == 0 {
+				continue
+			}
+			ch.Current = "Not installed"
+			ch.Version, ch.Source = ch.Apps[0].Version, ch.Apps[0].Source
+		} else if g.id != "workspace" {
 			ch.Current = oldApps[0].Version
 			appReleases, e = releasesFor(ctx, h, token, repo)
 			if e != nil {
@@ -323,6 +437,11 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 				oldTime := releaseTime(appReleases, sourceTag(oldApps[0].Source, repo))
 				newTime := releaseTime(appReleases, sourceTag(ch.Source, repo))
 				if ch.Source != oldApps[0].Source && (oldTime.IsZero() || !newTime.After(oldTime)) {
+					if len(ch.NewApps) > 0 {
+						ch.Reason = "New apps require a compatible suite pin for the newer installed app; no downgrade was selected."
+						plan.Choices = append(plan.Choices, ch)
+						continue
+					}
 					ch.Apps = oldApps
 					ch.Packages = groupPackages(g, current)
 					ch.Version = ch.Current
@@ -350,6 +469,9 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		// A newer standalone release can supersede the suite pin only with an
 		// explicit managed-update contract scoped to this repository/app group.
 		for _, r := range appReleases {
+			if len(ch.NewApps) > 0 {
+				break
+			} // new integration comes from the suite contract
 			if r.Draft || r.Published.IsZero() {
 				continue
 			}
@@ -491,11 +613,45 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 		return current, nil, errors.New("installation changed since the release check; check for updates again")
 	}
 	target := current
+	target.Selection = current.EffectiveSelection()
 	target.Packages = map[string]catalog.Package{}
 	for id, p := range current.Packages {
 		target.Packages[id] = p
 	}
 	target.Apps = append([]catalog.App(nil), current.Apps...)
+	// A normal Workspace update includes every newly introduced default app.
+	// Existing app updates remain independently selectable.
+	selected = append([]string(nil), selected...)
+	includeDefaults := false
+	for _, id := range selected {
+		if id == "workspace" {
+			includeDefaults = true
+		}
+		for _, ch := range plan.Choices {
+			if ch.ID == id && len(ch.NewApps) > 0 {
+				includeDefaults = true
+			}
+		}
+	}
+	if includeDefaults {
+		for _, ch := range plan.Choices {
+			if len(ch.NewApps) > 0 && !ch.Available {
+				return target, nil, fmt.Errorf("cannot include new apps from %s: %s", ch.Name, ch.Reason)
+			}
+			if !ch.Available || (ch.ID != "workspace" && len(ch.NewApps) == 0) {
+				continue
+			}
+			present := false
+			for _, id := range selected {
+				if id == ch.ID {
+					present = true
+				}
+			}
+			if !present {
+				selected = append(selected, ch.ID)
+			}
+		}
+	}
 	sources := map[string]UpdateDownload{}
 	seen := map[string]bool{}
 	for _, id := range selected {
@@ -535,9 +691,26 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 					break
 				}
 			}
-			// Updating an optional app's coupled executable must not enable a tile the
-			// owner deliberately left disabled, or add newly released suite apps.
-			_ = found
+			if !found {
+				allowed := false
+				for _, added := range ch.NewApps {
+					allowed = allowed || added == n.ID
+				}
+				if !allowed || target.Selection.Excludes(n.ID) {
+					return target, nil, errors.New("new app is outside the selected default-app contract")
+				}
+				if !strings.HasPrefix(n.Source, "https://github.com/oneworkspacestudio/") {
+					return target, nil, errors.New("new app must use an organization release")
+				}
+				if n.Kind == "process" {
+					accounts, ok := current.Find("accounts")
+					if !ok {
+						return target, nil, errors.New("MyAccounts is required to install new apps")
+					}
+					n.Port += accounts.Port - 8991
+				}
+				target.Apps = append(target.Apps, n)
+			}
 		}
 	}
 	if len(seen) == 0 {
@@ -582,11 +755,12 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 		return current, errors.New("use rollback to restore an older Workspace version")
 	}
 	plan := UpdatePlan{BaseCatalogSHA256: catalogIdentity(current)}
-	for _, g := range updateGroups {
-		if g.id != "workspace" && len(groupApps(g, current)) == 0 {
+	for _, g := range suiteUpdateGroups(incoming) {
+		ch := UpdateChoice{ID: g.id, Name: g.name, Version: incoming.Version, Packages: groupPackages(g, incoming), Apps: groupApps(g, incoming)}
+		ch = markNewDefaults(current, incoming, ch)
+		if g.id != "workspace" && len(groupApps(g, current)) == 0 && len(ch.NewApps) == 0 {
 			continue
 		}
-		ch := UpdateChoice{ID: g.id, Version: incoming.Version, Packages: groupPackages(g, incoming), Apps: groupApps(g, incoming)}
 		if g.id != "workspace" {
 			if len(ch.Apps) == 0 {
 				continue
@@ -606,6 +780,55 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 	}
 	c, _, e := SelectUpdates(current, plan, selected)
 	return c, e
+}
+
+// StartupDefaultPlan bridges older controllers which upgraded the manager but
+// discarded new app entries. Bind additions to that exact manager release, not
+// whichever release happens to be newest while the transaction is restarting.
+func StartupDefaultPlan(ctx context.Context, current catalog.Catalog) (UpdatePlan, error) {
+	plan := UpdatePlan{CheckedAt: time.Now().UTC(), BaseCatalogSHA256: catalogIdentity(current)}
+	h, token := client(), githubToken(ctx)
+	rs, err := releasesFor(ctx, h, token, Repository)
+	if err != nil {
+		return plan, err
+	}
+	var release Release
+	for _, r := range rs {
+		if r.Tag == "v"+current.Version && !r.Draft && !r.Published.IsZero() {
+			release = r
+			break
+		}
+	}
+	bundle, hasBundle := releaseAsset(release, bundleName)
+	metadata, hasMetadata := releaseAsset(release, "catalog.json")
+	if !hasBundle || !hasMetadata || !validAsset(bundle, Repository, release.Tag) {
+		return plan, errors.New("matching Workspace release is unavailable; use the newest installer to finish adding apps")
+	}
+	raw, err := fetchUpdateBytes(ctx, h, token, Repository, release, metadata, 1<<20)
+	if err != nil {
+		return plan, err
+	}
+	latest, err := catalog.Read(raw)
+	if err != nil {
+		return plan, err
+	}
+	if latest.Version != current.Version || latest.Packages["manager"] != current.Packages["manager"] {
+		return plan, errors.New("new-app catalog does not match the verified installed manager")
+	}
+	for _, g := range suiteUpdateGroups(latest) {
+		ch := UpdateChoice{ID: g.id, Name: g.name, Apps: groupApps(g, latest), Packages: groupPackages(g, latest), Downloads: map[string]UpdateDownload{}}
+		ch = markNewDefaults(current, latest, ch)
+		if len(ch.NewApps) == 0 {
+			continue
+		}
+		ch = scopeUpdateChoice(current, ch)
+		ch.Available = true
+		for id, p := range ch.Packages {
+			ch.Downloads[id] = UpdateDownload{Asset: bundle, Repository: Repository, Tag: release.Tag, Member: p.File}
+		}
+		plan.Choices = append(plan.Choices, ch)
+	}
+	return plan, nil
 }
 
 // StageUpdateFiles verifies both download archives and their individual members.

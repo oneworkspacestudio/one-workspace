@@ -33,6 +33,34 @@ OIDC clients, hosting settings, disabled optional apps and custom extensions.
 It refuses an automatic change to existing data paths, storage environment
 bindings, private Mail backend or OIDC callbacks. Those need an explicit migration.
 
+### New apps are included
+
+Updating **One Workspace** also installs newly introduced default apps, including
+My Hosting. They appear as **Not installed** in the release list and are included
+with the Workspace selection. New apps receive their own private storage and a
+MyAccounts client automatically, using your existing owner account and sign-in.
+The update is complete only after the new apps pass the normal startup checks.
+Their installation and identity changes are covered by the same verified backup
+and rollback transaction as the manager update.
+
+Advanced setup remembers the apps you uncheck. Future updates respect those
+exclusions and exclude apps whose dependencies you omitted. If an installer
+downloads a newer bundle than the app list it originally displayed, new defaults
+in that bundle are included; an absent checkbox is not treated as an opt-out.
+Both online updates and explicit offline bundles follow the same policy.
+
+Old installations did not record exclusions. The compatibility migration preserves
+missing apps from the pre-Hosting app list as omitted; My Hosting and future app
+IDs are considered new defaults. This deliberately avoids re-enabling an older
+optional app that may have been unchecked. Reinstalling is not required to add
+Hosting. Use the corrected installer/updater once to repair an installation made
+by an older updater, even if it already reports the current Workspace version.
+When an older controller downloads a corrected manager, the manager also finishes
+adding missing defaults during that update's startup checks. It uses the exact
+matching verified release and the original transaction's backup. Normal launches
+do not download or install apps. Explicit offline repairs should use the corrected
+installer with the complete bundle.
+
 ## Follow update progress
 
 The local updater shows the current stage and a checklist of completed and
@@ -130,7 +158,8 @@ WorkspaceSetup-windows-amd64.exe --update "C:\Workspace\Private" --rollback BACK
 ```
 
 Update groups: workspace, accounts, drive, gitea, music, mail, studio, calendar,
-notes, my-tube. Older installations must update Workspace first or select it
+notes, my-tube, vault, chat, hosting. New organization apps with a compatible
+suite contract are discovered from the verified suite catalog. Older installations must update Workspace first or select it
 together with their app updates. No password or recovery credential is needed in
 the command line. An administrative Windows user still needs access to the
 installation’s protected private storage.

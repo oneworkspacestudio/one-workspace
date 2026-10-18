@@ -3,8 +3,8 @@ package suite
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/branding"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/branding"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net/http"
 	"strings"
 )

@@ -3,7 +3,7 @@ package suite
 import (
 	"context"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net/http"
 	"net/url"
 	"path/filepath"

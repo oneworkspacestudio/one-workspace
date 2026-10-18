@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net"
 	"net/http"
 	"os"
@@ -70,6 +70,15 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	}()
 	if e = CheckPorts(c); e != nil {
 		return e
+	}
+	appCount := len(c.Catalog.Apps)
+	c, s, e = startupDefaults(ctx, c, s, func(detail string) { progress.Step("checks", "running", detail) })
+	if e != nil {
+		return e
+	}
+	// A legacy update can add steps before app startup begins.
+	if len(c.Catalog.Apps) != appCount {
+		progress = NewProgress("starting", StartupSteps(c), filepath.Join(c.Data, "startup-progress.json"))
 	}
 	restoreTemp, tempErr := setWorkspaceTemp(c)
 	if tempErr != nil {
@@ -164,6 +173,12 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "music" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_MUSIC_DIR="+filepath.Join(c.Files, "Music"), "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			cmd.Env = append(cmd.Env, "TEMP="+musicRuntimeTemp(c), "TMP="+musicRuntimeTemp(c))
+		}
+		if foundationApp(app.ID) {
+			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner, "WORKSPACE_HOME_URL="+c.Origin)
+			if app.ID == "monitor" {
+				cmd.Env = append(cmd.Env, fmt.Sprintf("WORKSPACE_REGISTRY_URL=http://127.0.0.1:%d/_integration/monitor", c.Port), "WORKSPACE_REGISTRY_TOKEN="+monitorCapability(client.Secret))
+			}
 		}
 		if app.ID == "hosting" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner)

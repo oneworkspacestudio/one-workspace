@@ -17,8 +17,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/suite"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/suite"
 )
 
 func main() {

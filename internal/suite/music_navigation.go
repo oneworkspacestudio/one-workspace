@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 //go:embed assets/music-worker-navigation.js

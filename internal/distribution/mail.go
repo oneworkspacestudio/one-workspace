@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/operationprogress"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/operationprogress"
 )
 
 const mailRepository = "oneworkspacestudio/mail"

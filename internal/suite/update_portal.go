@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/fahimc/one-workspace/internal/branding"
+	"github.com/oneworkspacestudio/one-workspace/internal/branding"
 )
 
 func (p *Portal) updateRoutes(mux *http.ServeMux) {

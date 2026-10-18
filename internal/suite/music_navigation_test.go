@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 func TestMusicWorkerKeepsOriginalCachingButUsesLiveNavigation(t *testing.T) {

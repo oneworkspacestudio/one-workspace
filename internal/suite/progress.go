@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 type ProgressStep struct {

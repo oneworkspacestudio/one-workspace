@@ -3,7 +3,7 @@ package suite
 import (
 	"context"
 	"errors"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/calendar/shared"
 	"os"
 	"path/filepath"

@@ -2,10 +2,8 @@ package suite
 
 import (
 	"fmt"
-	"path/filepath"
-	"strings"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 // SelectInstallApps removes omitted executables as well as launcher entries.
@@ -28,10 +26,11 @@ func SelectInstallApps(c catalog.Catalog, r Request) (catalog.Catalog, error) {
 		return c, fmt.Errorf("MyAccounts is required for Workspace sign-in")
 	}
 	apps := []catalog.App{}
-	keep := map[string]bool{"manager": true, "cloudflared": true, "license": true, "notice": true}
-	shared := false
+	keep := catalog.InstallPackageIDs(c, selected)
+	selection := &catalog.AppSelection{}
 	for _, a := range c.Apps {
 		if !selected[a.ID] {
+			selection.Excluded = append(selection.Excluded, a.ID)
 			continue
 		}
 		for _, dep := range a.Depends {
@@ -40,22 +39,14 @@ func SelectInstallApps(c catalog.Catalog, r Request) (catalog.Catalog, error) {
 			}
 		}
 		apps = append(apps, a)
-		keep[a.Package] = true
-		if a.ID == "studio" {
-			keep["studio"] = true
-		}
-		if sharedConsumer(a.ID) && !(a.ID == "mail" && a.Env["WORKSPACE_MAIL_BACKEND"] == "private") {
-			shared = true
-		}
 	}
-	keep["stalwart-shared"], keep["services-shared"] = shared, shared
 	packages := map[string]catalog.Package{}
 	for id, p := range c.Packages {
 		// License/provenance text remains available even for omitted components.
-		if keep[id] || strings.HasPrefix(filepath.ToSlash(p.File), "licenses/") || (selected["vault"] && strings.HasPrefix(id, "vault-")) {
+		if keep[id] {
 			packages[id] = p
 		}
 	}
-	c.Apps, c.Packages = apps, packages
+	c.Apps, c.Packages, c.Selection = apps, packages, selection
 	return c, c.Validate()
 }

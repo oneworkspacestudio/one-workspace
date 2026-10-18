@@ -2,7 +2,7 @@ package distribution
 
 import (
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 // A newer setup must not download an older manager and silently lose its features.

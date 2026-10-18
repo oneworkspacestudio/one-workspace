@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/maintenance"
-	"github.com/fahimc/one-workspace/internal/platform"
-	"github.com/fahimc/one-workspace/internal/suite"
+	"github.com/oneworkspacestudio/one-workspace/internal/maintenance"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/suite"
 	"net/http"
 	"os"
 	"os/signal"
@@ -104,13 +104,23 @@ func run() error {
 	case "install-apps":
 		f := flag.NewFlagSet("install-apps", flag.ContinueOnError)
 		bundle := f.String("bundle", "", "Verified organization Workspace bundle ZIP")
+		requested := f.String("apps", "", "Explicitly re-enable omitted tasks,pdf,monitor,search IDs")
 		if e = f.Parse(args[1:]); e != nil {
 			return e
 		}
 		if *bundle == "" {
 			return fmt.Errorf("provide --bundle with the organization suite ZIP")
 		}
-		return suite.InstallApps(ctx, *data, *bundle, func(message string) { fmt.Println(message) })
+		var ids []string
+		if *requested != "" {
+			ids = strings.Split(*requested, ",")
+		}
+		return suite.InstallRequestedApps(ctx, *data, *bundle, ids, func(message string) { fmt.Println(message) })
+	case "remove-app":
+		if len(args) != 2 {
+			return fmt.Errorf("use remove-app tasks|pdf|monitor|search after stopping Workspace; data is preserved")
+		}
+		return suite.RemoveApp(*data, args[1])
 	case "recovery":
 		fmt.Printf("MyAccounts server recovery: %s, organization built-in\nPassword: %s\nDrive recovery: workspace-recovery\nPassword: %s\n", s.AdminEmail, s.AdminPassword, s.RecoveryPassword)
 		return nil

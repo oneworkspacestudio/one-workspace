@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/distribution"
-	"github.com/fahimc/one-workspace/internal/operationprogress"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/distribution"
+	"github.com/oneworkspacestudio/one-workspace/internal/operationprogress"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/calendar/shared"
 )
 
@@ -230,6 +230,7 @@ type updateOperations struct {
 	preflight func(context.Context, Config) error
 	stop      func(context.Context, Config) error
 	start     func(context.Context, Config, string) error
+	connect   func(context.Context, Config, *Secrets) error
 }
 
 // Check process creation from the updater itself before taking working apps
@@ -248,7 +249,7 @@ func preflightUpdateRestart(ctx context.Context, c Config) error {
 	return nil
 }
 
-var nativeUpdateOperations = updateOperations{preflight: preflightUpdateRestart, stop: stopUpdateRuntime, start: startUpdatedRuntime}
+var nativeUpdateOperations = updateOperations{preflight: preflightUpdateRestart, stop: stopUpdateRuntime, start: startUpdatedRuntime, connect: connectAddedApps}
 
 func verifyInstalledPrograms(c Config) error {
 	if p, ok := c.Catalog.Packages["manager"]; !ok || p.File != "Workspace.exe" {
@@ -423,7 +424,13 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	}
 	for _, app := range target.Apps {
 		old, ok := c.Catalog.Find(app.ID)
-		if !ok || old.Callback != app.Callback || old.OIDC != app.OIDC {
+		if !ok {
+			if !organizationSource(app.Source) {
+				return fmt.Errorf("%s needs a verified organization integration", app.Name)
+			}
+			continue
+		}
+		if old.Callback != app.Callback || old.OIDC != app.OIDC {
 			return errors.New("update changes an identity callback and needs an explicit migration")
 		}
 		for key, value := range old.Env {
@@ -490,6 +497,11 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e != nil || before != after {
 		return errors.New("installation changed while preparing the update; check again")
 	}
+	next := c
+	next.Catalog, next.Version = target, target.Version
+	if e = CheckPorts(next); e != nil {
+		return fmt.Errorf("new app ports are unavailable: %w", e)
+	}
 	backup, e := makeUpdateBackup(ctx, c, backupRoot, report)
 	if e != nil {
 		lock.Close()
@@ -525,9 +537,6 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 			result = fmt.Errorf("update was rolled back; original data and programs restored: %w", result)
 		}
 	}()
-	next := c
-	next.Catalog = target
-	next.Version = target.Version
 	// Callbacks are part of identity configuration. Changing them requires a
 	// publisher migration rather than silently invalidating existing OIDC clients.
 	operationprogress.Report(ctx, "install", "Installing verified program files", 0, 0, "")
@@ -580,6 +589,32 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		}
 		installed++
 		operationprogress.Report(ctx, "install", "Installing verified program files", int64(installed), int64(changed), "packages")
+	}
+	added := false
+	for _, app := range target.Apps {
+		if _, exists := c.Catalog.Find(app.ID); !exists {
+			added = true
+		}
+	}
+	if added {
+		operationprogress.Report(ctx, "install", "Connecting new apps to your existing Workspace sign-in", 0, 0, "")
+		report("Connecting new apps to MyAccounts; preserving your existing accounts and app credentials")
+		if ops.connect == nil {
+			return errors.New("new apps require an identity provisioning operation")
+		}
+		if e = ops.connect(ctx, next, &s); e != nil {
+			return fmt.Errorf("connect new apps: %w", e)
+		}
+		if _, hadDrive := c.Catalog.Find("drive"); !hadDrive {
+			if _, addingDrive := target.Find("drive"); addingDrive {
+				if _, statErr := os.Lstat(filepath.Join(c.Data, "drive", "config.yaml")); !os.IsNotExist(statErr) {
+					return errors.New("existing Drive settings need an explicit migration")
+				}
+				if e = writeDrive(next, s); e != nil {
+					return e
+				}
+			}
+		}
 	}
 	if e = Save(next, s); e != nil {
 		return e

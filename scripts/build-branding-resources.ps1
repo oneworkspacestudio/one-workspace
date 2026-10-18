@@ -7,6 +7,10 @@ if(!$NotesRoot){$NotesRoot=Join-Path $ProjectsRoot 'notes'}
 $targets=@(
  @{icon='one_workspace';path='one-workspace/cmd/workspace'},
  @{icon='one_workspace';path='one-workspace/cmd/setup'},
+ @{icon='my_tasks';path='my-tasks/cmd/my-tasks'},
+ @{icon='my_pdf';path='my-pdf/cmd/my-pdf'},
+ @{icon='my_monitor';path='my-monitor/cmd/my-monitor'},
+ @{icon='my_search';path='my-search/cmd/my-search'},
  @{icon='my_drive';path='filebrowser-drive/backend'},
  @{icon='my_photos';path='filebrowser-drive/apps/photos'},
  @{icon='photo_editor';path='minipaint-studio/desktop'},

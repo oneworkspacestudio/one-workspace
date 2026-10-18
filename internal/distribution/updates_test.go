@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 type updateTransport map[string][]byte

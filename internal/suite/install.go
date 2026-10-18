@@ -5,9 +5,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/distribution"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/distribution"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net/http"
 	"os"
 	"os/exec"
@@ -46,6 +46,12 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	if e := r.Validate(); e != nil {
 		return empty, e
 	}
+	// Record exclusions against the apps actually offered by this installer.
+	// A newer online bundle can contain apps absent from its embedded app picker.
+	offered, selectionErr := SelectInstallApps(cat, r)
+	if selectionErr != nil {
+		return empty, selectionErr
+	}
 	if !r.Offline {
 		downloadRoot := filepath.Dir(r.Programs)
 		if err := os.MkdirAll(downloadRoot, 0700); err != nil {
@@ -64,10 +70,15 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	} else {
 		progress("Using this installer’s bundled versions (offline mode)")
 	}
+	r.SelectedApps = []string{}
+	for _, app := range cat.DefaultApps(offered.Selection) {
+		r.SelectedApps = append(r.SelectedApps, app.ID)
+	}
 	selected, selectionErr := SelectInstallApps(cat, r)
 	if selectionErr != nil {
 		return empty, selectionErr
 	}
+	selected.Selection = offered.Selection
 	c := NewConfig(r, selected)
 	if e := CheckPorts(c); e != nil {
 		return empty, e

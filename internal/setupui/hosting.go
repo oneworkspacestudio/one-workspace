@@ -11,8 +11,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/platform"
-	"github.com/fahimc/one-workspace/internal/suite"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/suite"
 )
 
 func (s *Server) connectHosting(w http.ResponseWriter, r *http.Request) {

@@ -17,7 +17,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 func must(e error) {

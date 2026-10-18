@@ -3,7 +3,7 @@ package maintenance
 import (
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/operationprogress"
+	"github.com/oneworkspacestudio/one-workspace/internal/operationprogress"
 )
 
 type operationStep struct {

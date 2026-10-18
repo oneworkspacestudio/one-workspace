@@ -21,6 +21,11 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"tasks", "My Tasks", "/tasks", "/api/me", "/tasks/auth/login", "/tasks/auth/logout", []string{"tasks_session"}},
+	{"pdf", "My PDF", "/pdf", "/api/me", "/pdf/auth/login", "/pdf/auth/logout", []string{"pdf_session"}},
+	{"monitor", "My Monitor", "/monitor", "/api/me", "/monitor/auth/login", "/monitor/auth/logout", []string{"monitor_session"}},
+	{"search", "My Search", "/search", "/api/me", "/search/auth/login", "/search/auth/logout", []string{"search_session"}},
+
 	{"hosting", "My Hosting", "/hosting", "/api/me", "/hosting/auth/login", "/hosting/auth/logout", []string{"myhosting_session"}},
 	{"chat", "Chat", "/chat", "/api/me", "/chat/auth/login", "/chat/auth/logout", []string{"chat_session"}},
 	{"drive", "Drive", "/drive", "/drive/api/users?username=self", "/drive/api/auth/oidc/login", "/drive/api/auth/logout", []string{"filebrowser_quantum_jwt"}},
@@ -96,6 +101,18 @@ func (p *Portal) appSessionStatus(r *http.Request, app appSignIn) int {
 			return http.StatusUnauthorized
 		}
 		return 0
+	}
+	if foundationApp(app.id) && resp.StatusCode == http.StatusOK {
+		var info struct {
+			User struct{ Subject, Issuer string }
+		}
+		if json.NewDecoder(io.LimitReader(resp.Body, 256*1024)).Decode(&info) != nil {
+			return 0
+		}
+		u, ok := p.user(r)
+		if !ok || info.User.Subject != u.Subject || info.User.Issuer != p.rt.Config.Issuer {
+			return http.StatusUnauthorized
+		}
 	}
 	if app.id == "my-tube" && resp.StatusCode == http.StatusOK {
 		var info struct {

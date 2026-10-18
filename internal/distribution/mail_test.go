@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 type mailTransport func(*http.Request) (*http.Response, error)

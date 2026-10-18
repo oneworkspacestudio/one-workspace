@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/fahimc/one-workspace/internal/branding"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/branding"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"golang.org/x/oauth2"
 	"html/template"
 	"io"
@@ -30,6 +30,7 @@ type loginFlow struct {
 type session struct {
 	Subject, Name, Email, IDToken string
 	HostingSession                string
+	AppSessions                   map[string]string
 	Expires                       time.Time
 }
 type Portal struct {
@@ -183,6 +184,7 @@ func (p *Portal) callback(w http.ResponseWriter, r *http.Request) {
 func (p *Portal) Handler(control string) http.Handler {
 	mux := http.NewServeMux()
 	p.navigationRoutes(mux)
+	p.monitorRegistry(mux)
 	mux.HandleFunc("GET /_workspace/open/{id}", p.appOpen)
 	p.vaultRoutes(mux)
 	p.updateRoutes(mux)
@@ -201,6 +203,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		current, _ := p.user(r)
 		p.closeChatSession(r)
 		p.closeHostingSession(r)
+		p.closeFoundationSessions(r)
 		if c, e := r.Cookie("workspace_session"); e == nil {
 			p.mu.Lock()
 			delete(p.sessions, c.Value)
@@ -295,7 +298,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		route := strings.TrimRight(a.Route, "/")
 		h := proxy(fmt.Sprintf("http://127.0.0.1:%d", a.Port), p.rt.Config.Origin, route, a.StripPrefix, false)
 		mux.Handle(route+"/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if _, ok := p.user(r); !ok && a.ID != "gitea" && a.ID != "music" && !p.hostingWebhook(r) {
+			if _, ok := p.user(r); !ok && a.ID != "gitea" && a.ID != "music" && !p.hostingWebhook(r) && !p.publicMonitor(r) {
 				http.Redirect(w, r, "/auth/login?"+url.Values{"returnTo": {r.URL.RequestURI()}}.Encode(), 302)
 				return
 			}
@@ -317,12 +320,12 @@ func (p *Portal) Handler(control string) http.Handler {
 		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_ = home.Execute(w, map[string]any{"LoggedIn": ok, "User": user, "Tiles": p.tiles(ok && user.Subject == p.rt.Config.Owner), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
+		_ = home.Execute(w, map[string]any{"SearchInstalled": searchInstalled(p.rt.Config), "LoggedIn": ok, "User": user, "Tiles": p.tiles(ok && user.Subject == p.rt.Config.Owner), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
 	})
 	origin, _ := url.Parse(p.rt.Config.Origin)
 	local := fmt.Sprintf("localhost:%d", p.rt.Config.Port)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/healthz" && r.URL.Path != "/_control/stop" && UpdatePending(p.rt.Config) {
+		if r.URL.Path != "/healthz" && r.URL.Path != "/_control/stop" && r.URL.Path != "/_integration/monitor" && UpdatePending(p.rt.Config) {
 			http.Error(w, "Workspace is completing an update. Your data is protected; please wait.", http.StatusServiceUnavailable)
 			return
 		}
@@ -339,7 +342,7 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		if p.isAppRequest(r) {
-			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) && !p.hostingWebhook(r) {
+			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) && !p.hostingWebhook(r) && !p.publicMonitor(r) {
 				if r.Method == "GET" && strings.Contains(r.Header.Get("Accept"), "text/html") {
 					http.Redirect(w, r, "/auth/login?returnTo="+url.QueryEscape(safeReturnPath(r.URL.RequestURI())), http.StatusSeeOther)
 				} else {
@@ -354,6 +357,7 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		p.rememberHostingSession(r)
+		p.rememberFoundationSessions(r)
 		if _, ok := p.user(r); !ok && publicDriveRoute(r.URL.Path) {
 			anonymousShareCookies(r)
 		}
@@ -466,6 +470,6 @@ func (p *Portal) tiles(owner ...bool) []catalogTile {
 	return tiles
 }
 
-var home = template.Must(template.New("home").Parse(branding.VersionHTML(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One Workspace</title><link rel="icon" type="image/svg+xml" href="/branding/icons/one_workspace.svg"><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px system-ui,sans-serif}header,main{max-width:1040px;margin:auto;padding:32px}header{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;flex:none}.app-logo{display:block;width:56px;height:56px;margin-bottom:18px}h1{font-size:44px;letter-spacing:-1.5px;margin-bottom:12px}.muted,p{color:#5e6c84;line-height:1.65}a{color:#345de5;text-decoration:none}button,.button{display:inline-block;background:#345de5;color:white;border:0;padding:13px 22px;border-radius:12px;font:inherit;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:32px 0}.tile{background:white;border:1px solid #e3e8f4;border-radius:20px;padding:26px;box-shadow:0 5px 24px #23397605}.tile h2{color:#18233b;margin-top:0;font-size:23px}.tile:hover{border-color:#345de5}.right{margin-left:auto}footer{margin-top:40px;font-size:13px;color:#6e7890}.admin{background:#eaf0ff;padding:22px;border-radius:16px}</style><header><img class="logo" src="/branding/icons/one_workspace.svg" alt="" width="48" height="48"><b>One Workspace</b><span class="right muted">Your apps, together</span></header><main>{{if .LoggedIn}}<h1>Your workspace.</h1><p>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}{{.User.Email}}{{end}}. Open an app to continue.</p><div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if .Owner}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{.Issuer}}/organizations/myaccounts/users">Manage accounts →</a> · <a href="/updates">Updates and backups →</a></div>{{end}}<form action="/auth/logout" method="post" style="margin-top:24px"><button>Sign out of Workspace</button></form>{{else}}<h1>One account.<br>Your whole workspace.</h1><p>Files, documents and photos in one place.<br>Sign in with your MyAccounts account to get started.</p><a class="button" href="{{.LoginURL}}">Sign in with MyAccounts →</a>{{end}}<footer>One Workspace {{.Version}} · Self-hosted evaluation build. Signing out closes Workspace app access and opens MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately. App access tokens and public sharing links are managed separately.</footer></main><script defer src="/_workspace/navigation.js"></script></html>`)))
+var home = template.Must(template.New("home").Parse(branding.VersionHTML(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One Workspace</title><link rel="icon" type="image/svg+xml" href="/branding/icons/one_workspace.svg"><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px system-ui,sans-serif}header,main{max-width:1040px;margin:auto;padding:32px}header{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;flex:none}.app-logo{display:block;width:56px;height:56px;margin-bottom:18px}h1{font-size:44px;letter-spacing:-1.5px;margin-bottom:12px}.muted,p{color:#5e6c84;line-height:1.65}a{color:#345de5;text-decoration:none}button,.button{display:inline-block;background:#345de5;color:white;border:0;padding:13px 22px;border-radius:12px;font:inherit;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:32px 0}.tile{background:white;border:1px solid #e3e8f4;border-radius:20px;padding:26px;box-shadow:0 5px 24px #23397605}.tile h2{color:#18233b;margin-top:0;font-size:23px}.tile:hover{border-color:#345de5}.right{margin-left:auto}footer{margin-top:40px;font-size:13px;color:#6e7890}.admin{background:#eaf0ff;padding:22px;border-radius:16px}</style><header><img class="logo" src="/branding/icons/one_workspace.svg" alt="" width="48" height="48"><b>One Workspace</b><span class="right muted">Your apps, together</span></header><main>{{if .LoggedIn}}<h1>Your workspace.</h1>{{if .SearchInstalled}}<form action="/search/" method="get" role="search"><label for="workspace-global-search">Search your Workspace</label><input id="workspace-global-search" name="q" type="search" maxlength="200" placeholder="Files, notes, events and tasks" style="font:inherit;padding:13px;border:1px solid #e3e8f4;border-radius:12px;margin:12px"><button>Search</button></form>{{end}}<p>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}{{.User.Email}}{{end}}. Open an app to continue.</p><div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if .Owner}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{.Issuer}}/organizations/myaccounts/users">Manage accounts →</a> · <a href="/updates">Updates and backups →</a></div>{{end}}<form action="/auth/logout" method="post" style="margin-top:24px"><button>Sign out of Workspace</button></form>{{else}}<h1>One account.<br>Your whole workspace.</h1><p>Files, documents and photos in one place.<br>Sign in with your MyAccounts account to get started.</p><a class="button" href="{{.LoginURL}}">Sign in with MyAccounts →</a>{{end}}<footer>One Workspace {{.Version}} · Self-hosted evaluation build. Signing out closes Workspace app access and opens MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately. App access tokens and public sharing links are managed separately.</footer></main><script defer src="/_workspace/navigation.js"></script></html>`)))
 
 var logoutPage = template.Must(template.New("logout").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><title>Signing out of One Workspace</title><h1>Signing out</h1><p>Workspace app access is closed. Opening MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately.</p><form id="workspace-provider-logout" method="get" action="{{.Endpoint}}"><input type="hidden" name="id_token_hint" value="{{.Hint}}"><input type="hidden" name="client_id" value="{{.Client}}"><input type="hidden" name="post_logout_redirect_uri" value="{{.Return}}"><button>Continue sign-out</button></form><script src="/_workspace/logout.js" defer></script></html>`))

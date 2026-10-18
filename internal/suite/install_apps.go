@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/distribution"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/distribution"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 // InstallApps adds the verified suite apps to an existing stopped installation.
@@ -22,6 +22,12 @@ import (
 // mailbox is a separate operation. The manager, notices and new apps are backed
 // up/copied, while identity stores and ordinary user files are retained.
 func InstallApps(ctx context.Context, data, bundle string, report func(string)) (err error) {
+	return InstallRequestedApps(ctx, data, bundle, nil, report)
+}
+
+// Explicit requested IDs re-enable a previous opt-out, preserving its data and
+// existing OIDC client. All downloads still obey the verified bundle contract.
+func InstallRequestedApps(ctx context.Context, data, bundle string, requested []string, report func(string)) (err error) {
 	c, s, err := Load(data)
 	if err != nil {
 		return err
@@ -56,6 +62,31 @@ func InstallApps(ctx context.Context, data, bundle string, report func(string)) 
 	if err = distribution.CheckInstallerBundle(c.Catalog, incoming); err != nil {
 		return err
 	}
+	selection := c.Catalog.EffectiveSelection()
+	for _, id := range requested {
+		if !foundationApp(id) {
+			return errors.New("explicit reinstallation supports tasks, pdf, monitor and search")
+		}
+		if _, ok := incoming.Find(id); !ok {
+			return fmt.Errorf("%s is not in this verified bundle", id)
+		}
+		kept := selection.Excluded[:0]
+		for _, excluded := range selection.Excluded {
+			if excluded != id {
+				kept = append(kept, excluded)
+			}
+		}
+		selection.Excluded = kept
+	}
+	request := Request{SelectedApps: []string{}}
+	for _, app := range incoming.DefaultApps(selection) {
+		request.SelectedApps = append(request.SelectedApps, app.ID)
+	}
+	incoming, err = SelectInstallApps(incoming, request)
+	if err != nil {
+		return err
+	}
+	incoming.Selection = selection
 	if _, hadDrive := c.Catalog.Find("drive"); !hadDrive {
 		if _, addingDrive := incoming.Find("drive"); addingDrive {
 			if _, e := os.Lstat(filepath.Join(c.Data, "drive", "config.yaml")); !os.IsNotExist(e) {
@@ -117,6 +148,11 @@ func InstallApps(ctx context.Context, data, bundle string, report func(string)) 
 	oldConfig := c
 	c.Catalog, c.Version = incoming, incoming.Version
 	ports := NewConfig(Request{Port: c.Port, Photos: true}, incoming).Catalog.Apps
+	for i, app := range ports {
+		if old, installed := oldConfig.Catalog.Find(app.ID); installed {
+			ports[i].Port = old.Port
+		}
+	}
 	c.Catalog.Apps = ports
 	if err = CheckPorts(c); err != nil {
 		return err
@@ -236,12 +272,19 @@ func organizationSource(raw string) bool {
 	return err == nil && u.Scheme == "https" && u.Host == "github.com" && u.User == nil && u.RawQuery == "" && u.Fragment == "" && strings.HasPrefix(u.Path, "/oneworkspacestudio/") && len(strings.Split(strings.Trim(u.Path, "/"), "/")) >= 2
 }
 
-func connectAddedApps(ctx context.Context, c Config, s *Secrets) error {
+func connectAddedApps(ctx context.Context, c Config, s *Secrets) (result error) {
 	job, err := platform.NewJob()
 	if err != nil {
 		return err
 	}
-	defer job.Close()
+	defer func() {
+		stop, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+		if e := job.Stop(stop); e != nil && result == nil {
+			result = fmt.Errorf("stop temporary account provisioning: %w", e)
+		}
+		job.Close()
+	}()
 	rt := &Runtime{Config: c, Secrets: *s, job: job, status: map[string]string{}}
 	a, _ := c.Catalog.Find("accounts")
 	held, err := platform.LockedBinary(filepath.Join(c.Programs, a.Executable), c.Catalog.Packages[a.Package].SHA256)

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
 
 func signInFixture(t *testing.T, app appSignIn, status int) *Portal {

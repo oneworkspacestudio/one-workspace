@@ -1,8 +1,8 @@
 package suite
 
 import (
-	"github.com/fahimc/one-workspace/internal/catalog"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net/http/httptest"
 	"path/filepath"
 	"strings"

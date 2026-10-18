@@ -2,7 +2,7 @@ package suite
 
 import (
 	"bytes"
-	"github.com/fahimc/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"net/http"
 	"net/http/httptest"
 	"net/url"

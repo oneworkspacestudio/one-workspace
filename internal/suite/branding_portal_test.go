@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fahimc/one-workspace/internal/branding"
+	"github.com/oneworkspacestudio/one-workspace/internal/branding"
 )
 
 func TestHomeUsesCurrentWorkspaceAndAppIcons(t *testing.T) {

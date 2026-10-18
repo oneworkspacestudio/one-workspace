@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/fahimc/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"io"
 	"os"
 	"path/filepath"
@@ -45,6 +45,13 @@ type Catalog struct {
 	Version              string             `json:"version"`
 	Packages             map[string]Package `json:"packages"`
 	Apps                 []App              `json:"apps"`
+	// Selection is installation state, never publisher policy. A non-nil empty
+	// selection means all default apps are wanted, including future additions.
+	Selection *AppSelection `json:"selection,omitempty"`
+}
+
+type AppSelection struct {
+	Excluded []string `json:"excluded,omitempty"`
 }
 
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
@@ -56,6 +63,18 @@ func (c Catalog) Validate() error {
 	}
 	if c.Schema != 1 || c.Version == "" {
 		return errors.New("unsupported or unversioned app catalog")
+	}
+	if c.Selection != nil {
+		excluded := map[string]bool{}
+		for _, id := range c.Selection.Excluded {
+			if !idPattern.MatchString(id) || excluded[id] || id == "accounts" {
+				return errors.New("invalid app exclusions")
+			}
+			excluded[id] = true
+			if _, installed := c.Find(id); installed {
+				return errors.New("installed app is also excluded")
+			}
+		}
 	}
 	seen := map[string]bool{}
 	routes := map[string]bool{}
