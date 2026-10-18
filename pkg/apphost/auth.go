@@ -44,6 +44,8 @@ func (h *Host) session(r *http.Request) (s Session, ok bool) {
 		if s.User.Subject == h.Config.Owner && h.Config.Owner != "" {
 			s.User.Role = "owner"
 		}
+	} else if s.User.Issuer != "local:"+h.Config.ID {
+		return s, false
 	}
 	return s, true
 }
