@@ -67,3 +67,14 @@ API, operations, architecture and acceptance documents.
 
 The original Workspace showcase remains; the app-mark overview and aligned README
 table include all four original icons.
+
+### Published-release upgrade check
+
+After publication, the actual preview.36 installer/controller upgraded a legacy
+installation using the public preview.37 bundle. It added all four apps and
+Hosting, preserved existing issuer/ports, verified installed executable hashes
+and completed all startup checks. The full eighteen-check browser flow passed
+again after this older-controller upgrade. The final full-payload fresh selected
+installation passed the same flow. All 91 ZIP members were independently checked
+against catalog sizes and SHA256. Test installations and their backups were then
+stopped and removed from the named disposable C: root; owner data was preserved.

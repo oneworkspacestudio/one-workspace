@@ -240,3 +240,48 @@ Cleanup: only named C:/Projects/.cache/workspace-four-apps-20261018 fixtures aft
 verified process stops. Owner C:/tmp/workspace and newest rollback preserved;
 unrelated Hosting acceptance/public-preview19007 preserved. All large builds,
 downloads/source/cache/packages on I:. Do not delete unknown owner/user data.
+
+## Publication checkpoint
+
+Four app v0.1.0-preview.1 releases and Notes v0.1.0-preview.5 are public; all
+uploaded asset sizes/digests verified and four app ZIPs anonymously downloaded
+and SHA256 checked. Root main767a9cf pins them. Full local org build passed19
+entries/91 package member size+SHA checks; exact full installer fresh-selected
+install passed all18 managed checks again. Suite37 source/provenance/docs and
+Windows artifacts staged; large draft upload in progress, not yet published.
+
+Completed synthetic C fixtures (suite, legacy, two standalone generations) were
+stopped already and safely removed: about5.35GB, no reparse entries or process
+references. Retain legacy-controller fixture for actual old36 postpublication
+upgrade and published-full fresh fixture until final stop/cleanup. Exact named
+C cache root only; preserve owner live C:/tmp/workspace/newest rollback and
+unrelated Hosting preview. External receipts/evidence on I:.
+
+## Published and final acceptance
+
+Suite https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.37
+is public from source767a9cf193fe73d8e1c4424765ee2c16766bae28, with20 assets.
+All remote sizes/SHA256 digests match local artifacts; anonymous public catalog,
+checksum and app ZIP download checks pass. Full19-app/91-package archive member
+sizes and digests verified. Tag/source assets remain immutable; this final record
+is a documentation-only follow-up.
+
+Actual published preview36 installer/controller applied the public37 bundle to a
+legacy three-app fixture. The new manager added Hosting and all four defaults,
+preserved existing Accounts/Drive/Notes ports and issuer, updated selected Notes
+to5, and passed10/10 startup checks. Installed four EXE digests match the published
+catalog. The bridge fetched and verified the actual public766MB bundle; an open
+Windows download showed stale directory length0 while FileStream.Length confirmed
+progress. Old controller8-minute startup window accommodates bridge6-minute bound.
+After upgrade, the same18 browser checks passed again (SSO/Drive/PDF/Search/ACL/
+Monitor/logout). Fresh final full-payload selected installation also passed18.
+
+Cleanup complete: stopped both final suite fixtures through their native control
+commands, verified no task process references/reparse entries, removed the exact
+named disposable NTFS root. Explicit deletion receipts total6,248,462,477 bytes
+(~6.25GB) across completed fixtures/backups and final cleanup; C free30,635,139,072
+bytes at completion. Owner Apps/Private/Files preserved. Prior unrelated Hosting
+preview data preserved; current task preview tabs closed. All source, releases,
+cache, licenses and synthetic evidence remain on I:. No Actions. No unfinished
+implementation/publication step remains; retain documented preview limits and
+independent audit/clean physical host/reboot/SCM follow-ups.
