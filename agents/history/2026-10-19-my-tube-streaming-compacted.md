@@ -43,9 +43,39 @@ GitHub REST release listing omitted the newly created draft although GraphQL
 listed it; fetching draft by databaseId returned full authenticated metadata.
 Verify draft by ID and never create duplicates based only on REST listing.
 
-Next: commit/push Workspace41 source; assemble verified40 bundle with only
-manager/MyTube/notices changed, build exact native installer, verify91 package
-hashes and component manifest, run isolated selected-app install/update gates,
-publish after remote digest verification. External tooling/evidence is under
-I:/Projects/tooling/tube-streaming. Update this file with actual release/native
-acceptance and cleanup results. Preserve unrelated untracked earlier histories.
+Workspace41 code/source commit17a37ac1f98c514593805e390b9b44b5df5435cc is pushed
+to main and codex/four-apps. Local native19-app bundle has91 verified package
+hashes; My Tube packages match the public component manifest and other app
+payloads/pins are unchanged. Refresh both the release-status notice and embedded
+organization-components.json when incrementally assembling verified payloads.
+
+Isolated native baseline40 Accounts/Drive/MyTube1 installation opened My Tube
+through one Workspace sign-in and seeded a synthetic original. The released40
+controller applied the exact Tube2 package; actual41 installer then updated the
+manager. Release binary hashes, identity/locations and healthy startup matched.
+Native cleanup removed one older experimental rollback (~853MB), retaining the
+latest. Managed playback after the final update reused verified helpers and
+four qualities, preserved the original checksum/ID and decoded360p at simulated
+1.2Mbps. No personal runtime used as a functional fixture.
+
+Stopped task-native processes/browsers, checked process/path/reparse boundaries
+and removed1,616,551,814 bytes from the exact named C task root. About768MB of
+interrupted task-only build temporaries were also removed earlier. Owner health
+still200 and installation/credentials/tunnel/data untouched. Evidence/binaries
+remain under I:/Projects/tooling/tube-streaming.
+
+## Published and complete
+
+Published [Workspace v0.3.0-preview.41](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.41)
+from17a37ac1f98c514593805e390b9b44b5df5435cc, with24 assets. Every remote asset
+size/SHA256 matches local staged files; public catalog downloaded/hashed and
+anonymous installer/bundle downloads checked. Tag source matches the build
+provenance. Both repositories' main branches contain the implementation and
+Actions remain disabled. My Tube component has ten verified public assets.
+
+No pending release work. Publication does not deploy to the owner's running
+installation: use Workspace Updates for Workspace/My Tube, then keep the suite
+running while legacy originals prepare. Existing owner settings omit processing
+flags, so new defaults apply on update. Preserve explicit opt-outs, owner data,
+latest owner rollback and three unrelated untracked earlier histories. Do not
+retag or replace published release assets.
