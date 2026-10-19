@@ -138,7 +138,7 @@ func (p *Portal) appSessionStatus(r *http.Request, app appSignIn) int {
 // until the person deliberately opens the app again from Workspace.
 func (p *Portal) seamlessApp(w http.ResponseWriter, r *http.Request) bool {
 	app, ok := p.signInForPath(r.URL.Path)
-	if !ok {
+	if !ok || app.id == "chat" {
 		return false
 	}
 	guard, destination := "workspace_sso_"+app.id, "workspace_return_"+app.id

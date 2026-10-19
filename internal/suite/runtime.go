@@ -160,6 +160,13 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	for _, v := range app.Args {
 		args = append(args, vars.Replace(v))
 	}
+	if app.ID == "chat" {
+		for index := 0; index+1 < len(args); index++ {
+			if args[index] == "--origin" {
+				args[index+1] = chatOrigin(c)
+			}
+		}
+	}
 	cmd := exec.Command(filepath.Join(c.Programs, filepath.FromSlash(app.Executable)), args...)
 	cmd.Dir = appWorkingDir(c, app.ID)
 	cmd.Env = append(os.Environ(), "TEMP="+runtimeTemp(c, app.ID), "TMP="+runtimeTemp(c, app.ID))
@@ -189,6 +196,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		}
 		if app.ID == "chat" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_CHAT_DIRECTORY_TOKEN="+rt.chatDirectoryToken)
+			cmd.Env = append(cmd.Env, "WORKSPACE_HOME_URL="+c.Origin, fmt.Sprintf("WORKSPACE_CHAT_CATALOG_URL=http://127.0.0.1:%d/_integration/chat/catalog", c.Port))
+			cmd.Env = append(cmd.Env, "WORKSPACE_OIDC_REDIRECT_URI="+chatOrigin(c)+"/auth/callback")
+			cmd.Env = append(cmd.Env, "WORKSPACE_CHAT_MANAGER_CAPABILITIES=isolated-chat-origin-v1")
 		}
 		if app.ID == "mail" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
@@ -209,6 +219,21 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	if e := prepareRuntimeTemp(rt.Config, app.ID); e != nil {
 		return e
+	}
+	if app.ID == "chat" {
+		rt.progress.Step(app.ID, "running", "Preparing Chat's separate browser address and existing MyAccounts connection")
+		hostingContext, cancelHosting := context.WithTimeout(ctx, 90*time.Second)
+		if err := rt.ensureChatHosting(hostingContext); err != nil {
+			log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", "chat-hosting.log")}
+			_, _ = log.Write([]byte(err.Error() + "\n"))
+		}
+		cancelHosting()
+		identityContext, cancel := context.WithTimeout(ctx, 25*time.Second)
+		err := rt.prepareChatIdentity(identityContext)
+		cancel()
+		if err != nil {
+			return err
+		}
 	}
 	if app.ID == "vault" {
 		rt.progress.Step(app.ID, "running", "Preparing My Vault's permanent secure address")
@@ -277,6 +302,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	rt.progress.Step(app.ID, "done", "App health check passed")
 	if app.ID == "vault" {
 		rt.vaultHostingProgress(ctx, app)
+	}
+	if app.ID == "chat" {
+		rt.chatHostingProgress(ctx)
 	}
 	if app.ID == "mail" && rt.Config.HostingDomain != "" && !usesShared(rt.Config, "mail") {
 		rt.mailHostingProgress(ctx, app)

@@ -28,12 +28,14 @@ import (
 // contract. It travels with the app release, verified by GitHub's asset digest.
 // Arbitrary release executables are never guessed into an installation.
 type AppUpdateManifest struct {
-	Schema      int                      `json:"schema"`
-	Integration int                      `json:"integration"`
-	Repository  string                   `json:"repository"`
-	Tag         string                   `json:"tag"`
-	Apps        []catalog.App            `json:"apps"`
-	Packages    map[string]UpdatePackage `json:"packages"`
+	Schema               int                      `json:"schema"`
+	Integration          int                      `json:"integration"`
+	Repository           string                   `json:"repository"`
+	Tag                  string                   `json:"tag"`
+	Apps                 []catalog.App            `json:"apps"`
+	Packages             map[string]UpdatePackage `json:"packages"`
+	MinimumManager       string                   `json:"minimumManager,omitempty"`
+	RequiredCapabilities []string                 `json:"requiredCapabilities,omitempty"`
 }
 type UpdatePackage struct {
 	catalog.Package
@@ -47,18 +49,20 @@ type UpdateDownload struct {
 	Member     string `json:"member,omitempty"`
 }
 type UpdateChoice struct {
-	ID        string                     `json:"id"`
-	Name      string                     `json:"name"`
-	Current   string                     `json:"current"`
-	Version   string                     `json:"version"`
-	Source    string                     `json:"source"`
-	Available bool                       `json:"available"`
-	Reason    string                     `json:"reason,omitempty"`
-	ReviewURL string                     `json:"reviewUrl,omitempty"`
-	NewApps   []string                   `json:"newApps,omitempty"`
-	Apps      []catalog.App              `json:"apps,omitempty"`
-	Packages  map[string]catalog.Package `json:"packages,omitempty"`
-	Downloads map[string]UpdateDownload  `json:"downloads,omitempty"`
+	ID                   string                     `json:"id"`
+	Name                 string                     `json:"name"`
+	Current              string                     `json:"current"`
+	Version              string                     `json:"version"`
+	Source               string                     `json:"source"`
+	Available            bool                       `json:"available"`
+	Reason               string                     `json:"reason,omitempty"`
+	ReviewURL            string                     `json:"reviewUrl,omitempty"`
+	NewApps              []string                   `json:"newApps,omitempty"`
+	Apps                 []catalog.App              `json:"apps,omitempty"`
+	Packages             map[string]catalog.Package `json:"packages,omitempty"`
+	Downloads            map[string]UpdateDownload  `json:"downloads,omitempty"`
+	MinimumManager       string                     `json:"minimumManager,omitempty"`
+	RequiredCapabilities []string                   `json:"requiredCapabilities,omitempty"`
 }
 type UpdatePlan struct {
 	CheckedAt         time.Time      `json:"checkedAt"`
@@ -528,8 +532,11 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 	if d.Decode(&trailing) != io.EOF {
 		return UpdateChoice{}, errors.New("trailing app update metadata")
 	}
-	if m.Schema != 1 || m.Integration != 2 || m.Repository != repo || m.Tag != r.Tag {
+	if m.Repository != repo || m.Tag != r.Tag {
 		return UpdateChoice{}, errors.New("unsupported app update contract")
+	}
+	if err := checkManifestRequirements(m, current.Version); err != nil {
+		return UpdateChoice{}, err
 	}
 	allowedApps := map[string]bool{}
 	for _, id := range g.apps {
@@ -537,6 +544,8 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 	}
 	allowedPackages := groupPackages(g, current)
 	ch := UpdateChoice{ID: g.id, Name: g.name, Source: "https://github.com/" + repo + "/releases/tag/" + r.Tag, Apps: m.Apps, Packages: map[string]catalog.Package{}, Downloads: map[string]UpdateDownload{}}
+	ch.MinimumManager = m.MinimumManager
+	ch.RequiredCapabilities = append([]string(nil), m.RequiredCapabilities...)
 	seen := map[string]bool{}
 	for _, a := range m.Apps {
 		if !allowedApps[a.ID] || seen[a.ID] || a.Source != ch.Source {
@@ -672,6 +681,11 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 		}
 		if ch == nil || !ch.Available {
 			return target, nil, fmt.Errorf("update %s is not available", id)
+		}
+		if ch.MinimumManager != "" {
+			if err := checkRequirements(current.Version, ch.MinimumManager, ch.RequiredCapabilities); err != nil {
+				return target, nil, err
+			}
 		}
 		if id == "workspace" {
 			target.Version = ch.Version

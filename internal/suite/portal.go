@@ -185,8 +185,10 @@ func (p *Portal) Handler(control string) http.Handler {
 	mux := http.NewServeMux()
 	p.navigationRoutes(mux)
 	p.monitorRegistry(mux)
+	p.chatCatalogRoute(mux)
 	mux.HandleFunc("GET /_workspace/open/{id}", p.appOpen)
 	p.vaultRoutes(mux)
+	p.chatRoutes(mux)
 	p.updateRoutes(mux)
 	p.backupRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
@@ -292,7 +294,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		})
 	}
 	for _, a := range p.rt.Config.Catalog.Apps {
-		if a.ID == "accounts" || a.ID == "drive" || a.ID == "photos" || a.ID == "vault" || a.Kind != "process" {
+		if a.ID == "accounts" || a.ID == "drive" || a.ID == "photos" || a.ID == "vault" || a.ID == "chat" || a.Kind != "process" {
 			continue
 		}
 		route := strings.TrimRight(a.Route, "/")

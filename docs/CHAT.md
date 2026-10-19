@@ -16,8 +16,17 @@ validates the identity token, state, nonce and PKCE before issuing single-use
 engine tickets. Identity links use issuer plus subject; email is never the key.
 No second Chat password is created. Logout closes the Chat browser session and
 its active connections; Workspace sign-out also ends the current Chat session before clearing its cookies.
-Chat preferences use their own browser-storage namespace; directly opened
-attachments are sandboxed on the shared Workspace origin.
+Workspace43 gives Chat a separate browser hostname and updates its existing
+MyAccounts callback without changing its client credentials or account links.
+Old `/chat` links redirect to the new address, retaining the conversation link.
+Host-only cookies and per-account browser caches keep Chat separate from other
+apps. Directly opened active attachments are sandboxed.
+
+Managed Cloudflare installations automatically allocate an unused first-level
+`chat` hostname (or a numbered alternative), retain it in private settings and
+repair its owned tunnel route on startup. Unrelated DNS and tunnel routes are
+preserved. Local installations use the other loopback hostname, so Workspace
+and Chat do not share a cookie host. This does not configure calling or TURN.
 
 ## Finding people and opening conversations
 
@@ -46,7 +55,24 @@ Chat is optional in Advanced installation. Existing installations can add it
 through the installer’s app-selection flow; ordinary updates preserve deliberately
 omitted apps. Future Chat releases are offered from oneworkspacestudio/chat.
 
-## Scope
+## Candidate5 changes and scope
+
+Chat5 adds a full-height branded layout, app switcher, synchronized custom lists,
+account/conversation drafts and static offline shell. Restored sends use one
+durable client ID; acknowledgement loss cannot publish another copy. A deleted
+message's retry returns Gone. Uploaded bytes and conversation membership are
+checked before media access or attachment linking. The account and security
+surfaces route centrally managed name/password controls to MyAccounts.
+
+Chat5 requires Workspace43. The app-update manifest rejects older managers;
+the executable also checks the manager capability before touching Chat storage,
+protecting complete-bundle update paths. Use the paired Workspace update first.
+
+This candidate is **not full WhatsApp parity and does not send end-to-end
+encrypted messages**. Its separately tested OpenMLS native/browser proof is not
+part of Chat.exe. Linked-device trust, encrypted media/search/recovery, complete
+social features, calls and native clients remain unfinished. See the
+[feature matrix and actual test scope](https://github.com/oneworkspacestudio/chat/blob/master/docs/whatsapp-parity/IMPLEMENTATION-STATUS.md).
 
 The package remains a preview. Separate synthetic Windows accounts passed browser
 OIDC, search, ID/QR lookup, two-way direct/group messaging, exact attachment bytes,

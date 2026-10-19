@@ -69,6 +69,12 @@ func TestEveryAppStartsNativeSignInWithoutAnotherLoginScreen(t *testing.T) {
 			p := signInFixture(t, app, http.StatusUnauthorized)
 			r := signInRequest(app.route + "/")
 			w := httptest.NewRecorder()
+			if app.id == "chat" {
+				if p.seamlessApp(w, r) {
+					t.Fatal("Dedicated Chat must not be probed using shared portal cookies")
+				}
+				return
+			}
 			if !p.seamlessApp(w, r) || w.Code != http.StatusSeeOther || !strings.HasPrefix(w.Header().Get("Location"), app.login) {
 				t.Fatalf("did not start native sign-in: %d %s", w.Code, w.Header().Get("Location"))
 			}

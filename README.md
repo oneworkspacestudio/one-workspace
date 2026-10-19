@@ -170,6 +170,8 @@ tested Next/Nuxt builds with real logs, previews, rollback, encrypted backups an
 MyAccounts shared sign-in. Managed Cloudflare connections publish flat site
 addresses without router setup. [Setup, tests and limits](docs/MY-HOSTING.md).
 
+**Preview 43 upgrades Chat integration.** Chat opens on its own hostname with the same MyAccounts identity, installed-app switcher, synchronized chat lists, durable drafts and offline retry. New manager compatibility checks protect app updates. This is an incomplete WhatsApp-parity candidate; application encryption, full social features, calls and native clients remain unfinished. [Changes, checks and limits](docs/CHAT.md).
+
 **[Preview 35 fixes Chat discovery and messaging](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.35).** MyAccounts members become searchable automatically, including before their first Chat login. Find by name, username, verified email or account ID; open native Chat IDs and QR links. Browser checks covered two-way direct/group messages, attachments and disabled-account access in a separate tester installation. [Chat checks and limits](https://github.com/oneworkspacestudio/chat/blob/master/docs/workspace/ACCEPTANCE.md).
 
 **[Preview 34 adds Chat](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.34).** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).

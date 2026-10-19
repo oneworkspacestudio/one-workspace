@@ -1,4 +1,22 @@
-# October 19 release status
+# October 20 release status
+
+## Preview43 candidate: Chat integration and update compatibility
+
+Adds a dedicated Chat browser origin, preserved MyAccounts client/identity links,
+legacy entry redirects, a private installed-app catalog and subject-scoped logout
+backchannel. Chat5 adds branded responsive messaging, custom lists, durable drafts,
+offline reconnect/idempotency and stricter conversation/media authorization.
+The manager advertises its tested origin capability; app manifests can require a
+minimum manager, while Chat rejects incompatible managed startup before storage.
+
+Synthetic native browser checks passed SSO, directory/ID lookup, actual direct and
+group messages, attachment bytes and denied access, restored outbox replay once,
+custom-list synchronization and global logout. This is an incomplete candidate
+for the WhatsApp parity brief. Application E2EE, full social/calling/native-client
+features and fresh-machine key recovery remain unfinished. The MLS interoperability
+proof is separate from the shipped messenger. See [Chat scope](CHAT.md).
+Final published-download/update/rollback results are recorded separately after
+they run. Built locally; no GitHub Actions.
 
 ## Preview42: My Slicer
 

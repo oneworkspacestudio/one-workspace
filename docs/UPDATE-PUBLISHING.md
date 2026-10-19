@@ -1,5 +1,15 @@
 # Publishing independent app updates
 
+Apps that need a new manager contract use schema2/integration3 and the manifest
+tool's `--minimum-manager` and `--capabilities` flags. Requirements are checked
+both when discovering and selecting an update. Old managers deliberately reject
+that schema. A full bundle can also supply app packages: an incompatible app
+must refuse its old manager before storage migration, or the manager migration
+must be enforced by another tested staged route. Do not put manager capabilities
+in catalog-controlled app environment variables. Chat5 requires Workspace43 and
+`isolated-chat-origin-v1`; its managed entry point checks this before any data
+directory or runtime is created.
+
 Publish **workspace-update.json** alongside a new Windows app release. Include it
 in the draft before publication; do not rewrite previously published tags/assets.
 The updater gets release timestamps, URLs, archive hashes and byte sizes from

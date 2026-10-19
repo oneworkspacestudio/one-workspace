@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/distribution"
@@ -30,6 +31,8 @@ func run() error {
 	tag := flag.String("tag", "", "new release tag")
 	fileMap := flag.String("files", "", "JSON package map: id -> {path, asset, member?}")
 	output := flag.String("out", "workspace-update.json", "generated release asset")
+	minimumManager := flag.String("minimum-manager", "", "minimum compatible Workspace version; selects manifest schema2")
+	capabilities := flag.String("capabilities", "", "comma-separated required manager capabilities")
 	flag.Parse()
 	data, e := os.ReadFile(*catalogPath)
 	if e != nil {
@@ -72,6 +75,15 @@ func run() error {
 	}
 	manifest, e := distribution.MakeAppUpdateManifest(base, *group, *version, *repo, *tag, files)
 	if e != nil {
+		return e
+	}
+	var required []string
+	if *capabilities != "" {
+		for _, value := range strings.Split(*capabilities, ",") {
+			required = append(required, strings.TrimSpace(value))
+		}
+	}
+	if e = distribution.RequireManager(&manifest, *minimumManager, required); e != nil {
 		return e
 	}
 	return platform.SaveJSON(*output, manifest)
