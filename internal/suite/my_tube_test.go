@@ -30,6 +30,9 @@ func TestMyTubeManagedSettingsPreserveUserConfiguration(t *testing.T) {
 	if settings["admin_subjects"].([]any)[0] != "owner-subject" || settings["public_access"] != false {
 		t.Fatal(settings)
 	}
+	if settings["transcode"] != true || settings["auto_helpers"] != true || len(settings["qualities"].([]any)) != 4 {
+		t.Fatal("New installations must prepare adaptive streaming", settings)
+	}
 	if strings.Contains(string(b), "client_secret") {
 		t.Fatal("Credentials written to ordinary settings")
 	}

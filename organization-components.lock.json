@@ -51,9 +51,9 @@
   },
   "myTube": {
     "repository": "oneworkspacestudio/my-tube",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-tube-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "3ef6f9d8e9f9d5f1ec25bff59561e4ce6f7d998365847c71d816facb248ab0b8"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-tube-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "bf788ebef31d770224eb7d548d7c771e177c537707330ebcf0ef8d4521c6a5ac"
   },
   "drive": {
     "repository": "oneworkspacestudio/drive",

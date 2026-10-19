@@ -1,5 +1,21 @@
 # October 19 release status
 
+## Preview 41: automatic adaptive My Tube streaming
+
+Pins My Tube 0.1.0-preview.2. Windows x 64 automatically downloads checksum-pinned
+media tools from the original publisher, then queues new and existing completed
+originals for bounded 360/480/720/1080p HLS copies. Originals stay unchanged and
+playable. Auto starts low and adapts conservatively. Settings shows byte/percentage
+progress; failed downloads retry without blocking app startup. Explicit processing
+and download opt-outs are preserved. New managed setup enables the feature.
+
+Seven isolated native upgrade/playback checks passed, including real helper
+download, measured renditions, unchanged source/ranges, private-media denial and
+Chrome decoding on a simulated 1.2Mbps connection. Source 21.38Mbps produced
+approximately 0.59/0.95/1.70/3.23Mbps copies. This does not certify every video,
+remote network, clean host/reboot/service or an independent security audit.
+See [streaming details](MY-TUBE-STREAMING.md). Built locally; no GitHub Actions.
+
 ## Preview40: reliable My PDF saves to Drive
 
 Pins My PDF 0.1.0-preview.3 in both the complete installer and update catalog.

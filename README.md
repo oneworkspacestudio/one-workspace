@@ -153,6 +153,8 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
   </tbody>
 </table>
 
+**Preview 41 improves My Tube playback.** Automatic verified video tools, bounded adaptive qualities and conservative Auto playback reduce the bandwidth needed for remote watching. Existing originals remain unchanged. [Streaming details](docs/MY-TUBE-STREAMING.md).
+
 **Preview 40 fixes PDF storage in Drive.** New uploads and processed PDF copies save automatically into **Drive / My PDF**, with per-file status, numbered duplicates and retries. Existing library documents have a Save to Drive action. See [saving details and limits](docs/PDF-DRIVE-SAVE.md).
 
 **Preview 37 adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. All four have native Windows downloads, MyAccounts sign-in, matching branding and encrypted recovery. See [delivery and tested limits](docs/FOUR-APPS-DELIVERY.md).

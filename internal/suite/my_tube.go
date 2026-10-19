@@ -22,6 +22,9 @@ func ensureMyTubeConfig(c Config) error {
 		return fmt.Errorf("My Tube is not in the installed catalog")
 	}
 	settings := map[string]any{"mode": "managed", "listen": fmt.Sprintf("127.0.0.1:%d", tube.Port), "data_dir": filepath.Join(c.Data, "my-tube"), "media_dir": filepath.Join(c.Data, "my-tube", "media"), "public_url": c.Origin + "/my-tube", "admin_subjects": []string{c.Owner}, "public_access": false, "public_uploads": false}
+	settings["transcode"] = true
+	settings["auto_helpers"] = true
+	settings["qualities"] = []int{360, 480, 720, 1080}
 	// Use the direct loopback Drive mount: a server-to-server request cannot
 	// satisfy the portal's separate browser session with only a Drive token.
 	if drive, ok := c.Catalog.Find("drive"); ok {
