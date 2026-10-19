@@ -29,6 +29,13 @@ folder and unlabelled legacy staging folders are preserved by that sweep.
 
 ## Failures and interrupted cleanup
 
+When an older updater installs this manager, the new manager waits until all
+apps are ready, the older updater records completion and its maintenance lock
+is released. It can then finish cleanup under the same lock. Reopening or
+restarting does not repeat a completed cleanup. An older controller may leave
+additional unlabelled history that cannot be classified safely; installing with
+the newest installer provides the complete cleanup workflow and progress UI.
+
 A failed update or rollback never triggers backup retention cleanup. Cleanup
 starts only after the successful update has been committed to its journal.
 It never deletes the final recovery copy to make room for an update.

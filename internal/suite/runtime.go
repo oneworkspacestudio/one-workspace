@@ -140,6 +140,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	progress.Finish("ready", "Your Workspace is running", nil)
 	_ = platform.SaveJSON(filepath.Join(c.Data, "running.json"), map[string]any{"pid": os.Getpid(), "origin": c.Origin, "started": time.Now().UTC()})
 	go rt.backupSchedule(ctx)
+	go startupUpdateCleanup(ctx, c)
 	select {
 	case <-ctx.Done():
 	case e = <-errc:

@@ -31,6 +31,16 @@ Preserve the three unrelated untracked availability/history files.
 
 ## Verification and release preparation
 
+Compatibility follow-up: Run starts a post-readiness cleanup watcher. It waits
+for a completed journal and the older updater's maintenance lock, rechecks the
+installed owner/version, and skips an already completed cleanup receipt. This
+lets the new manager perform cleanup when installed by an older controller.
+The completed journal proves an unlabelled retained legacy copy is automatic;
+unknown older copies remain protected. Handoff/idempotency regression passes.
+Final native assembly replaces the manager/catalog in the verified full bundle
+using Go archive/zip.Copy for unchanged members, then recompiles the installer;
+all member sizes/digests are rechecked. Component pins remain unchanged.
+
 Windows cleanup regression cases passed: automatic vs manual/scheduled/legacy/
 recovery retention, incomplete commit, corrupted retained copy, locked-file
 partial deletion/retry/rollback denial, proven legacy cleanup, unexpected files,

@@ -257,7 +257,7 @@ func cleanupSuccessfulUpdate(ctx context.Context, c Config, keep BackupReceipt, 
 		return r
 	}
 	var j UpdateJournal
-	if e := platform.LoadJSON(updateJournalPath(c), &j); e != nil || j.Phase != "complete" || j.Backup.ID != keep.ID || j.Backup.SHA256 != keep.SHA256 || keep.Purpose != "update" || keep.RecoveryOnly || keep.CleanupPending {
+	if e := platform.LoadJSON(updateJournalPath(c), &j); e != nil || j.Phase != "complete" || j.Backup.ID != keep.ID || j.Backup.SHA256 != keep.SHA256 || j.Backup.Purpose != keep.Purpose || (keep.Purpose != "update" && keep.Purpose != "") || keep.RecoveryOnly || keep.CleanupPending {
 		r.Warnings = append(r.Warnings, "Cleanup skipped: a completed healthy update and its recovery copy are required")
 		return finish()
 	}
@@ -382,6 +382,60 @@ func cleanupSuccessfulUpdate(ctx context.Context, c Config, keep BackupReceipt, 
 	}
 	operationprogress.Report(ctx, "cleanup", "Cleanup finished; latest recovery copy retained", int64(r.RemovedBackups+r.RemovedStages), int64(r.RemovedBackups+r.RemovedStages), "folders")
 	return finish()
+}
+
+// Older maintenance binaries cannot run a newly installed manager's cleanup
+// code. Once Run has passed all app checks, wait for their committed journal and
+// maintenance lock. The new manager can then finish cleanup without racing the
+// old updater or treating its still-testing transaction as successful.
+func startupUpdateCleanup(ctx context.Context, c Config) {
+	deadline := time.NewTimer(2 * time.Minute)
+	defer deadline.Stop()
+	tick := time.NewTicker(500 * time.Millisecond)
+	defer tick.Stop()
+	for {
+		var j UpdateJournal
+		if platform.LoadJSON(updateJournalPath(c), &j) != nil {
+			return
+		}
+		if j.Phase == "rolled-back" {
+			return
+		}
+		if j.Phase == "complete" {
+			last, e := LoadUpdateCleanup(c)
+			if e == nil && last != nil && last.KeptBackup == j.Backup.ID && !last.Finished.Before(j.Updated) && len(last.Warnings) == 0 {
+				return
+			}
+			guard, e := lockUpdate(c)
+			if e == nil {
+				defer guard.Close()
+				// Configuration/journal may have changed while the prior updater held
+				// the lock. Only this installation's current healthy manager may act.
+				actual, _, e := Load(c.Data)
+				if e != nil || actual.Version != c.Version || actual.Owner != c.Owner {
+					return
+				}
+				if platform.LoadJSON(updateJournalPath(c), &j) != nil || j.Phase != "complete" {
+					return
+				}
+				last, e = LoadUpdateCleanup(c)
+				if e == nil && last != nil && last.KeptBackup == j.Backup.ID && !last.Finished.Before(j.Updated) && len(last.Warnings) == 0 {
+					return
+				}
+				log := &platform.Log{Path: filepath.Join(c.Data, "updates", "cleanup.log")}
+				result := cleanupSuccessfulUpdate(ctx, actual, j.Backup, "", func(s string) { fmt.Fprintln(log, s) })
+				fmt.Fprintln(log, result.Summary())
+				return
+			}
+		}
+		select {
+		case <-ctx.Done():
+			return
+		case <-deadline.C:
+			return
+		case <-tick.C:
+		}
+	}
 }
 
 func validateCleanupContents(root string, allowed map[string]bool) error {

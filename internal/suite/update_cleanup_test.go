@@ -257,3 +257,23 @@ func TestUpdateCleanupTransactionRunsOnlyAfterHealthCheckedCommit(t *testing.T) 
 		})
 	}
 }
+
+func TestUpdateCleanupStartupCompletesLegacyHandoffAndIsIdempotent(t *testing.T) {
+	c, _ := updateFixture(t)
+	old := cleanupCopy(t, c, "update")
+	keep := cleanupCopy(t, c, "")
+	cleanupReady(t, c, keep, nil)
+	startupUpdateCleanup(context.Background(), c)
+	requireExists(t, old.Path, false)
+	requireExists(t, keep.Path, true)
+	r, e := LoadUpdateCleanup(c)
+	if e != nil || r == nil || r.RemovedBackups != 1 || len(r.Warnings) != 0 {
+		t.Fatalf("%+v %v", r, e)
+	}
+	before := r.Finished
+	startupUpdateCleanup(context.Background(), c)
+	r, _ = LoadUpdateCleanup(c)
+	if !r.Finished.Equal(before) {
+		t.Fatal("startup repeated a completed cleanup")
+	}
+}
