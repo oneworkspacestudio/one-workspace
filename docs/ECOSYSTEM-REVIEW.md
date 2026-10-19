@@ -114,3 +114,17 @@ Drive pickers and synchronization features above remain genuine product gaps.
   Calendar and Contacts share the same rebuilt frontend.
 - No production account, live-installation test data, tunnel/DNS change, external
   mail delivery, Vault decryption or GitHub Actions was used for these checks.
+
+### Release verification
+
+[Workspace preview.38](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.38)
+was built locally and published with the six updated component releases. All91
+bundle members passed size/SHA256 verification, and all21 Workspace assets matched
+their GitHub digests. Public component ZIP downloads were independently hashed.
+
+A fresh offline installation of this exact installer selected all19 apps and passed
+all12 managed browser regressions. The first attempt reached Monitor before its
+initial discovery had settled; the test now waits for the discovered check before
+running it. No runtime payload change was needed. The fixture was stopped and
+removed, reclaiming approximately741MB on C:. The owner's installation was not
+updated by these release checks. Existing product and acceptance limits remain.

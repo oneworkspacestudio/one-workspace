@@ -91,3 +91,38 @@ User explicitly requested push and release without Actions after the review.
 Preparing preview.38 with Tasks/PDF/Monitor/Search preview.2, Notes preview.6,
 Calendar/Contacts preview.3. No owner-installation deployment requested. Published
 release receipts and final component pins will be recorded after verification.
+
+## Publication completed
+
+Published [v0.3.0-preview.38](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.38) from `b93bfb2bc7f184cf9898226687e1cc558729796b`.
+All 21 remote asset sizes/SHA256 match the local stage, including the
+Windows installer, portable manager, full19-app/91-package bundle, source archive,
+catalog and provenance. Anonymous catalog download and installer/bundle download
+availability verified. Each of the91 embedded package hashes/sizes verified.
+All six component ZIPs downloaded anonymously and hashed; Actions remain disabled
+in every changed repository. Component releases:
+
+- [oneworkspacestudio/my-tasks v0.1.0-preview.2](https://github.com/oneworkspacestudio/my-tasks/releases/tag/v0.1.0-preview.2) — `88f4e86336a374462863da71c51f611a1d0e8b4a`.
+- [oneworkspacestudio/my-pdf v0.1.0-preview.2](https://github.com/oneworkspacestudio/my-pdf/releases/tag/v0.1.0-preview.2) — `08cab407cf4295a9e16f8473e3d454f96aa30659`.
+- [oneworkspacestudio/my-monitor v0.1.0-preview.2](https://github.com/oneworkspacestudio/my-monitor/releases/tag/v0.1.0-preview.2) — `1f113d5cd17b7bf5958afde4c22efa5ec77c614b`.
+- [oneworkspacestudio/my-search v0.1.0-preview.2](https://github.com/oneworkspacestudio/my-search/releases/tag/v0.1.0-preview.2) — `6038bd2e1e609cf1e045e1820efe2b80d7a50c6a`.
+- [oneworkspacestudio/calendar v0.1.0-preview.3](https://github.com/oneworkspacestudio/calendar/releases/tag/v0.1.0-preview.3) — `f683add9fd4e8cfdb7ff71a2bfa1cca55726a691`.
+- [oneworkspacestudio/notes v0.1.0-preview.6](https://github.com/oneworkspacestudio/notes/releases/tag/v0.1.0-preview.6) — `f6ea555fb6c6c2538218639a48c871e687f1a51e`.
+
+The exact final installer completed a fresh offline installation selecting all19
+apps. All12 managed browser regressions passed. First attempt reached9 passes
+before the Monitor probe failed while discovery was settling; inspection returned
+HTTP200 for the same probe. Test-only follow-up now waits for the discovered
+Mail check instead of assuming it already exists. Release native source remains
+the immutable commit above; this wait and the final receipt are a post-release
+test/documentation follow-up on main, not a native payload change.
+
+Stopped the isolated manager plus shared service; removed exactly 740,982,623
+bytes of named C fixture/build data; C free 22,414,184,448 bytes afterward.
+No task process/tunnel remains. Existing owner installation/files/private data
+were preserved; this release task did not deploy into the owner installation.
+Builds, release stages and synthetic evidence remain on I under tooling/ecosystem-release.
+Preserve the two unrelated October15/16 untracked histories.
+
+Native production/clean-host/reboot/security and unresolved product feature limits
+remain as documented; publishing is not certification of those gates.
