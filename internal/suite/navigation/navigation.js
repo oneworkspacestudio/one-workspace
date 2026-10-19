@@ -1,29 +1,79 @@
 (() => {
  if (window.top !== window || document.getElementById('one-workspace-nav')) return;
- fetch('/_workspace/apps', {credentials:'same-origin'}).then(r => r.ok ? r.json() : null).then(catalog => {
-  if (!catalog) return;
-  // Refresh an already-installed Music worker after suite upgrades. Old offline
-  // shells can otherwise intercept sign-in before the new client ever loads.
-  if ('serviceWorker' in navigator) {
-   const music=catalog.apps.find(app=>app.Name==='Music');
-   if (music) {
-    const scope=new URL('/music/',location.origin).href;
-    navigator.serviceWorker.getRegistration(scope)
-     .then(registration=>registration?.scope===scope ? registration.update() : undefined).catch(()=>{});
-   }
+ if(location.pathname === '/') {
+  const apply = value => {document.documentElement.dataset.theme=value==='dark'?'dark':'light'};
+  try{apply(localStorage.getItem('workspace-theme'))}catch{apply(null)}
+  window.addEventListener('storage',e=>{if(e.key==='workspace-theme')apply(e.newValue)});
+  const appearance=document.createElement('link');appearance.rel='stylesheet';appearance.href='/_workspace/appearance.css';document.head.append(appearance);
+ }
+ fetch('/_workspace/apps', {credentials:'same-origin',cache:'no-store'}).then(r => r.ok ? r.json() : null).then(catalog => {
+  if (!catalog || !Array.isArray(catalog.apps)) return;
+  if ('serviceWorker' in navigator && catalog.apps.some(app => app.ID === 'music')) {
+   const scope = new URL('/music/', location.origin).href;
+   navigator.serviceWorker.getRegistration(scope).then(r => r?.scope === scope ? r.update() : undefined).catch(() => {});
   }
-  const host = document.createElement('div'); host.id='one-workspace-nav';
-  const shadow=host.attachShadow({mode:'open'}), style=document.createElement('link');
-  style.rel='stylesheet'; style.href='/_workspace/navigation.css'; shadow.append(style);
-  const toggle=document.createElement('button'); toggle.textContent='Workspace apps'; toggle.setAttribute('aria-expanded','false'); toggle.setAttribute('aria-label','Open Workspace apps');
-  const panel=document.createElement('section'); panel.hidden=true; panel.setAttribute('aria-label','Workspace apps');
-  const name=document.createElement('strong'); name.textContent=catalog.name || catalog.email || 'Your workspace'; panel.append(name);
-  const searchApp=catalog.apps.find(a=>a.Name==='My Search');if(searchApp){const search=document.createElement('form');search.action='/search/';search.method='get';search.setAttribute('role','search');const input=document.createElement('input');input.type='search';input.name='q';input.placeholder='Search Workspace';input.setAttribute('aria-label','Search Workspace');input.maxLength=200;search.append(input);panel.append(search);document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();panel.hidden=false;toggle.setAttribute('aria-expanded','true');input.focus()}})}
-  const home=document.createElement('a'); home.href='/'; home.textContent='One Workspace home'; panel.append(home);
-  for(const app of catalog.apps){const a=document.createElement('a');a.href=app.URL;if(app.Icon){const img=document.createElement('img');img.src=app.Icon;img.alt='';img.width=24;img.height=24;a.append(img)}a.append(document.createTextNode(app.Name));panel.append(a)}
-  const form=document.createElement('form');form.action='/auth/logout';form.method='post';const logout=document.createElement('button');logout.textContent='Sign out of Workspace apps';form.append(logout);panel.append(form);
-  toggle.onclick=()=>{panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',String(!panel.hidden))};
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){panel.hidden=true;toggle.setAttribute('aria-expanded','false')}});
-  shadow.append(panel,toggle);document.body.append(host);
+  const host = document.createElement('div'); host.id = 'one-workspace-nav';
+  const shadow = host.attachShadow({mode:'open'}), style = document.createElement('link');
+  style.rel = 'stylesheet'; style.href = '/_workspace/navigation.css'; shadow.append(style);
+  const make = (tag, text, className) => {const el = document.createElement(tag); if(text) el.textContent = text; if(className) el.className = className; return el};
+  const icon = (url, size=24) => {const img = make('img'); img.src=url; img.alt=''; img.width=size; img.height=size; return img};
+  const toggle = make('button', '', 'launcher'); toggle.type='button';
+  toggle.append(icon('/branding/icons/one_workspace.svg'), make('span','Workspace'));
+  toggle.setAttribute('aria-expanded','false'); toggle.setAttribute('aria-label','Open Workspace apps'); toggle.setAttribute('aria-haspopup','dialog');
+  const panel = make('dialog'); panel.setAttribute('aria-label','Workspace apps');
+  const heading = make('header'), home = make('a','One Workspace'); home.href='/'; heading.append(home);
+  const close = make('button','×','close'); close.type='button'; close.setAttribute('aria-label','Close Workspace apps'); heading.append(close); panel.append(heading);
+  panel.append(make('p',catalog.name || catalog.email || 'Your workspace','account'));
+  const current = make('p','','current'); panel.append(current);
+  let searchInput;
+  if(catalog.apps.some(a => a.ID === 'search')) {
+   const search = make('form','','search'); search.action='/search/'; search.method='get'; search.setAttribute('role','search');
+   searchInput=make('input'); searchInput.type='search'; searchInput.name='q'; searchInput.placeholder='Search your Workspace'; searchInput.setAttribute('aria-label','Search Workspace'); searchInput.maxLength=200;
+   const submit=make('button','Search'); submit.type='submit'; search.append(searchInput,submit); panel.append(search);
+  }
+  const links = make('nav','','apps'); links.setAttribute('aria-label','Installed apps'); const entries=[];
+  for(const app of catalog.apps) {
+   const a=make('a'); a.href=app.URL; a.title=app.Description || app.Name;
+   if(app.Icon) a.append(icon(app.Icon,32)); a.append(make('span',app.Name));
+   links.append(a); entries.push({app,a});
+  }
+  panel.append(links);
+  const footer=make('footer'), drive=catalog.apps.find(a=>a.ID==='drive');
+  if(drive){const files=make('a','Your files in Drive'); files.href=drive.URL; footer.append(files)}
+  const form=make('form'); form.action='/auth/logout'; form.method='post'; const logout=make('button','Sign out of Workspace'); logout.type='submit'; form.append(logout); footer.append(form); panel.append(footer);
+  let opener;
+  const open = (focusSearch=false) => {if(!panel.open){opener=shadow.activeElement || document.activeElement; panel.showModal()} toggle.setAttribute('aria-expanded','true'); (focusSearch && searchInput ? searchInput : close).focus()};
+  toggle.onclick=()=>open(); close.onclick=()=>panel.close();
+  panel.addEventListener('close',()=>{toggle.setAttribute('aria-expanded','false');if(opener?.isConnected)opener.focus()});
+  panel.addEventListener('click',e=>{if(e.target===panel){const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)panel.close()}});
+  window.addEventListener('workspace:open-apps',()=>open());
+  document.addEventListener('keydown',e=>{if(!e.defaultPrevented && !e.isComposing && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k' && searchInput){e.preventDefault();open(true)}});
+  const decode = path => {try{return decodeURIComponent(path).replace(/\/$/,'')}catch{return path}};
+  let currentApp;
+  const title = () => {
+   let next=document.title;
+   if(currentApp?.ID==='music') next=next.replace(/Swing Music$/, 'Music · One Workspace');
+   if(currentApp?.ID==='photos' && next==='Photos') next='Photos · One Workspace';
+   if(currentApp?.ID==='studio' && next==='Workspace Drive - Studio') next='Photo Editor · One Workspace';
+   if(next!==document.title) document.title=next;
+  };
+  const active = () => {
+   const path=decode(location.pathname), matched=entries.filter(({app})=>app.ID!=='accounts' && app.Route && decode(app.Route) && (path===decode(app.Route)||path.startsWith(decode(app.Route)+'/'))).sort((a,b)=>b.app.Route.length-a.app.Route.length)[0];
+   for(const {a} of entries)a.removeAttribute('aria-current');
+   if(matched)matched.a.setAttribute('aria-current','page');
+   current.textContent=matched ? 'You’re in '+matched.app.Name : 'Your apps, together';
+   toggle.title=matched ? 'Workspace apps · '+matched.app.Name : 'Workspace apps';
+   currentApp=matched?.app; title();
+  };
+  new MutationObserver(title).observe(document.head,{childList:true,subtree:true,characterData:true});
+  const theme=()=>{host.dataset.theme=document.documentElement.dataset.theme || (document.documentElement.classList.contains('dark-mode')||document.documentElement.classList.contains('dark')||document.body.classList.contains('dark')?'dark':'light')};
+  new MutationObserver(theme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']});
+  new MutationObserver(theme).observe(document.body,{attributes:true,attributeFilter:['class']});
+  window.addEventListener('popstate',active); window.addEventListener('hashchange',active);
+  // Vue/React routers can change the path without popstate or a document load.
+  let lastPath=location.pathname;
+  setInterval(()=>{if(!document.hidden&&location.pathname!==lastPath){lastPath=location.pathname;active()}},1000);
+  shadow.append(panel,toggle); document.body.append(host); active(); theme();
+  document.documentElement.dataset.workspaceNavigation='ready';
  }).catch(()=>{});
 })();

@@ -23,16 +23,25 @@ func (p *Portal) navigationRoutes(mux *http.ServeMux) {
 		apps := []map[string]any{}
 		for _, tile := range p.tiles(user.Subject == p.rt.Config.Owner) {
 			entry := map[string]any{"Name": tile.Name, "Description": tile.Description, "URL": tile.URL, "Icon": tile.Icon}
-			if a, ok := p.rt.Config.Catalog.Find(strings.TrimPrefix(tile.URL, "/_workspace/open/")); ok {
+			id := strings.TrimPrefix(tile.URL, "/_workspace/open/")
+			if tile.URL == p.rt.Config.Issuer {
+				id = "accounts"
+			}
+			if tile.URL == "/backups" {
+				entry["ID"], entry["Route"] = "backups", "/backups"
+			}
+			if a, ok := p.rt.Config.Catalog.Find(id); ok {
 				entry["ID"] = a.ID
 				entry["Route"] = strings.TrimRight(a.Route, "/") + "/"
 				entry["Version"] = a.Version
 			}
 			apps = append(apps, entry)
 		}
-		json.NewEncoder(w).Encode(map[string]any{"apps": apps, "name": user.Name, "email": user.Email, "subject": user.Subject, "issuer": p.rt.Config.Issuer, "home": "/"})
+		json.NewEncoder(w).Encode(map[string]any{"apps": apps, "name": user.Name, "email": user.Email, "subject": user.Subject, "issuer": p.rt.Config.Issuer, "home": "/", "capabilities": map[string]bool{"appConnections": true, "sharedNavigation": true}})
 	})
-	for _, name := range []string{"navigation.js", "navigation.css", "logout.js"} {
+	mux.HandleFunc("GET /_workspace/connect/{id}", p.connectApp)
+	mux.HandleFunc("GET /_workspace/setup/mail", p.mailSetup)
+	for _, name := range []string{"navigation.js", "navigation.css", "appearance.css", "logout.js"} {
 		mux.HandleFunc("GET /_workspace/"+name, func(w http.ResponseWriter, r *http.Request) {
 			body, err := navigationAssets.ReadFile("navigation/" + name)
 			if err != nil {
@@ -95,6 +104,7 @@ func clearAppCookies(w http.ResponseWriter, r *http.Request, secure bool) {
 	}
 	domain := r.Host
 	for _, app := range suiteSignIns {
+		names["workspace_connect_"+app.id] = []string{"/"}
 		names["workspace_sso_"+app.id] = []string{"/"}
 		names["workspace_return_"+app.id] = []string{"/"}
 	}

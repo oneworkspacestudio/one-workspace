@@ -14,6 +14,11 @@ import (
 func signInFixture(t *testing.T, app appSignIn, status int) *Portal {
 	t.Helper()
 	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if app.id == "mail" && r.URL.Path == "/healthz" {
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(`{"configured":true}`))
+			return
+		}
 		if r.URL.RequestURI() != app.probe {
 			t.Errorf("unexpected session probe %s", r.URL.RequestURI())
 		}

@@ -387,6 +387,18 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 		r.Header.Del("Forwarded")
 	}
 	p.ErrorHandler = func(w http.ResponseWriter, r *http.Request, e error) {
+		if browserDocument(r) {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.Header().Set("Cache-Control", "no-store")
+			w.Header().Set("Retry-After", "3")
+			w.WriteHeader(http.StatusBadGateway)
+			retry := prefix + "/"
+			if retry == "//" || retry == "" {
+				retry = "/"
+			}
+			_ = appUnavailable.Execute(w, map[string]string{"Retry": retry})
+			return
+		}
 		http.Error(w, "Application is starting or unavailable. Check Workspace logs.", 502)
 	}
 
@@ -453,9 +465,14 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 
 type catalogTile struct{ Name, Description, URL, Icon string }
 
+var appUnavailable = template.Must(template.New("app-unavailable").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>App unavailable · One Workspace</title><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px/1.65 "Segoe UI",system-ui,sans-serif}main{max-width:560px;margin:12vh auto;padding:32px;border:1px solid #e3e8f4;border-radius:20px;background:#fff}img{width:48px;height:48px}h1{line-height:1.2}p{color:#5e6c84}a{color:#345de5}nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap}.button{padding:12px 22px;background:#345de5;color:#fff;border-radius:12px;text-decoration:none}a:focus-visible{outline:3px solid #345de5;outline-offset:4px}@media(max-width:640px){main{margin:32px 16px;padding:24px}}</style><main><img src="/branding/icons/one_workspace.svg" alt="One Workspace"><h1>This app isn’t ready yet</h1><p>It may be starting, restarting after an update, or temporarily stopped. Wait a moment, then try opening it again.</p><nav><a class="button" href="{{.Retry}}">Try opening the app again</a><a href="/">Back to Workspace</a></nav><p>If it still won’t open, ask your Workspace owner to check the app in My Monitor or Workspace Updates. This page does not mean your files have been deleted.</p></main><script defer src="/_workspace/navigation.js"></script></html>`))
+
 func (p *Portal) tiles(owner ...bool) []catalogTile {
 	tiles := []catalogTile{}
 	for _, a := range p.rt.Config.Catalog.Apps {
+		if a.ID == "monitor" && (len(owner) == 0 || !owner[0]) {
+			continue // Infrastructure controls are only available to the owner.
+		}
 		link := "/_workspace/open/" + a.ID
 		if a.ID == "accounts" {
 			link = p.rt.Config.Issuer

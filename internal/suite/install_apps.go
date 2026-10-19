@@ -63,20 +63,8 @@ func InstallRequestedApps(ctx context.Context, data, bundle string, requested []
 		return err
 	}
 	selection := c.Catalog.EffectiveSelection()
-	for _, id := range requested {
-		if !foundationApp(id) {
-			return errors.New("explicit reinstallation supports tasks, pdf, monitor and search")
-		}
-		if _, ok := incoming.Find(id); !ok {
-			return fmt.Errorf("%s is not in this verified bundle", id)
-		}
-		kept := selection.Excluded[:0]
-		for _, excluded := range selection.Excluded {
-			if excluded != id {
-				kept = append(kept, excluded)
-			}
-		}
-		selection.Excluded = kept
+	if err = reenableRequestedApps(incoming, selection, requested); err != nil {
+		return err
 	}
 	request := Request{SelectedApps: []string{}}
 	for _, app := range incoming.DefaultApps(selection) {
@@ -257,6 +245,40 @@ func InstallRequestedApps(ctx context.Context, data, bundle string, requested []
 	}
 	committed = true
 	report("Installed all available suite apps. Existing files, accounts and Mail storage were preserved. Backup: " + backup)
+	return nil
+}
+
+func reenableRequestedApps(incoming catalog.Catalog, selection *catalog.AppSelection, requested []string) error {
+	enabled := map[string]bool{}
+	var enable func(string) error
+	enable = func(id string) error {
+		if enabled[id] {
+			return nil
+		}
+		app, ok := incoming.Find(id)
+		if !ok {
+			return fmt.Errorf("%s is not in this verified bundle", id)
+		}
+		enabled[id] = true
+		for _, dependency := range app.Depends {
+			if err := enable(dependency); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	for _, id := range requested {
+		if err := enable(id); err != nil {
+			return err
+		}
+	}
+	kept := []string{}
+	for _, id := range selection.Excluded {
+		if !enabled[id] {
+			kept = append(kept, id)
+		}
+	}
+	selection.Excluded = kept
 	return nil
 }
 

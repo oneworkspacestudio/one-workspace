@@ -104,7 +104,7 @@ func run() error {
 	case "install-apps":
 		f := flag.NewFlagSet("install-apps", flag.ContinueOnError)
 		bundle := f.String("bundle", "", "Verified organization Workspace bundle ZIP")
-		requested := f.String("apps", "", "Explicitly re-enable omitted tasks,pdf,monitor,search IDs")
+		requested := f.String("apps", "", "Comma-separated app IDs to re-enable, including their required apps")
 		if e = f.Parse(args[1:]); e != nil {
 			return e
 		}

@@ -1,0 +1,10 @@
+html[data-theme=dark]{color-scheme:dark}
+html[data-theme=dark] body{background:#151c2b;color:#e8eef9}
+html[data-theme=dark] .tile{background:#1e293b;border-color:#3b4a63;box-shadow:none}
+html[data-theme=dark] .tile h2{color:#e8eef9}
+html[data-theme=dark] .muted,html[data-theme=dark] p,html[data-theme=dark] footer{color:#b3bfd3}
+html[data-theme=dark] a{color:#a9c0ff}
+html[data-theme=dark] .admin{background:#2c3c5b}
+html[data-theme=dark] .button,html[data-theme=dark] button{color:#fff}
+html[data-theme=dark] input{background:#1e293b;color:#e8eef9}
+html[data-theme=dark] .tile:hover{border-color:#a9c0ff}

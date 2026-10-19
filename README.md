@@ -278,5 +278,6 @@ Yes. Workspace can be extended with additional apps. Connecting a new app curren
 | --- | --- |
 | A download or what changed | [Downloads and release notes](https://github.com/oneworkspacestudio/one-workspace/releases) |
 | Setup, online access or backups | [Technical guide](docs/TECHNICAL.md) |
+| App consistency, Drive workflows and current gaps | [Ecosystem review and local fixes](docs/ECOSYSTEM-REVIEW.md) |
 | A problem to report | [Report an issue](https://github.com/oneworkspacestudio/one-workspace/issues) |
 | Licensing and component information | [Licenses and sources](docs/COMPONENTS.md) |

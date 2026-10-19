@@ -142,6 +142,7 @@ func (p *Portal) seamlessApp(w http.ResponseWriter, r *http.Request) bool {
 	}
 	guard, destination := "workspace_sso_"+app.id, "workspace_return_"+app.id
 	if r.URL.Path == app.logout && (r.Method == http.MethodPost || app.id == "music") {
+		p.cookie(w, "workspace_connect_"+app.id, "", -1)
 		p.cookie(w, guard, p.signInStamp(r), 8*3600)
 		p.cookie(w, destination, "", -1)
 		return false
@@ -173,9 +174,18 @@ func (p *Portal) seamlessApp(w http.ResponseWriter, r *http.Request) bool {
 	if relative == "/setup" || relative == "/setup/" || publicDriveRoute(r.URL.Path) {
 		return false
 	}
+	if p.mailNeedsSetup(r, app) {
+		u, ok := p.user(r)
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		_ = mailSetupNeeded.Execute(w, map[string]bool{"Owner": ok && u.Subject == p.rt.Config.Owner})
+		return true
+	}
 	status := p.appSessionStatus(r, app)
 	if status == http.StatusOK {
 		p.cookie(w, guard, "", -1)
+		if p.finishConnection(w, r, app) {
+			return true
+		}
 		if c, err := r.Cookie(destination); err == nil {
 			p.cookie(w, destination, "", -1)
 			if target, err := url.QueryUnescape(c.Value); err == nil && len(target) <= 3000 && safeReturnPath(target) == target {
