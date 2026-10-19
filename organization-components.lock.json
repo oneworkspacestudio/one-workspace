@@ -38,16 +38,16 @@
     "sha256": "b0a757a02125eb12d8e3fdbe1fc1fd16501a281eae5a9b510397a687720fbd31"
   },
   "calendar": {
+    "sha256": "da46245cb29c83c908aaab63e0b13c4f3e32f7ccd583acc49331b3d340bbd29a",
+    "asset": "calendar-v0.1.0-preview.3-windows-amd64.zip",
     "repository": "oneworkspacestudio/calendar",
-    "tag": "v0.1.0-preview.2",
-    "asset": "calendar-v0.1.0-preview.2-windows-amd64.zip",
-    "sha256": "cddde0f91e68394da60537ed8069252152543237ad433838c1e31f28638497e1"
+    "tag": "v0.1.0-preview.3"
   },
   "notes": {
-    "sha256": "14e0e780dd2caf94150c010db386fe6b21050b91b10b7553e7b1daf4812d29a0",
-    "asset": "notes-0.1.0-preview.5-windows-amd64.zip",
-    "tag": "v0.1.0-preview.5",
-    "repository": "oneworkspacestudio/notes"
+    "sha256": "6fe9039639133b89ea12a29b5d775a504aed0cafbc5dbab0d2bf2facee6221df",
+    "asset": "notes-0.1.0-preview.6-windows-amd64.zip",
+    "repository": "oneworkspacestudio/notes",
+    "tag": "v0.1.0-preview.6"
   },
   "myTube": {
     "repository": "oneworkspacestudio/my-tube",
@@ -90,27 +90,27 @@
     "sha256": "392273b43dc97c468e395ab0010276864b6ac70a719dcb2c18d7b09b81ebd129"
   },
   "myTasks": {
-    "sha256": "b1a7d71397db16ec21e2dd6554817382482d6e45b46a6807830d65d6a99bc0bf",
-    "asset": "my-tasks-0.1.0-preview.1-windows-amd64.zip",
-    "tag": "v0.1.0-preview.1",
-    "repository": "oneworkspacestudio/my-tasks"
+    "sha256": "6343e54eda5106d3f95be5ef55afb54e7ea2aa4e15c2f4bad7c420ab243420a0",
+    "asset": "my-tasks-0.1.0-preview.2-windows-amd64.zip",
+    "repository": "oneworkspacestudio/my-tasks",
+    "tag": "v0.1.0-preview.2"
   },
   "myPDF": {
-    "sha256": "b7499ddd08128ab698c572163933e146c6e5e449b107832fad3b92e43217c0de",
-    "asset": "my-pdf-0.1.0-preview.1-windows-amd64.zip",
-    "tag": "v0.1.0-preview.1",
-    "repository": "oneworkspacestudio/my-pdf"
+    "sha256": "11160b44e4caea7f862053dc57ffe1d55c7730e05c8f6f46f7bb7d14fc460cd8",
+    "asset": "my-pdf-0.1.0-preview.2-windows-amd64.zip",
+    "repository": "oneworkspacestudio/my-pdf",
+    "tag": "v0.1.0-preview.2"
   },
   "myMonitor": {
-    "sha256": "8032bf36bbf3c0031a4a8388d183e2db8ec410f677e500d57c8f629e9643926c",
-    "asset": "my-monitor-0.1.0-preview.1-windows-amd64.zip",
-    "tag": "v0.1.0-preview.1",
-    "repository": "oneworkspacestudio/my-monitor"
+    "sha256": "e12fa691948a175e4408973cbf0266eb905cff4d08a0c73e914ddd8884c0bb25",
+    "asset": "my-monitor-0.1.0-preview.2-windows-amd64.zip",
+    "repository": "oneworkspacestudio/my-monitor",
+    "tag": "v0.1.0-preview.2"
   },
   "mySearch": {
-    "sha256": "760a8e780fbe7a47033c03cb93e23931a40b13bc889f013a6cfbe13fc378582d",
-    "asset": "my-search-0.1.0-preview.1-windows-amd64.zip",
-    "tag": "v0.1.0-preview.1",
-    "repository": "oneworkspacestudio/my-search"
+    "sha256": "4e0fc1b825e506e184f01c38705766a88ea5a676d4d8f96446688e71cbb1c75d",
+    "asset": "my-search-0.1.0-preview.2-windows-amd64.zip",
+    "repository": "oneworkspacestudio/my-search",
+    "tag": "v0.1.0-preview.2"
   }
 }
