@@ -50,3 +50,15 @@ No owner installation served as a feature fixture. These checks do not certify
 every feature, hostile-input security, a clean physical host, Windows service
 startup, actual reboot, Internet mail or Vault decryption. Existing preview and
 component limitations remain in RELEASE-STATUS.md and ECOSYSTEM-REVIEW.md.
+
+### Published release verification
+
+[Workspace preview.40](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.40)
+includes the public [My PDF preview.3](https://github.com/oneworkspacestudio/my-pdf/releases/tag/v0.1.0-preview.3).
+All23 Workspace asset sizes/digests matched, all91 bundled packages plus the
+catalog were checked, and public installer/bundle downloads were available.
+A real39-controller PDF upgrade and40-installer manager upgrade preserved the
+synthetic schema1 document and installation identity/paths; the migrated document
+and new PDFs saved to ordinary Drive files with matching downloaded bytes.
+The fixture was stopped and removed. The owner's installation was not updated
+by these checks. Published assets remain immutable.
