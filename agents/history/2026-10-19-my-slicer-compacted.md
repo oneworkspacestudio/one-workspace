@@ -63,3 +63,47 @@ Keep owner identity/settings and latest rollback. Stop all task fixture managers
 children; exact synthetic C:/Projects/.cache/my-slicer-20261019 roots may be removed
 after process/reparse checks; programs/files/artifacts onI. No broad C cleanup.
 External receipts/logs in I:/Projects/tooling/my-slicer, no credentials in history.
+
+Later availability check: owner41 was no longer running; local8990 refused and
+public Workspace/Accounts returned530. Last Drive health was21:45:26 local; saved
+startup/running markers were stale. No owner update had been attempted; old update
+journal remained complete. Scoped fixture Stop uses each installation's control
+token and port, not a global executable kill. No sampled Application crash event
+established why the manager exited. Owner autostart remains false; do not call this
+proof of the exit cause. Restarted existing owner41 explicitly --data/run at22:03
+local. Ready21/21 by22:05; all18 process/tunnel states running. Public portal, health,
+Accounts discovery and Vault root returned200. Existing SMTP/router warning remains
+distinct from portal availability; no email delivery claim. Identity/DNS/config
+unchanged. External owner-restored logs hold bounded operational diagnostics.
+
+Workspace source5ebc588 is on org main. Release42 draft417730490 initially had24/26
+assets: interrupted large uploads, not a published release or owner update. Resumed
+installer/bundle uploads onI; verify every remote size/digest before publication.
+MySlicer app1 is already published. Synthetic task previews stopped and exact C
+fixture root removed after process/reparse checks:30036 files/4012540546 bytes;
+owner installation and rollbacks preserved. Receipts remain external onI.
+
+Authorized owner update subsequently applied exact approved42 artifacts while
+large public uploads continued (therefore not described as a public download at
+application time). Source/payload SHA checks preceded installation. Completed
+22:14 local: owner now0.3.0-preview.42,20 apps, Slicer0.1.0-preview.1; final manager
+and Slicer hashes match approved artifacts. Identity/data/programs/files/origin
+unchanged. Journal complete; all19 process/tunnel states running, public health,
+Accounts discovery and Vault root200. Remote portal browser reaches normal
+MyAccounts sign-in; no owner credentials entered or owner-data functional tests.
+Direct unauthenticated /slicer is401 by portal policy; launch via Workspace app
+card /_workspace/open/slicer. User asked to enter both printers privately; no
+physical connection or printing acceptance claimed. Newest verified recovery
+update-20261019T211017-e3df2b91e52e retained; cleanup removed one older rollback,
+3004537321 bytes. owner-update42-receipt.json and protected cleanup journal verify.
+Do not rerun the owner update just to finish publication.
+
+Publication finished22:19 local: public v0.3.0-preview.42, release417730490,
+all26 asset sizes and SHA256 digests match local installed build. Tag resolves
+source5ebc588 and Actions remains disabled. Public release URL:
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.42
+My Slicer public1 and Workspace42 are released, owner updated, tunnel running.
+Earlier pending upload/source notes are historical and superseded by this entry.
+Remaining acceptance requires private physical printer pairing and explicit human
+Print; no reboot/SCM/second-host/security-audit certification. Source-only history
+follow-up can move main without rebuilding or rewriting immutable release tags.
