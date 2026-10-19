@@ -60,3 +60,44 @@ under I:/Projects/tooling/update-cleanup-release; NTFS disposable state uses onl
 C:/Projects/.cache/workspace-cleanup-20261019. Track and stop all fixture PIDs;
 clean only that verified non-reparse named root after testing. Current owner
 C:/tmp/workspace/{Apps,Private,Files} must remain untouched.
+
+## Published and completed
+
+Published [v0.3.0-preview.39](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.39) from
+`d05764981b52459f3e217a1b779d1048b5abd8cf`. All22 GitHub asset sizes/digests matched local artifacts;
+all91 embedded members passed hash/size verification. Public catalog downloaded
+and verified; public installer and bundle download availability checked. Actions
+remain disabled and were not used. No component versions/pins changed from38.
+
+Real native acceptance: isolated selected Accounts+Notes installation used the
+published37 installer, upgraded through the38 controller and then the new39
+installer. Cleanup removed one completed-journal-proven legacy rollback and one
+owned stale stage (246,200,848 bytes), retained exactly one verified
+automatic update rollback, preserved an unknown stage and ordinary file, and
+preserved owner/issuer/ports/paths. Independently hashed every retained backup
+file (320 files). Installed manager matches the release; services healthy.
+
+Second isolated native test used the old38 controller to install39. The new
+manager waited for commit/lock release and then removed its owned stale stage;
+retained legacy rollback verified, final services healthy. This exercises the
+compatibility handoff in a real process, not only mocks. Desktop1280 and mobile390
+update-window screenshots were captured with browser-screenshot and reviewed:
+cleanup counts, freed-space summary, policy and restore control fit both layouts.
+Final suite/maintenance/platform/distribution tests and vet passed. Corrupt-copy
+messages explicitly avoid claiming verification succeeded. Existing independent
+audit/clean physical host/reboot/SCM and component product limits remain.
+
+Stopped both fixtures and the isolated maintenance window, verified no task
+process references or reparse points, removed the exact named C disposable root:
+556,840,872 additional bytes reclaimed. Builds/artifacts/evidence remain
+under I:/Projects/tooling/update-cleanup-release. Owner Apps/Private/Files were
+preserved and the owner public health still returned200 after cleanup. No owner
+upgrade/deployment, DNS, credentials, autostart or tunnel configuration change.
+The separate owner availability task's runtime was left running.
+
+No required publication work remains. Recovery/manual/scheduled and unknown
+legacy backups are preserved; only a completed journal can classify the last
+legacy automatic rollback. Unregistered app runtime caches and unlabelled old
+staging folders remain conservative exclusions, not a generic disk-cleaner claim.
+Preserve three unrelated untracked earlier availability/history files. This final
+receipt is a documentation-only follow-up; do not retag or replace release assets.
