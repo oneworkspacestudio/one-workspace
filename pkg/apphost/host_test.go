@@ -57,6 +57,24 @@ func TestLocalIdentityCSRFIsolationAndManagedRestrictions(t *testing.T) {
 	if json.Unmarshal(me.Body.Bytes(), &session) != nil || session.User.Role != "owner" || session.CSRF == "" {
 		t.Fatal(me.Body.String())
 	}
+	if me.Header().Get("X-Workspace-Account") != session.User.ID {
+		t.Fatal("missing authenticated response account")
+	}
+	r := httptest.NewRequest("POST", h.Config.Origin+"/api/local-users", strings.NewReader(`{"email":"wrong@example.test","password":"fixture-password"}`))
+	r.AddCookie(cookie)
+	r.Header.Set("Origin", h.Config.Origin)
+	r.Header.Set("X-CSRF-Token", session.CSRF)
+	r.Header.Set("X-Workspace-Expected-Account", "another-account")
+	mismatch := httptest.NewRecorder()
+	h.Handler().ServeHTTP(mismatch, r)
+	if mismatch.Code != 409 || mismatch.Header().Get("X-Workspace-Account") != session.User.ID {
+		t.Fatal("stale account request executed", mismatch.Code)
+	}
+	var wrong int
+	h.DB.QueryRow("SELECT COUNT(*) FROM host_users WHERE email='wrong@example.test'").Scan(&wrong)
+	if wrong != 0 {
+		t.Fatal("account mismatch wrote a user")
+	}
 	input := map[string]string{"email": "member@example.test", "password": "fixture-password"}
 	if w := call(h, "POST", "/api/local-users", input, cookie, ""); w.Code != 403 {
 		t.Fatal("CSRF accepted", w.Code)

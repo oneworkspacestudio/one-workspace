@@ -295,6 +295,11 @@ func (h *Host) Require(fn http.HandlerFunc) http.HandlerFunc {
 			Problem(w, 401, "Your app session needs reconnecting. Continue with MyAccounts.")
 			return
 		}
+		w.Header().Set("X-Workspace-Account", s.User.ID)
+		if expected := r.Header.Get("X-Workspace-Expected-Account"); expected != "" && !Equal(expected, s.User.ID) {
+			Problem(w, http.StatusConflict, "The signed-in account changed. Reload the app before continuing")
+			return
+		}
 		if r.Method != "GET" && r.Method != "HEAD" {
 			if !h.sameOrigin(r) || !Equal(r.Header.Get("X-CSRF-Token"), s.CSRF) {
 				Problem(w, 403, "Refresh the app before submitting this change")
@@ -396,7 +401,7 @@ func (h *Host) Run(ctx context.Context) error {
 	if e != nil {
 		return e
 	}
-	srv := &http.Server{Handler: h.Handler(), ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 20}
+	srv := &http.Server{Handler: h.Handler(), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 2 * time.Minute, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 20}
 	done := make(chan error, 1)
 	go func() { done <- srv.Serve(l) }()
 	h.Log.Info("application started", "app", h.Config.ID, "version", h.Config.Version)
