@@ -96,6 +96,7 @@ var updateGroups = []updateGroup{
 	{"pdf", "My PDF", "my-pdf", []string{"pdf"}},
 	{"monitor", "My Monitor", "my-monitor", []string{"monitor"}},
 	{"search", "My Search", "my-search", []string{"search"}},
+	{"slicer", "My Slicer", "my-slicer", []string{"slicer"}},
 }
 
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
@@ -247,6 +248,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "slicer" || strings.HasPrefix(id, "slicer-") {
+		return "slicer"
+	}
 	if id == "tasks" || id == "tasks-LICENSE" || id == "tasks-NOTICE" || id == "tasks-THIRD-PARTY-LICENSES.txt" {
 		return "tasks"
 	}

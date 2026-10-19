@@ -1,0 +1,311 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="1200" height="620"><rect width="1200" height="620" rx="24" fill="#f7f9ff"/><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="one-workspace-title" x="60" y="20" width="80" height="80">
+  <title id="one-workspace-title">One Workspace</title>
+  <defs>
+    <linearGradient id="ow-bg" x1="38" y1="28" x2="214" y2="233" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5877FF"/>
+      <stop offset="0.48" stop-color="#2A39C7"/>
+      <stop offset="1" stop-color="#17155F"/>
+    </linearGradient>
+    <linearGradient id="ow-blue" x1="58" y1="58" x2="125" y2="125" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9AB7FF"/>
+      <stop offset="0.45" stop-color="#4E6FFF"/>
+      <stop offset="1" stop-color="#3550E8"/>
+    </linearGradient>
+    <linearGradient id="ow-grey" x1="58" y1="134" x2="122" y2="196" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F2F4F9"/>
+      <stop offset="0.52" stop-color="#D7DDE8"/>
+      <stop offset="1" stop-color="#B7C0D2"/>
+    </linearGradient>
+    <linearGradient id="ow-green" x1="140" y1="134" x2="201" y2="198" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9DEFD9"/>
+      <stop offset="0.55" stop-color="#59D7C1"/>
+      <stop offset="1" stop-color="#2CC1AF"/>
+    </linearGradient>
+    <filter id="ow-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#141A5A" flood-opacity="0.18"/>
+    </filter>
+    <filter id="ow-tile-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="4" flood-color="#16165E" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#ow-shadow)">
+    <rect x="16" y="16" width="224" height="224" rx="48" fill="url(#ow-bg)"/>
+  </g>
+
+  <g filter="url(#ow-tile-shadow)">
+    <rect x="58" y="58" width="66" height="66" rx="18" fill="url(#ow-blue)"/>
+    <rect x="132" y="58" width="66" height="66" rx="18" fill="url(#ow-grey)"/>
+    <rect x="58" y="132" width="66" height="66" rx="18" fill="url(#ow-grey)"/>
+    <rect x="132" y="132" width="66" height="66" rx="18" fill="url(#ow-green)"/>
+  </g>
+
+  <path d="M44 25C53 20 67 18 84 18H196C215 18 231 31 236 50" stroke="#B4C5FF" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M64 59C68 57 73 56 79 56H103" stroke="#D7E3FF" stroke-opacity="0.55" stroke-width="1.2" stroke-linecap="round"/>
+</svg>
+<text x="100" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">One Workspace</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="myaccounts-title" x="260" y="20" width="80" height="80">
+<title id="myaccounts-title">MyAccounts</title>
+<defs>
+<linearGradient id="myaccounts-navy" x1="49" y1="35" x2="214" y2="230" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="myaccounts-head" x1="103" y1="72" x2="155" y2="128" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<linearGradient id="myaccounts-person" x1="90" y1="147" x2="165" y2="207" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+</defs>
+<path d="M138 19 218 53C227 57 231 64 231 76V137C231 181 196 211 142 237C133 241 123 241 114 237C60 211 25 181 25 137V76C25 64 29 57 38 53L118 19C124 16 132 16 138 19Z" fill="url(#myaccounts-navy)"/>
+<circle cx="128" cy="99" r="33" fill="url(#myaccounts-head)"/>
+<path d="M73 188C77 157 97 140 128 140C159 140 179 157 183 188C187 201 173 207 128 207C83 207 69 201 73 188Z" fill="url(#myaccounts-person)"/>
+</svg>
+<text x="300" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">MyAccounts</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="drive-title" x="460" y="20" width="80" height="80">
+<title id="drive-title">Drive</title>
+<defs>
+<linearGradient id="drive-back-cloud" x1="115" y1="49" x2="189" y2="162" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#687AFF"/><stop offset="0.47" stop-color="#404CDD"/><stop offset="1" stop-color="#242074"/></linearGradient>
+<linearGradient id="drive-left-cloud" x1="45" y1="112" x2="102" y2="210" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4C52D7"/><stop offset="0.54" stop-color="#302A98"/><stop offset="1" stop-color="#211A69"/></linearGradient>
+<linearGradient id="drive-front-cloud" x1="117" y1="96" x2="222" y2="211" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#A1F4DF"/><stop offset="0.44" stop-color="#57D8BD"/><stop offset="1" stop-color="#08AB95"/></linearGradient>
+</defs>
+<path d="M67 125C67 82 98 50 138 50C178 50 209 78 211 113L186 169 92 191Z" fill="url(#drive-back-cloud)"/>
+<path d="M109 131C93 106 65 100 42 114C20 127 10 151 17 173C21 188 32 200 50 205L122 207 153 153Z" fill="url(#drive-left-cloud)"/>
+<path d="M49 205 111 123C131 97 160 88 187 97C219 108 240 131 240 160C240 187 219 209 191 209H75C65 209 56 208 49 205Z" fill="url(#drive-front-cloud)"/>
+<path d="M83 84C97 63 116 51 139 51C164 51 184 62 197 80" fill="none" stroke="#B3C2FF" stroke-opacity="0.22" stroke-width="1.1" stroke-linecap="round"/>
+</svg>
+<text x="500" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Drive</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="docs-title" x="660" y="20" width="80" height="80">
+<title id="docs-title">Docs</title>
+<defs>
+<linearGradient id="docs-navy" x1="28" y1="16" x2="226" y2="239" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="docs-fold" x1="171" y1="16" x2="235" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#A0B7FF"/><stop offset="0.53" stop-color="#7087FF"/><stop offset="1" stop-color="#495DFC"/></linearGradient>
+<linearGradient id="docs-content-block" x1="63" y1="74" x2="120" y2="135" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+<linearGradient id="docs-text" x1="0" y1="114" x2="0" y2="207" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+</defs>
+<path d="M56 16H171L235 80V207C235 225 220 240 202 240H56C38 240 23 225 23 207V49C23 31 38 16 56 16Z" fill="url(#docs-navy)"/>
+<path d="M171 16 235 80H192C180 80 171 71 171 59Z" fill="url(#docs-fold)"/>
+<rect x="60" y="74" width="65" height="60" rx="9" fill="url(#docs-content-block)" stroke="#B4F9E4" stroke-opacity="0.22" stroke-width="0.8"/>
+<rect x="142" y="114" width="54" height="18" rx="9" fill="url(#docs-text)"/>
+<rect x="60" y="153" width="136" height="18" rx="9" fill="url(#docs-text)"/>
+<rect x="60" y="189" width="136" height="18" rx="9" fill="url(#docs-text)"/>
+</svg>
+<text x="700" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Docs</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="photos-title" x="860" y="20" width="80" height="80">
+<title id="photos-title">Photos</title>
+<defs>
+<linearGradient id="photos-navy" x1="15" y1="59" x2="202" y2="227" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="photos-back-photo" x1="190" y1="65" x2="243" y2="214" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#E4EAF4"/><stop offset="1" stop-color="#9CA8C2"/></linearGradient>
+<linearGradient id="photos-green-photo" x1="78" y1="37" x2="228" y2="205" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3BD9C0"/><stop offset="0.55" stop-color="#11B8A8"/><stop offset="1" stop-color="#00A496"/></linearGradient>
+<linearGradient id="photos-moon" x1="57" y1="93" x2="95" y2="139" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<linearGradient id="photos-blue-mountain" x1="139" y1="122" x2="159" y2="227" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7185FF"/><stop offset="0.53" stop-color="#4E61EE"/><stop offset="1" stop-color="#3338D0"/></linearGradient>
+<linearGradient id="photos-grey-mountain" x1="59" y1="166" x2="103" y2="231" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#E8EDF5"/><stop offset="1" stop-color="#A0ABC2"/></linearGradient>
+<clipPath id="photos-front-photo-clip"><rect x="14" y="60" width="178" height="167" rx="26"/></clipPath>
+</defs>
+<rect x="158" y="63" width="85" height="150" rx="24" fill="url(#photos-back-photo)"/>
+<rect x="64" y="37" width="150" height="175" rx="25" fill="url(#photos-green-photo)"/>
+<path d="M217 66V187C217 202 205 214 190 214" fill="none" stroke="#F6F8FC" stroke-width="6" stroke-linecap="round"/>
+<rect x="14" y="60" width="178" height="167" rx="26" fill="url(#photos-navy)"/>
+<g clip-path="url(#photos-front-photo-clip)">
+<circle cx="74" cy="113" r="24" fill="url(#photos-moon)"/>
+<path d="M58 201 125 129C133 121 141 121 149 129L201 183V235H58Z" fill="url(#photos-blue-mountain)"/>
+<path d="M3 215 53 167C60 160 67 160 74 167L139 234H3Z" fill="url(#photos-grey-mountain)"/>
+</g>
+</svg>
+<text x="900" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Photos</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="music-title" x="1060" y="20" width="80" height="80">
+<title id="music-title">Music</title>
+<defs>
+<linearGradient id="music-stem" x1="134" y1="67" x2="155" y2="196" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#009D8D"/><stop offset="0.55" stop-color="#16B99E"/><stop offset="1" stop-color="#55DBBC"/></linearGradient>
+<linearGradient id="music-flag" x1="139" y1="16" x2="222" y2="106" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#91EFDB"/><stop offset="0.5" stop-color="#43CFB2"/><stop offset="1" stop-color="#00A992"/></linearGradient>
+<linearGradient id="music-note-head" x1="53" y1="122" x2="143" y2="228" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7985FF"/><stop offset="0.36" stop-color="#5363F5"/><stop offset="0.73" stop-color="#3736CF"/><stop offset="1" stop-color="#211571"/></linearGradient>
+</defs>
+<rect x="134" y="61" width="22" height="129" rx="0" fill="url(#music-stem)"/>
+<path d="M134 29C134 18 142 12 153 18L213 51C222 56 226 63 226 74V98C226 109 218 113 210 108L151 76C144 72 138 73 134 78Z" fill="url(#music-flag)"/>
+<circle cx="94" cy="178" r="62" fill="url(#music-note-head)"/>
+<path d="M39 150C51 127 73 116 96 117" fill="none" stroke="#CED7FF" stroke-opacity="0.2" stroke-width="1" stroke-linecap="round"/>
+</svg>
+<text x="1100" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Music</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="gitea-title" x="60" y="170" width="80" height="80">
+<title id="gitea-title">Gitea</title>
+<defs>
+<linearGradient id="gitea-navy" x1="57" y1="29" x2="190" y2="230" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="gitea-silver" x1="102" y1="56" x2="174" y2="196" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<linearGradient id="gitea-top-node" x1="104" y1="63" x2="136" y2="94" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+<linearGradient id="gitea-branch-node" x1="155" y1="119" x2="197" y2="162" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+<linearGradient id="gitea-bottom-node" x1="110" y1="169" x2="136" y2="198" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6C80FF"/><stop offset="0.48" stop-color="#455CF3"/><stop offset="1" stop-color="#3029C6"/></linearGradient>
+</defs>
+<path d="M149 25 231 107C243 119 243 137 231 149L149 231C137 243 119 243 107 231L25 149C13 137 13 119 25 107L107 25C119 13 137 13 149 25Z" fill="url(#gitea-navy)"/>
+<path d="M119 77V180M119 88 176 136" fill="none" stroke="url(#gitea-silver)" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="119" cy="77" r="25" fill="url(#gitea-silver)"/>
+<circle cx="119" cy="77" r="14" fill="url(#gitea-top-node)"/>
+<circle cx="119" cy="181" r="25" fill="url(#gitea-silver)"/>
+<circle cx="119" cy="181" r="14" fill="url(#gitea-bottom-node)"/>
+<circle cx="176" cy="138" r="25" fill="url(#gitea-branch-node)"/>
+</svg>
+<text x="100" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Git</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="photo-editor-title" x="260" y="170" width="80" height="80">
+<title id="photo-editor-title">Photo Editor</title>
+<defs>
+<linearGradient id="photo-editor-navy" x1="17" y1="25" x2="210" y2="214" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="photo-editor-blue-mountain" x1="129" y1="88" x2="151" y2="219" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7589FF"/><stop offset="0.5" stop-color="#4E68FA"/><stop offset="1" stop-color="#2B35CA"/></linearGradient>
+<linearGradient id="photo-editor-moon" x1="56" y1="54" x2="91" y2="100" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<linearGradient id="photo-editor-grey-mountain" x1="55" y1="132" x2="82" y2="213" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F2F5FC"/><stop offset="0.48" stop-color="#CAD2E1"/><stop offset="1" stop-color="#9CA8BF"/></linearGradient>
+<linearGradient id="photo-editor-brush-handle" x1="218" y1="106" x2="193" y2="182" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#535BE5"/><stop offset="0.45" stop-color="#332EAD"/><stop offset="1" stop-color="#1E176B"/></linearGradient>
+<linearGradient id="photo-editor-ferrule" x1="173" y1="164" x2="185" y2="201" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<linearGradient id="photo-editor-bristles" x1="144" y1="187" x2="178" y2="226" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+<clipPath id="photo-editor-photo-clip"><path d="M45 25H181C197 25 210 38 210 54V108L150 172C136 174 128 180 126 191L124 205C124 211 120 214 114 214H45C29 214 16 201 16 185V54C16 38 29 25 45 25Z"/></clipPath>
+</defs>
+<path d="M45 25H181C197 25 210 38 210 54V108L150 172C136 174 128 180 126 191L124 205C124 211 120 214 114 214H45C29 214 16 201 16 185V54C16 38 29 25 45 25Z" fill="url(#photo-editor-navy)"/>
+<g clip-path="url(#photo-editor-photo-clip)">
+<circle cx="70" cy="77" r="24" fill="url(#photo-editor-moon)"/>
+<path d="M57 179 136 94C143 87 152 86 160 94L219 153V221H57Z" fill="url(#photo-editor-blue-mountain)"/>
+<path d="M1 178 45 137C51 131 58 131 64 137L124 195V221H1Z" fill="url(#photo-editor-grey-mountain)"/>
+</g>
+<path d="M221 110C227 103 237 105 241 112C247 118 243 125 238 131L190 183 182 201C182 212 171 228 155 232C148 235 136 235 131 232C128 230 128 228 131 225C138 219 137 208 141 198C145 188 153 185 160 183L169 164Z" fill="#F5F8FC" stroke="#F5F8FC" stroke-width="8" stroke-linejoin="round"/>
+<path d="M221 110C227 103 237 105 241 112C247 118 243 125 238 131L190 183 169 164Z" fill="url(#photo-editor-brush-handle)"/>
+<path d="M169 164 190 183 182 201 160 183Z" fill="url(#photo-editor-ferrule)"/>
+<path d="M160 183 182 201C182 212 171 228 155 232C148 235 136 235 131 232C128 230 128 228 131 225C138 219 137 208 141 198C145 188 153 185 160 183Z" fill="url(#photo-editor-bristles)"/>
+<path d="M160 183C148 194 153 210 138 224C143 224 154 218 160 206C164 198 164 192 171 193Z" fill="#98F0D9" fill-opacity="0.22"/>
+</svg>
+<text x="300" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Photo Editor</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="mail-title" x="460" y="170" width="80" height="80">
+<title id="mail-title">Mail</title>
+<defs>
+<linearGradient id="mail-navy" x1="26" y1="77" x2="228" y2="214" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="mail-right-panel" x1="225" y1="78" x2="171" y2="197" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#211C70"/><stop offset="1" stop-color="#312EAF"/></linearGradient>
+<linearGradient id="mail-front-panel" x1="69" y1="131" x2="192" y2="221" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5268FC"/><stop offset="0.55" stop-color="#3849E8"/><stop offset="1" stop-color="#322ACC"/></linearGradient>
+<linearGradient id="mail-flap" x1="127" y1="43" x2="128" y2="155" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5272FF"/><stop offset="0.45" stop-color="#92ACFF"/><stop offset="1" stop-color="#CCD7FF"/></linearGradient>
+<clipPath id="mail-envelope-clip"><rect x="16" y="41" width="224" height="174" rx="32"/></clipPath>
+</defs>
+<rect x="16" y="41" width="224" height="174" rx="32" fill="url(#mail-navy)"/>
+<g clip-path="url(#mail-envelope-clip)">
+<path d="M240 66 131 132 240 206Z" fill="url(#mail-right-panel)"/>
+<path d="M9 209 111 128Q128 115 145 128L248 208V222H9Z" fill="url(#mail-front-panel)"/>
+<path d="M16 70C16 54 30 41 48 41H208C226 41 240 54 240 70L143 148C132 158 127 160 116 152Z" fill="url(#mail-flap)"/>
+<path d="M17 70 116 152C127 160 132 158 143 148L239 70" fill="none" stroke="#E0E7FF" stroke-opacity="0.6" stroke-width="1.2" stroke-linejoin="round"/>
+</g>
+<path d="M48 42H208C222 42 234 52 238 63" fill="none" stroke="#B9CAFF" stroke-opacity="0.35" stroke-width="1" stroke-linecap="round"/>
+</svg>
+<text x="500" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Mail</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="calendar-title" x="660" y="170" width="80" height="80">
+<title id="calendar-title">Calendar</title>
+<defs>
+<linearGradient id="calendar-body" x1="38" y1="63" x2="215" y2="236" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#332D98"/><stop offset="0.46" stop-color="#241C74"/><stop offset="1" stop-color="#171448"/></linearGradient>
+<linearGradient id="calendar-header" x1="25" y1="35" x2="224" y2="85" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4849DC"/><stop offset="0.55" stop-color="#302C93"/><stop offset="1" stop-color="#24206D"/></linearGradient>
+<linearGradient id="calendar-rings" x1="0" y1="16" x2="0" y2="65" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5677FF"/><stop offset="0.5" stop-color="#8DABFF"/><stop offset="1" stop-color="#CBDCFF"/></linearGradient>
+<linearGradient id="calendar-selected-green" x1="50" y1="108" x2="88" y2="146" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#90F0D8"/><stop offset="0.5" stop-color="#36CEB0"/><stop offset="1" stop-color="#00A38E"/></linearGradient>
+<linearGradient id="calendar-date-grey" x1="0" y1="108" x2="0" y2="201" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#BFC9DA"/><stop offset="0.47" stop-color="#A3AEC5"/><stop offset="1" stop-color="#8590AD"/></linearGradient>
+<linearGradient id="calendar-selected-blue" x1="108" y1="162" x2="147" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9CB4FF"/><stop offset="0.46" stop-color="#6583FF"/><stop offset="1" stop-color="#384DDF"/></linearGradient>
+</defs>
+<rect x="22" y="34" width="212" height="206" rx="34" fill="url(#calendar-body)"/>
+<path d="M56 34H200C219 34 234 49 234 68V84H22V68C22 49 37 34 56 34Z" fill="url(#calendar-header)"/>
+<path d="M23 84H233" fill="none" stroke="#8293FF" stroke-opacity="0.12" stroke-width="1"/>
+<rect x="60" y="16" width="22" height="48" rx="11" fill="url(#calendar-rings)" stroke="#D5E2FF" stroke-opacity="0.3" stroke-width="0.7"/>
+<rect x="170" y="16" width="22" height="48" rx="11" fill="url(#calendar-rings)" stroke="#D5E2FF" stroke-opacity="0.3" stroke-width="0.7"/>
+<rect x="50" y="108" width="38" height="38" rx="8" fill="url(#calendar-selected-green)" stroke="#F2F6FF" stroke-opacity="0.17" stroke-width="0.8"/>
+<rect x="108" y="108" width="38" height="38" rx="8" fill="url(#calendar-date-grey)" stroke="#F2F6FF" stroke-opacity="0.17" stroke-width="0.8"/>
+<rect x="166" y="108" width="38" height="38" rx="8" fill="url(#calendar-date-grey)" stroke="#F2F6FF" stroke-opacity="0.17" stroke-width="0.8"/>
+<rect x="50" y="163" width="38" height="38" rx="8" fill="url(#calendar-date-grey)" stroke="#F2F6FF" stroke-opacity="0.17" stroke-width="0.8"/>
+<rect x="108" y="163" width="38" height="38" rx="8" fill="url(#calendar-selected-blue)" stroke="#F2F6FF" stroke-opacity="0.17" stroke-width="0.8"/>
+<rect x="166" y="163" width="38" height="38" rx="8" fill="url(#calendar-date-grey)" stroke="#F2F6FF" stroke-opacity="0.17" stroke-width="0.8"/>
+</svg>
+<text x="700" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Calendar</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="contacts-title" x="860" y="170" width="80" height="80">
+<title id="contacts-title">Contacts</title>
+<defs>
+<linearGradient id="contacts-navy" x1="26" y1="36" x2="201" y2="220" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="contacts-pages" x1="207" y1="39" x2="241" y2="208" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F7FAFF"/><stop offset="0.5" stop-color="#D4DCE9"/><stop offset="1" stop-color="#A8B4CA"/></linearGradient>
+<linearGradient id="contacts-person" x1="77" y1="140" x2="157" y2="201" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+<linearGradient id="contacts-green-tab" x1="210" y1="86" x2="238" y2="159" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#47D1B5"/><stop offset="1" stop-color="#00A892"/></linearGradient>
+<linearGradient id="contacts-blue-tab" x1="211" y1="162" x2="239" y2="219" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6C80FF"/><stop offset="0.48" stop-color="#455CF3"/><stop offset="1" stop-color="#3029C6"/></linearGradient>
+<linearGradient id="contacts-head" x1="88" y1="72" x2="137" y2="124" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<clipPath id="contacts-tabs-clip"><path d="M207 40H213C228 40 240 52 240 67V191C240 208 228 221 211 221H207Z"/></clipPath>
+</defs>
+<path d="M207 40H213C228 40 240 52 240 67V191C240 208 228 221 211 221H207Z" fill="url(#contacts-pages)"/>
+<g clip-path="url(#contacts-tabs-clip)">
+<rect x="207" y="88" width="34" height="65" rx="0" fill="url(#contacts-green-tab)"/>
+<rect x="207" y="160" width="34" height="64" rx="0" fill="url(#contacts-blue-tab)"/>
+<rect x="207" y="153" width="34" height="6" rx="0" fill="#EAF0F7"/>
+</g>
+<path d="M46 35H197C203 35 207 39 207 45V211C207 217 203 221 197 221H46C29 221 16 208 16 191V65C16 48 29 35 46 35Z" fill="url(#contacts-navy)"/>
+<path d="M211 41V218" fill="none" stroke="#F7F9FD" stroke-width="4" stroke-linecap="round"/>
+<circle cx="111" cy="98" r="30" fill="url(#contacts-head)"/>
+<path d="M55 182C58 151 80 134 111 134C142 134 164 151 167 182C170 196 155 202 111 202C67 202 52 196 55 182Z" fill="url(#contacts-person)"/>
+</svg>
+<text x="900" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Contacts</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="notes-title" x="1060" y="170" width="80" height="80">
+<title id="notes-title">Notes</title>
+<defs>
+<linearGradient id="notes-navy" x1="31" y1="18" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4B4DD8"/><stop offset="0.48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient>
+<linearGradient id="notes-fold" x1="164" y1="16" x2="226" y2="78" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#98B0FF"/><stop offset="0.55" stop-color="#647EFF"/><stop offset="1" stop-color="#465CF3"/></linearGradient>
+<linearGradient id="notes-silver" x1="0" y1="100" x2="0" y2="121" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.47" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient>
+<linearGradient id="notes-mint" x1="59" y1="140" x2="190" y2="162" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8AEFD9"/><stop offset="0.42" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient>
+<linearGradient id="notes-short-line" x1="59" y1="183" x2="151" y2="202" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#D4DCEA"/><stop offset="1" stop-color="#9BA7C0"/></linearGradient>
+</defs>
+<path d="M64 16H164L226 78V206C226 225 211 240 192 240H64C45 240 30 225 30 206V50C30 31 45 16 64 16Z" fill="url(#notes-navy)"/>
+<path d="M164 16 226 78H184C173 78 164 69 164 58Z" fill="url(#notes-fold)"/>
+<rect x="58" y="102" width="132" height="18" rx="9" fill="url(#notes-silver)"/>
+<rect x="58" y="143" width="132" height="18" rx="9" fill="url(#notes-mint)"/>
+<rect x="58" y="184" width="96" height="18" rx="9" fill="url(#notes-short-line)"/>
+<path d="M64 17H163" fill="none" stroke="#9AA9FF" stroke-opacity="0.26" stroke-width="1"/>
+</svg>
+<text x="1100" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Notes</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="my-tube-title" x="60" y="320" width="80" height="80">
+  <title id="my-tube-title">My Tube</title>
+  <defs>
+    <linearGradient id="mt-bg" x1="36" y1="28" x2="220" y2="234" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5877FF"/>
+      <stop offset="0.48" stop-color="#2A39C7"/>
+      <stop offset="1" stop-color="#17155F"/>
+    </linearGradient>
+    <linearGradient id="mt-card" x1="58" y1="72" x2="171" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F4F6FB"/>
+      <stop offset="0.55" stop-color="#DCE2ED"/>
+      <stop offset="1" stop-color="#BFC8D9"/>
+    </linearGradient>
+    <linearGradient id="mt-blue-tab" x1="166" y1="72" x2="196" y2="165" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6F92FF"/>
+      <stop offset="0.52" stop-color="#3F63F2"/>
+      <stop offset="1" stop-color="#2944D2"/>
+    </linearGradient>
+    <linearGradient id="mt-green-tab" x1="185" y1="82" x2="212" y2="162" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9DEFD9"/>
+      <stop offset="0.58" stop-color="#59D7C1"/>
+      <stop offset="1" stop-color="#2CC1AF"/>
+    </linearGradient>
+    <linearGradient id="mt-play" x1="94" y1="100" x2="144" y2="153" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9DEFD9"/>
+      <stop offset="0.55" stop-color="#49D2BE"/>
+      <stop offset="1" stop-color="#12B7AD"/>
+    </linearGradient>
+    <linearGradient id="mt-progress-active" x1="44" y1="194" x2="124" y2="194" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8DEED7"/>
+      <stop offset="1" stop-color="#2CC1AF"/>
+    </linearGradient>
+    <linearGradient id="mt-progress-rest" x1="119" y1="194" x2="195" y2="194" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#CCD5E7"/>
+      <stop offset="1" stop-color="#B9C4D8"/>
+    </linearGradient>
+    <linearGradient id="mt-knob" x1="112" y1="180" x2="128" y2="204" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F7F8FB"/>
+      <stop offset="1" stop-color="#CDD6E8"/>
+    </linearGradient>
+    <filter id="mt-bg-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#141A5A" flood-opacity="0.18"/>
+    </filter>
+    <filter id="mt-card-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="3" stdDeviation="4.5" flood-color="#111854" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#mt-bg-shadow)">
+    <rect x="16" y="16" width="224" height="224" rx="48" fill="url(#mt-bg)"/>
+  </g>
+
+  <g filter="url(#mt-card-shadow)">
+    <rect x="162" y="84" width="38" height="74" rx="16" fill="url(#mt-green-tab)"/>
+    <rect x="147" y="73" width="42" height="90" rx="18" fill="url(#mt-blue-tab)"/>
+    <g transform="rotate(-3 116 122)">
+      <rect x="54" y="66" width="112" height="96" rx="22" fill="url(#mt-card)"/>
+      <path d="M96 95.5C96 91.9 99.9 89.6 103.1 91.6L141.8 116C144.8 117.9 144.9 122.3 141.9 124.3L103.2 149.5C100 151.6 96 149.3 96 145.5V95.5Z" fill="url(#mt-play)"/>
+    </g>
+  </g>
+
+  <rect x="44" y="186" width="152" height="10" rx="5" fill="url(#mt-progress-rest)"/>
+  <rect x="44" y="186" width="78" height="10" rx="5" fill="url(#mt-progress-active)"/>
+  <circle cx="122" cy="191" r="9" fill="url(#mt-knob)"/>
+
+  <path d="M44 25C53 20 67 18 84 18H196C215 18 231 31 236 50" stroke="#B4C5FF" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
+<text x="100" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Tube</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="vault-title" x="260" y="320" width="80" height="80"><title id="vault-title">My Vault</title><defs><linearGradient id="vault-gradient" x1="40" y1="28" x2="218" y2="235" gradientUnits="userSpaceOnUse"><stop stop-color="#4285F4"/><stop offset=".52" stop-color="#6256D9"/><stop offset="1" stop-color="#A04CD3"/></linearGradient></defs><rect x="26" y="20" width="204" height="216" rx="48" fill="url(#vault-gradient)"/><rect x="61" y="68" width="134" height="132" rx="27" stroke="white" stroke-width="12"/><path d="M91 70V58a37 37 0 0 1 74 0v12" stroke="white" stroke-width="12" stroke-linecap="round"/><circle cx="128" cy="128" r="19" fill="white"/><path d="M128 139v25" stroke="white" stroke-width="12" stroke-linecap="round"/><path d="M44 110h16m-16 52h16m136-52h16m-16 52h16" stroke="white" stroke-width="9" stroke-linecap="round" opacity=".7"/></svg>
+<text x="300" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Vault</text><svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="chat-title" x="460" y="320" width="80" height="80"><title id="chat-title">Chat</title><defs><linearGradient id="chat-navy" x1="20" y1="20" x2="217" y2="224" gradientUnits="userSpaceOnUse"><stop stop-color="#4B4DD8"/><stop offset=".48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient><linearGradient id="chat-mint" x1="86" y1="116" x2="233" y2="231" gradientUnits="userSpaceOnUse"><stop stop-color="#8AEFD9"/><stop offset=".5" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient><linearGradient id="chat-silver" x1="57" y1="68" x2="172" y2="125" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF"/><stop offset=".5" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient></defs><path d="M54 22h123c22 0 40 18 40 40v77c0 22-18 40-40 40H98l-52 36v-42c-17-4-30-20-30-38V62c0-22 17-40 38-40Z" fill="url(#chat-navy)"/><path d="M119 119h91c17 0 30 13 30 30v47c0 14-9 26-23 29v23l-38-24h-60c-17 0-30-13-30-30v-45c0-17 13-30 30-30Z" fill="url(#chat-mint)"/><rect x="52" y="67" width="124" height="16" rx="8" fill="url(#chat-silver)"/><rect x="52" y="99" width="82" height="16" rx="8" fill="url(#chat-silver)"/><circle cx="128" cy="171" r="8" fill="#F6FFFD"/><circle cx="164" cy="171" r="8" fill="#F6FFFD"/><circle cx="200" cy="171" r="8" fill="#F6FFFD"/><path d="M54 23h122" stroke="#9AA9FF" stroke-opacity=".3"/></svg><text x="500" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Chat</text><svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="hosting-title" x="660" y="320" width="80" height="80"><title id="hosting-title">My Hosting</title><defs><linearGradient id="hosting-navy" x1="32" y1="42" x2="218" y2="226" gradientUnits="userSpaceOnUse"><stop stop-color="#4B4DD8"/><stop offset=".48" stop-color="#302B99"/><stop offset="1" stop-color="#1C165E"/></linearGradient><linearGradient id="hosting-mint" x1="83" y1="35" x2="175" y2="166" gradientUnits="userSpaceOnUse"><stop stop-color="#8AEFD9"/><stop offset=".5" stop-color="#49D4BA"/><stop offset="1" stop-color="#00A58F"/></linearGradient><linearGradient id="hosting-silver" x1="51" y1="189" x2="199" y2="205" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF"/><stop offset=".5" stop-color="#E8EDF5"/><stop offset="1" stop-color="#AAB5C9"/></linearGradient></defs><path d="m128 109 108 54-108 55L20 163l31-15 77 39 77-39Z" fill="url(#hosting-navy)"/><path d="m128 142 108 54-108 55L20 196l31-15 77 39 77-39Z" fill="url(#hosting-navy)"/><path d="M113 153V76L85 104 64 83l64-65 64 65-21 21-28-28v77Z" fill="url(#hosting-mint)"/><path d="m59 184 69 35 69-35" stroke="url(#hosting-silver)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="m128 20 62 63" stroke="#D1FFF5" stroke-opacity=".3" stroke-width="1.5"/></svg>
+<text x="700" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Hosting</text><svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" x="860" y="320" width="80" height="80"><title>My Tasks</title><defs><linearGradient id="navy" x2="1" y2="1"><stop stop-color="#4b4dd8"/><stop offset=".5" stop-color="#302b99"/><stop offset="1" stop-color="#1c165e"/></linearGradient><linearGradient id="mint" x2="1" y2="1"><stop stop-color="#8aefd9"/><stop offset=".5" stop-color="#49d4ba"/><stop offset="1" stop-color="#00a58f"/></linearGradient><linearGradient id="silver" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#e8edf5"/><stop offset="1" stop-color="#aab5c9"/></linearGradient></defs><rect x="50" y="37" width="165" height="203" rx="23" fill="url(#navy)"/><rect x="37" y="23" width="165" height="203" rx="23" fill="url(#silver)"/><rect x="84" y="15" width="73" height="30" rx="10" fill="url(#mint)"/><path d="m63 84 11 11 23-25m-34 70 11 11 23-25m-34 70 11 11 23-25" stroke="url(#mint)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 87h58m-58 55h58m-58 55h39" stroke="url(#navy)" stroke-width="12" stroke-linecap="round"/></svg>
+<text x="900" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Tasks</text><svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" x="1060" y="320" width="80" height="80"><title>My PDF</title><defs><linearGradient id="navy" x2="1" y2="1"><stop stop-color="#4b4dd8"/><stop offset=".5" stop-color="#302b99"/><stop offset="1" stop-color="#1c165e"/></linearGradient><linearGradient id="mint" x2="1" y2="1"><stop stop-color="#8aefd9"/><stop offset=".5" stop-color="#49d4ba"/><stop offset="1" stop-color="#00a58f"/></linearGradient><linearGradient id="silver" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#e8edf5"/><stop offset="1" stop-color="#aab5c9"/></linearGradient></defs><path d="M64 23h98l49 50v151a15 15 0 0 1-15 15H64a15 15 0 0 1-15-15V38a15 15 0 0 1 15-15Z" fill="url(#navy)"/><path d="M48 13h98l49 50v151a15 15 0 0 1-15 15H48a15 15 0 0 1-15-15V28a15 15 0 0 1 15-15Z" fill="url(#silver)"/><path d="M146 13v49h49" fill="url(#mint)"/><rect x="53" y="107" width="156" height="66" rx="15" fill="url(#mint)"/><text x="130" y="152" text-anchor="middle" font-family="Segoe UI,Arial" font-size="42" font-weight="700" fill="#1c165e">PDF</text><path d="M63 194h96" stroke="url(#navy)" stroke-width="10" stroke-linecap="round"/></svg>
+<text x="1100" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My PDF</text><svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" x="60" y="470" width="80" height="80"><title>My Monitor</title><defs><linearGradient id="navy" x2="1" y2="1"><stop stop-color="#4b4dd8"/><stop offset=".5" stop-color="#302b99"/><stop offset="1" stop-color="#1c165e"/></linearGradient><linearGradient id="mint" x2="1" y2="1"><stop stop-color="#8aefd9"/><stop offset=".5" stop-color="#49d4ba"/><stop offset="1" stop-color="#00a58f"/></linearGradient><linearGradient id="silver" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#e8edf5"/><stop offset="1" stop-color="#aab5c9"/></linearGradient></defs><rect x="23" y="42" width="221" height="158" rx="24" fill="url(#navy)"/><rect x="12" y="29" width="221" height="158" rx="24" fill="url(#silver)"/><rect x="28" y="45" width="189" height="124" rx="13" fill="url(#navy)"/><path d="M41 111h35l18-43 30 76 21-42h57" stroke="url(#mint)" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/><path d="M98 188v33H68v14h117v-14h-32v-33" fill="url(#navy)"/></svg>
+<text x="100" y="580" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Monitor</text><svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" x="260" y="470" width="80" height="80"><title>My Search</title><defs><linearGradient id="navy" x2="1" y2="1"><stop stop-color="#4b4dd8"/><stop offset=".5" stop-color="#302b99"/><stop offset="1" stop-color="#1c165e"/></linearGradient><linearGradient id="mint" x2="1" y2="1"><stop stop-color="#8aefd9"/><stop offset=".5" stop-color="#49d4ba"/><stop offset="1" stop-color="#00a58f"/></linearGradient><linearGradient id="silver" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#e8edf5"/><stop offset="1" stop-color="#aab5c9"/></linearGradient></defs><path d="m166 157 73 67-25 27-74-70Z" fill="url(#navy)"/><path d="m169 156 57 54-19 21-58-53Z" fill="url(#mint)"/><circle cx="106" cy="101" r="87" fill="url(#navy)"/><circle cx="103" cy="96" r="78" fill="url(#silver)"/><circle cx="103" cy="96" r="57" fill="url(#navy)"/><path d="M73 89h60m-60 22h40" stroke="url(#mint)" stroke-width="10" stroke-linecap="round"/></svg>
+<text x="300" y="580" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Search</text><svg x="460" y="470" width="80" height="80" viewBox="0 0 96 96"><title id="slicer-title">My Slicer</title><defs><linearGradient id="sl-frame" x1="18" y1="8" x2="76" y2="91" gradientUnits="userSpaceOnUse"><stop stop-color="#6264FF"/><stop offset="1" stop-color="#201968"/></linearGradient><linearGradient id="sl-green" x1="37" y1="40" x2="64" y2="70" gradientUnits="userSpaceOnUse"><stop stop-color="#A3F8DD"/><stop offset="1" stop-color="#12B6A2"/></linearGradient><linearGradient id="sl-blue" x1="28" y1="63" x2="64" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#676DFF"/><stop offset="1" stop-color="#3531AD"/></linearGradient></defs><rect x="12" y="8" width="72" height="80" rx="14" fill="url(#sl-frame)"/><rect x="23" y="21" width="50" height="52" rx="5" fill="#E8ECFF"/><path d="M24 30h48" stroke="#AAAFFF" stroke-width="5"/><path d="M42 30v10l6 5 6-5V30" fill="url(#sl-green)"/><path d="m48 45 18 10-18 10-18-10 18-10Z" fill="url(#sl-green)"/><path d="m30 55 18 10 18-10v10L48 75 30 65V55Z" fill="url(#sl-blue)"/><path d="m48 65 18-10v10L48 75V65Z" fill="#211969"/><path d="m31 64 17 9 17-9" stroke="#69E5CF" stroke-width="2"/><rect x="23" y="78" width="50" height="4" rx="2" fill="#848BFF"/><circle cx="75" cy="16" r="3" fill="#6AE5CF"/></svg>
+<text x="500" y="580" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">My Slicer</text><svg  xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 96 96" x="660" y="470" width="80" height="80"><rect x="8" y="12" width="80" height="72" rx="18" fill="#e8f0fe"/><path d="M25 37h46v34H25z" fill="#4285f4"/><path d="M25 25h46v16H25z" fill="#34a853"/><path d="M48 44v19m-8-8 8 8 8-8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="68" cy="69" r="12" fill="#fbbc04"/><path d="m62 69 4 4 8-9" fill="none" stroke="#17355c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="700" y="580" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" fill="#172b4d">Backups</text></svg>

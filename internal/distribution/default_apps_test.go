@@ -20,8 +20,8 @@ func fourDefaultCatalogs() (catalog.Catalog, catalog.Catalog) {
 		incoming.Packages[id] = p
 	}
 	incoming.Packages["manager"] = fixturePackage("Workspace.exe", []byte("new-manager"))
-	for i, id := range []string{"tasks", "pdf", "monitor", "search"} {
-		name := map[string]string{"tasks": "MyTasks", "pdf": "MyPDF", "monitor": "MyMonitor", "search": "MySearch"}[id]
+	for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer"} {
+		name := map[string]string{"tasks": "MyTasks", "pdf": "MyPDF", "monitor": "MyMonitor", "search": "MySearch", "slicer": "MySlicer"}[id]
 		incoming.Packages[id] = fixturePackage(name+".exe", []byte("new-"+id))
 		for _, notice := range []string{"LICENSE", "NOTICE", "THIRD-PARTY-LICENSES.txt"} {
 			incoming.Packages[id+"-"+notice] = fixturePackage("licenses/"+name+"-"+notice, []byte("license-"+notice))
@@ -41,7 +41,7 @@ func TestManagerUpdateAutomaticallyAddsNewDefaultsAndPreservesOptOuts(t *testing
 		if e != nil {
 			t.Fatal(e)
 		}
-		for i, id := range []string{"tasks", "pdf", "monitor", "search"} {
+		for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer"} {
 			app, installed := target.Find(id)
 			want := !(id == "pdf" || id == "search") || excluded == nil
 			if installed != want {
@@ -87,7 +87,7 @@ func TestOnlinePlanDiscoversSameFourNewApplications(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	for _, id := range []string{"tasks", "pdf", "monitor", "search"} {
+	for _, id := range []string{"tasks", "pdf", "monitor", "search", "slicer"} {
 		if _, ok := target.Find(id); !ok {
 			t.Fatal("new app missing", id)
 		}
@@ -95,7 +95,7 @@ func TestOnlinePlanDiscoversSameFourNewApplications(t *testing.T) {
 			t.Fatal("new executable not downloaded", id)
 		}
 	}
-	if len(downloads) < 17 {
-		t.Fatal(fmt.Sprintf("expected manager plus executable/notices for four apps; got %d", len(downloads)))
+	if len(downloads) < 21 {
+		t.Fatal(fmt.Sprintf("expected manager plus executable/notices for five apps; got %d", len(downloads)))
 	}
 }

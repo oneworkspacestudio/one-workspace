@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"slicer", "My Slicer", "/slicer", "/api/me", "/slicer/auth/login", "/slicer/auth/logout", []string{"slicer_session"}},
 	{"tasks", "My Tasks", "/tasks", "/api/me", "/tasks/auth/login", "/tasks/auth/logout", []string{"tasks_session"}},
 	{"pdf", "My PDF", "/pdf", "/api/me", "/pdf/auth/login", "/pdf/auth/logout", []string{"pdf_session"}},
 	{"monitor", "My Monitor", "/monitor", "/api/me", "/monitor/auth/login", "/monitor/auth/logout", []string{"monitor_session"}},

@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.41',
+ [string]$Version='0.3.0-preview.42',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261014.2',
  [string]$DriveVersion='photos-preview-local',
@@ -27,6 +27,9 @@ param(
  [string]$Chat='',
  [string]$ChatVersion='0.1.0-preview.4',
  [string]$ChatNotices='',
+ [string]$MySlicer='',
+ [string]$MySlicerVersion='0.1.0-preview.1',
+ [string]$MySlicerNotices='',
  [string]$MyTasks='',
  [string]$MyTasksVersion='0.1.0-preview.1',
  [string]$MyTasksNotices='',
@@ -91,6 +94,7 @@ try {
   foreach($name in @('OPERATIONS.md','PUBLISHING.md','FRAMEWORKS.md','ACCEPTANCE.md','openapi.json')){$inputs['hosting-doc-'+$name]=@{source=(Join-Path $MyHostingNotices ('docs/'+$name));file=('docs/MyHosting/'+$name)}}
  }
  if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","SIGN-IN.md","PRODUCTION-GATES.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
+ if($MySlicer){$inputs['slicer']=@{source=$MySlicer;file='MySlicer.exe'};if(-not $MySlicerNotices){throw 'My Slicer requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['slicer-'+$name]=@{source=(Join-Path $MySlicerNotices $name);file='licenses/MySlicer-'+$name}};foreach($name in @('SETUP.md','ACCEPTANCE.md','ENGINE.md')){$inputs['slicer-doc-'+$name]=@{source=(Join-Path $MySlicerNotices ('docs/'+$name));file='docs/MySlicer/'+$name}};$inputs['slicer-contract']=@{source=(Join-Path $MySlicerNotices 'compatibility.json');file='docs/MySlicer/compatibility.json'}}
  if($MyTasks){$inputs['tasks']=@{source=$MyTasks;file='MyTasks.exe'};if(-not $MyTasksNotices){throw 'My Tasks requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['tasks-'+$name]=@{source=(Join-Path $MyTasksNotices $name);file='licenses/MyTasks-'+$name}}}
  if($MyPDF){$inputs['pdf']=@{source=$MyPDF;file='MyPDF.exe'};if(-not $MyPDFNotices){throw 'My PDF requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['pdf-'+$name]=@{source=(Join-Path $MyPDFNotices $name);file='licenses/MyPDF-'+$name}}}
  if($MyMonitor){$inputs['monitor']=@{source=$MyMonitor;file='MyMonitor.exe'};if(-not $MyMonitorNotices){throw 'My Monitor requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['monitor-'+$name]=@{source=(Join-Path $MyMonitorNotices $name);file='licenses/MyMonitor-'+$name}}}
@@ -117,6 +121,7 @@ try {
  foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){
   if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data',('${DATA}/'+$dependent.id),'--shared-data','${DATA}/shared','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base',('/'+$dependent.id),'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar/releases/tag/v'+$CalendarVersion}}
  }
+ if($MySlicer){$apps+=@{id='slicer';name='My Slicer';description='Native A1/A1 mini slicing, real toolpath preview and local printing';version=$MySlicerVersion;kind='process';package='slicer';executable='MySlicer.exe';port=9012;route='/slicer';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/slicer/auth/callback';args=@('--data','${DATA}/slicer','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/slicer','--no-browser');source='https://github.com/oneworkspacestudio/my-slicer/releases/tag/v'+$MySlicerVersion}}
  if($MyTasks){$apps+=@{id='tasks';name='My Tasks';description='Private and shared tasks, recurrence and reminders';version=$MyTasksVersion;kind='process';package='tasks';executable='MyTasks.exe';port=9008;route='/tasks';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/tasks/auth/callback';args=@('--data','${DATA}/tasks','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/tasks','--no-browser');source='https://github.com/oneworkspacestudio/my-tasks/releases/tag/v'+$MyTasksVersion}}
  if($MyPDF){$apps+=@{id='pdf';name='My PDF';description='PDF viewing, annotations and copy-oriented tools';version=$MyPDFVersion;kind='process';package='pdf';executable='MyPDF.exe';port=9009;route='/pdf';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/pdf/auth/callback';args=@('--data','${DATA}/pdf','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/pdf','--no-browser');source='https://github.com/oneworkspacestudio/my-pdf/releases/tag/v'+$MyPDFVersion}}
  if($MyMonitor){$apps+=@{id='monitor';name='My Monitor';description='Private uptime monitoring and opt-in public status';version=$MyMonitorVersion;kind='process';package='monitor';executable='MyMonitor.exe';port=9010;route='/monitor';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/monitor/auth/callback';args=@('--data','${DATA}/monitor','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/monitor','--no-browser');source='https://github.com/oneworkspacestudio/my-monitor/releases/tag/v'+$MyMonitorVersion}}

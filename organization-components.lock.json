@@ -112,5 +112,11 @@
     "asset": "my-search-0.1.0-preview.2-windows-amd64.zip",
     "repository": "oneworkspacestudio/my-search",
     "tag": "v0.1.0-preview.2"
+  },
+  "mySlicer": {
+    "repository": "oneworkspacestudio/my-slicer",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-slicer-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "1f431ec7b893a6591eaf067f10ef8145f5012e158e6b81d2e0ce66e814f4890e"
   }
 }

@@ -16,7 +16,7 @@ import (
 )
 
 func foundationApp(id string) bool {
-	return id == "tasks" || id == "pdf" || id == "monitor" || id == "search"
+	return id == "slicer" || id == "tasks" || id == "pdf" || id == "monitor" || id == "search"
 }
 func monitorCapability(secret string) string {
 	if secret == "" {

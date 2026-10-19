@@ -1,5 +1,14 @@
 # October 19 release status
 
+## Preview42: My Slicer
+
+Adds My Slicer 0.1.0-preview.1 from the organization release with a matching icon,
+shared MyAccounts sign-in/logout, Drive ordinary-file copies, `/slicer/` routing,
+private data, backups and default-app installer/updater selection. Native A1/A1 mini
+slicing uses a separately downloaded, hash-pinned official engine. See
+[My Slicer integration and exact acceptance limits](MY-SLICER.md).
+No GitHub Actions are used. Existing preview and component limitations remain.
+
 ## Preview 41: automatic adaptive My Tube streaming
 
 Pins My Tube 0.1.0-preview.2. Windows x 64 automatically downloads checksum-pinned

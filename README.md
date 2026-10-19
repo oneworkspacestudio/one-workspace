@@ -21,7 +21,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite-db81f244.png)
+![Current One Workspace and app logos](docs/branding/app-suite-slicer.png)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 
@@ -149,6 +149,12 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
       <td valign="middle"><strong>Backups</strong></td>
       <td valign="middle">Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default.</td>
       <td valign="middle">Built into One Workspace</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_slicer.svg" alt="My Slicer logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Slicer</strong></td>
+      <td valign="middle">Prepare STL and supported Bambu 3MF, slice with the native engine, preview real layers and print locally to A1 / A1 mini. <a href="docs/MY-SLICER.md">Setup and acceptance limits</a>.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-slicer">my-slicer</a></td>
     </tr>
   </tbody>
 </table>
