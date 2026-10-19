@@ -1,5 +1,21 @@
 # October 19 release status
 
+## Preview40: reliable My PDF saves to Drive
+
+Pins My PDF 0.1.0-preview.3 in both the complete installer and update catalog.
+Managed PDF uploads, image conversions and browser/native processed PDF copies
+save as ordinary Drive files while the app remains open. Per-file save status,
+numbered duplicates, durable retries and custom destinations preserve originals.
+Existing library documents are not silently exported; use Save to Drive.
+
+Ten isolated managed browser checks, a final native completion smoke, all PDF
+Go tests/vet and eleven frontend checks passed. Actual Drive downloads were
+compared, including duplicate naming, native rotation, browser copies and failed
+or interrupted transfers. See [PDF saving](PDF-DRIVE-SAVE.md) for exact scope.
+No live account data was used. Built locally without GitHub Actions. Existing
+unsigned preview, clean-host/reboot/service, independent audit and component
+limits remain. Schema2 app-data downgrade requires a compatible backup restore.
+
 ## Preview37: Tasks, PDF, Monitor and Search
 
 Adds four original Apache-2.0 native Windows applications from pinned organization

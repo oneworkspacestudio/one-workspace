@@ -96,10 +96,10 @@
     "tag": "v0.1.0-preview.2"
   },
   "myPDF": {
-    "sha256": "11160b44e4caea7f862053dc57ffe1d55c7730e05c8f6f46f7bb7d14fc460cd8",
-    "asset": "my-pdf-0.1.0-preview.2-windows-amd64.zip",
     "repository": "oneworkspacestudio/my-pdf",
-    "tag": "v0.1.0-preview.2"
+    "tag": "v0.1.0-preview.3",
+    "asset": "my-pdf-0.1.0-preview.3-windows-amd64.zip",
+    "sha256": "4afe27f0cc0e741d05f7e56b8bec577dab2dbef54205f1bb44e623da5ac952b6"
   },
   "myMonitor": {
     "sha256": "e12fa691948a175e4408973cbf0266eb905cff4d08a0c73e914ddd8884c0bb25",

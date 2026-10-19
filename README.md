@@ -129,7 +129,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
     <tr>
       <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_pdf.svg" alt="My PDF logo" width="40" height="40"></td>
       <td valign="middle"><strong>My PDF</strong></td>
-      <td valign="middle">PDF viewing, copy-oriented tools, annotations and raster redaction; Drive open/save.</td>
+      <td valign="middle">PDF viewing, annotations and copy-oriented tools; automatic Drive saves with status and retry.</td>
       <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-pdf">my-pdf</a></td>
     </tr>
     <tr>
@@ -152,6 +152,8 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
     </tr>
   </tbody>
 </table>
+
+**Preview 40 fixes PDF storage in Drive.** New uploads and processed PDF copies save automatically into **Drive / My PDF**, with per-file status, numbered duplicates and retries. Existing library documents have a Save to Drive action. See [saving details and limits](docs/PDF-DRIVE-SAVE.md).
 
 **Preview 37 adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. All four have native Windows downloads, MyAccounts sign-in, matching branding and encrypted recovery. See [delivery and tested limits](docs/FOUR-APPS-DELIVERY.md).
 
