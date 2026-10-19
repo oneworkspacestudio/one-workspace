@@ -1,4 +1,22 @@
-# October 18 release status
+# October 19 release status
+
+## Preview37: Tasks, PDF, Monitor and Search
+
+Adds four original Apache-2.0 native Windows applications from pinned organization
+releases, plus Notes preview.5's authenticated current-user identity endpoint.
+The installer and updater add new default apps, preserve explicit opt-outs and
+existing ports, and register app sign-in, private data, backup and health checks.
+The launcher, original overview artwork, app marks and README table include all
+four applications. No GitHub Actions are used.
+
+Local synthetic NTFS fixtures passed native standalone desktop/mobile flows,
+same-window account switching, encrypted new-folder recovery, real MyAccounts
+single sign-on, Drive/PDF import and save-copy, Monitor registry privacy, Search
+federation/deletion/account isolation, viewer sharing/revocation and suite logout.
+Source tests/vet and pinned independent release builds passed. See
+[delivery evidence and limits](FOUR-APPS-DELIVERY.md). This is an unsigned preview;
+no second-machine, actual reboot, Windows-service or independent security audit
+certification is claimed. Existing component limitations below remain.
 
 ## Preview36: My Hosting and free site publishing
 

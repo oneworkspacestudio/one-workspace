@@ -44,6 +44,7 @@ type Secrets struct {
 	MailDNSToken     string            `json:"mailDnsToken,omitempty"`
 }
 type Request struct {
+	NoShortcuts  bool     `json:"noShortcuts,omitempty"`
 	SelectedApps []string `json:"selectedApps,omitempty"`
 	Offline      bool     `json:"-"`
 	Folder       string   `json:"folder,omitempty"`

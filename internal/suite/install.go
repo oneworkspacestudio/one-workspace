@@ -202,8 +202,10 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	if e = platform.Autostart(manager, c.Data, r.Autostart); e != nil {
 		return empty, e
 	}
-	if e = platform.Shortcut(manager, c.Data); e != nil {
-		return empty, fmt.Errorf("apps installed but Start Menu shortcut failed: %w", e)
+	if !r.NoShortcuts {
+		if e = platform.Shortcut(manager, c.Data); e != nil {
+			return empty, fmt.Errorf("apps installed but Start Menu shortcut failed: %w", e)
+		}
 	}
 	// The program-side pointer contains no credentials and enables a normal launch.
 	if e = platform.SaveJSON(filepath.Join(c.Programs, "workspace-location.json"), map[string]string{"data": c.Data}); e != nil {

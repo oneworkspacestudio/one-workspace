@@ -203,3 +203,40 @@ Full suite tests and vet passed before the final checksum-restore hardening;
 repeat final gates. Current app-suite PNG updated with four new marks and a new
 content-addressed README URL; original illustrated showcase preserved. Source
 foundation publication to feature branch is next; no product release yet.
+
+## Final delivery correction (19 October)
+
+Earlier resume lists above describe intermediate work. Final independent app
+sources pin public apphost b1c1f801ccb2 via immutable pseudo-version; no local
+replacements/GOWORK for release. My Tasks/PDF/Monitor/Search are original Apache2
+repos; actual Notes org repo is notes, native preview.5 adds /api/identity.
+
+Final native standalone binaries passed eight Chrome checks including same-SPA
+account switching, private-draft clearing and expected-account rejection. Final
+managed native package update passed all eighteen checks in scripts/four-apps-e2e.mjs:
+one MyAccounts password, six app SSO flows, actual Drive/PDF import/save-byte-copy,
+Monitor registry/status privacy, real Search sources/deletion/XSS strings,
+second-user isolation/viewer sharing/edit denial/revocation/non-owner Monitor403,
+and app-initiated full Workspace logout/cookie cleanup. Full suite tests/vet pass.
+Four encrypted standalone backups/new-folder restores passed. Actual old36 install
+updated with new37 controller added four defaults, preserved ports/identity/old
+omissions; separate Notes update enables identity connector. Old-controller bridge
+requires published exact manager/catalog; postpublication native check remains.
+
+Packaging: PowerShell7 local builds, pinned dependencies, full license texts,
+compatibility/build metadata, original matching SVG/PNG/ICO and synthetic UI
+screenshots. New runtime npm audits0; Go source scans0 reachable/imported findings,
+module-only findings retained. Existing Notes moderate sprintf-js precision DoS
+has no upstream fix. No clean-host/reboot/SCM/independent-audit claim; preview only.
+
+Release outputs/evidence remain external on I:/Projects/tooling/four-apps.
+Publish four preview.1 apps and Notes preview.5, pin actual published ZIP digests,
+build full org19 catalog, push main fast-forward, publish suite preview.37. No
+Actions. Root has intentional NoShortcuts fixture isolation, strict19 catalog
+check, provenance-after-all-downloads and managed E2E script changes. Preserve two
+unrelated untracked older histories. Final release/cleanup outcome follows below.
+
+Cleanup: only named C:/Projects/.cache/workspace-four-apps-20261018 fixtures after
+verified process stops. Owner C:/tmp/workspace and newest rollback preserved;
+unrelated Hosting acceptance/public-preview19007 preserved. All large builds,
+downloads/source/cache/packages on I:. Do not delete unknown owner/user data.

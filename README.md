@@ -153,7 +153,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
   </tbody>
 </table>
 
-**Preview 37 candidate adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. Build and acceptance work is in progress on this branch. See [delivery status](docs/FOUR-APPS-DELIVERY.md).
+**Preview 37 adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. All four have native Windows downloads, MyAccounts sign-in, matching branding and encrypted recovery. See [delivery and tested limits](docs/FOUR-APPS-DELIVERY.md).
 
 **Preview 36 adds My Hosting.** Deploy trusted static sites, Node/Express and
 tested Next/Nuxt builds with real logs, previews, rollback, encrypted backups and
