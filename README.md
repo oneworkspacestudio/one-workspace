@@ -209,7 +209,10 @@ Your computer needs to stay on while you use the apps. Access through your own w
 The owner can open **Updates and backups** from Workspace administration to check
 Workspace and its apps, choose compatible releases and update with verified backups
 and automatic rollback. Existing accounts, app data, files and storage locations
-are retained. The update window runs locally on your Windows PC.
+are retained. After a successful update, [automatic cleanup](docs/UPDATE-CLEANUP.md)
+keeps the latest verified rollback and removes older automatic update copies and
+owned temporary update folders. Scheduled backups remain separate. The update
+window runs locally on your Windows PC.
 
 For an older installation, download the newest installer and choose **Already have
 One Workspace?** on its first screen. [Update, backup and recovery guide](docs/UPDATES.md).

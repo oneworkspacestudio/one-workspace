@@ -24,7 +24,7 @@ The PC and Workspace must be running. A missed scheduled run is picked up within
 30 seconds of startup. Runs do not overlap updates, recovery or each other.
 An unavailable/full drive produces a visible error; failures retry after
 30 minutes while Workspace remains running. Restarting Workspace may retry a
-missed run sooner. Copies are retained until the owner removes them; no automatic
+missed run sooner. Copies created by the Backups app are retained until the owner removes them; no automatic
 pruning is performed.
 
 ## What happens during a backup

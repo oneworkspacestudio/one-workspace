@@ -37,7 +37,7 @@ type operationState struct {
 
 func (s *Server) beginLocked(kind string) {
 	now := time.Now().UTC()
-	steps := []operationStep{{ID: "prepare", Label: "Prepare update"}, {ID: "download", Label: "Download releases"}, {ID: "stage", Label: "Check downloaded packages"}, {ID: "preflight", Label: "Check storage and restart"}, {ID: "backup", Label: "Back up your workspace"}, {ID: "verify", Label: "Verify backup"}, {ID: "install", Label: "Install updates"}, {ID: "restart", Label: "Restart and check apps"}}
+	steps := []operationStep{{ID: "prepare", Label: "Prepare update"}, {ID: "download", Label: "Download releases"}, {ID: "stage", Label: "Check downloaded packages"}, {ID: "preflight", Label: "Check storage and restart"}, {ID: "backup", Label: "Back up your workspace"}, {ID: "verify", Label: "Verify backup"}, {ID: "install", Label: "Install updates"}, {ID: "restart", Label: "Restart and check apps"}, {ID: "cleanup", Label: "Clean up old update files"}}
 	if kind == "check" {
 		steps = []operationStep{{ID: "check", Label: "Check published app releases"}}
 	}

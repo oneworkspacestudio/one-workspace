@@ -12,21 +12,22 @@ import (
 	"strings"
 	"time"
 
+	"github.com/oneworkspacestudio/calendar/shared"
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/distribution"
 	"github.com/oneworkspacestudio/one-workspace/internal/operationprogress"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
-	"github.com/oneworkspacestudio/calendar/shared"
 )
 
 type UpdateJournal struct {
-	Schema   int            `json:"schema"`
-	Phase    string         `json:"phase"`
-	Backup   BackupReceipt  `json:"backup"`
-	Recovery *BackupReceipt `json:"recovery,omitempty"`
-	Token    string         `json:"token,omitempty"`
-	Error    string         `json:"error,omitempty"`
-	Updated  time.Time      `json:"updated"`
+	Schema                  int            `json:"schema"`
+	Phase                   string         `json:"phase"`
+	Backup                  BackupReceipt  `json:"backup"`
+	Recovery                *BackupReceipt `json:"recovery,omitempty"`
+	PreviousAutomaticBackup *BackupReceipt `json:"previousAutomaticBackup,omitempty"`
+	Token                   string         `json:"token,omitempty"`
+	Error                   string         `json:"error,omitempty"`
+	Updated                 time.Time      `json:"updated"`
 }
 
 var errRestoredNeedsStart = errors.New("original data and programs restored, but Workspace could not start")
@@ -353,11 +354,11 @@ func ApplyUpdates(ctx context.Context, data string, plan distribution.UpdatePlan
 	if e != nil {
 		return e
 	}
-	stage, e := os.MkdirTemp(filepath.Join(c.Data, "updates"), "stage-")
+	stage, e := newUpdateStage(c)
 	if e != nil {
 		return e
 	}
-	defer os.RemoveAll(stage)
+	defer removeUpdateStage(c, stage, report)
 	if e = distribution.StageUpdateFiles(ctx, target, sources, stage, report); e != nil {
 		return e
 	}
@@ -404,11 +405,11 @@ func UpdateFromBundle(ctx context.Context, data, bundle, backupRoot string, sele
 			partial.Packages[id] = p
 		}
 	}
-	stage, e := os.MkdirTemp(filepath.Join(c.Data, "updates"), "stage-")
+	stage, e := newUpdateStage(c)
 	if e != nil {
 		return e
 	}
-	defer os.RemoveAll(stage)
+	defer removeUpdateStage(c, stage, report)
 	if e = catalog.Extract(&z.Reader, partial, stage); e != nil {
 		return e
 	}
@@ -502,7 +503,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e = CheckPorts(next); e != nil {
 		return fmt.Errorf("new app ports are unavailable: %w", e)
 	}
-	backup, e := makeUpdateBackup(ctx, c, backupRoot, report)
+	backup, e := makeBackupDetailed(ctx, c, backupRoot, report, nil, "update")
 	if e != nil {
 		lock.Close()
 		lock = nil
@@ -512,6 +513,12 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		return e
 	}
 	j := UpdateJournal{Phase: "applying", Backup: backup, Token: platform.Token()}
+	var previous UpdateJournal
+	if platform.LoadJSON(updateJournalPath(c), &previous) == nil && previous.Phase == "complete" && !previous.Backup.RecoveryOnly && !previous.Backup.CleanupPending && (previous.Backup.Purpose == "" || previous.Backup.Purpose == "update") {
+		// A completed transaction proves which legacy copy was automatic; other
+		// unlabelled snapshots might be scheduled or manual and must be kept.
+		j.PreviousAutomaticBackup = &previous.Backup
+	}
 	if e = saveUpdateJournal(c, &j); e != nil {
 		return e
 	}
@@ -636,7 +643,8 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		return e
 	}
 	committed = true
-	report("Update complete. All apps are healthy. Verified backup: " + backup.Path)
+	cleanup := cleanupSuccessfulUpdate(ctx, next, backup, stage, report)
+	report("Update complete. All apps are healthy. " + cleanup.Summary() + " Verified backup: " + backup.Path)
 	return nil
 }
 func RecoverUpdate(ctx context.Context, data string, report func(string)) error {
@@ -753,6 +761,9 @@ func RollbackUpdate(ctx context.Context, data, id string, report func(string)) e
 	}
 	if backup == nil {
 		return errors.New("choose a recorded backup for this installation")
+	}
+	if backup.CleanupPending {
+		return errors.New("this older automatic backup is being removed; choose the retained recovery backup")
 	}
 	if backup.RecoveryOnly {
 		return errors.New("this archive contains an interrupted state; choose a complete installation backup")

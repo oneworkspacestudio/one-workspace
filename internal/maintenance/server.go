@@ -149,7 +149,8 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, e.Error(), 500)
 			return
 		}
-		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked()})
+		cleanup, _ := suite.LoadUpdateCleanup(c)
+		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "cleanup": cleanup, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked()})
 	})
 	mux.HandleFunc("POST /api/check", func(w http.ResponseWriter, r *http.Request) {
 		s.work("check", func(ctx context.Context) error {

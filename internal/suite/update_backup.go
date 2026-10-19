@@ -40,14 +40,17 @@ type UpdateBackup struct {
 	Config       Config       `json:"config"`
 	Files        []BackupFile `json:"files"`
 	RecoveryOnly bool         `json:"recoveryOnly,omitempty"`
+	Purpose      string       `json:"purpose,omitempty"`
 }
 type BackupReceipt struct {
-	ID           string    `json:"id"`
-	Path         string    `json:"path"`
-	SHA256       string    `json:"sha256"`
-	Version      string    `json:"version"`
-	Created      time.Time `json:"created"`
-	RecoveryOnly bool      `json:"recoveryOnly,omitempty"`
+	ID             string    `json:"id"`
+	Path           string    `json:"path"`
+	SHA256         string    `json:"sha256"`
+	Version        string    `json:"version"`
+	Created        time.Time `json:"created"`
+	RecoveryOnly   bool      `json:"recoveryOnly,omitempty"`
+	Purpose        string    `json:"purpose,omitempty"`
+	CleanupPending bool      `json:"cleanupPending,omitempty"`
 }
 
 var privateUpdateExclusions = map[string]bool{".owner-sid": true, "backups": true, "updates": true, "maintenance": true, "logs": true, "music-runtime-temp": true, "runtime": true, "runtime.lock": true, "install.lock": true, "running.json": true, "startup-progress.json": true, "control.dpapi": true}
@@ -180,6 +183,9 @@ func makeUpdateBackup(ctx context.Context, c Config, parent string, report func(
 	return makeUpdateBackupDetailed(ctx, c, parent, report, nil)
 }
 func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, report func(string), copied func(int64, int64)) (BackupReceipt, error) {
+	return makeBackupDetailed(ctx, c, parent, report, copied, "snapshot")
+}
+func makeBackupDetailed(ctx context.Context, c Config, parent string, report func(string), copied func(int64, int64), purpose string) (BackupReceipt, error) {
 	if report == nil {
 		report = func(string) {}
 	}
@@ -258,7 +264,7 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 	if e = platform.ProtectMaintenanceDir(path, c.Data); e != nil {
 		return receipt, e
 	}
-	backup := UpdateBackup{Schema: 1, ID: id, Created: time.Now().UTC(), Config: c, RecoveryOnly: partial}
+	backup := UpdateBackup{Schema: 1, ID: id, Created: time.Now().UTC(), Config: c, RecoveryOnly: partial, Purpose: purpose}
 	report("Copying accounts, app data, programs and ordinary files")
 	operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", 0, size, "bytes")
 	var bytesDone int64
@@ -344,7 +350,7 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 	if e != nil {
 		return receipt, e
 	}
-	receipt = BackupReceipt{ID: id, Path: path, SHA256: sum, Version: c.Version, Created: backup.Created, RecoveryOnly: partial}
+	receipt = BackupReceipt{ID: id, Path: path, SHA256: sum, Version: c.Version, Created: backup.Created, RecoveryOnly: partial, Purpose: purpose}
 	if copied != nil {
 		copied(bytesDone, size)
 	}
@@ -360,6 +366,9 @@ func verifyUpdateBackup(c Config, r BackupReceipt) (UpdateBackup, error) {
 }
 func verifyUpdateBackupProgress(ctx context.Context, c Config, r BackupReceipt) (UpdateBackup, error) {
 	var b UpdateBackup
+	if r.CleanupPending {
+		return b, errors.New("this older automatic backup is being removed; choose the retained recovery backup")
+	}
 	if !filepath.IsAbs(r.Path) || r.ID == "" || filepath.Base(r.Path) != r.ID {
 		return b, errors.New("invalid backup receipt")
 	}
@@ -384,6 +393,9 @@ func verifyUpdateBackupProgress(ctx context.Context, c Config, r BackupReceipt) 
 	}
 	if b.RecoveryOnly != r.RecoveryOnly {
 		return b, errors.New("backup recovery type mismatch")
+	}
+	if b.Purpose != r.Purpose {
+		return b, errors.New("backup purpose mismatch")
 	}
 	seen := map[string]bool{}
 	for i, f := range b.Files {

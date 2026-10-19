@@ -95,8 +95,12 @@ Backups are protected on a local NTFS volume, including when programs/files use 
 Allow space for **two full copies** of the backed-up installation plus working
 space. Downloads stage under Private/updates, so that volume also needs staging
 space. Existing backups, diagnostic logs and disposable runtime extraction caches
-are excluded from each new snapshot and retained in place. Backups are never
-silently purged to make room. A failed backup prevents any program replacement.
+are excluded from each new snapshot. After a healthy update, automatic cleanup
+keeps the latest verified update recovery copy and removes older identified
+automatic update backups. Scheduled/manual snapshots, recovery archives and
+unknown legacy copies remain. Backups are never purged before a new update to
+make room. A failed backup prevents any program replacement. See
+[automatic update cleanup](UPDATE-CLEANUP.md) for the retention and safety rules.
 Custom app storage outside Programs, Private and Files is not part of this
 snapshot; back up those external locations separately before maintenance. Current
 installed versions and source URLs are recorded in the protected installation
@@ -128,7 +132,8 @@ To manually undo an update, choose a recorded backup and **Archive current state
 and restore backup**. This creates a verified snapshot of the current installation
 first. You can restore that newer snapshot again if you need post-update edits.
 The protected backup directory also contains the files and app databases for
-individual recovery. Keep backups until you have checked your work in every app.
+individual recovery. The newest automatic update rollback is retained; use the
+separate Backups app for long-term snapshots that update cleanup does not retire.
 
 A durable transaction journal blocks normal startup during an unfinished update.
 Manager replacement is ordered before app replacement; recovery retains a verified
