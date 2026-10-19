@@ -71,7 +71,7 @@ func TestUpdateCleanupRetainsRecoverySnapshotsAndUnknownStages(t *testing.T) {
 	os.MkdirAll(unknown, 0700)
 	os.WriteFile(filepath.Join(unknown, "unrecognised.txt"), []byte("keep"), 0600)
 	r := cleanupSuccessfulUpdate(context.Background(), c, keep, filepath.Join(active, "packages"), quietUpdate)
-	if r.RemovedBackups != 1 || r.RemovedStages != 1 || len(r.Warnings) != 0 || r.BytesFreed <= 0 {
+	if !r.RetainedVerified || r.RemovedBackups != 1 || r.RemovedStages != 1 || len(r.Warnings) != 0 || r.BytesFreed <= 0 {
 		t.Fatalf("%+v", r)
 	}
 	requireExists(t, old.Path, false)
@@ -102,7 +102,7 @@ func TestUpdateCleanupRequiresSuccessfulCommitAndIntactRetainedCopy(t *testing.T
 				os.WriteFile(filepath.Join(keep.Path, "files", "Document.txt"), []byte("corrupted"), 0600)
 			}
 			r := cleanupSuccessfulUpdate(context.Background(), c, keep, "", quietUpdate)
-			if len(r.Warnings) == 0 || r.RemovedBackups != 0 {
+			if r.RetainedVerified || len(r.Warnings) == 0 || r.RemovedBackups != 0 {
 				t.Fatalf("%+v", r)
 			}
 			requireExists(t, old.Path, true)

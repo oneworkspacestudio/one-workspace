@@ -644,7 +644,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	}
 	committed = true
 	cleanup := cleanupSuccessfulUpdate(ctx, next, backup, stage, report)
-	report("Update complete. All apps are healthy. " + cleanup.Summary() + " Verified backup: " + backup.Path)
+	report("Update complete. All apps are healthy. " + cleanup.Summary() + " Recovery backup: " + backup.Path)
 	return nil
 }
 func RecoverUpdate(ctx context.Context, data string, report func(string)) error {

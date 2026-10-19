@@ -29,15 +29,19 @@ type cleanupOwner struct {
 // Only receipts explicitly labelled by the automatic updater are retired.
 // Legacy snapshots cannot be distinguished from scheduled/manual backups.
 type UpdateCleanupReport struct {
-	Finished       time.Time `json:"finished"`
-	KeptBackup     string    `json:"keptBackup"`
-	RemovedBackups int       `json:"removedBackups"`
-	RemovedStages  int       `json:"removedStages"`
-	BytesFreed     int64     `json:"bytesFreed"`
-	Warnings       []string  `json:"warnings,omitempty"`
+	Finished         time.Time `json:"finished"`
+	KeptBackup       string    `json:"keptBackup"`
+	RetainedVerified bool      `json:"retainedVerified"`
+	RemovedBackups   int       `json:"removedBackups"`
+	RemovedStages    int       `json:"removedStages"`
+	BytesFreed       int64     `json:"bytesFreed"`
+	Warnings         []string  `json:"warnings,omitempty"`
 }
 
 func (r UpdateCleanupReport) Summary() string {
+	if !r.RetainedVerified {
+		return "Cleanup kept older recovery copies because the completed update or retained recovery copy could not be verified. See the cleanup details."
+	}
 	s := fmt.Sprintf("Cleanup removed %d older update backup(s) and %d temporary update folder(s), freeing approximately %.1f MB. The latest verified recovery copy is kept.", r.RemovedBackups, r.RemovedStages, float64(r.BytesFreed)/1e6)
 	if len(r.Warnings) > 0 {
 		s += " Some files were kept because cleanup needs attention; see the cleanup details."
@@ -287,6 +291,7 @@ func cleanupSuccessfulUpdate(ctx context.Context, c Config, keep BackupReceipt, 
 		r.Warnings = append(r.Warnings, "Cleanup skipped: recovery copy is missing from backup history")
 		return finish()
 	}
+	r.RetainedVerified = true
 	operationprogress.Report(ctx, "cleanup", "Removing older automatic update backups", 0, int64(len(rs)), "backups")
 	for i := 0; i < len(rs); {
 		v := rs[i]
