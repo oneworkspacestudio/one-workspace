@@ -143,3 +143,5 @@ groups/files/calls and mobile background delivery still need server support.
 Acceptance used real Chrome profiles and synthetic accounts on one Windows PC;
 separate-network and physical Android/iOS checks remain open. Normal server
 messages are not application E2EE.
+
+[Public Chat10/Workspace49 acceptance, release hashes and boundaries](CHAT-PUBLIC49-ACCEPTANCE.json).
