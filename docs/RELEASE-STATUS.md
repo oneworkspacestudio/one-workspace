@@ -1,14 +1,23 @@
 # October 20 release status
 
-## Preview45 preparation: safe manual Chat retry
+## Preview45 preparation: Chat identity, navigation and safe retry
 
 Chat7 repairs the actual Retry menu so it uses the original queued publication
 and durable ID. A real server ACK was deliberately dropped after recipient
 delivery: Chat6's manual Retry produced two copies. The corrected packaged7
 menu produces one copy after reload and retains the original ID. Controller
 checks cover retained reply/document headers, ambiguous legacy drafts, failed
-acknowledgements and the subscription race with automatic replay. Complete45
-download/fresh/upgrade checks remain outstanding until recorded separately.
+acknowledgements and the subscription race with automatic replay.
+
+The first unpublished45 fresh test then exposed a By ID startup race: QR could
+encode an unavailable initial ID. The corrected Chat8 waits for identity and
+refreshes QR; actual3s delayed-login/QR-pixel tests pass. The UI suite also found
+a late-data-end callback crash during navigation. Failed8 candidates were held.
+Owned/guarded callback cleanup, deferred-pin fencing, stale subscribe handling
+and pending-leave re-entry now pass ordered real-frame network delay,13 controller
+units and the complete packaged native/browser/security/UI/restart regressions.
+Rebuild45 with the final released8 bytes; complete45 download/fresh/upgrade checks
+remain outstanding until recorded separately. No8/45 immutable assets rewritten.
 
 ## Preview44: Chat discovery, receipts and identity binding
 

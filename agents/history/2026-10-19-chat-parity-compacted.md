@@ -203,3 +203,30 @@ until7/45 published/downloaded integration gates pass. MyAccounts20 unchanged.
 45 build defaults/docs now target7; pin its actual published ZIP hash after final
 tests/release. Continue all mandatory encryption/device/rich/social/calls/native/
 recovery scope. Current candidates are plaintext and incomplete, not full parity.
+
+## Unpublished45 held for Chat8 startup/navigation correction
+
+47b55ed built the first45 candidate with7. Stage release-workspace45 is preserved
+but NOT pushed/tagged/released; do not publish those bytes. Its all99 hashes/20org
+pins passed; only manager/chat/two metadata files differ from44. Actual old42
+offered7 manifest was deferred (older suite6 fallback), and complete final7 bundle
+Chat-only selection refused before runtime extraction. Automatic rollback restored
+Chat4, identities/history and actual document filename/bytes. Primary30960 remains
+42 with usable rollback; fresh pre-upgrade browser SSO captured protected only.
+
+Fresh local45 on31560 found a real By ID lifecycle race. Actual3s delayed login
+ACK (below SDK5s timeout) proved the QR did not encode the later readable ID.
+An initial6s fault exceeded the SDK timeout and is not a provider failure.8 adds
+explicit identity input, connecting/disabled actions and QR refresh/stale guards.
+Its first held clean4216 candidate passed QR but UI found getPinnedMessages on
+undefined after leaving a conversation. Ordered real-frame latency reproduced it.
+
+Final clean Chat8 source9df7307771d24f8b9a4654832866929138dd0bc8 now passes
+the QR-pixel test, guarded/owned callback cleanup, delayed-data navigation and
+rapid re-entry,13 controller units, native tests, baseline/security, group receipts,
+live directory,7viewport/two-theme UI, offline/logout and restart. EXE
+b06d21022f68a45908008a840c84e0c35cf9bd23f637cc48d45253037fe1f691. No owner
+data used; owner remains42.8 staging/publication is running; then pin actual8 ZIP,
+commit new45 source and rebuild into a separate release-workspace45-r2 stage.
+Actual final downloads/fresh/paired upgrade/recovery must precede owner update.
+Broader mandatory encryption/device/rich/social/calls/native/recovery remains open.

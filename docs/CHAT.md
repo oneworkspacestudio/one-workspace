@@ -57,7 +57,7 @@ Chat is optional in Advanced installation. Existing installations can add it
 through the installer’s app-selection flow; ordinary updates preserve deliberately
 omitted apps. Future Chat releases are offered from oneworkspacestudio/chat.
 
-## Candidate5/6/7 changes and scope
+## Candidate5/6/7/8 changes and scope
 
 Chat5 adds a full-height branded layout, app switcher, synchronized custom lists,
 account/conversation drafts and static offline shell. Restored sends use one
@@ -79,7 +79,14 @@ message. Read implies delivery and text labels accompany icons. Unknown legacy
 or removed-recipient counters are conservatively Sent; historical receipt
 retention after deletion/rejoin and full Message Info/privacy remain incomplete.
 
-Chat5/6/7 require Workspace43. The app-update manifest rejects older managers;
+Chat8 waits for the actual user ID before enabling By ID actions and creating
+its QR. The QR refreshes when identity arrives; stale asynchronous work is ignored.
+Owned conversation callbacks are detached on navigation so late data/pin work
+cannot crash Settings or update a different conversation. Re-entry coordinates
+with an outstanding leave, and stale subscribe completion cannot select an old
+chat. Real delayed-login QR-pixel and ordered delayed-frame navigation tests pass.
+
+Chat5/6/7/8 require Workspace43. The app-update manifest rejects older managers;
 the executable also checks the manager capability before touching Chat storage,
 protecting complete-bundle update paths. Use the paired Workspace update first.
 
