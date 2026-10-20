@@ -139,8 +139,8 @@
   },
   "myMeet": {
     "repository": "oneworkspacestudio/my-meet",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-meet-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "7994fbc4d322e5e5989fe7499e7b1f29a073ae9e492fe322dda74d811f2d8a1a"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-meet-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "9dab399b9a6c4f14a83b5de778d1777ef5c6224423d1c539bf7d8c7833468e81"
   }
 }

@@ -1,6 +1,6 @@
 # Workspace53: Maps, Meet and visible Office creation
 
-Adds My Maps1 and My Meet1 to the default 24-app catalogue, shared MyAccounts
+Adds My Maps1 and My Meet2 to the default 24-app catalogue, shared MyAccounts
 sign-in, managed private app folders, backup coverage and app updates. New
 installs can deselect optional apps in Advanced; existing installations retain
 their explicit exclusions. Carries forward the Workspace52 integrated navigation
