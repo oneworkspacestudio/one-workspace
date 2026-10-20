@@ -87,3 +87,25 @@ The finishing publisher now uploads sequentially and verifies every remote
 asset size/SHA256 before publication. It must not wait indefinitely for failed 53.
 No Actions or paid providers were enabled. Remaining work: finish transfers,
 verify public hashes against installed packages, and record publication receipts.
+
+## Publication complete
+
+Maps 2 and Meet 3 have 16 assets each; Drive 3 has 15; Workspace 55 has 21.
+All are public in the organization, with exact uploaded size/SHA256 checks.
+The installed manager, Maps, Meet and Drive executables match their public
+release hashes. All 23 service health entries remain running. The normal updater
+retained 24 apps, existing identities/storage and a verified newest rollback.
+Receipt: docs/evidence/maps-meet-delivery-20261020.json. No GitHub Actions used.
+
+Sequential retries succeeded after transient HTTP 408/slow transfer failures.
+The publisher superseded the stopped, failed older 53 draft without waiting
+indefinitely. Removed only this task's superseded unpublished Meet 1 and Workspace
+54 drafts; their source tags remain immutable. Leave the unrelated older 53
+draft to its owning work.
+
+Fast-forwarded the concurrent blue-branding/README commit f022733 on main before
+the final documentation update. That separate artwork change is preserved in
+source; it was not inserted into the already sealed 55 release artifacts.
+No further release/upload/install action remains for these four versions.
+Follow-ups: external Meet media route/relay choice and real-device acceptance,
+managed browser SSO acceptance, and the explicitly documented feature gaps.

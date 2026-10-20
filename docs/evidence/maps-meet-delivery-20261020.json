@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "workspace": "0.3.0-preview.55",
+  "apps": 24,
+  "healthyServiceEntries": 23,
+  "allServicesHealthy": true,
+  "changedExecutablesVerifiedAgainstPublicReleaseAssets": 4,
+  "releases": [
+    {
+      "repository": "oneworkspacestudio/one-workspace",
+      "tag": "v0.3.0-preview.55",
+      "source": "de39246412774ee035d1b5a6cdb298f2930378d3",
+      "public": true,
+      "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.55",
+      "installedExecutableSHA256": "52d7e5feab9c16c46d6fcc1de0ecc0498c37754b3a8007d353d24d7ff575e049",
+      "installedExecutableMatchesPublicAsset": true,
+      "githubActionsEnabled": false
+    },
+    {
+      "repository": "oneworkspacestudio/my-maps",
+      "tag": "v0.1.0-preview.2",
+      "source": "7708ea6ff66e6eb5edcfcf688d0e59fcf5d61233",
+      "public": true,
+      "url": "https://github.com/oneworkspacestudio/my-maps/releases/tag/v0.1.0-preview.2",
+      "installedExecutableSHA256": "850a70a8b74a5c63292d8b010784df5277cbe8437a4c0931c583bd405612429c",
+      "installedExecutableMatchesPublicAsset": true,
+      "githubActionsEnabled": false
+    },
+    {
+      "repository": "oneworkspacestudio/my-meet",
+      "tag": "v0.1.0-preview.3",
+      "source": "b39d099c6e1be5f95054a37583cba5f1e40a0e6f",
+      "public": true,
+      "url": "https://github.com/oneworkspacestudio/my-meet/releases/tag/v0.1.0-preview.3",
+      "installedExecutableSHA256": "90c9ecb2d3ddc606bcb589e750bb5e945d3b1078eaed110d338d4e39e8513912",
+      "installedExecutableMatchesPublicAsset": true,
+      "githubActionsEnabled": false
+    },
+    {
+      "repository": "oneworkspacestudio/drive",
+      "tag": "drive-v0.5.0-preview.3",
+      "source": "1319b08bd41b9eae6932ddad5a1d5316369685cc",
+      "public": true,
+      "url": "https://github.com/oneworkspacestudio/drive/releases/tag/drive-v0.5.0-preview.3",
+      "installedExecutableSHA256": "41bf60c7fbab5e063a5a1df752d5e386ba3e55ea70b4f5ebc7ca8bc93f1771f7",
+      "installedExecutableMatchesPublicAsset": true,
+      "githubActionsEnabled": false
+    }
+  ],
+  "limitations": [
+    "Functional previews; no claim of full Google feature parity.",
+    "Synthetic Meet media checks only; public media/NAT and physical devices unverified.",
+    "Managed browser SSO not rechecked because browser-control policy loading failed."
+  ]
+}

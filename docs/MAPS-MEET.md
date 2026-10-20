@@ -60,3 +60,19 @@ media and shared meeting chat worked. Maps displayed OSM tiles and Photon result
 These checks do not establish physical-device quality, public NAT traversal,
 large meeting capacity or full feature parity. Release and installation receipts
 are separate from this scoped preview evidence.
+
+## Published installation
+
+The local installation was updated through the normal backed-up updater to
+[Workspace 55](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.55),
+with [Maps 2](https://github.com/oneworkspacestudio/my-maps/releases/tag/v0.1.0-preview.2),
+[Meet 3](https://github.com/oneworkspacestudio/my-meet/releases/tag/v0.1.0-preview.3)
+and [Drive 3](https://github.com/oneworkspacestudio/drive/releases/tag/drive-v0.5.0-preview.3).
+All four installed executables match the SHA-256 values of their public release
+assets. The catalogue contains 24 apps and all 23 service health entries reported
+running. The newest recovery backup was verified. No GitHub Actions were used.
+
+See the [sanitized delivery receipt](evidence/maps-meet-delivery-20261020.json).
+Managed browser sign-in was not rechecked because browser control could not load
+its request-header policy. External call media, physical devices and capacity
+remain outside the completed synthetic checks described above.
