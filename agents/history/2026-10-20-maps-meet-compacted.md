@@ -69,3 +69,21 @@ refuses manager downgrades regardless of publication time. No new tests added or
 run for this follow-up. Build/package integrity and installation checks remain.
 54 draft418837047 is held; its source tag stays immutable. Owner54 is healthy.
 Final55 packaging/publication and normal owner manager update are pending.
+
+## Installed 55; large release transfers pending
+
+The normal 54-to-55 update completed at 2026-10-20T21:01Z. All 24 app versions and
+packages, identity and storage locations were retained; all 23 service entries
+were healthy. The newest rollback manifest was verified. Workspace.exe SHA256
+is `52d7e5feab9c16c46d6fcc1de0ecc0498c37754b3a8007d353d24d7ff575e049`.
+Do not rerun the 54/55 update scripts against this newer installation.
+
+Final 55 source/tag is `de39246412774ee035d1b5a6cdb298f2930378d3`; main also merges
+the independent Clips 53 installation evidence. Final bundle contains 24 apps
+and 119 verified payloads. Maps 2 and Meet 3 are public. Drive 3 and Workspace 55
+remain draft while large uploads retry HTTP 408 failures. The failed concurrent
+Workspace 53 publisher has stopped; its draft is not an installed-version target.
+The finishing publisher now uploads sequentially and verifies every remote
+asset size/SHA256 before publication. It must not wait indefinitely for failed 53.
+No Actions or paid providers were enabled. Remaining work: finish transfers,
+verify public hashes against installed packages, and record publication receipts.
