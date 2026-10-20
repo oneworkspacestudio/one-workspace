@@ -63,3 +63,7 @@ resize and scroll updates retain fallback, keyboard and focus behavior. Built UI
 Chrome tests passed320–1024px including tabs and picker. Package/release and owner
 update pending in I:/Projects/tooling/clips-navigation-20261020. Keep published2/51
 immutable and preserve four unrelated histories.
+
+Before publication, packaged short-height checks exposed an off-screen Clips
+sidebar footer. Clips3 now scrolls only the sidebar menu and keeps Workspace
+visible at1024x740. Built UI regression passes after correction; pin updated.
