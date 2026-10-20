@@ -57,9 +57,9 @@
   },
   "drive": {
     "repository": "oneworkspacestudio/drive",
-    "tag": "drive-v0.5.0-preview.2",
+    "tag": "drive-v0.5.0-preview.3",
     "asset": "filebrowser.exe",
-    "sha256": "c77740cf4180601ff43058e09b037e7d71e05cb45d1178cf4ae285649d36fa78"
+    "sha256": "41bf60c7fbab5e063a5a1df752d5e386ba3e55ea70b4f5ebc7ca8bc93f1771f7"
   },
   "photos": {
     "repository": "oneworkspacestudio/drive",
@@ -130,5 +130,17 @@
     "tag": "v0.1.0-preview.3",
     "asset": "my-clips-0.1.0-preview.3-windows-amd64.zip",
     "sha256": "3313e96bd399fac1c33ad820a0021d000d5dda309a66dc42312b4779d455a214"
+  },
+  "myMaps": {
+    "repository": "oneworkspacestudio/my-maps",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-maps-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "234c035db48c67a49a92d5d7a4600d88cd09fe3fd2276f87cdef40ec7f557e45"
+  },
+  "myMeet": {
+    "repository": "oneworkspacestudio/my-meet",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-meet-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "7994fbc4d322e5e5989fe7499e7b1f29a073ae9e492fe322dda74d811f2d8a1a"
   }
 }

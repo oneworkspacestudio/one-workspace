@@ -11,6 +11,8 @@ const apps = [
   ['my_calendar', 'Calendar'], ['my_contacts', 'Contacts'], ['my_notes', 'Notes'],
   ['my_tube', 'My Tube'], ['my_chat', 'Chat'], ['my_vault', 'My Vault'],
   ['my_hosting', 'My Hosting'], ['my_tasks', 'My Tasks'], ['my_pdf', 'My PDF'], ['my_monitor', 'My Monitor'], ['my_search', 'My Search'], ['backups', 'Backups'],
+  ['my_slicer', 'My Slicer'], ['my_social', 'My Social'], ['my_clips', 'My Clips'],
+  ['my_maps', 'My Maps'], ['my_meet', 'My Meet'],
 ];
 
 const columns = 6;

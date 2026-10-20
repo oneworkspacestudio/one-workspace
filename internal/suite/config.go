@@ -163,6 +163,10 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 14
 		case "chat":
 			app.Port = r.Port + 16
+		case "maps":
+			app.Port = r.Port + 25
+		case "meet":
+			app.Port = r.Port + 26
 		case "clips":
 			app.Port = r.Port + 24
 		case "social":
@@ -211,12 +215,20 @@ func Save(c Config, s Secrets) error {
 }
 func CheckPorts(c Config) error {
 	ports := []int{c.Port}
+	mediaUDP := []int{}
 	if SharedEnabled(c) && !sharedOwnsPort(c) {
 		ports = append(ports, c.Port+11)
 	}
 	for _, a := range c.Catalog.Apps {
 		if a.Kind == "process" {
 			ports = append(ports, a.Port)
+			if a.ID == "meet" {
+				if a.Port > 64000 {
+					return errors.New("My Meet needs media ports above its app port; choose a Workspace base port below 63975")
+				}
+				ports = append(ports, a.Port+1000, a.Port+1002)
+				mediaUDP = append(mediaUDP, a.Port+1001)
+			}
 			if a.ID == "vault" {
 				ports = append(ports, a.Port+1)
 			}
@@ -240,6 +252,13 @@ func CheckPorts(c Config) error {
 			return fmt.Errorf("port %d is already in use", p)
 		}
 		listeners = append(listeners, l)
+	}
+	for _, p := range mediaUDP {
+		l, e := net.ListenPacket("udp4", fmt.Sprintf("0.0.0.0:%d", p))
+		if e != nil {
+			return fmt.Errorf("My Meet media UDP port %d is already in use; choose a different Workspace base port", p)
+		}
+		l.Close()
 	}
 	return nil
 }

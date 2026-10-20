@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.52',
+ [string]$Version='0.3.0-preview.53',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261020.1',
  [string]$DriveVersion='photos-preview-local',
@@ -27,6 +27,12 @@ param(
  [string]$Chat='',
  [string]$ChatVersion='0.1.0-preview.10',
  [string]$ChatNotices='',
+ [string]$MyMaps='',
+ [string]$MyMapsVersion='0.1.0-preview.1',
+ [string]$MyMapsNotices='',
+ [string]$MyMeet='',
+ [string]$MyMeetVersion='0.1.0-preview.1',
+ [string]$MyMeetNotices='',
  [string]$MyClips='',
  [string]$MyClipsVersion='0.1.0-preview.3',
  [string]$MyClipsNotices='',
@@ -100,6 +106,8 @@ try {
   foreach($name in @('OPERATIONS.md','PUBLISHING.md','FRAMEWORKS.md','ACCEPTANCE.md','openapi.json')){$inputs['hosting-doc-'+$name]=@{source=(Join-Path $MyHostingNotices ('docs/'+$name));file=('docs/MyHosting/'+$name)}}
  }
  if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","SIGN-IN.md","PRODUCTION-GATES.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
+ if($MyMaps){$inputs['maps']=@{source=$MyMaps;file='Maps.exe'};if(-not $MyMapsNotices){throw 'My Maps requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['maps-'+$name]=@{source=(Join-Path $MyMapsNotices $name);file='licenses/MyMaps-'+$name}};$inputs['maps-contract']=@{source=(Join-Path $MyMapsNotices 'compatibility.json');file='docs/MyMaps/compatibility.json'}}
+ if($MyMeet){$inputs['meet']=@{source=$MyMeet;file='Meet.exe'};if(-not $MyMeetNotices){throw 'My Meet requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['meet-'+$name]=@{source=(Join-Path $MyMeetNotices $name);file='licenses/MyMeet-'+$name}};$inputs['meet-contract']=@{source=(Join-Path $MyMeetNotices 'compatibility.json');file='docs/MyMeet/compatibility.json'}}
  if($MyClips){$inputs['clips']=@{source=$MyClips;file='MyClips.exe'};if(-not $MyClipsNotices){throw 'My Clips requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['clips-'+$name]=@{source=(Join-Path $MyClipsNotices $name);file='licenses/MyClips-'+$name}};$inputs['clips-contract']=@{source=(Join-Path $MyClipsNotices 'compatibility.json');file='docs/MyClips/compatibility.json'}}
  if($MySocial){$inputs['social']=@{source=$MySocial;file='MySocial.exe'};if(-not $MySocialNotices){throw 'My Social requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['social-'+$name]=@{source=(Join-Path $MySocialNotices $name);file='licenses/MySocial-'+$name}};$inputs['social-contract']=@{source=(Join-Path $MySocialNotices 'compatibility.json');file='docs/MySocial/compatibility.json'}}
  if($MySlicer){$inputs['slicer']=@{source=$MySlicer;file='MySlicer.exe'};if(-not $MySlicerNotices){throw 'My Slicer requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['slicer-'+$name]=@{source=(Join-Path $MySlicerNotices $name);file='licenses/MySlicer-'+$name}};foreach($name in @('SETUP.md','ACCEPTANCE.md','ENGINE.md')){$inputs['slicer-doc-'+$name]=@{source=(Join-Path $MySlicerNotices ('docs/'+$name));file='docs/MySlicer/'+$name}};$inputs['slicer-contract']=@{source=(Join-Path $MySlicerNotices 'compatibility.json');file='docs/MySlicer/compatibility.json'}}
@@ -129,6 +137,8 @@ try {
  foreach($dependent in @(@{id='calendar';name='Calendar';port=8999;exe='Calendar.exe'},@{id='contacts';name='Contacts';port=9000;exe='Contacts.exe'})){
   if($inputs.Contains($dependent.id)){$apps+=@{id=$dependent.id;name=$dependent.name;description='Your '+$dependent.name.ToLowerInvariant()+', connected to MyAccounts';version=$CalendarVersion;kind='process';package=$dependent.id;executable=$dependent.exe;port=$dependent.port;route='/'+$dependent.id;stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/'+$dependent.id+'/auth/callback';args=@('--data',('${DATA}/'+$dependent.id),'--shared-data','${DATA}/shared','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}','--base',('/'+$dependent.id),'--services','${DATA}/shared/WorkspaceServices.exe','--no-browser');source='https://github.com/oneworkspacestudio/calendar/releases/tag/v'+$CalendarVersion}}
  }
+ if($MyMaps){$apps+=@{id='maps';name='My Maps';description='Explore places, save lists and plan driving, walking and cycling routes';version=$MyMapsVersion;kind='process';package='maps';executable='Maps.exe';port=9015;route='/maps';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/maps/auth/callback';args=@('--data','${DATA}/maps','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/maps','--no-browser');source='https://github.com/oneworkspacestudio/my-maps/releases/tag/v'+$MyMapsVersion}}
+ if($MyMeet){$apps+=@{id='meet';name='My Meet';description='Host video meetings with screen sharing, admission controls and chat';version=$MyMeetVersion;kind='process';package='meet';executable='Meet.exe';port=9016;route='/meet';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/meet/auth/callback';args=@('--data','${DATA}/meet','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/meet','--no-browser');source='https://github.com/oneworkspacestudio/my-meet/releases/tag/v'+$MyMeetVersion}}
  if($MyClips){$apps+=@{id='clips';name='My Clips';description='Create and discover short videos with music and adaptive streaming';version=$MyClipsVersion;kind='process';package='clips';executable='MyClips.exe';port=9014;route='/clips';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/clips/auth/callback';args=@('--data','${DATA}/clips','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/clips','--no-browser');source='https://github.com/oneworkspacestudio/my-clips/releases/tag/v'+$MyClipsVersion}}
  if($MySocial){$apps+=@{id='social';name='My Social';description='Capture, compose and share your moments, Stories and Reels';version=$MySocialVersion;kind='process';package='social';executable='MySocial.exe';port=9013;route='/social';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/social/auth/callback';args=@('--data','${DATA}/social','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/social','--no-browser');source='https://github.com/oneworkspacestudio/my-social/releases/tag/v'+$MySocialVersion}}
  if($MySlicer){$apps+=@{id='slicer';name='My Slicer';description='Native A1/A1 mini slicing, real toolpath preview and local printing';version=$MySlicerVersion;kind='process';package='slicer';executable='MySlicer.exe';port=9012;route='/slicer';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/slicer/auth/callback';args=@('--data','${DATA}/slicer','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/slicer','--no-browser');source='https://github.com/oneworkspacestudio/my-slicer/releases/tag/v'+$MySlicerVersion}}

@@ -6,4 +6,36 @@ Shared apphost now has explicit opt-in geolocation, safe HTTPS image origins and
 
 Maps provider policies: OSM tiles forbid offline bulk downloads; Photon is best effort; FOSSGIS maximum one request/second. Remote LiveKit requires reachable media UDP/TCP (HTTP Cloudflare tunnel alone cannot carry media). No live traffic, Street View, proprietary reviews, Meet telephony, cloud transcription or unlimited conferencing claimed.
 
-Build tools/caches: I:/Projects/tooling/maps-meet-20261020 and existing four-apps/env.ps1. No owner install changed. Release scripts/integration/package/license work remains. Current tool session holds pending Drive main-menu edit in I:/Projects/filebrowser-drive; unrelated untracked preview files must be preserved.
+Build tools/caches: I:/Projects/tooling/maps-meet-20261020 and existing four-apps/env.ps1. GOTMPDIR is now task-owned on I: for large builds. No owner install changed yet.
+
+## Release preparation
+
+Merged the primary checkout's 7104646 (Workspace52 navigation and Clips3) before
+integration. Published apphost dependency 0578d36ce297 is pinned in both new Go
+modules. Suite53 adds maps/meet ports, routes, identity/session lifecycle, private
+storage, icons, source pins, licences, app-update groups and contracts. Default
+catalogue has 24 apps. Meet's derived TCP/UDP ports are included in install
+preflight, with a clear lower-base-port error. README overview/table includes all
+apps and retains existing hero artwork. New-app exclusion/update selection uses
+the existing default-app contract.
+
+Maps release source c25322c; Meet e92087e; Drive 1319b08b. Windows standalone
+packages built locally, no Actions. Drive3 only promotes existing Office creation
+to the main New menu; Photos bytes and pinned editor/Studio vendor assets remain
+unchanged, verified against the public Drive2 release. Its untracked preview files
+are preserved. Source/licence/checksum assets are staged for org publication.
+
+Chrome synthetic preview: Maps OSM tiles and Photon results render on desktop
+and mobile. Meet has real LiveKit connections, two synthetic media publishers,
+host admission and cross-client chat. Physical media quality, public NAT paths,
+capacity and full Google parity remain unverified. The 120 engine module licences
+and missing npm protobuf licence texts are included. Maps stale reverse-lookup
+selection, exact pin coordinates, Settings overlay restoration and mobile tab
+shrink were corrected during visual review.
+
+Next: finish public app releases, run the complete pinned org build, publish
+Workspace53 and app update manifests, then apply the normal backed-up owner
+update. Recheck current canonical Git and installed state first because the
+Workspace52 task may still be publishing/updating. Remote Meet forwarding choice
+is pending; never infer approval. Clean only task-owned synthetic preview
+processes/data on C:, not the owner's rollback or other active work.

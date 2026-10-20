@@ -21,7 +21,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 ## Meet your apps
 
-![Current One Workspace and app logos](docs/branding/app-suite-slicer.png)
+![Current One Workspace and app logos, including My Maps and My Meet](docs/branding/app-suite-36dfad39.png)
 
 *The current project logos. Open an app repository below for its source, README and downloads.*
 
@@ -162,10 +162,30 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
       <td valign="middle">Capture, compose and share protected photos, Stories and Reels. <a href="docs/MY-SOCIAL.md">Preview features and limits</a>.</td>
       <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-social">my-social</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_clips.svg" alt="My Clips logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Clips</strong></td>
+      <td valign="middle">Create and discover short videos, with Drive originals and adaptive streaming.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-clips">my-clips</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_maps.svg" alt="My Maps logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Maps</strong></td>
+      <td valign="middle">OpenStreetMap exploration, saved places and driving, cycling and walking routes.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-maps">my-maps</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_meet.svg" alt="My Meet logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Meet</strong></td>
+      <td valign="middle">Self-hosted video meetings, host approval, screen sharing and chat. <a href="docs/MAPS-MEET.md">Remote media setup and preview limits</a>.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-meet">my-meet</a></td>
+    </tr>
 </tbody>
 </table>
 
-**Preview 51 adds [My Clips](docs/MY-CLIPS.md)**: an original short-video app, private Drive originals, adaptive HLS, creator tools, recommendations and a signed Android client. Existing app pins are preserved. This is a first preview with documented parity and device limits.
+**Preview 53 adds [My Maps and My Meet](docs/MAPS-MEET.md)**, bringing the default catalogue to 24 apps. Both run as standalone Windows executables or use Workspace sign-in. Drive's New menu now offers Word, Excel, PowerPoint and PDF directly. Meet's web page uses the tunnel; Internet media needs reachable UDP/TCP ports or a self-hosted relay. These are functional previews with documented feature and network limits.
+
+**Preview 51 added [My Clips](docs/MY-CLIPS.md)**: an original short-video app, private Drive originals, adaptive HLS, creator tools, recommendations and a signed Android client.
 
 **Preview 49 improves [Chat continuity](docs/CHAT.md#offline-continuity-in-chat10).**
 Previously opened Chat pages load during outages, messages stay in a durable
