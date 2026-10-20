@@ -34,7 +34,7 @@ param(
  [string]$MyMeetVersion='0.1.0-preview.1',
  [string]$MyMeetNotices='',
  [string]$MyClips='',
- [string]$MyClipsVersion='0.1.0-preview.3',
+ [string]$MyClipsVersion='0.1.0-preview.4',
  [string]$MyClipsNotices='',
  [string]$MySocial='',
  [string]$MySocialVersion='0.1.0-preview.2',
