@@ -1,6 +1,6 @@
 # My Clips
 
-Workspace 0.3.0-preview.50 adds My Clips 0.1.0-preview.1 as the22nd ecosystem app.
+Workspace 0.3.0-preview.51 adds My Clips 0.1.0-preview.2 as the22nd ecosystem app.
 Source and standalone Windows/PWA/Android packages:
 https://github.com/oneworkspacestudio/my-clips
 
@@ -20,7 +20,7 @@ production-scale live service or full TikTok parity is claimed.
 Default loopback port9014; managed route `/clips/`; MyAccounts OIDC and the
 shared app picker. Installer selection and normal Workspace updates can add the
 app; existing opt-outs, identities, paths and unrelated app versions persist.
-Standalone app updates require `scoped-clips-storage-v1` on Workspace50+.
+Standalone app updates require `scoped-clips-storage-v1` on Workspace51+.
 
 Originals live in `Data/videos-clips/My Photos/My Clips/users/<identity-hash>`.
 The native **My Clips Originals** source is outside broad Drive/Files roots,

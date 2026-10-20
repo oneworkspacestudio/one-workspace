@@ -127,8 +127,8 @@
   },
   "myClips": {
     "repository": "oneworkspacestudio/my-clips",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-clips-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "2b28b032dd9d84f7a4f96d840c7dc83c4d4e59bce3af90c76de6b868b1a4f3ad"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-clips-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "909df8660dc908993e5b87b8beb5ea2fba4eac9173e90adf4687759a2ba8cfe3"
   }
 }

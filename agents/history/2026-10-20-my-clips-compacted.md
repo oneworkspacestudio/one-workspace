@@ -22,9 +22,15 @@ pass video editing/render/HLS/range/privacy/drafts/capture/mobile/live. Signed
 Android client built; no physical-device acceptance. Full parity/ML/AR/commerce/
 large live infrastructure is explicitly outside the implemented preview.
 
-Next: pin the verified My Clips1 ZIP, complete full22-app bundle/installer and
+Next: pin the verified My Clips2 ZIP, complete full22-app bundle/installer and
 fresh/published49-to50 update acceptance, publish immutable release artifacts,
 then run the normal backed-up owner update selecting workspace/clips. Preserve
 the newest verified owner rollback. Verify public digests and exact installed
 hashes, clean only stopped named synthetic roots, synchronize local source clones,
 and append final release/source references and operational receipt.
+
+Held candidate50 draft418675057 was deleted before publication after actual
+My Music import revealed a Windows nested-path bug in Clips1. Source tags remain
+unchanged, but neither1 nor50 was released or installed in the owner suite.
+Use corrected Clips2/Workspace51 for final delivery. All21 baseline49 payloads
+stay unchanged. App native path and live audience revocation regressions added.
