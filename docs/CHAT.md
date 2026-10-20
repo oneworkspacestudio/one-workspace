@@ -116,3 +116,10 @@ Chat address healthy through Cloudflare. Owner conversations and owner browser
 sign-in were not test fixtures. [Recorded boundaries and hashes](CHAT-PUBLIC45-ACCEPTANCE.json).
 
 Source and component notices: https://github.com/oneworkspacestudio/chat
+
+## Phone layout in Chat9
+
+Chat9 uses a compact branded header, search and filters, a separate compose action,
+readable working navigation tabs and actual conversation timestamps. Workspace
+has a fixed close action above its scrolling app grid. See the
+[mobile reference and verification scope](https://github.com/oneworkspacestudio/chat/blob/master/docs/whatsapp-parity/MOBILE-LAYOUT.md).

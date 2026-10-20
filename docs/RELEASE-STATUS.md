@@ -1,5 +1,18 @@
 # October 20 release status
 
+## Preview46: mobile Chat and visible Workspace dismissal
+
+Pins Chat9 from the organisation's release, with compact phone navigation,
+real conversation times, readable rows/composer targets, and a Workspace picker
+whose header/Close stays outside its scrolling app grid. The shared Workspace
+picker in other apps now also scrolls only its catalog. Only existing working
+Chat destinations are offered; calls/Updates/Communities remain incomplete.
+
+Exact Chat9 packaged mobile/browser/security/offline/retry/QR/navigation/restart
+checks passed using synthetic accounts. Official rendered Android/iOS design
+examples were reviewed; current reference-account pixel parity and physical-phone
+acceptance are not claimed. Full application E2EE and the broader parity brief
+remain unfinished. Installer/download/installed checks are recorded separately.
 ## Preview45: Chat identity, navigation and safe retry
 
 Chat7 repairs the actual Retry menu so it uses the original queued publication
