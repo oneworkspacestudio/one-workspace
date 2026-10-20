@@ -113,3 +113,70 @@ Workspace pin now targets those exact bytes. Final build-org build, public
 manifest rejection, downloads/fresh/install/paired upgrade and rollback remain.
 Legacy Chat redirects now remove old media transport credentials from the query;
 full suite tests passed after this change. Do not claim app E2EE/full parity.
+
+## October20 actual public43 downloads and follow-up
+
+Public43 is published from3c5e951,27 assets all size/SHA-verified. Installer
+3b0099182371b59fd3d9afe30786b11807bd5d5b4a1a41b316e55e2b844204ce and bundle
+1be166d1a024d53c05c71762aadb4b37dc7c15ca7fd56b4e5b3ac496e7d4543c downloaded.
+Actual public42→43 update preserved IDs/history/UI attachment filename and bytes,
+selected Accounts+Chat and18 opt-outs. Default-online fresh install passed native
+startup plus baseline/security/UI after asserting directory snapshot ready. First
+immediate new-account Find failed before synchronization; Chat6 now tests automatic
+refresh with a real new account created while Find stays open. Keep this boundary
+explicit. Neither public43 nor5 is full parity or application E2EE.
+
+Uncommitted dedicated_tunnel.go helper now prepends only the owned exact route
+before wildcards, repairs its Host header preserving options, refuses conflicting
+routes and skips occupied candidates. Tests prove input/unrelated-rule preservation,
+idempotence and conflicts; full suite PASS (manager-routing-suite.log). No public44
+or actual Cloudflare operation yet; v1 origin capability unchanged. Provider callback
+fix and Chat6 candidate coordinated in companion histories. Owner still42/healthy,
+no owner account/data used as fixture, normal released local update still pending.
+
+Named C task's redundant cold synthetic snapshots removed after path/reparse/
+process checks,~1.94GB reclaimed; active fixtures/newest backup retained. Preserve
+the four unrelated untracked Workspace histories. Continue all mandatory brief work.
+
+## Preview44 assembly checkpoint
+
+Chat6 and MyAccountspreview-20261020.1 are now PUBLIC,15/14 assets respectively.
+Every uploaded asset's server SHA/size and each tag's source commit were verified;
+Actions read API confirmed disabled in all three repos before publication.
+Chat clean sourceec0885eedf45e1e845333bbbcb5f95c90e8ca963, EXE
+5dca548066ede54932b2b70bacb4c9c56ae0818a055e7961108890941467833a,
+ZIP2b0e58d8f3b4469f86496a72393dbcdf1e6e5558645ce5104f8ed9085cced498.
+Provider clean source87a1c98d83f2ec1751e5d8eac114b94ba30c4660, EXE
+c3a309d396774427aeb9fdf0db355b70fb37a107abdd7b7156fe817744ec1d34.
+The component lock/default versions now target those bytes; no44 build/release yet.
+
+Exact final Chat6 passed real live new-member query, three-account historical
+audience receipt transitions, forged/removed-member/membership retry, baseline,
+security,7viewport×2themes and native restart. Historical receipt retention after
+subscriber deletion/rejoin needs a durable ledger; full family remains incomplete.
+Exact provider passed root/focused tests+vet, fresh independent OIDC and encrypted
+SQLite restore, existing synthetic DB/negative PKCE/concurrent claim and retained
+Chat identities/history/actual UI filename+document bytes. Source processing/cache
+on I was slow; provider built from a clean temporary detached C NTFS worktree of
+the same commit, frontend before native. Toolchain copy/fixtures are scoped C
+scratch to clean after preserving evidence. Owner42 still untouched/healthy.
+
+Routing helper also now compares exact hostnames case-insensitively to refuse a
+foreign mixed-case route. Final full-suite/manifest rerun passed. Source
+currently uncommitted44: routing/tests,2version scripts,2component pins,CHAT and
+RELEASE-STATUS/UPDATE-PUBLISHING docs plus this handoff. Four other untracked
+histories are unrelated and must stay unstaged. Need build-org from committed
+exact source,20org pins, new immutable44 assets/source/hash mapping, actual
+public42 old-manager offered6 refusal + final44 fresh/upgrade and rollback checks,
+then normal owner update/remote health. No user data as fixtures. Entire mandatory
+brief remains active; current releases are incomplete and plaintext, not parity.
+
+Published IDs: Chat6 release417921774, provider20 release417922134. Their app
+manifests were generated with the actual Workspace tool; Accounts includes both
+owned notice files, not only its EXE. Provider inventory1013 declared Go/frontend
+build components is explicitly not an audit. Primary prototype is being restored
+through actual downloaded public43 setup to its verified pre42 rollback snapshot
+update-20261020T002529-b668f2ee318d for an actual old42 offered6 check and future
+public44 paired upgrade. Do not re-run native test-client metadata against that
+rolled-back provider without recreating its synthetic registration. Fresh31060
+remains final Chat6 with public43 manager/old provider for final native checks.

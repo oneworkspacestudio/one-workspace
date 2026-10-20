@@ -110,14 +110,20 @@ func (rt *Runtime) ensureDedicatedTunnelHost(ctx context.Context, id, saved stri
 				return "", "", e
 			}
 			owned := false
+			occupied := false
+			for _, entry := range ingress {
+				if rule, ok := entry.(map[string]any); ok && sameTunnelHostname(rule["hostname"], candidate) && (rule["service"] != service || (rule["path"] != nil && rule["path"] != "")) {
+					occupied = true
+				}
+			}
 			if ownedDNS(records) {
 				for _, entry := range ingress {
-					if rule, ok := entry.(map[string]any); ok && rule["hostname"] == candidate && rule["service"] == service && (rule["path"] == nil || rule["path"] == "") {
+					if rule, ok := entry.(map[string]any); ok && sameTunnelHostname(rule["hostname"], candidate) && rule["service"] == service && (rule["path"] == nil || rule["path"] == "") {
 						owned = true
 					}
 				}
 			}
-			if len(records) == 0 || owned {
+			if !occupied && (len(records) == 0 || owned) {
 				host = candidate
 				break
 			}
@@ -129,18 +135,9 @@ func (rt *Runtime) ensureDedicatedTunnelHost(ctx context.Context, id, saved stri
 			return "", "", err
 		}
 	}
-	found := false
-	for _, entry := range ingress {
-		rule, ok := entry.(map[string]any)
-		if !ok {
-			return fail("The managed tunnel contains an invalid route.")
-		}
-		if rule["hostname"] == host {
-			if rule["service"] != service || (rule["path"] != nil && rule["path"] != "") {
-				return fail("Chat's hostname routes to another service; existing routes were preserved.")
-			}
-			found = true
-		}
+	next, changed, err := dedicatedTunnelIngress(ingress, host, service)
+	if err != nil {
+		return "", "", err
 	}
 	records, err := lookup(host)
 	if err != nil {
@@ -149,13 +146,7 @@ func (rt *Runtime) ensureDedicatedTunnelHost(ctx context.Context, id, saved stri
 	if len(records) > 0 && !ownedDNS(records) {
 		return fail("Chat's hostname is now used by another DNS record; it was preserved.")
 	}
-	if !found {
-		last, ok := ingress[len(ingress)-1].(map[string]any)
-		if !ok || (last["hostname"] != nil && last["hostname"] != "") {
-			return fail("The tunnel needs a terminal catch-all route.")
-		}
-		next := append([]any{}, ingress[:len(ingress)-1]...)
-		next = append(next, map[string]any{"hostname": host, "service": service, "originRequest": map[string]any{"httpHostHeader": host}}, last)
+	if changed {
 		remote.Config["ingress"] = next
 		if err = api.call(ctx, "PUT", base, map[string]any{"config": remote.Config}, nil); err != nil {
 			return "", "", err
@@ -172,4 +163,62 @@ func (rt *Runtime) ensureDedicatedTunnelHost(ctx context.Context, id, saved stri
 		recordID = records[0].ID
 	}
 	return "https://" + host + "/chat", recordID, nil
+}
+
+// Exact app routes precede wildcard fallbacks. Copy only the app's own rule;
+// retain every unrelated rule, its options and its relative order. Re-running
+// also repairs the owned Host override without dropping other origin options.
+func dedicatedTunnelIngress(ingress []any, host, service string) ([]any, bool, error) {
+	if len(ingress) == 0 {
+		return nil, false, errors.New("The tunnel needs a terminal catch-all route.")
+	}
+	last, ok := ingress[len(ingress)-1].(map[string]any)
+	if !ok || (last["hostname"] != nil && last["hostname"] != "") || (last["path"] != nil && last["path"] != "") {
+		return nil, false, errors.New("The tunnel needs a terminal catch-all route.")
+	}
+	index := -1
+	owned := map[string]any{"hostname": host, "service": service}
+	for i, entry := range ingress {
+		rule, valid := entry.(map[string]any)
+		if !valid {
+			return nil, false, errors.New("The managed tunnel contains an invalid route.")
+		}
+		if !sameTunnelHostname(rule["hostname"], host) {
+			continue
+		}
+		if index >= 0 || rule["service"] != service || (rule["path"] != nil && rule["path"] != "") {
+			return nil, false, errors.New("Chat's hostname has another or duplicate route; existing routes were preserved.")
+		}
+		index = i
+		for key, value := range rule {
+			owned[key] = value
+		}
+	}
+	origin := map[string]any{}
+	if raw := owned["originRequest"]; raw != nil {
+		options, valid := raw.(map[string]any)
+		if !valid {
+			return nil, false, errors.New("Chat's owned origin settings need repair; existing routes were preserved.")
+		}
+		for key, value := range options {
+			origin[key] = value
+		}
+	}
+	if index == 0 && origin["httpHostHeader"] == host {
+		return ingress, false, nil
+	}
+	origin["httpHostHeader"] = host
+	owned["originRequest"] = origin
+	next := []any{owned}
+	for i, entry := range ingress {
+		if i != index {
+			next = append(next, entry)
+		}
+	}
+	return next, true, nil
+}
+
+func sameTunnelHostname(value any, host string) bool {
+	name, ok := value.(string)
+	return ok && strings.EqualFold(name, host)
 }

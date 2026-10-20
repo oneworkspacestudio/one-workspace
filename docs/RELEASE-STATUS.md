@@ -1,5 +1,25 @@
 # October 20 release status
 
+## Preview44 candidate preparation: Chat discovery, receipts and identity binding
+
+The candidate combines Chat6's visible/online directory-query refresh and
+original group-recipient receipt checks with MyAccounts' exact original callback
+binding. Actual synthetic native tests cover account creation while Find is open,
+three-recipient acknowledgement transitions, denied forged audiences and retry
+after membership changes. Provider migration preserved existing tokens, browser
+SSO and Chat identities/history/document bytes; malformed callbacks, PKCE failure,
+replay and concurrent redemption were tested against the real provider.
+
+The manager places its owned exact Chat tunnel route before wildcard fallbacks,
+repairs only its owned Host override and preserves unrelated rules/options.
+Unit/full-suite tests passed. Actual public Cloudflare routing and final44
+download/fresh/upgrade acceptance remain separate gates until performed.
+
+These are tested increments, not full WhatsApp parity. Application E2EE, complete
+device/recovery, rich/social/calling and native-mobile families remain incomplete.
+Historical group receipts after subscriber deletion/rejoin still need a durable
+ledger; unknown original-recipient state is conservatively Sent. No Actions.
+
 ## Preview43 candidate: Chat integration and update compatibility
 
 Adds a dedicated Chat browser origin, preserved MyAccounts client/identity links,
@@ -15,8 +35,12 @@ custom-list synchronization and global logout. This is an incomplete candidate
 for the WhatsApp parity brief. Application E2EE, full social/calling/native-client
 features and fresh-machine key recovery remain unfinished. The MLS interoperability
 proof is separate from the shipped messenger. See [Chat scope](CHAT.md).
-Final published-download/update/rollback results are recorded separately after
-they run. Built locally; no GitHub Actions.
+Actual public42→43 upgrade preserved selected apps, IDs/history and actual UI
+document filename/bytes. Default-online fresh installation passed baseline,
+security and UI after directory-ready assertion. Its initial immediate query
+missed a new account before synchronization, prompting the Chat6 refresh fix.
+The old42 manifest refusal and automatic pre-migration rollback were tested.
+Built locally; no GitHub Actions.
 
 ## Preview42: My Slicer
 

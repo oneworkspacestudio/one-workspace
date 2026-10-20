@@ -8,9 +8,9 @@
   },
   "accounts": {
     "repository": "oneworkspacestudio/myaccounts",
-    "tag": "preview-20261015.1",
+    "tag": "preview-20261020.1",
     "asset": "MyAccounts-windows-amd64.exe",
-    "sha256": "ed3b21f6fabab89b4298c5d9a98dc479a2f0350171d145c2794a2e8eccb740ca"
+    "sha256": "c3a309d396774427aeb9fdf0db355b70fb37a107abdd7b7156fe817744ec1d34"
   },
   "studio": {
     "repository": "oneworkspacestudio/Photo-Editor",
@@ -79,9 +79,9 @@
   },
   "chat": {
     "repository": "oneworkspacestudio/chat",
-    "tag": "v0.1.0-preview.5",
-    "asset": "chat-0.1.0-preview.5-windows-amd64.zip",
-    "sha256": "db72538e9e722da41a2d46a74b227b4ed2451e3605312e0f8cd402148d87a933"
+    "tag": "v0.1.0-preview.6",
+    "asset": "chat-0.1.0-preview.6-windows-amd64.zip",
+    "sha256": "2b0e58d8f3b4469f86496a72393dbcdf1e6e5558645ce5104f8ed9085cced498"
   },
   "myHosting": {
     "repository": "oneworkspacestudio/my-hosting",
