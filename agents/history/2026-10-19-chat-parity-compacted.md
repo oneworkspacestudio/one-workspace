@@ -230,3 +230,42 @@ data used; owner remains42.8 staging/publication is running; then pin actual8 ZI
 commit new45 source and rebuild into a separate release-workspace45-r2 stage.
 Actual final downloads/fresh/paired upgrade/recovery must precede owner update.
 Broader mandatory encryption/device/rich/social/calls/native/recovery remains open.
+
+## Latest: public45 and actual-download gate (October20)
+
+Workspace45 r2/sourceedf3a8affbf89fd0ceed31a83f9fbffc6174c5a4 is PUBLIC as
+v0.3.0-preview.45, release417984674. All28 uploaded SHA/size/tag-source mappings
+verified before and after publication. Installer833e9b40f186a464cacf4765c398cb9f8fda658f2e4b40bd77fe2e748d5887e7;
+bundle6b9fb6481421bf226f4a49e18c6d9ce02bd199b3448a732d5359fa76f5ad0482;
+manager58840dde2bef1042e31d444feea22dc7b53e7925935520cf427f2a7b225b290c.
+Stage is release-workspace45-r2. First47b stage is unpublished and superseded;
+never confuse its same version number with these final bytes. Chat8 public417976383
+is source9df73077, EXEb06d2102 and ZIPa8f31aa9 (full hashes above/companion history).
+MyAccountspreview-20261020.1 remains public source87a1c98, EXEc3a309d3.
+
+Final local fresh45 on31560 passes actual login/QR pixels, baseline, media/socket
+security, ordered-frame navigation/re-entry,7viewport×2themes, offline/logout and
+lost-ACK manual Retry. Actual old42 rejected public8 manifest and final8 complete
+bundle Chat-only selection before runtime extraction; automatic rollback restored
+Chat4/IDs/history/actual document bytes. Then final paired42→45 preserved portal/
+Chat client IDs/secrets, owner/issuer/locations,2apps/18optouts, old browser SSO with
+no password and immutable history/document download. Cleanup removed3 old test
+backups after verification, retaining pre42 update-20261020T035544-a4ead95a2e7e.
+
+Anonymous public45 installer/bundle downloads are active under I task/public45,
+using .partial then verified rename; execute ONLY after expected size/SHA passes.
+External download-public45.ps1 checks both; no GitHub credential used. Next run
+actual downloaded default-online fresh setup via install-workspace45-r2-fixture.ps1
+Phase public (Node run-file-script.cjs avoids inherited-pipe waits), protected C
+public45r2-chat-parity-20261020/fixture,31760; programs/files I public45-r2. Seed with
+seed-public45-r2-users.ps1. Then actual public paired/recovery on primary30960,
+normal owner update and local/public/dedicated Chat routing checks. Owner still42,
+20apps/tunnel healthy on8990; no owner data used as fixtures. Full brief unfinished.
+
+Completed C local44/fresh/local45 fixtures were stopped/path/process/reparse checked
+and removed, reclaiming2.35GiB. C client dependency mirror remains for final QR
+tests. Current primary30960 is finalLOCAL45/8/provider20; local fresh31560 lives at
+local45r2-chat-parity-20261020, not the removed old local45 path. One first r2 fresh
+attempt correctly refused the retained old I program folder; helper now uses empty
+I local45-r2. Its failed C root held only test credentials and was verified/removed.
+Preserve owner/newest recovery and the four unrelated untracked histories.
