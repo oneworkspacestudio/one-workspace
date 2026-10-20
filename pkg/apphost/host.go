@@ -30,7 +30,11 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-type Config struct{ ID, Name, Version, Data, Listen, Origin, Issuer, ClientID, ClientSecret, Owner, WorkspaceURL, RegistryURL, RegistryToken string }
+type Config struct {
+	ID, Name, Version, Data, Listen, Origin, Issuer, ClientID, ClientSecret, Owner, WorkspaceURL, RegistryURL, RegistryToken string
+	// MediaCapture is an explicit app capability. Permission still requires a user gesture.
+	MediaCapture bool
+}
 type User struct {
 	ID      string `json:"id"`
 	Issuer  string `json:"issuer"`
@@ -380,11 +384,14 @@ func (h *Host) Handler() http.Handler {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Referrer-Policy", "same-origin")
 		w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+		if h.Config.MediaCapture {
+			w.Header().Set("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()")
+		}
 		scripts := "'self'"
 		if h.Config.ID == "pdf" {
 			scripts += " 'wasm-unsafe-eval'"
 		}
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src "+scripts+"; style-src 'self' 'unsafe-inline'; font-src 'self' blob: data:; img-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'")
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src "+scripts+"; style-src 'self' 'unsafe-inline'; font-src 'self' blob: data:; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'")
 		if h.Base != "" && (r.URL.Path == h.Base || strings.HasPrefix(r.URL.Path, h.Base+"/")) {
 			if r.URL.Path == h.Base {
 				http.Redirect(w, r, h.Base+"/", 303)
