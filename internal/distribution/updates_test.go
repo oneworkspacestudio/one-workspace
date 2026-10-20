@@ -139,7 +139,7 @@ func TestIndependentContractCannotReplaceOtherAppsOrEscapeArchive(t *testing.T) 
 	var releases []Release
 	json.Unmarshal(tr["https://api.github.com/repos/oneworkspacestudio/notes/releases?per_page=100"], &releases)
 	r := releases[0]
-	g := updateGroups[8]
+	g := updateGroup{}; for _, candidate := range updateGroups { if candidate.id == "notes" { g=candidate } }
 	for _, mutate := range []func(*AppUpdateManifest){func(m *AppUpdateManifest) { m.Repository = "someone/notes" }, func(m *AppUpdateManifest) { m.Apps[0].ID = "accounts" }, func(m *AppUpdateManifest) {
 		p := m.Packages["notes"]
 		p.File = "MyAccounts.exe"
@@ -235,7 +235,13 @@ func TestPublisherContractRoundTripAndCustomExtensionOwnership(t *testing.T) {
 	raw, _ := json.Marshal(generated)
 	var releases []Release
 	json.Unmarshal(tr["https://api.github.com/repos/oneworkspacestudio/notes/releases?per_page=100"], &releases)
-	ch, e := manifestChoice(updateGroups[8], current, generated.Repository, releases[0], raw)
+	var notesGroup updateGroup
+	for _, group := range updateGroups {
+		if group.id == "notes" {
+			notesGroup = group
+		}
+	}
+	ch, e := manifestChoice(notesGroup, current, generated.Repository, releases[0], raw)
 	if e != nil {
 		t.Fatal(e)
 	}

@@ -165,6 +165,8 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 16
 		case "maps":
 			app.Port = r.Port + 25
+		case "create":
+			app.Port = r.Port + 27
 		case "meet":
 			app.Port = r.Port + 26
 		case "clips":

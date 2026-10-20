@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-f6de3110.png)
+![The complete One Workspace app collection](docs/branding/app-suite-96007a8d.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -155,6 +155,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_meet.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-meet"><strong>My Meet</strong></a></td>
       <td>Host video meetings, share your screen and chat.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_create.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-create"><strong>My Create</strong></a></td>
+      <td>Create designs and edit imported text, shapes, pictures and pages.</td>
     </tr>
   </tbody>
 </table>

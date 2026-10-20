@@ -180,5 +180,12 @@
     "name": "My Meet",
     "description": "Host video meetings, share your screen and chat.",
     "url": "https://github.com/oneworkspacestudio/my-meet"
+  },
+  {
+    "url": "https://github.com/oneworkspacestudio/my-create",
+    "name": "My Create",
+    "id": "create",
+    "description": "Create designs and edit imported text, shapes, pictures and pages.",
+    "icon": "my_create"
   }
 ]

@@ -10,7 +10,7 @@ func runtimeTemp(c Config, app string) string { return filepath.Join(c.Data, "ru
 
 func appWorkingDir(c Config, app string) string {
 	switch app {
-	case "maps", "meet", "clips", "social", "tasks", "pdf", "monitor", "search", "accounts", "drive", "photos", "gitea", "music", "mail", "calendar", "contacts", "notes", "my-tube", "chat":
+	case "create", "maps", "meet", "clips", "social", "tasks", "pdf", "monitor", "search", "accounts", "drive", "photos", "gitea", "music", "mail", "calendar", "contacts", "notes", "my-tube", "chat":
 		return filepath.Join(c.Data, app)
 	case "vault":
 		return filepath.Join(c.Data, "my-vault")

@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "workspace": "0.3.0-preview.57",
+  "apps": 25,
+  "payloads": 124,
+  "allPayloadHashesVerified": true,
+  "all24ExistingAppContractsAndPayloadsUnchanged": true,
+  "baseline": "verified local Workspace56",
+  "baselineSHA256": "97187ff8958147e99676bc5aea37d9d3e9b03e8963227f0546159b0036ded5f2",
+  "ownerDataUsedAsFixture": false
+}

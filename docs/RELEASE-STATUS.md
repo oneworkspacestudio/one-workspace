@@ -518,3 +518,13 @@ Windows manager/installer icons from the shared blue SVG and ICO sources. The
 24 app executables and managed contracts remain unchanged from Workspace55.
 New icon content hashes prevent browser/CDN caches from retaining old artwork.
 Local package acceptance and backed-up installation are recorded separately.
+
+## My Create / Workspace57
+
+Adds My Create, a native local design editor with editable SVG/PPTX imports,
+best-effort PDF/PSD recovery, comparison, immutable revisions, portable templates
+and optional Windows OCR. Includes the new blue app icon and installer/updater
+contract. All 24 existing app versions and packages are retained from the verified
+Workspace56 deployment. See [My Create](MY-CREATE.md) for fidelity limits.
+Built and tested locally; GitHub Actions remain disabled. Publication and local
+deployment are recorded in the release receipt after verification.
