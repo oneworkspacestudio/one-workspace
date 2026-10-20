@@ -41,12 +41,37 @@
   const footer=make('footer'), drive=catalog.apps.find(a=>a.ID==='drive');
   if(drive){const files=make('a','Your files in Drive'); files.href=drive.URL; footer.append(files)}
   const form=make('form'); form.action='/auth/logout'; form.method='post'; const logout=make('button','Sign out of Workspace'); logout.type='submit'; form.append(logout); footer.append(form); panel.append(footer);
+  const triggerSelector='[data-workspace-apps-trigger]';
+  const triggers=()=>Array.from(document.querySelectorAll(triggerSelector));
+  const visible=el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&r.bottom>0&&r.right>0&&r.top<innerHeight&&r.left<innerWidth&&getComputedStyle(el).visibility==='visible'};
+  const expanded=value=>{toggle.setAttribute('aria-expanded',value);for(const el of triggers())el.setAttribute('aria-expanded',value)};
   let opener;
-  const open = (focusSearch=false) => {if(!panel.open){opener=shadow.activeElement || document.activeElement; panel.showModal()} toggle.setAttribute('aria-expanded','true'); (focusSearch && searchInput ? searchInput : close).focus()};
+  const open = (focusSearch=false,trigger) => {if(!panel.open){opener=trigger || shadow.activeElement || document.activeElement; panel.showModal()} expanded('true'); (focusSearch && searchInput ? searchInput : close).focus()};
   toggle.onclick=()=>open(); close.onclick=()=>panel.close();
-  panel.addEventListener('close',()=>{toggle.setAttribute('aria-expanded','false');if(opener?.isConnected)opener.focus()});
+  panel.addEventListener('close',()=>{expanded('false');const target=opener?.isConnected&&visible(opener)?opener:triggers().find(visible)||toggle;target.focus()});
   panel.addEventListener('click',e=>{if(e.target===panel){const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)panel.close()}});
   window.addEventListener('workspace:open-apps',()=>open());
+  // Apps may provide a normal navigation link as an accessible picker trigger.
+  // Keep its href as a fallback, and hide only the floating button, never the dialog.
+  const syncTriggers=()=>{
+   const links=triggers();
+   for(const el of links){el.setAttribute('role','button');el.setAttribute('aria-haspopup','dialog');el.setAttribute('aria-expanded',String(panel.open))}
+   toggle.hidden=links.some(visible);
+  };
+  let triggerFrame;
+  const scheduleTriggers=()=>{if(!triggerFrame)triggerFrame=requestAnimationFrame(()=>{triggerFrame=0;syncTriggers()})};
+  new MutationObserver(scheduleTriggers).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden','data-workspace-apps-trigger']});
+  window.addEventListener('resize',scheduleTriggers);
+  document.addEventListener('scroll',scheduleTriggers,true);
+  document.addEventListener('click',e=>{
+   const trigger=e.target.closest?.(triggerSelector);
+   if(!trigger||e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.altKey||e.shiftKey)return;
+   e.preventDefault();open(false,trigger);
+  });
+  document.addEventListener('keydown',e=>{
+   const trigger=e.target.closest?.(triggerSelector);
+   if(trigger&&!e.defaultPrevented&&e.key===' '){e.preventDefault();open(false,trigger)}
+  });
   document.addEventListener('keydown',e=>{if(!e.defaultPrevented && !e.isComposing && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k' && searchInput){e.preventDefault();open(true)}});
   const decode = path => {try{return decodeURIComponent(path).replace(/\/$/,'')}catch{return path}};
   let currentApp;
@@ -73,7 +98,7 @@
   // Vue/React routers can change the path without popstate or a document load.
   let lastPath=location.pathname;
   setInterval(()=>{if(!document.hidden&&location.pathname!==lastPath){lastPath=location.pathname;active()}},1000);
-  shadow.append(panel,toggle); document.body.append(host); active(); theme();
+  shadow.append(panel,toggle); document.body.append(host); active(); theme(); syncTriggers();
   document.documentElement.dataset.workspaceNavigation='ready';
  }).catch(()=>{});
 })();

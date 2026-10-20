@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.51',
+ [string]$Version='0.3.0-preview.52',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
@@ -115,7 +115,7 @@ Expand-Archive -LiteralPath $clipsZip -DestinationPath $clipsStage
 $clipsRoot=(Get-ChildItem -LiteralPath $clipsStage -Filter MyClips.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $clipsRoot){throw 'My Clips package is missing MyClips.exe'}
 $clipsContract=Get-Content -LiteralPath (Join-Path $clipsRoot 'compatibility.json') -Raw|ConvertFrom-Json
-if($clipsContract.schema -ne 1 -or $clipsContract.workspaceInstallerIntegration -ne 1 -or $clipsContract.route -cne '/clips' -or $clipsContract.version -cne ($lock.myClips.tag -replace '^v','') -or $clipsContract.minimumWorkspaceVersion -cne '0.3.0-preview.51'){throw 'Unsupported My Clips integration contract'}
+if($clipsContract.schema -ne 1 -or $clipsContract.workspaceInstallerIntegration -ne 1 -or $clipsContract.route -cne '/clips' -or $clipsContract.version -cne ($lock.myClips.tag -replace '^v','') -or $clipsContract.minimumWorkspaceVersion -cne '0.3.0-preview.52'){throw 'Unsupported My Clips integration contract'}
 $slicerZip=Get-OrgAsset $lock.mySlicer
 $slicerStage=Join-Path $Cache ('my-slicer-stage-'+[guid]::NewGuid().ToString('N'))
 Expand-Archive -LiteralPath $slicerZip -DestinationPath $slicerStage

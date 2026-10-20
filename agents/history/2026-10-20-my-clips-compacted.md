@@ -55,3 +55,15 @@ has no remote. Preserve four unrelated untracked histories (installed-preview22,
 runtime-restart, installed-availability and installed-preview41). Named synthetic
 C fixtures were stopped and removed; retained I artifacts are intentional.
 Final sanitized operational evidence: docs/MY-CLIPS-ACCEPTANCE.json.
+
+Navigation follow-up: user screenshot showed floating Workspace blocking the
+For You tab. Clips3 provides marked navigation links; manager52 enhances visible
+links into picker controls and suppresses only its floating toggle. Mutation,
+resize and scroll updates retain fallback, keyboard and focus behavior. Built UI
+Chrome tests passed320–1024px including tabs and picker. Package/release and owner
+update pending in I:/Projects/tooling/clips-navigation-20261020. Keep published2/51
+immutable and preserve four unrelated histories.
+
+Before publication, packaged short-height checks exposed an off-screen Clips
+sidebar footer. Clips3 now scrolls only the sidebar menu and keeps Workspace
+visible at1024x740. Built UI regression passes after correction; pin updated.
