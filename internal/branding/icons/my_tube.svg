@@ -2,19 +2,19 @@
   <title id="my-tube-title">My Tube</title>
   <defs>
     <linearGradient id="mt-bg" x1="36" y1="28" x2="220" y2="234" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#5877FF"/>
-      <stop offset="0.48" stop-color="#2A39C7"/>
-      <stop offset="1" stop-color="#17155F"/>
+      <stop offset="0" stop-color="#6799F0"/>
+      <stop offset="0.48" stop-color="#165EDB"/>
+      <stop offset="1" stop-color="#0A2D6A"/>
     </linearGradient>
     <linearGradient id="mt-card" x1="58" y1="72" x2="171" y2="176" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#F4F6FB"/>
-      <stop offset="0.55" stop-color="#DCE2ED"/>
-      <stop offset="1" stop-color="#BFC8D9"/>
+      <stop offset="0" stop-color="#F3F6FC"/>
+      <stop offset="0.55" stop-color="#D3E0F6"/>
+      <stop offset="1" stop-color="#A2C1F6"/>
     </linearGradient>
     <linearGradient id="mt-blue-tab" x1="166" y1="72" x2="196" y2="165" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#6F92FF"/>
-      <stop offset="0.52" stop-color="#3F63F2"/>
-      <stop offset="1" stop-color="#2944D2"/>
+      <stop offset="0" stop-color="#7CA7F2"/>
+      <stop offset="0.52" stop-color="#4482ED"/>
+      <stop offset="1" stop-color="#1762E4"/>
     </linearGradient>
     <linearGradient id="mt-green-tab" x1="185" y1="82" x2="212" y2="162" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#9DEFD9"/>
@@ -31,18 +31,18 @@
       <stop offset="1" stop-color="#2CC1AF"/>
     </linearGradient>
     <linearGradient id="mt-progress-rest" x1="119" y1="194" x2="195" y2="194" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#CCD5E7"/>
-      <stop offset="1" stop-color="#B9C4D8"/>
+      <stop offset="0" stop-color="#BBD1F8"/>
+      <stop offset="1" stop-color="#9CBDF5"/>
     </linearGradient>
     <linearGradient id="mt-knob" x1="112" y1="180" x2="128" y2="204" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#F7F8FB"/>
-      <stop offset="1" stop-color="#CDD6E8"/>
+      <stop offset="0" stop-color="#F5F8FD"/>
+      <stop offset="1" stop-color="#BDD3F8"/>
     </linearGradient>
     <filter id="mt-bg-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#141A5A" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#0A2B64" flood-opacity="0.18"/>
     </filter>
     <filter id="mt-card-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="3" stdDeviation="4.5" flood-color="#111854" flood-opacity="0.16"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="4.5" flood-color="#09275C" flood-opacity="0.16"/>
     </filter>
   </defs>
 
@@ -63,5 +63,5 @@
   <rect x="44" y="186" width="78" height="10" rx="5" fill="url(#mt-progress-active)"/>
   <circle cx="122" cy="191" r="9" fill="url(#mt-knob)"/>
 
-  <path d="M44 25C53 20 67 18 84 18H196C215 18 231 31 236 50" stroke="#B4C5FF" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M44 25C53 20 67 18 84 18H196C215 18 231 31 236 50" stroke="#BBD1F8" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
 </svg>

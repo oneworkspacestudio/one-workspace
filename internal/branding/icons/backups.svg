@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><rect x="8" y="12" width="80" height="72" rx="18" fill="#e8f0fe"/><path d="M25 37h46v34H25z" fill="#4285f4"/><path d="M25 25h46v16H25z" fill="#34a853"/><path d="M48 44v19m-8-8 8 8 8-8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="68" cy="69" r="12" fill="#fbbc04"/><path d="m62 69 4 4 8-9" fill="none" stroke="#17355c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="backups-title">
+  <title id="backups-title">Backups</title>
+  <defs>
+    <linearGradient id="backups-blue" x1="38" y1="30" x2="214" y2="230" gradientUnits="userSpaceOnUse"><stop stop-color="#60A5FA"/><stop offset=".48" stop-color="#2563EB"/><stop offset="1" stop-color="#0B2A63"/></linearGradient>
+    <linearGradient id="backups-mint" x1="164" y1="164" x2="218" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#9DEFD9"/><stop offset="1" stop-color="#16B8A6"/></linearGradient>
+  </defs>
+  <rect x="24" y="24" width="208" height="208" rx="44" fill="url(#backups-blue)"/>
+  <rect x="58" y="58" width="140" height="25" rx="8" fill="#DBEAFE"/>
+  <path d="M65 96v83a13 13 0 0 0 13 13h83" stroke="#EFF6FF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M128 103v49m-22-20 22 22 22-22" stroke="#EFF6FF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="188" cy="185" r="34" fill="url(#backups-mint)"/>
+  <path d="m172 185 11 11 22-24" stroke="#0B2A63" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

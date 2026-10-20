@@ -2,333 +2,206 @@
   <img src="internal/branding/icons/one_workspace.svg" alt="One Workspace logo" width="112" height="112">
   <h1>One Workspace</h1>
   <p>Your apps and files, together on your own Windows PC.</p>
-  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
+  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="#help">Get help</a></p>
 </div>
 
-![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase-94fac59e.png)
-
-*An illustrated look at the workspace. Check the download notes for the apps included in each package.*
+<!-- app-overview:start -->
+![The complete One Workspace app collection](docs/branding/app-suite-f6de3110.png)
+<!-- app-overview:end -->
 
 ## A place for your everyday work
 
-Browse files, edit documents, enjoy your photos and music, and move between apps with one account. One Workspace brings them together in a browser, while your files stay on the computer and in the folders you choose.
+Browse files, edit documents, enjoy your photos and music, and keep in touch. One Workspace brings your apps together in a browser, while your files stay on your own computer.
 
-- **Your files stay yours.** Work with ordinary folders on your own storage.
-- **Connected sign-in.** Sign in once with MyAccounts and open connected apps without repeating their sign-in buttons. My Vault keeps its independent master password. [How sign-in works](docs/SIGN-IN.md).
-- **Optional backups.** The owner’s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
-- **Choose your apps.** Advanced setup remembers unchecked apps and handles their dependencies. Workspace updates automatically include newly added default apps.
-- **Room to grow.** Add more apps as your needs change.
+- **Your files stay yours.** Choose where to keep them on your own storage.
+- **One account, connected apps.** Sign in once and move between your apps. My Vault keeps a separate master password.
+- **Choose what you need.** Select the apps you want during setup and add more later.
+- **Keep a copy of your work.** Use the built-in Backups app to save your workspace. [Set up backups](docs/BACKUPS.md).
 
 ## Meet your apps
 
-![Current One Workspace and app logos, including My Maps and My Meet](docs/branding/app-suite-36dfad39.png)
+Choose an app name to learn more. The full collection is listed below, including the Workspace hub and the built-in Backups tool.
 
-*The current project logos. Open an app repository below for its source, README and downloads.*
-
+<!-- app-directory:start -->
 <table>
-  <thead>
-    <tr><th colspan="2">App</th><th>What you can do</th><th>Repository</th></tr>
-  </thead>
+  <thead><tr><th colspan="2">App</th><th>What you can do</th></tr></thead>
   <tbody>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_drive.svg" alt="Drive logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Drive</strong></td>
-      <td valign="middle">Browse, upload, organise and share your files.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/drive">drive</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/one_workspace.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/one-workspace"><strong>One Workspace</strong></a></td>
+      <td>Open your apps and manage your workspace in one place.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_office.svg" alt="Docs logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Docs</strong></td>
-      <td valign="middle">Create and edit documents, spreadsheets, slides and PDFs.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/drive">drive</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_drive.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/drive"><strong>Drive</strong></a></td>
+      <td>Browse, upload, organise and share your files.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_photos.svg" alt="Photos logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Photos</strong></td>
-      <td valign="middle">Browse your pictures and explore folders as albums.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/drive">drive</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_office.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/drive"><strong>Docs</strong></a></td>
+      <td>Create and edit documents, spreadsheets and presentations.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_music.svg" alt="Music logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Music</strong></td>
-      <td valign="middle">Listen to your music collection.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/Music">Music</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_photos.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/drive"><strong>Photos</strong></a></td>
+      <td>Browse your pictures and explore folders as albums.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_git.svg" alt="Git logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Git</strong></td>
-      <td valign="middle">Keep code projects organised and collaborate.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/gitea">gitea</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_music.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/Music"><strong>Music</strong></a></td>
+      <td>Listen to your own music collection.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_accounts.svg" alt="MyAccounts logo" width="40" height="40"></td>
-      <td valign="middle"><strong>MyAccounts</strong></td>
-      <td valign="middle">Manage people, sign-ins and passwords.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/myaccounts">myaccounts</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_git.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/gitea"><strong>Git</strong></a></td>
+      <td>Keep code projects organised and work on them together.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/photo_editor.svg" alt="Photo Editor logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Photo Editor</strong></td>
-      <td valign="middle">Draw and edit images and layers, opening and saving directly in Drive. A standalone Studio.exe is also installed.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/Photo-Editor">Photo-Editor</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_accounts.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/myaccounts"><strong>MyAccounts</strong></a></td>
+      <td>Manage your account and the people who can sign in.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_mail.svg" alt="Mail logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Mail</strong></td>
-      <td valign="middle">Your inbox, automatic MyAccounts mailboxes and guided hosting setup.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/mail">mail</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/photo_editor.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/Photo-Editor"><strong>Photo Editor</strong></a></td>
+      <td>Crop, draw and edit images.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_calendar.svg" alt="Calendar logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Calendar</strong></td>
-      <td valign="middle">Events, schedules and calendars with MyAccounts sign-in.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/calendar">calendar</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_mail.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/mail"><strong>Mail</strong></a></td>
+      <td>Read and send email from your workspace.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_contacts.svg" alt="Contacts logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Contacts</strong></td>
-      <td valign="middle">Your address book, sharing Calendar's local service.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/calendar">calendar</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_calendar.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/calendar"><strong>Calendar</strong></a></td>
+      <td>Plan events and keep track of your schedule.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_notes.svg" alt="Notes logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Notes</strong></td>
-      <td valign="middle">Private notes and notebooks, with Markdown editing and history.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/notes">notes</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_contacts.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/calendar"><strong>Contacts</strong></a></td>
+      <td>Keep names, email addresses and phone numbers together.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_tube.svg" alt="My Tube logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Tube</strong></td>
-      <td valign="middle">Upload and watch videos, create channels and playlists, and follow your community.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-tube">my-tube</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_notes.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/notes"><strong>Notes</strong></a></td>
+      <td>Write notes and organise them into notebooks.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_chat.svg" alt="Chat logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Chat</strong></td>
-      <td valign="middle">Messages, groups and attachments with MyAccounts sign-in, local stickers and offline continuity.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/chat">chat</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_tube.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-tube"><strong>My Tube</strong></a></td>
+      <td>Upload and watch videos, create channels and organise playlists.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_vault.svg" alt="My Vault logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Vault</strong></td>
-      <td valign="middle">An independent password vault with compatible clients, encrypted backups and portable recovery.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-vault">my-vault</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_chat.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/chat"><strong>Chat</strong></a></td>
+      <td>Send messages, share files and chat in groups.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_hosting.svg" alt="My Hosting logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Hosting</strong></td>
-      <td valign="middle">Deploy websites and Node apps from GitHub or ZIP with previews and rollback.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-hosting">my-hosting</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_vault.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-vault"><strong>My Vault</strong></a></td>
+      <td>Keep your passwords in a protected vault.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_tasks.svg" alt="My Tasks logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Tasks</strong></td>
-      <td valign="middle">Private and shared lists, recurring tasks, reminders and Calendar/Notes links.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-tasks">my-tasks</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_hosting.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-hosting"><strong>My Hosting</strong></a></td>
+      <td>Publish and manage your websites.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_pdf.svg" alt="My PDF logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My PDF</strong></td>
-      <td valign="middle">PDF viewing, annotations and copy-oriented tools; automatic Drive saves with status and retry.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-pdf">my-pdf</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_tasks.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-tasks"><strong>My Tasks</strong></a></td>
+      <td>Organise to-do lists, shared tasks and reminders.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_monitor.svg" alt="My Monitor logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Monitor</strong></td>
-      <td valign="middle">Private service health, uptime history, incidents and opt-in public status.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-monitor">my-monitor</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_pdf.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-pdf"><strong>My PDF</strong></a></td>
+      <td>Read, annotate and organise PDF documents.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_search.svg" alt="My Search logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Search</strong></td>
-      <td valign="middle">Permission-aware search across connected apps; Vault contents are excluded.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-search">my-search</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_monitor.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-monitor"><strong>My Monitor</strong></a></td>
+      <td>Check whether your apps and websites are running.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/backups.svg" alt="Backups logo" width="40" height="40"></td>
-      <td valign="middle"><strong>Backups</strong></td>
-      <td valign="middle">Optional scheduled snapshots of accounts, app data, programs and ordinary files. Owner access only; off by default.</td>
-      <td valign="middle">Built into One Workspace</td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_search.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-search"><strong>My Search</strong></a></td>
+      <td>Find things across your connected apps.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_slicer.svg" alt="My Slicer logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Slicer</strong></td>
-      <td valign="middle">Prepare STL and supported Bambu 3MF, slice with the native engine, preview real layers and print locally to A1 / A1 mini. <a href="docs/MY-SLICER.md">Setup and acceptance limits</a>.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-slicer">my-slicer</a></td>
-    </tr>
-      <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_social.svg" alt="My Social logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Social</strong></td>
-      <td valign="middle">Capture, compose and share protected photos, Stories and Reels. <a href="docs/MY-SOCIAL.md">Preview features and limits</a>.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-social">my-social</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/backups.svg" alt="" width="40" height="40"></td>
+      <td><a href="docs/BACKUPS.md"><strong>Backups</strong></a></td>
+      <td>Save copies of your workspace so you can recover your work.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_clips.svg" alt="My Clips logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Clips</strong></td>
-      <td valign="middle">Create and discover short videos, with Drive originals and adaptive streaming.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-clips">my-clips</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_slicer.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-slicer"><strong>My Slicer</strong></a></td>
+      <td>Prepare 3D models for supported printers.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_maps.svg" alt="My Maps logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Maps</strong></td>
-      <td valign="middle">OpenStreetMap exploration, saved places and driving, cycling and walking routes.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-maps">my-maps</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_social.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-social"><strong>My Social</strong></a></td>
+      <td>Share photos, stories and reels.</td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_meet.svg" alt="My Meet logo" width="40" height="40"></td>
-      <td valign="middle"><strong>My Meet</strong></td>
-      <td valign="middle">Self-hosted video meetings, host approval, screen sharing and chat. <a href="docs/MAPS-MEET.md">Remote media setup and preview limits</a>.</td>
-      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-meet">my-meet</a></td>
+      <td align="center" width="56"><img src="internal/branding/icons/my_clips.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-clips"><strong>My Clips</strong></a></td>
+      <td>Create, share and discover short videos.</td>
     </tr>
-</tbody>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_maps.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-maps"><strong>My Maps</strong></a></td>
+      <td>Explore maps, save places and plan routes.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_meet.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-meet"><strong>My Meet</strong></a></td>
+      <td>Host video meetings, share your screen and chat.</td>
+    </tr>
+  </tbody>
 </table>
-
-**Preview 53 adds [My Maps and My Meet](docs/MAPS-MEET.md)**, bringing the default catalogue to 24 apps. Both run as standalone Windows executables or use Workspace sign-in. Drive's New menu now offers Word, Excel, PowerPoint and PDF directly. Meet's web page uses the tunnel; Internet media needs reachable UDP/TCP ports or a self-hosted relay. These are functional previews with documented feature and network limits.
-
-**Preview 51 added [My Clips](docs/MY-CLIPS.md)**: an original short-video app, private Drive originals, adaptive HLS, creator tools, recommendations and a signed Android client.
-
-**Preview 49 improves [Chat continuity](docs/CHAT.md#offline-continuity-in-chat10).**
-Previously opened Chat pages load during outages, messages stay in a durable
-queue, and existing one-to-one chats can reconnect directly while the server is
-down. Includes the shared navigation styling fix and all 21 apps, including
-Social2 from Preview48. Built locally without GitHub Actions.
-
-**Preview 41 improves My Tube playback.** Automatic verified video tools, bounded adaptive qualities and conservative Auto playback reduce the bandwidth needed for remote watching. Existing originals remain unchanged. [Streaming details](docs/MY-TUBE-STREAMING.md).
-
-**Preview 40 fixes PDF storage in Drive.** New uploads and processed PDF copies save automatically into **Drive / My PDF**, with per-file status, numbered duplicates and retries. Existing library documents have a Save to Drive action. See [saving details and limits](docs/PDF-DRIVE-SAVE.md).
-
-**Preview 47 adds [My Social](docs/MY-SOCIAL.md)** with MyAccounts sign-in, guarded My Photos originals and the shared Workspace launcher. Full Instagram parity remains unfinished.
-
-**Preview 37 adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. All four have native Windows downloads, MyAccounts sign-in, matching branding and encrypted recovery. See [delivery and tested limits](docs/FOUR-APPS-DELIVERY.md).
-
-**Preview 36 adds My Hosting.** Deploy trusted static sites, Node/Express and
-tested Next/Nuxt builds with real logs, previews, rollback, encrypted backups and
-MyAccounts shared sign-in. Managed Cloudflare connections publish flat site
-addresses without router setup. [Setup, tests and limits](docs/MY-HOSTING.md).
-
-**Preview 43 upgrades Chat integration.** Chat opens on its own hostname with the same MyAccounts identity, installed-app switcher, synchronized chat lists, durable drafts and offline retry. New manager compatibility checks protect app updates. This is an incomplete WhatsApp-parity candidate; application encryption, full social features, calls and native clients remain unfinished. [Changes, checks and limits](docs/CHAT.md).
-
-**[Preview 35 fixes Chat discovery and messaging](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.35).** MyAccounts members become searchable automatically, including before their first Chat login. Find by name, username, verified email or account ID; open native Chat IDs and QR links. Browser checks covered two-way direct/group messages, attachments and disabled-account access in a separate tester installation. [Chat checks and limits](https://github.com/oneworkspacestudio/chat/blob/master/docs/workspace/ACCEPTANCE.md).
-
-**[Preview 34 adds Chat](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.34).** A portable Tinode-based messenger with One Workspace styling, MyAccounts sign-in and its own protected message and attachment storage. [Chat guide](docs/CHAT.md).
-
-**[Preview 32 connects My Vault automatically](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.32).** Managed Cloudflare hosting provides a separate permanent Vault address and its sign-in callback, retained across updates.
-
-**Clear update completion.** Progress bars appear while an operation is running. Finished updates show a static completion summary and duration, with their completed steps and activity details. [Update guide](docs/UPDATES.md#follow-update-progress).
-
-Preview 30 added download, backup, verification, installation and app startup progress with a checklist, speed and approximate stage time remaining. Small notices use matching verified release files when available, avoiding a complete bundle download.
-
-Preview 29 fixed app sign-in and Windows update restart failures. Connected apps reuse your existing session, including Music when an older offline cache is present. Updates check that Workspace can launch before stopping apps and give clearer recovery guidance. All twelve entries in the existing installation opened without another login during the browser review. [Checks and remaining limits](docs/SIGN-IN.md#recorded-local-review-17-october-2026).
-
-Preview 28 introduced Backups, app selection and per-app runtime storage. Open the owner-only Backups tile to choose a local NTFS destination and interval. Scheduling starts off; scheduled backup/restore acceptance remains pending. [Backup setup and limits](docs/BACKUPS.md).
-
-The organization build includes all currently released apps above, with exact
-release URLs and checksums recorded in the package. [App sources and installation](docs/ORG-APPS.md).
-Notes is included from its [organization release](https://github.com/oneworkspacestudio/notes/releases).
-My Tube is installed with the package from its [organization release](https://github.com/oneworkspacestudio/my-tube/releases), with MyAccounts sign-in, private video storage and My Drive import/export. FFmpeg/FFprobe remain optional separate helpers for broader codecs and HLS.
-My Vault automatically gets its own permanent HTTPS address when you use managed Cloudflare hosting. Its DNS, tunnel route and MyAccounts callback are handled by Workspace; updates keep the same link. My Vault uses optional MyAccounts sign-in on that separate secure address. An active MyAccounts session skips another account sign-in; vault encryption still has its own unlock. Independent sign-in and recovery work without MyAccounts or Workspace. [Vault installation, hosting and recovery](docs/MY-VAULT.md).
-
-The Preview 34 bundle adds Chat to the thirteen existing apps, including
-[My Vault 0.2.0 RC3](https://github.com/oneworkspacestudio/my-vault/releases/tag/v0.2.0-rc.3).
-My Vault keeps independent password access and encrypted recovery tools.
-Local recovery uses owner-approved localhost certificate trust; its remote address uses trusted HTTPS.
-[Recorded sign-in checks](docs/SIGN-IN.md#recorded-local-review-17-october-2026).
-
-**My Vault is a preview:** do not store important credentials until its remaining client, clean-computer and security acceptance checks are complete. [Recorded checks and limitations](https://github.com/oneworkspacestudio/my-vault/blob/main/docs/acceptance.json).
-Calendar and Contacts use a shared local service. Hosting-capable Mail keeps its
-existing private engine and mailboxes until an explicit supported migration.
-[Shared-service integration](docs/SHARED-SERVICES.md).
-
-Included apps vary by download. The [release notes](https://github.com/oneworkspacestudio/one-workspace/releases) show what is available now.
+<!-- app-directory:end -->
 
 ## Get started
 
-You need a **64-bit Windows PC** and at least **4 GB of free space**, plus room for your files. See the [storage requirements](docs/TECHNICAL.md#requirements-and-storage) before choosing your installation folders.
+You need a 64-bit Windows PC and room for your apps and files. [Check computer and storage requirements](docs/TECHNICAL.md#requirements-and-storage).
 
-1. **Download the installer.** Open [Downloads](https://github.com/oneworkspacestudio/one-workspace/releases) and choose `WorkspaceSetup-windows-amd64.exe`.
-2. **Make it yours.** Run the setup wizard and enter your name, email address and a password.
-3. **Choose one folder.** Workspace organises apps, protected per-app private data and ordinary files inside it. Expand **Advanced: choose your apps** to omit apps. Choose local access or connect your domain with Cloudflare.
-4. **Install the latest apps.** Setup downloads the newest published Workspace bundle from GitHub, verifies its checksums, and shows progress. Launch Workspace and sign in.
+1. **Download the Windows installer** from the [downloads page](https://github.com/oneworkspacestudio/one-workspace/releases).
+2. **Create your account.** Setup guides you through your first sign-in.
+3. **Choose your folder and apps.** Pick where to keep your workspace and select the apps you want.
+4. **Open Workspace.** Finish setup, sign in and choose an app.
 
-Your computer needs to stay on while you use the apps. Access through your own web address is optional; the [online setup guide](docs/TECHNICAL.md#local-and-public-addresses) explains what is needed.
+Keep the Windows computer switched on while you use its apps. You can use Workspace on that computer or set up your own web address to reach it from other devices. [Setup and online access](docs/TECHNICAL.md).
 
-## Keep your installation up to date
+## Keep your workspace up to date
 
-The owner can open **Updates and backups** from Workspace administration to check
-Workspace and its apps, choose compatible releases and update with verified backups
-and automatic rollback. Existing accounts, app data, files and storage locations
-are retained. After a successful update, [automatic cleanup](docs/UPDATE-CLEANUP.md)
-keeps the latest verified rollback and removes older automatic update copies and
-owned temporary update folders. Scheduled backups remain separate. The update
-window runs locally on your Windows PC.
+Open **Updates and backups** from Workspace administration to check for updates. Your accounts, files and chosen storage folders are kept when you update. Keep a backup of important work and check the download notes before installing.
 
-For an older installation, download the newest installer and choose **Already have
-One Workspace?** on its first screen. [Update, backup and recovery guide](docs/UPDATES.md).
-
-<details>
-<summary>Take a look at the setup wizard</summary>
-
-![One Workspace setup wizard](docs/screenshots/setup-new-logo.png)
-
-</details>
-
-> **Currently in preview.** One Workspace is still being developed. Keep backups of important files and read the download notes before installing or changing an existing workspace.
-
-The October 15 bundle includes the updated app icons and fixes, with current
-limitations recorded in the release notes. Music uses its previous published
-version while Microsoft analyses a Defender detection in its newer build.
-[Release status and limitations](docs/RELEASE-STATUS.md).
-
-### Keeping new installs current
-
-Normal installation checks the public GitHub releases each time and downloads the
-newest published Workspace application bundle, including preview releases. Each
-bundle declares the versions of its apps as a compatible set. An installer you
-saved earlier will therefore install the latest published bundle. Unreleased Git
-commits are not installed. Setup stops with a retry message if GitHub or checksum
-verification fails; it does not silently install the old embedded versions.
-
-Setup also checks [Mail's organization releases](https://github.com/oneworkspacestudio/mail/releases)
-independently, and installs the newest published Mail executable with a supported
-Workspace compatibility manifest. It verifies GitHub's SHA256 and size before
-installation and records the exact Mail version and release source. An invalid,
-unavailable or incompatible Mail release stops online installation with guidance.
-Download an updated installer if a future Mail integration version is unsupported.
-
-The complete Calendar/Contacts bundle requires installer integration2. Setup17
-or earlier stops before installing this bundle and asks for the current installer.
-Download the current installer once to move to this application set.
-
-For an intentional offline installation, run
-`WorkspaceSetup-windows-amd64.exe --offline`. This uses the versions bundled with
-that installer. Existing installations are not automatically upgraded by this
-new-install behavior. Mail hosting checks incoming SMTP connectivity separately
-and shows guidance for router, Windows firewall or ISP restrictions.
+For an older installation, open the latest installer and choose **Already have One Workspace?** [Update and recovery help](docs/UPDATES.md).
 
 ## A few useful things to know
 
 ### Where are my files kept?
 
-In the folders you choose on your own computer. They stay as ordinary files that you can access outside Workspace too.
+On your own computer, in the folders you choose. Files you keep in Drive remain ordinary files that you can open outside Workspace too.
 
 ### Can I invite other people?
 
-Yes. Use **Manage accounts** to add people and reset passwords. The starting Drive folder is shared, so review who can access it before inviting others. [Account and sharing details](docs/TECHNICAL.md#accounts-and-administration).
+Yes. Use **Manage accounts** to add people. The starting Drive folder is shared, so check who should have access before inviting others. [Accounts and sharing](docs/TECHNICAL.md#accounts-and-administration).
 
 ### Do I need an email service?
 
-No. You can create accounts and reset passwords without one. Email verification and password-recovery emails are optional features you can set up later.
+No. You can create accounts and reset passwords without one. You can set up email verification and password-recovery emails later.
 
-### Can I add more apps?
+### Can I use it on my phone?
 
-Yes. Workspace can be extended with additional apps. Connecting a new app currently takes some configuration; see [adding apps](docs/TECHNICAL.md#add-another-app).
+You can open your workspace in your phone's browser once its address is reachable. Keep the Windows computer running. Some apps also offer their own downloads on their app pages.
 
-## Help and further reading
+## Help
 
-| Looking forâ€¦ | Start here |
+| Looking for | Start here |
 | --- | --- |
-| A download or what changed | [Downloads and release notes](https://github.com/oneworkspacestudio/one-workspace/releases) |
-| Setup, online access or backups | [Technical guide](docs/TECHNICAL.md) |
-| App consistency, Drive workflows and current gaps | [Ecosystem review and local fixes](docs/ECOSYSTEM-REVIEW.md) |
+| Downloads and what changed | [Downloads and release notes](https://github.com/oneworkspacestudio/one-workspace/releases) |
+| Setup and online access | [Setup guide](docs/TECHNICAL.md) |
+| Backups and recovery | [Backup guide](docs/BACKUPS.md) |
 | A problem to report | [Report an issue](https://github.com/oneworkspacestudio/one-workspace/issues) |
-| Licensing and component information | [Licenses and sources](docs/COMPONENTS.md) |
+| Detailed app information | [App guides and current availability](docs/RELEASE-STATUS.md) |
+| Licenses and credits | [Licenses and sources](docs/COMPONENTS.md) |

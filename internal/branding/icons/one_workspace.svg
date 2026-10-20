@@ -2,19 +2,19 @@
   <title id="one-workspace-title">One Workspace</title>
   <defs>
     <linearGradient id="ow-bg" x1="38" y1="28" x2="214" y2="233" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#5877FF"/>
-      <stop offset="0.48" stop-color="#2A39C7"/>
-      <stop offset="1" stop-color="#17155F"/>
+      <stop offset="0" stop-color="#6799F0"/>
+      <stop offset="0.48" stop-color="#165EDB"/>
+      <stop offset="1" stop-color="#0A2D6A"/>
     </linearGradient>
     <linearGradient id="ow-blue" x1="58" y1="58" x2="125" y2="125" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#9AB7FF"/>
-      <stop offset="0.45" stop-color="#4E6FFF"/>
-      <stop offset="1" stop-color="#3550E8"/>
+      <stop offset="0" stop-color="#A3C1F6"/>
+      <stop offset="0.45" stop-color="#5E93EF"/>
+      <stop offset="1" stop-color="#3276EB"/>
     </linearGradient>
     <linearGradient id="ow-grey" x1="58" y1="134" x2="122" y2="196" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#F2F4F9"/>
-      <stop offset="0.52" stop-color="#D7DDE8"/>
-      <stop offset="1" stop-color="#B7C0D2"/>
+      <stop offset="0" stop-color="#EFF4FC"/>
+      <stop offset="0.52" stop-color="#C6D9F9"/>
+      <stop offset="1" stop-color="#95B8F4"/>
     </linearGradient>
     <linearGradient id="ow-green" x1="140" y1="134" x2="201" y2="198" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#9DEFD9"/>
@@ -22,10 +22,10 @@
       <stop offset="1" stop-color="#2CC1AF"/>
     </linearGradient>
     <filter id="ow-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#141A5A" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#0A2B64" flood-opacity="0.18"/>
     </filter>
     <filter id="ow-tile-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="2.5" stdDeviation="4" flood-color="#16165E" flood-opacity="0.14"/>
+      <feDropShadow dx="0" dy="2.5" stdDeviation="4" flood-color="#0A2D6A" flood-opacity="0.14"/>
     </filter>
   </defs>
 
@@ -40,6 +40,6 @@
     <rect x="132" y="132" width="66" height="66" rx="18" fill="url(#ow-green)"/>
   </g>
 
-  <path d="M44 25C53 20 67 18 84 18H196C215 18 231 31 236 50" stroke="#B4C5FF" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
-  <path d="M64 59C68 57 73 56 79 56H103" stroke="#D7E3FF" stroke-opacity="0.55" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M44 25C53 20 67 18 84 18H196C215 18 231 31 236 50" stroke="#BBD1F8" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M64 59C68 57 73 56 79 56H103" stroke="#DEE8F8" stroke-opacity="0.55" stroke-width="1.2" stroke-linecap="round"/>
 </svg>

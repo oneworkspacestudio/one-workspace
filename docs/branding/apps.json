@@ -1,0 +1,184 @@
+[
+  {
+    "id": "workspace",
+    "icon": "one_workspace",
+    "name": "One Workspace",
+    "description": "Open your apps and manage your workspace in one place.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace"
+  },
+  {
+    "id": "drive",
+    "icon": "my_drive",
+    "name": "Drive",
+    "description": "Browse, upload, organise and share your files.",
+    "url": "https://github.com/oneworkspacestudio/drive"
+  },
+  {
+    "id": "docs",
+    "icon": "my_office",
+    "name": "Docs",
+    "description": "Create and edit documents, spreadsheets and presentations.",
+    "url": "https://github.com/oneworkspacestudio/drive"
+  },
+  {
+    "id": "photos",
+    "icon": "my_photos",
+    "name": "Photos",
+    "description": "Browse your pictures and explore folders as albums.",
+    "url": "https://github.com/oneworkspacestudio/drive"
+  },
+  {
+    "id": "music",
+    "icon": "my_music",
+    "name": "Music",
+    "description": "Listen to your own music collection.",
+    "url": "https://github.com/oneworkspacestudio/Music"
+  },
+  {
+    "id": "gitea",
+    "icon": "my_git",
+    "name": "Git",
+    "description": "Keep code projects organised and work on them together.",
+    "url": "https://github.com/oneworkspacestudio/gitea"
+  },
+  {
+    "id": "accounts",
+    "icon": "my_accounts",
+    "name": "MyAccounts",
+    "description": "Manage your account and the people who can sign in.",
+    "url": "https://github.com/oneworkspacestudio/myaccounts"
+  },
+  {
+    "id": "studio",
+    "icon": "photo_editor",
+    "name": "Photo Editor",
+    "description": "Crop, draw and edit images.",
+    "url": "https://github.com/oneworkspacestudio/Photo-Editor"
+  },
+  {
+    "id": "mail",
+    "icon": "my_mail",
+    "name": "Mail",
+    "description": "Read and send email from your workspace.",
+    "url": "https://github.com/oneworkspacestudio/mail"
+  },
+  {
+    "id": "calendar",
+    "icon": "my_calendar",
+    "name": "Calendar",
+    "description": "Plan events and keep track of your schedule.",
+    "url": "https://github.com/oneworkspacestudio/calendar"
+  },
+  {
+    "id": "contacts",
+    "icon": "my_contacts",
+    "name": "Contacts",
+    "description": "Keep names, email addresses and phone numbers together.",
+    "url": "https://github.com/oneworkspacestudio/calendar"
+  },
+  {
+    "id": "notes",
+    "icon": "my_notes",
+    "name": "Notes",
+    "description": "Write notes and organise them into notebooks.",
+    "url": "https://github.com/oneworkspacestudio/notes"
+  },
+  {
+    "id": "my-tube",
+    "icon": "my_tube",
+    "name": "My Tube",
+    "description": "Upload and watch videos, create channels and organise playlists.",
+    "url": "https://github.com/oneworkspacestudio/my-tube"
+  },
+  {
+    "id": "chat",
+    "icon": "my_chat",
+    "name": "Chat",
+    "description": "Send messages, share files and chat in groups.",
+    "url": "https://github.com/oneworkspacestudio/chat"
+  },
+  {
+    "id": "vault",
+    "icon": "my_vault",
+    "name": "My Vault",
+    "description": "Keep your passwords in a protected vault.",
+    "url": "https://github.com/oneworkspacestudio/my-vault"
+  },
+  {
+    "id": "hosting",
+    "icon": "my_hosting",
+    "name": "My Hosting",
+    "description": "Publish and manage your websites.",
+    "url": "https://github.com/oneworkspacestudio/my-hosting"
+  },
+  {
+    "id": "tasks",
+    "icon": "my_tasks",
+    "name": "My Tasks",
+    "description": "Organise to-do lists, shared tasks and reminders.",
+    "url": "https://github.com/oneworkspacestudio/my-tasks"
+  },
+  {
+    "id": "pdf",
+    "icon": "my_pdf",
+    "name": "My PDF",
+    "description": "Read, annotate and organise PDF documents.",
+    "url": "https://github.com/oneworkspacestudio/my-pdf"
+  },
+  {
+    "id": "monitor",
+    "icon": "my_monitor",
+    "name": "My Monitor",
+    "description": "Check whether your apps and websites are running.",
+    "url": "https://github.com/oneworkspacestudio/my-monitor"
+  },
+  {
+    "id": "search",
+    "icon": "my_search",
+    "name": "My Search",
+    "description": "Find things across your connected apps.",
+    "url": "https://github.com/oneworkspacestudio/my-search"
+  },
+  {
+    "id": "backups",
+    "icon": "backups",
+    "name": "Backups",
+    "description": "Save copies of your workspace so you can recover your work.",
+    "url": "docs/BACKUPS.md"
+  },
+  {
+    "id": "slicer",
+    "icon": "my_slicer",
+    "name": "My Slicer",
+    "description": "Prepare 3D models for supported printers.",
+    "url": "https://github.com/oneworkspacestudio/my-slicer"
+  },
+  {
+    "id": "social",
+    "icon": "my_social",
+    "name": "My Social",
+    "description": "Share photos, stories and reels.",
+    "url": "https://github.com/oneworkspacestudio/my-social"
+  },
+  {
+    "id": "clips",
+    "icon": "my_clips",
+    "name": "My Clips",
+    "description": "Create, share and discover short videos.",
+    "url": "https://github.com/oneworkspacestudio/my-clips"
+  },
+  {
+    "id": "maps",
+    "icon": "my_maps",
+    "name": "My Maps",
+    "description": "Explore maps, save places and plan routes.",
+    "url": "https://github.com/oneworkspacestudio/my-maps"
+  },
+  {
+    "id": "meet",
+    "icon": "my_meet",
+    "name": "My Meet",
+    "description": "Host video meetings, share your screen and chat.",
+    "url": "https://github.com/oneworkspacestudio/my-meet"
+  }
+]

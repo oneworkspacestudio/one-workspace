@@ -2,9 +2,12 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const sharp = require(process.env.SHARP_MODULE || 'sharp');
+const { apps } = require('./app-branding.cjs');
 
 const root = path.resolve(__dirname, '..');
-const projects = process.argv[2] ? path.resolve(process.argv[2]) : path.dirname(root);
+const localOnly = process.argv.includes('--local-only');
+const projectsArgument = process.argv.slice(2).find(argument => !argument.startsWith('--'));
+const projects = projectsArgument ? path.resolve(projectsArgument) : path.dirname(root);
 const icons = path.join(root, 'internal/branding/icons');
 
 function copy(source, target) {
@@ -15,7 +18,7 @@ function copy(source, target) {
 async function main() {
   const generated = path.join(root, 'docs/branding');
   fs.mkdirSync(generated, { recursive: true });
-  for (const name of ['one_workspace', 'my_drive', 'my_office', 'my_photos', 'my_git', 'my_music', 'photo_editor', 'my_mail', 'my_accounts', 'my_notes', 'my_calendar', 'my_contacts']) {
+  for (const { icon: name } of apps) {
     const svg = path.join(icons, name + '.svg');
     const sizes = [16, 24, 32, 48, 64, 128, 256];
     const images = await Promise.all(sizes.map(size => sharp(svg).resize(size, size).png().toBuffer()));
@@ -37,6 +40,13 @@ async function main() {
     for (const size of [32, 180, 192, 512]) {
       await sharp(svg).resize(size, size).png().toFile(path.join(generated, `${name}-${size}.png`));
     }
+    // Preserve older app build paths that consume an unqualified PNG.
+    const legacyPNG = path.join(generated, name + '.png');
+    if (fs.existsSync(legacyPNG)) await sharp(svg).resize(192, 192).png().toFile(legacyPNG);
+  }
+  if (localOnly) {
+    console.log(`Generated PNG/ICO artwork for all ${apps.length} entries in this repository.`);
+    return;
   }
   const at = (repo, relative) => path.join(projects, repo, relative);
   const asset = (name, extension) => path.join(generated, name + extension);

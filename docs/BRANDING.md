@@ -1,39 +1,48 @@
-# Suite logos
+# Suite branding
 
-The seven supplied SVGs live in `internal/branding/icons/`. The original vector
-artwork is unchanged, including the transparent area outside each rounded tile.
+The shared SVGs in `internal/branding/icons/` are the source for the Workspace
+portal, app switcher, README and generated PNG/Windows ICO artwork. The app
+directory in `docs/branding/apps.json` includes every catalogue app, the
+Workspace hub and the built-in Backups tool.
 
-| Logo | Application surfaces |
-| --- | --- |
-| One Workspace | Portal header, setup wizard, favicon, manager and installer EXE |
-| My Drive | Drive header, login fallback, favicon, PWA icons and FileBrowser EXE |
-| My Office | Workspace Docs tile and the built-in Office editor toolbar |
-| My Photos | Portal tile, integrated/standalone Photos header, sidebar, favicon and EXE |
-| My Git | Portal tile, Gitea logo/favicon/touch icon and standalone launcher EXE |
-| My Music | Portal tile, Music header, favicon, PWA icons and Music EXE |
-| Photo Editor | Studio toolbar/menu, Drive sidebar, favicon and Studio EXE |
+## Visual style
 
-MyAccounts keeps its existing branding because no replacement was supplied.
-App names, routes, authentication and upstream license notices are unchanged.
-New add-on apps use the Workspace icon until they receive their own branding.
+Blue is the dominant colour across the collection. Use medium blue (`#2563EB`),
+light blue (`#60A5FA`) and deep blue (`#0B2A63`) as the main colour family. Mint and
+pale neutrals are accents. Preserve recognisable app symbols and transparent
+margins; check legibility at 16, 24, 32 and 40 pixels on light and dark backgrounds.
+Clips and Backups use the same blue gradient and restrained mint accents as the
+rest of the collection. Avoid unrelated black/red, yellow/green or purple themes.
 
-To refresh the copies in sibling repositories, install Sharp in a local tools
-folder (`npm install --prefix dist/branding-tools sharp`), then run:
+## Keep the collection complete
+
+When adding or renaming an app, update its SVG and `docs/branding/apps.json`.
+Apps sharing a repository still need separate entries. The shared directory
+validator rejects missing, duplicated and unlisted SVGs.
+
+With Sharp installed in a local tools directory, run from the repository root:
 
 ```powershell
-$env:SHARP_MODULE = "$PWD/dist/branding-tools/node_modules/sharp"
-node scripts/sync-branding.cjs I:/Projects
-./scripts/build-branding-resources.ps1 -Go I:/Projects/tooling/go1.27.2/go/bin/go.exe
+$env:SHARP_MODULE = 'path/to/node_modules/sharp'
+node scripts/sync-branding.cjs --local-only
+node scripts/render-branding-overview.cjs
 ```
 
-The sync command generates transparent PNG fallbacks and multi-size Windows ICOs
-in `docs/branding/`; the resource command embeds those ICOs in Windows amd64 Go
-resources. Photos and Studio build scripts carry those resources into staging.
-Music's client adapter applies its assets before the Vite build; PyInstaller uses
-the same ICO. The Gitea launcher uses Gitea's supported custom public-assets path
-so the bundled upstream executable receives the branding without a core rebuild.
+The first command generates every app's transparent PNGs and multi-size ICO.
+Existing unqualified PNG paths remain available for older build scripts. The
+second command regenerates the complete overview, its content-addressed filename,
+the README app table and the light/dark gallery at `docs/branding/index.html`.
+The table descriptions and overview order come from the same app directory.
 
-Build the apps locally after syncing. Running installations and already published
-release assets continue to use their embedded assets until deliberately updated.
-GitHub Actions is not needed or enabled. Open `docs/branding/index.html` for a
-light/dark background and small-size preview of all seven icons.
+Use `--local-only` for repository artwork work. The legacy positional projects
+root intentionally copies assets into supported sibling repositories; use that
+mode only as part of an explicitly scoped component update. It does not rebuild
+those apps. Do not silently modify sibling checkouts or published release files.
+
+Review the rendered README at desktop and phone widths. Keep its language
+friendly to ordinary users; technical details and release history belong in
+linked guides and release notes, as recorded in `AGENTS.md`.
+
+Published executables retain their embedded artwork until a later app or suite
+build includes these sources. Existing immutable release assets must not be
+replaced. GitHub Actions stays disabled; builds and visual checks run locally.

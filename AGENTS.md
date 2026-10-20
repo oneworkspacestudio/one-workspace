@@ -7,6 +7,30 @@ may use another drive. Preserve component license/provenance and user files.
 Do not claim a production or clean-host/service/reboot test not performed.
 The bundle is an evaluation build while upstream acceptance gates remain open.
 
+## README and app branding
+
+Keep the main README friendly to people without technical knowledge. Explain
+what people can do, how to get started and where to get help in plain language.
+Use short, accurate app descriptions. Put implementation details, commands,
+compatibility requirements and testing notes in linked guides. Keep numbered
+preview announcements, version histories and release-status commentary in release
+notes or docs/RELEASE-STATUS.md, not below the app table or elsewhere in README.md.
+Do not imply that an unfinished feature is available or that untested use is proven.
+
+List every app, including apps sharing a repository, plus the Workspace hub and
+Backups. Keep docs/branding/apps.json, the README app table and the logo overview
+in sync when apps are added, removed or renamed. Run
+scripts/render-branding-overview.cjs to regenerate the image and README sections;
+verify that all images and links work and review the result at desktop and phone
+widths before publishing. Use a new content-addressed overview image when artwork
+changes so GitHub does not keep showing an older collection.
+
+Use the shared SVG sources in internal/branding/icons. Blue is the dominant
+colour; mint and pale neutrals are secondary accents. Keep recognisable symbols,
+consistent visual weight, transparent margins and legibility at small sizes.
+Regenerate PNG/ICO exports from the SVGs with sync-branding.cjs --local-only;
+do not hand-edit generated artwork or silently copy into sibling repositories.
+
 ## Build and preview cleanup
 
 Use I:/Projects/tooling for large build artifacts, downloads and cleanup archives.
