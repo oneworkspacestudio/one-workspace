@@ -256,7 +256,11 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
-	for _, app := range []string{"maps", "meet"} {if id == app || strings.HasPrefix(id,app+"-"){return app}}
+	for _, app := range []string{"maps", "meet"} {
+		if id == app || strings.HasPrefix(id, app+"-") {
+			return app
+		}
+	}
 	if id == "clips" || strings.HasPrefix(id, "clips-") {
 		return "clips"
 	}
@@ -467,7 +471,7 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 					ch.Source = oldApps[0].Source
 				}
 			}
-		} else if t := releaseTime(rs, "v"+current.Version); (!t.IsZero() && !suiteRelease.Published.After(t)) || (t.IsZero() && !newerWorkspace(latest.Version, current.Version)) {
+		} else if !newerWorkspace(latest.Version, current.Version) {
 			ch.Packages = groupPackages(g, current)
 			ch.Version = current.Version
 		}

@@ -50,3 +50,22 @@ authenticated app session and restores video after camera re-enable. Drive3
 main-menu creation produced real DOCX/XLSX/PPTX/PDF files, all reporting saved
 in an isolated synthetic folder. Public release uploads/build and owner update
 receipts remain to be finalized. Do not claim public-network media acceptance.
+
+## Installed54; final release superseded by55
+
+Normal backed-up owner update53-to54 completed; 24 apps and23 running services
+healthy, other20 app versions/packages and all identity/storage fields preserved.
+Maps2 and Meet3 are public with managed-update manifests. Drive3 remains uploading.
+Public /maps/ and /meet/ return the expected unauthenticated login redirect.
+Chrome control could not load its request-header policy; managed browser SSO was
+not rechecked. Two synthetic Meet3 clients did pass media, lobby, chat and camera
+re-enable checks before installation. Synthetic C fixture was removed (56MB);
+normal updater cleanup freed about4.2GB and retained its verified newest rollback.
+
+Concurrent53 publication exposed an inherited release-ordering hazard: choose()
+used publication time, allowing an older version published late to displace a
+newer version.55 filters valid published version tags, sorts numerically and
+refuses manager downgrades regardless of publication time. No new tests added or
+run for this follow-up. Build/package integrity and installation checks remain.
+54 draft418837047 is held; its source tag stays immutable. Owner54 is healthy.
+Final55 packaging/publication and normal owner manager update are pending.

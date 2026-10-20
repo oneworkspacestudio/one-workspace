@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -202,11 +203,26 @@ func Latest(ctx context.Context, progress func(string), temporaryRoots ...string
 	return &Bundle{ZIP: &archive.Reader, Catalog: cat, Overrides: overrides, close: func() { archive.Close(); os.RemoveAll(dir) }}, nil
 }
 func choose(releases []Release) (Release, Asset, error) {
-	sort.SliceStable(releases, func(i, j int) bool { return releases[i].Published.After(releases[j].Published) })
+	versionTag := regexp.MustCompile(`^v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?$`)
+	candidates := make([]Release, 0, len(releases))
 	for _, release := range releases {
-		if release.Draft || release.Published.IsZero() || !strings.HasPrefix(release.Tag, "v") {
-			continue
+		if !release.Draft && !release.Published.IsZero() && versionTag.MatchString(release.Tag) {
+			candidates = append(candidates, release)
 		}
+	}
+	// A delayed older release must not displace a higher Workspace version.
+	// Publication time only breaks ties between equivalent version labels.
+	sort.SliceStable(candidates, func(i, j int) bool {
+		a, b := strings.TrimPrefix(candidates[i].Tag, "v"), strings.TrimPrefix(candidates[j].Tag, "v")
+		if newerWorkspace(a, b) {
+			return true
+		}
+		if newerWorkspace(b, a) {
+			return false
+		}
+		return candidates[i].Published.After(candidates[j].Published)
+	})
+	for _, release := range candidates {
 		for _, asset := range release.Assets {
 			if asset.Name == bundleName {
 				return release, asset, nil

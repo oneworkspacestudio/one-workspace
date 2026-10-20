@@ -199,3 +199,9 @@ check is reported instead of silently installing an older fallback.
 The internal owner **Backups** app adds full verified snapshots on a configurable
 interval, switched off by default. See [Backups](BACKUPS.md) for setup, downtime,
 storage and recovery limits. Its snapshots appear in the same local recovery list.
+
+## Release ordering
+
+Workspace55 chooses the highest published Workspace version that supplies a bundle.
+Publication dates only break ties between equivalent version labels. An older
+release published later is not offered as a manager downgrade.

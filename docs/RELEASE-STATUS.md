@@ -1,7 +1,9 @@
-# Workspace54: Maps, Meet and visible Office creation
+# Workspace55: Maps, Meet and visible Office creation
 
 Adds My Maps2 and My Meet3 to the default 24-app catalogue, shared MyAccounts
-sign-in, managed private app folders, backup coverage and app updates. New
+sign-in, managed private app folders, backup coverage and app updates.
+Workspace releases are selected by version, so a delayed older upload cannot
+replace a higher version. The manager also rejects a version downgrade. New
 installs can deselect optional apps in Advanced; existing installations retain
 their explicit exclusions. Carries forward the Workspace53 integrated navigation
 and Clips4 restart-safe database migration. Drive3 exposes DOCX, XLSX, PPTX and PDF in the New menu.
