@@ -25,3 +25,12 @@ guard rechecks native Quantum policy; Social mediates owner originals and
 audience-checked derivatives. Never expose that root directly. Chat uses Tinode
 and per-app tickets; Social currently offers an explicit launcher, no invented
 DM/RTC API. Full parity and physical-device/clean-host checks remain open.
+
+Managed acceptance passed: fresh three-app installation, one MyAccounts sign-in,
+private publication, exact original bytes, same immutable Drive subject, Quantum
+raw download/Photos media/folder denial and shared picker. Guard auth now reuses
+its token in memory for two minutes; authorization rules are fetched every time
+(regression tested). Full suite Go tests/vet pass. Social preview1 targeta7dfda3
+passed Windows CI39410458193 and packaged EXEf8de0bce repeated Chrome workflow.
+Social ZIPa78f08d7 is pinned; existing20 component app versions remain unchanged.
+Final full21-app installer, CI, release and normal owner update are next.

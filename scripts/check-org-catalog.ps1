@@ -2,7 +2,7 @@ param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
 if($cat.installerIntegration -ne 2){throw 'Missing installer compatibility guard for shared-service apps'}
-$required=@('accounts','drive','docs','photos','gitea','music','mail','studio','calendar','contacts','notes','my-tube','vault','chat','hosting','tasks','pdf','monitor','search','slicer')
+$required=@('accounts','drive','docs','photos','gitea','music','mail','studio','calendar','contacts','notes','my-tube','vault','chat','hosting','tasks','pdf','monitor','search','slicer','social')
 foreach($id in $required){if(@($cat.apps|Where-Object id -CEQ $id).Count -ne 1){throw ('Organization app missing or duplicated: '+$id)}}
 foreach($app in $cat.apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/[A-Za-z0-9_.-]+(/|$)'){throw ('Non-organization source: '+$app.id)}}
 foreach($id in @('calendar','contacts')){
@@ -27,7 +27,7 @@ $hosting=$cat.apps|Where-Object id -eq 'hosting'
 $hostingArgs=@('--data','${DATA}/my-hosting','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/hosting','--no-browser')
 if($cat.packages.hosting.file -cne 'MyHosting.exe' -or -not $cat.packages.'hosting-LICENSE' -or -not $cat.packages.'hosting-NOTICE' -or -not $cat.packages.'hosting-THIRD-PARTY-LICENSES.txt' -or -not $cat.packages.'hosting-compatibility.json'){throw 'My Hosting executable, attribution or integration contract missing'}
 if(-not $hosting.oidc -or $hosting.callback -cne '/hosting/auth/callback' -or $hosting.route -cne '/hosting' -or -not $hosting.stripPrefix -or @($hosting.depends).Count -ne 1 -or $hosting.depends[0] -cne 'accounts' -or ($hosting.args|ConvertTo-Json -Compress) -cne ($hostingArgs|ConvertTo-Json -Compress)){throw 'My Hosting managed authentication, data or launch contract is incorrect'}
-foreach($entry in @(@{id='tasks';exe='MyTasks.exe';port=9008},@{id='pdf';exe='MyPDF.exe';port=9009},@{id='monitor';exe='MyMonitor.exe';port=9010},@{id='search';exe='MySearch.exe';port=9011},@{id='slicer';exe='MySlicer.exe';port=9012})){
+foreach($entry in @(@{id='tasks';exe='MyTasks.exe';port=9008},@{id='pdf';exe='MyPDF.exe';port=9009},@{id='monitor';exe='MyMonitor.exe';port=9010},@{id='search';exe='MySearch.exe';port=9011},@{id='slicer';exe='MySlicer.exe';port=9012},@{id='social';exe='MySocial.exe';port=9013})){
  $app=$cat.apps|Where-Object id -CEQ $entry.id
  $expected=@('--data',('${DATA}/'+$entry.id),'--listen','127.0.0.1:${PORT}','--origin',('${ORIGIN}/'+$entry.id),'--no-browser')
  if($cat.packages.($entry.id).file -cne $entry.exe -or -not $app.oidc -or $app.route -cne ('/'+$entry.id) -or $app.callback -cne ('/'+$entry.id+'/auth/callback') -or -not $app.stripPrefix -or $app.port -ne $entry.port -or ($app.args|ConvertTo-Json -Compress) -cne ($expected|ConvertTo-Json -Compress)){throw ('Invalid four-app launch or identity contract: '+$entry.id)}

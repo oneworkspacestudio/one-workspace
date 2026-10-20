@@ -18,6 +18,9 @@ import (
 )
 
 type Runtime struct {
+	socialGuardMu      sync.Mutex
+	socialGuardToken   string
+	socialGuardTokenAt time.Time
 	sharedOnce         sync.Once
 	sharedErr          error
 	Config             Config
@@ -188,6 +191,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 				cmd.Env = append(cmd.Env, fmt.Sprintf("WORKSPACE_REGISTRY_URL=http://127.0.0.1:%d/_integration/monitor", c.Port), "WORKSPACE_REGISTRY_TOKEN="+monitorCapability(client.Secret))
 			}
 		}
+		if app.ID == "social" {
+			cmd.Env = append(cmd.Env, "MYSOCIAL_PHOTOS_ROOT="+socialRoot(c), fmt.Sprintf("MYSOCIAL_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/social/storage", c.Port), "MYSOCIAL_STORAGE_GUARD_TOKEN="+socialCapability(client.Secret))
+		}
 		if app.ID == "hosting" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			if c.HostingDomain != "" {
@@ -269,6 +275,11 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 	}
 	if usesShared(rt.Config, app.ID) {
 		if e := rt.ensureShared(ctx); e != nil {
+			return e
+		}
+	}
+	if app.ID == "social" {
+		if e := rt.verifySocialStorage(ctx, true); e != nil {
 			return e
 		}
 	}

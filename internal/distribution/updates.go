@@ -101,6 +101,7 @@ var updateGroups = []updateGroup{
 	{"monitor", "My Monitor", "my-monitor", []string{"monitor"}},
 	{"search", "My Search", "my-search", []string{"search"}},
 	{"slicer", "My Slicer", "my-slicer", []string{"slicer"}},
+	{"social", "My Social", "my-social", []string{"social"}},
 }
 
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
@@ -252,6 +253,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "social" || strings.HasPrefix(id, "social-") {
+		return "social"
+	}
 	if id == "slicer" || strings.HasPrefix(id, "slicer-") {
 		return "slicer"
 	}

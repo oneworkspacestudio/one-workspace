@@ -14,7 +14,7 @@ import (
 // later explicit reinstall reconnects the same encrypted/user-owned state.
 func RemoveApp(data, id string) error {
 	if !foundationApp(id) {
-		return errors.New("safe removal currently supports tasks, pdf, monitor and search")
+		return errors.New("safe removal supports Workspace foundation apps, including My Social")
 	}
 	lock, e := platform.Lock(filepath.Join(data, "runtime.lock"))
 	if e != nil {

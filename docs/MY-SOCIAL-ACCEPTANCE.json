@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "workspace": "0.3.0-preview.47",
+  "social": "0.1.0-preview.1",
+  "checks": [
+    "fresh isolated Windows installer",
+    "three selected apps",
+    "MyAccounts once then Social OIDC",
+    "guarded Quantum storage connected",
+    "private photo published",
+    "original byte identity",
+    "Drive OIDC immutable subject matches",
+    "Quantum raw download original denied",
+    "Photos raw media original denied",
+    "Quantum protected folder denied",
+    "Workspace picker"
+  ],
+  "ownerDataUsed": false,
+  "physicalDevice": false
+}

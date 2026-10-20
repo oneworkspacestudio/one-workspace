@@ -114,3 +114,10 @@ needed, and sign-out clears Chat cookies. Its messages and ordinary attachment
 files live in its own protected folder and are included in stopped suite backups.
 Chat's GPL/Apache and dependency notices accompany its exact org ZIP pin. See
 [Chat setup and limits](CHAT.md); initial runtime acceptance remains pending.
+
+## My Social / preview47
+
+The twenty-first app is [My Social](MY-SOCIAL.md), from the organization-owned
+`my-social` source and verified preview1 package. Existing component pins remain
+unchanged. The native guarded My Photos adapter and explicit SSO/logout/update
+contract require Workspace47 or later. Feature gaps remain explicit.

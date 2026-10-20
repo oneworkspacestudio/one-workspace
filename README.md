@@ -156,12 +156,20 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
       <td valign="middle">Prepare STL and supported Bambu 3MF, slice with the native engine, preview real layers and print locally to A1 / A1 mini. <a href="docs/MY-SLICER.md">Setup and acceptance limits</a>.</td>
       <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-slicer">my-slicer</a></td>
     </tr>
-  </tbody>
+      <tr>
+      <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_social.svg" alt="My Social logo" width="40" height="40"></td>
+      <td valign="middle"><strong>My Social</strong></td>
+      <td valign="middle">Capture, compose and share protected photos, Stories and Reels. <a href="docs/MY-SOCIAL.md">Preview features and limits</a>.</td>
+      <td valign="middle"><a href="https://github.com/oneworkspacestudio/my-social">my-social</a></td>
+    </tr>
+</tbody>
 </table>
 
 **Preview 41 improves My Tube playback.** Automatic verified video tools, bounded adaptive qualities and conservative Auto playback reduce the bandwidth needed for remote watching. Existing originals remain unchanged. [Streaming details](docs/MY-TUBE-STREAMING.md).
 
 **Preview 40 fixes PDF storage in Drive.** New uploads and processed PDF copies save automatically into **Drive / My PDF**, with per-file status, numbered duplicates and retries. Existing library documents have a Save to Drive action. See [saving details and limits](docs/PDF-DRIVE-SAVE.md).
+
+**Preview 47 adds [My Social](docs/MY-SOCIAL.md)** with MyAccounts sign-in, guarded My Photos originals and the shared Workspace launcher. Full Instagram parity remains unfinished.
 
 **Preview 37 adds My Tasks, My PDF, My Monitor and My Search.** New default apps are installed during Workspace updates; explicit opt-outs are preserved. All four have native Windows downloads, MyAccounts sign-in, matching branding and encrypted recovery. See [delivery and tested limits](docs/FOUR-APPS-DELIVERY.md).
 
