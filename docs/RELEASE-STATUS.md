@@ -12,7 +12,10 @@ Exact Chat9 packaged mobile/browser/security/offline/retry/QR/navigation/restart
 checks passed using synthetic accounts. Official rendered Android/iOS design
 examples were reviewed; current reference-account pixel parity and physical-phone
 acceptance are not claimed. Full application E2EE and the broader parity brief
-remain unfinished. Installer/download/installed checks are recorded separately.
+remain unfinished. Fresh installation, paired update and both picker layouts passed. Anonymous public
+files were hash-verified; the installed46/Chat9 bytes match. All18 app processes
+and Cloudflare are running, with2 built-in routes. The newest verified owner
+recovery copy is retained. [Final boundaries](CHAT-MOBILE-ACCEPTANCE.json).
 ## Preview45: Chat identity, navigation and safe retry
 
 Chat7 repairs the actual Retry menu so it uses the original queued publication
