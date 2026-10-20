@@ -48,3 +48,11 @@ Do not follow junctions into other folders. Archive unknown test state or older
 rollback data before removal, verify the archive, and encrypt private archives
 when the destination cannot preserve Windows ACLs. Keep the current installation
 and newest usable rollback backup. Do not clear unrelated projects or global temp.
+
+## Verify deployed branding
+
+For an installed-app branding request, publishing artwork or README changes is
+not completion. Rebuild the manager or affected app binaries, install with the
+normal backed-up update flow and verify the running deployment serves the new
+content-addressed icon bytes. Distinguish source artwork from deployed artwork
+in the completion report.

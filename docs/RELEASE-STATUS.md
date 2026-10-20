@@ -510,3 +510,11 @@ DPAPI still needs the original Windows security context; this is not a bare-disk
 or cross-machine recovery wizard. Keep independent Vault encrypted exports.
 Read BACKUPS.md before enabling the optional schedule. Prior component limitations,
 Mail/Vault browser gates and the withheld Music build remain unchanged.
+
+## Workspace 56: installed blue branding
+
+Rebuilds the Workspace manager, app grid, app switcher, header/favicon artwork and
+Windows manager/installer icons from the shared blue SVG and ICO sources. The
+24 app executables and managed contracts remain unchanged from Workspace55.
+New icon content hashes prevent browser/CDN caches from retaining old artwork.
+Local package acceptance and backed-up installation are recorded separately.

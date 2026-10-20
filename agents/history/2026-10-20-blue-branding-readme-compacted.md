@@ -44,3 +44,15 @@ Sanitized review artifacts and scripts: I:/Projects/tooling/blue-branding-202610
 Task-owned browser/server processes close after capture; remove only the named
 C:/Projects/.cache/blue-branding-20261020 cache after checking processes/reparse
 points. Publish only this task's docs, icons, generators and AGENTS/history paths.
+
+## Local deployment follow-up
+
+User reported the installed deployment still had old icons. Source/readme-only
+publication did not update the embedded assets in Workspace55. Current owner
+installation has24 apps/23 healthy service entries. Prepare Workspace56 with
+rebuilt SVG assets and Windows icon resources, preserving every app version and
+payload. Verify a synthetic55-to56 update before the normal protected owner
+update. Local package/acceptance tooling: I:/Projects/tooling/blue-branding-local-20261020.
+The former53 draft is superseded; Workspace55 and component releases are now
+public and fully verified by the concurrent delivery task. Do not downgrade or
+replace existing release assets. Further local build/install checks are pending.
