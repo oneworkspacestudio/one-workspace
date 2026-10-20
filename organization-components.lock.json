@@ -133,14 +133,14 @@
   },
   "myMaps": {
     "repository": "oneworkspacestudio/my-maps",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-maps-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "234c035db48c67a49a92d5d7a4600d88cd09fe3fd2276f87cdef40ec7f557e45"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-maps-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "4144fdd12e519f41cb204810fab11f180149edf435c2d1287f6aeff23711918e"
   },
   "myMeet": {
     "repository": "oneworkspacestudio/my-meet",
-    "tag": "v0.1.0-preview.2",
-    "asset": "my-meet-0.1.0-preview.2-windows-amd64.zip",
-    "sha256": "9dab399b9a6c4f14a83b5de778d1777ef5c6224423d1c539bf7d8c7833468e81"
+    "tag": "v0.1.0-preview.3",
+    "asset": "my-meet-0.1.0-preview.3-windows-amd64.zip",
+    "sha256": "72068550813042c56b1ef5fff862107c2f218d45f31e840c8fa7a14f5a44515a"
   }
 }

@@ -1,6 +1,6 @@
 # My Maps and My Meet
 
-Workspace53 adds both apps to the default installation and update catalogue.
+Workspace54 adds both apps to the default installation and update catalogue.
 Use the Apps page to open them; existing MyAccounts sessions start their normal
 authenticated SSO flow automatically. Neither app uses a second managed password.
 Advanced installation can exclude them. Standalone EXEs provide their own local

@@ -1,10 +1,10 @@
-# Workspace53: Maps, Meet and visible Office creation
+# Workspace54: Maps, Meet and visible Office creation
 
-Adds My Maps1 and My Meet2 to the default 24-app catalogue, shared MyAccounts
+Adds My Maps2 and My Meet3 to the default 24-app catalogue, shared MyAccounts
 sign-in, managed private app folders, backup coverage and app updates. New
 installs can deselect optional apps in Advanced; existing installations retain
-their explicit exclusions. Carries forward the Workspace52 integrated navigation
-and Clips3 sidebar footer. Drive3 exposes DOCX, XLSX, PPTX and PDF in the New menu.
+their explicit exclusions. Carries forward the Workspace53 integrated navigation
+and Clips4 restart-safe database migration. Drive3 exposes DOCX, XLSX, PPTX and PDF in the New menu.
 
 Maps uses Leaflet, OpenStreetMap, Photon and FOSSGIS OSRM. Meet embeds a verified
 LiveKit Windows media engine. No paid provider or GitHub Actions is used.

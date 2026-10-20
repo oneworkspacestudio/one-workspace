@@ -12,7 +12,7 @@ Build tools/caches: I:/Projects/tooling/maps-meet-20261020 and existing four-app
 
 Merged the primary checkout's 7104646 (Workspace52 navigation and Clips3) before
 integration. Published apphost dependency 0578d36ce297 is pinned in both new Go
-modules. Suite53 adds maps/meet ports, routes, identity/session lifecycle, private
+modules. Suite54 adds maps/meet ports, routes, identity/session lifecycle, private
 storage, icons, source pins, licences, app-update groups and contracts. Default
 catalogue has 24 apps. Meet's derived TCP/UDP ports are included in install
 preflight, with a clear lower-base-port error. README overview/table includes all
@@ -34,8 +34,19 @@ selection, exact pin coordinates, Settings overlay restoration and mobile tab
 shrink were corrected during visual review.
 
 Next: finish public app releases, run the complete pinned org build, publish
-Workspace53 and app update manifests, then apply the normal backed-up owner
+Workspace54 and app update manifests, then apply the normal backed-up owner
 update. Recheck current canonical Git and installed state first because the
 Workspace52 task may still be publishing/updating. Remote Meet forwarding choice
 is pending; never infer approval. Clean only task-owned synthetic preview
 processes/data on C:, not the owner's rollback or other active work.
+
+## Final Workspace54 candidate
+
+Merged canonical 1bd7da5 to preserve Clips4 restart-safe migrations. The owner's
+normal update to53 has now completed independently; recheck its live state
+before applying54. Final pins are Maps2/Meet3 with minimum manager54. Both have
+an integrated compact app picker; Meet binds its signalling grants to the
+authenticated app session and restores video after camera re-enable. Drive3
+main-menu creation produced real DOCX/XLSX/PPTX/PDF files, all reporting saved
+in an isolated synthetic folder. Public release uploads/build and owner update
+receipts remain to be finalized. Do not claim public-network media acceptance.

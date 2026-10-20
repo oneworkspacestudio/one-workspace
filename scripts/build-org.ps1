@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.53',
+ [string]$Version='0.3.0-preview.54',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
@@ -115,14 +115,14 @@ Expand-Archive -LiteralPath $mapsZip -DestinationPath $mapsStage
 $mapsRoot=(Get-ChildItem -LiteralPath $mapsStage -Filter Maps.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $mapsRoot){throw 'MyMaps executable missing'}
 $mapsContract=Get-Content -LiteralPath (Join-Path $mapsRoot 'compatibility.json') -Raw|ConvertFrom-Json
-if($mapsContract.schema -ne 1 -or $mapsContract.workspaceInstallerIntegration -ne 2 -or $mapsContract.route -cne '/maps' -or $mapsContract.version -cne ($lock.myMaps.tag -replace '^v','')){throw 'Unsupported MyMaps integration contract'}
+if($mapsContract.schema -ne 1 -or $mapsContract.workspaceInstallerIntegration -ne 2 -or $mapsContract.route -cne '/maps' -or $mapsContract.version -cne ($lock.myMaps.tag -replace '^v','') -or $mapsContract.minimumWorkspaceVersion -cne '0.3.0-preview.54'){throw 'Unsupported MyMaps integration contract'}
 $meetZip=Get-OrgAsset $lock.myMeet
 $meetStage=Join-Path $Cache ('my-meet-stage-'+[guid]::NewGuid().ToString('N'))
 Expand-Archive -LiteralPath $meetZip -DestinationPath $meetStage
 $meetRoot=(Get-ChildItem -LiteralPath $meetStage -Filter Meet.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $meetRoot){throw 'MyMeet executable missing'}
 $meetContract=Get-Content -LiteralPath (Join-Path $meetRoot 'compatibility.json') -Raw|ConvertFrom-Json
-if($meetContract.schema -ne 1 -or $meetContract.workspaceInstallerIntegration -ne 2 -or $meetContract.route -cne '/meet' -or $meetContract.version -cne ($lock.myMeet.tag -replace '^v','')){throw 'Unsupported MyMeet integration contract'}
+if($meetContract.schema -ne 1 -or $meetContract.workspaceInstallerIntegration -ne 2 -or $meetContract.route -cne '/meet' -or $meetContract.version -cne ($lock.myMeet.tag -replace '^v','') -or $meetContract.minimumWorkspaceVersion -cne '0.3.0-preview.54'){throw 'Unsupported MyMeet integration contract'}
 $clipsZip=Get-OrgAsset $lock.myClips
 $clipsStage=Join-Path $Cache ('my-clips-stage-'+[guid]::NewGuid().ToString('N'))
 Expand-Archive -LiteralPath $clipsZip -DestinationPath $clipsStage
