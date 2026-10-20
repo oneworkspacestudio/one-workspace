@@ -46,3 +46,11 @@ linked guides and release notes, as recorded in `AGENTS.md`.
 Published executables retain their embedded artwork until a later app or suite
 build includes these sources. Existing immutable release assets must not be
 replaced. GitHub Actions stays disabled; builds and visual checks run locally.
+
+## Installed deployment verification
+
+The Workspace56 local update and served-artwork checks are recorded in
+[evidence](evidence/blue-branding-deployment-20261021.json). The complete icon
+[screenshot](screenshots/blue-icons-native.png) comes from the isolated packaged
+acceptance server. Source publication alone does not change installed artwork;
+use the normal backed-up update flow and verify served icon bytes afterwards.

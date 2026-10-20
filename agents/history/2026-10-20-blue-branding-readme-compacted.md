@@ -56,3 +56,34 @@ update. Local package/acceptance tooling: I:/Projects/tooling/blue-branding-loca
 The former53 draft is superseded; Workspace55 and component releases are now
 public and fully verified by the concurrent delivery task. Do not downgrade or
 replace existing release assets. Further local build/install checks are pending.
+
+## Installed blue branding on 21 October
+
+Workspace55-to56 completed through the normal backed-up updater. All24 app
+versions/packages, identities and storage paths were preserved; all23 service
+entries are healthy. Every one of the26 content-addressed SVGs matches the
+verified package both on localhost and workspace.m8e.co.uk; legacy local URLs
+revalidate. The running manager hash matches the verified56 build. Seven new
+Windows PNG icon frames are embedded in both manager and installer resources.
+The newest rollback manifest checksum is verified. No user database was a test
+fixture and no existing published release asset was replaced.
+
+Compiled source49d3bdf519ce75de5427f47a7f0de04d6c0e246f includes the rebuilt
+manager/setup resources and version56. Full local bundle:24 apps/119 verified
+payloads, all app executables and contracts unchanged from public55. A synthetic
+55-to56 backed-up update retained sign-in and selections and verified all26 SVG
+bytes, content-addressed URLs, cache policy, portal header and favicon. Initial
+test setup on I was stopped for slow I/O; the successful fixture used only the
+named local C cache. Synthetic processes/data and staging copies were removed
+after use. Keep reusable build/review artifacts on I.
+
+Evidence: docs/evidence/blue-branding-deployment-20261021.json. The screenshot
+docs/screenshots/blue-icons-native.png uses the synthetic packaged acceptance
+server, not the owner's signed-in page. Tooling and complete local56 installer
+remain at I:/Projects/tooling/blue-branding-local-20261020.
+
+The user's C source clone has active uncommitted My Create integration, including
+scripts/build.ps1, other source files and a new icon. A fast-forward pull refused
+to overwrite those changes. Preserve them; do not stash/reset or force a sync.
+Canonical I source is pushed. Reserve later manager versions for new-app work;
+56 denotes this verified blue icon deployment.

@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "workspace": "0.3.0-preview.56",
+  "appCount": 24,
+  "iconCount": 26,
+  "sourceCommit": "49d3bdf519ce75de5427f47a7f0de04d6c0e246f",
+  "normalBackedUpUpdate": true,
+  "all24AppVersionsAndPackagesPreserved": true,
+  "allServicesHealthy": true,
+  "healthyServiceEntries": 23,
+  "ownerDataUsedAsFixture": false,
+  "installedManagerMatchesVerifiedPackage": true,
+  "windowsIcons": {
+    "schema": 1,
+    "managerAndInstallerUseNewIcon": true,
+    "verifiedPNGFramesPerExecutable": 7
+  },
+  "servedArtwork": [
+    {
+      "origin": "http://localhost:8990",
+      "all26IconsMatchPackagedArtwork": true,
+      "newContentAddressedURLsVerified": true
+    },
+    {
+      "origin": "https://workspace.m8e.co.uk",
+      "all26IconsMatchPackagedArtwork": true,
+      "newContentAddressedURLsVerified": true
+    }
+  ],
+  "rollbackManifestSHA256": "38b7bc3197e8d60567e242abfe1a10d479b7bb672e8596a921d76b245a67c727",
+  "completedAt": "2026-10-20T23:05:26.4510127Z",
+  "localBuildInstalled": true
+}
