@@ -1,6 +1,16 @@
 # October 20 release status
 
-## Preview44 candidate preparation: Chat discovery, receipts and identity binding
+## Preview45 preparation: safe manual Chat retry
+
+Chat7 repairs the actual Retry menu so it uses the original queued publication
+and durable ID. A real server ACK was deliberately dropped after recipient
+delivery: Chat6's manual Retry produced two copies. The corrected packaged7
+menu produces one copy after reload and retains the original ID. Controller
+checks cover retained reply/document headers, ambiguous legacy drafts, failed
+acknowledgements and the subscription race with automatic replay. Complete45
+download/fresh/upgrade checks remain outstanding until recorded separately.
+
+## Preview44: Chat discovery, receipts and identity binding
 
 The candidate combines Chat6's visible/online directory-query refresh and
 original group-recipient receipt checks with MyAccounts' exact original callback
@@ -12,8 +22,12 @@ replay and concurrent redemption were tested against the real provider.
 
 The manager places its owned exact Chat tunnel route before wildcard fallbacks,
 repairs only its owned Host override and preserves unrelated rules/options.
-Unit/full-suite tests passed. Actual public Cloudflare routing and final44
-download/fresh/upgrade acceptance remain separate gates until performed.
+Unit/full-suite tests passed. The public44 installer and bundle were downloaded
+and SHA-verified. Exact local44 fresh/paired42 upgrade preserved opt-outs, existing
+browser SSO, IDs/history and document bytes; old42 refused incompatible6 before
+storage, then automatically restored its backup. Actual public Cloudflare routing
+remains unverified. The later manual Retry defect is disclosed on both6/44 release
+pages; immutable published assets were not rewritten. Use the corrective release.
 
 These are tested increments, not full WhatsApp parity. Application E2EE, complete
 device/recovery, rich/social/calling and native-mobile families remain incomplete.

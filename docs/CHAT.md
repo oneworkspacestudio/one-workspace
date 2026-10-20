@@ -57,11 +57,16 @@ Chat is optional in Advanced installation. Existing installations can add it
 through the installer’s app-selection flow; ordinary updates preserve deliberately
 omitted apps. Future Chat releases are offered from oneworkspacestudio/chat.
 
-## Candidate5/6 changes and scope
+## Candidate5/6/7 changes and scope
 
 Chat5 adds a full-height branded layout, app switcher, synchronized custom lists,
 account/conversation drafts and static offline shell. Restored sends use one
-durable client ID; acknowledgement loss cannot publish another copy. A deleted
+durable client ID. Chat7 also preserves this ID through the actual manual Retry
+menu: a real dropped-acknowledgement test leaves one recipient copy after reload.
+The prior menu recreated the message and could duplicate an already delivered
+send; this defect was reproduced and disclosed for Chat6/Workspace44. Older
+ambiguous queued messages remain pending with guidance rather than receiving
+an invented ID. The original reply/document data is retained. A deleted
 message's retry returns Gone. Uploaded bytes and conversation membership are
 checked before media access or attachment linking. The account and security
 surfaces route centrally managed name/password controls to MyAccounts.
@@ -74,7 +79,7 @@ message. Read implies delivery and text labels accompany icons. Unknown legacy
 or removed-recipient counters are conservatively Sent; historical receipt
 retention after deletion/rejoin and full Message Info/privacy remain incomplete.
 
-Chat5/6 require Workspace43. The app-update manifest rejects older managers;
+Chat5/6/7 require Workspace43. The app-update manifest rejects older managers;
 the executable also checks the manager capability before touching Chat storage,
 protecting complete-bundle update paths. Use the paired Workspace update first.
 

@@ -180,3 +180,26 @@ update-20261020T002529-b668f2ee318d for an actual old42 offered6 check and futur
 public44 paired upgrade. Do not re-run native test-client metadata against that
 rolled-back provider without recreating its synthetic registration. Fresh31060
 remains final Chat6 with public43 manager/old provider for final native checks.
+
+## Published44 and manual Retry correction (October20)
+
+44/11561f6d is public (release417938790,28 server digests/sizes verified), with
+Chat6/ec0885ee and Accounts preview-20261020.1/87a1c98. Actual anonymous44 installer
+797abdf072bb02954d8eb0b319f514343cfcd993c18363406163a88a3240a21a and bundle
+f2367656c6f70a8ed3be823aa62fe1e4006aeeccb20268c822c32f7a62aa2d33 downloaded
+and verified. Exact local44 fresh and paired42 upgrade passed actual SSO without
+new password, opt-outs, immutable IDs/history and document filename/bytes. Actual
+old42 refused6 before runtime extraction and automatically restored its backup.
+
+A new real lost-ACK test exposed the upstream manual Retry menu deleting the
+queued entry and dropping workspace_id. The recipient saw TWO copies. Prior
+automatic/native idempotency tests missed this menu path. Both6/44 release bodies
+disclose it; no assets/tags rewritten. Chat7 source0e968335 corrects original
+publication/topic/header reuse, subscription race, invalid ACK and legacy ambiguous
+draft guidance. Exact clean packaged manual Retry now passes one-copy after
+recipient reload. Regression checks are running. Owner remains42; hold update
+until7/45 published/downloaded integration gates pass. MyAccounts20 unchanged.
+
+45 build defaults/docs now target7; pin its actual published ZIP hash after final
+tests/release. Continue all mandatory encryption/device/rich/social/calls/native/
+recovery scope. Current candidates are plaintext and incomplete, not full parity.
