@@ -34,6 +34,10 @@ type Config struct {
 	ID, Name, Version, Data, Listen, Origin, Issuer, ClientID, ClientSecret, Owner, WorkspaceURL, RegistryURL, RegistryToken string
 	// MediaCapture is an explicit app capability. Permission still requires a user gesture.
 	MediaCapture bool
+	// Explicit browser capabilities; disabled unless an application requests them.
+	Geolocation  bool
+	Realtime     bool
+	ImageOrigins []string
 }
 type User struct {
 	ID      string `json:"id"`
@@ -387,11 +391,33 @@ func (h *Host) Handler() http.Handler {
 		if h.Config.MediaCapture {
 			w.Header().Set("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()")
 		}
+		if h.Config.Geolocation {
+			w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=(self)")
+			w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		}
 		scripts := "'self'"
 		if h.Config.ID == "pdf" {
 			scripts += " 'wasm-unsafe-eval'"
 		}
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src "+scripts+"; style-src 'self' 'unsafe-inline'; font-src 'self' blob: data:; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'")
+		images := ""
+		for _, origin := range h.Config.ImageOrigins {
+			v, err := url.Parse(origin)
+			if err == nil && v.Scheme == "https" && v.Host != "" && v.User == nil && v.Path == "" && v.RawQuery == "" && v.Fragment == "" && !strings.ContainsAny(origin, " \t\r\n;") {
+				images += " " + v.Scheme + "://" + v.Host
+			}
+		}
+		connect := "'self'"
+		if h.Config.Realtime {
+			scheme := "wss"
+			if u.Scheme == "http" {
+				scheme = "ws"
+			}
+			connect += " " + scheme + "://" + u.Host
+			if host != u.Host {
+				connect += " " + scheme + "://" + host
+			}
+		}
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src "+scripts+"; connect-src "+connect+"; style-src 'self' 'unsafe-inline'; font-src 'self' blob: data:; img-src 'self' data: blob:"+images+"; media-src 'self' blob:; worker-src 'self' blob:; frame-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'")
 		if h.Base != "" && (r.URL.Path == h.Base || strings.HasPrefix(r.URL.Path, h.Base+"/")) {
 			if r.URL.Path == h.Base {
 				http.Redirect(w, r, h.Base+"/", 303)

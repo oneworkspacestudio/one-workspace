@@ -1,0 +1,9 @@
+# Maps and Meet integration — in progress
+
+User authorized two native standalone apps, shared design/MyAccounts, Drive Office creation, installation, org repos and releases. Free/open source foundations only; no paid services or GitHub Actions. New app roots: I:/Projects/my-maps and I:/Projects/my-meet. Suite branch codex/maps-meet is isolated from concurrent Clips/navigation work in the primary checkout; reconcile the newer primary commits before release.
+
+Shared apphost now has explicit opt-in geolocation, safe HTTPS image origins and same-origin websocket CSP. Added Service for embedded engine children under the existing Windows kill-on-close job boundary with an explicit scrubbed environment. My Maps uses Leaflet, user-triggered cached/rate-limited Photon and FOSSGIS routing, OSM attribution and provider configuration; no tile prefetch. Meet embeds pinned LiveKit 1.13.10 Windows x64 with SHA256 validation, separate signal route, per-room host admission and server-side permission checks before websocket proxying. All private state uses host issuer/subject identities and NTFS ACLs. Both AUI/TS frontends and Go development EXEs compile. Runtime and external-media checks remain outstanding; do not claim parity or a release yet.
+
+Maps provider policies: OSM tiles forbid offline bulk downloads; Photon is best effort; FOSSGIS maximum one request/second. Remote LiveKit requires reachable media UDP/TCP (HTTP Cloudflare tunnel alone cannot carry media). No live traffic, Street View, proprietary reviews, Meet telephony, cloud transcription or unlimited conferencing claimed.
+
+Build tools/caches: I:/Projects/tooling/maps-meet-20261020 and existing four-apps/env.ps1. No owner install changed. Release scripts/integration/package/license work remains. Current tool session holds pending Drive main-menu edit in I:/Projects/filebrowser-drive; unrelated untracked preview files must be preserved.
