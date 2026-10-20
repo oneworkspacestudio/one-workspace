@@ -1,5 +1,26 @@
 # October 20 release status
 
+## Preview48: My Social with scoped private originals
+
+Publishes Social2 and the complete21-app suite. The other20 component versions
+and payload bytes are preserved. MyAccounts identity, capture, layered photo and
+carousel editing, private drafts, publishing, Stories, basic Reels, social actions,
+Studio and opt-in notifications are functional; the app acceptance matrix tracks
+remaining Instagram, advanced video, messaging/live and physical-device gaps.
+
+Social2 requires48. A dedicated private My Photos source replaces the preview1/47
+shared-folder adapter: native Windows ACL casing could bypass folder denies.
+Each account receives only its own read-only native scope. Native own-original
+byte identity, cross-account traversal/case denial, managed OIDC, packaged Chrome,
+Windows tests/vet and CI passed. A published47-to48 update preserved identities,
+paths, files and app opt-outs. Public assets were size/SHA256 verified, and the
+normal local backed-up update completed with every app healthy. The newest
+verified recovery copy is retained. No owner data was used as a test fixture.
+Predecessor1/47 notes are superseded; existing legacy media needs explicit migration.
+
+Releases: [Social2](https://github.com/oneworkspacestudio/my-social/releases/tag/v0.1.0-preview.2),
+[Workspace48](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.48).
+
 ## Preview46: mobile Chat and visible Workspace dismissal
 
 Pins Chat9 from the organisation's release, with compact phone navigation,

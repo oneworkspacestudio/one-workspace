@@ -1,6 +1,6 @@
 # My Social
 
-My Social is the optional native social PWA in Workspace preview47 and later.
+My Social is the optional native social PWA in Workspace preview48 and later.
 It uses MyAccounts, the shared Workspace switcher/theme and the existing HTTPS
 proxy. Default app route `/social`, listener9013 (allocated per installation),
 callback `/social/auth/callback`. Dependencies: Accounts and Drive/My Photos.
@@ -14,10 +14,11 @@ device push and production acceptance remain open. The app's
 is authoritative for feature status.
 
 All originals reside under the configured Private/photos-social/My Photos/My Social root, keyed
-by immutable issuer/subject. The manager reserves it in native Quantum ACLs and
-rejects conflicting explicit allow rules, including ancestor rules. Each media
-operation verifies a loopback capability guard; only authentication is briefly
-reused, never the authorization decision. Social serves owner originals and
+by immutable issuer/subject. The dedicated native source is outside shared Files,
+disabled by default and bound to each verified account's own read-only scope.
+Native physical scope containment protects originals across casing and traversal
+variants. Each media operation verifies a server-only loopback capability guard.
+Social serves owner originals and
 audience-checked renditions. No public/static directory mapping is created.
 Existing My Photos files remain private unless explicitly imported and published.
 The Social picker displays only that user's protected originals; ordinary Photos
@@ -26,7 +27,7 @@ imports use the user's own current Drive session and scope.
 Runtime app state is in Private/social. The normal coordinated stopped backup
 covers both Private and Files; standalone state-only snapshots do not cover the
 external media root. Removing the app preserves originals, identity and the
-protective Quantum policy. Do not remove that policy to browse private originals.
+private source boundaries. Owners browse originals through their native scope.
 Story expiry is server enforced; retention is conservative and owner managed.
 
 Install/update/uninstall uses existing package size/SHA verification and reversible

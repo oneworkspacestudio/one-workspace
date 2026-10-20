@@ -55,3 +55,25 @@ Drive alias denial. CreateUser applies defaults to incoming source permissions;
 bootstrap creates without a private scope, then PATCHes read-only scope. Scope
 provisioning is serialized to avoid concurrent first-login create races.
 Social source0744a86 passes CI39429278014 and packaged Chrome checks.
+
+Delivery complete: Social v0.1.0-preview.2 target0744a86c826a978c76cbfe521b00336dbe187dc0
+(release418427788,9 verified assets, anonymous public ZIP verified) and Workspace
+v0.3.0-preview.48 target1e589609b86b96ca2aa2a4e61b0d5430893b21ce
+(release418432236,21 verified assets) are public. Source CI39429278014 and
+39430126063 passed, as did packaged Chrome and native managed acceptance.
+A real published47-to48 backed-up upgrade preserved identity/issuer/paths,
+ordinary bytes, Accounts/Drive hashes and18 app opt-outs, then passed own native
+original identity and cross-account/case/traversal denial. Existing20 other
+component payloads/versions remain unchanged.
+
+The authorized real local installation now runs48/Social2, public-digest-matched
+manager1c459041 and Social3f938d8f, with21 apps and health verified. Normal updater
+created a verified rollback; preserve the newest recovery copy. Owner data was
+never a development fixture. Existing operator FFmpeg/FFprobe are configured; no
+helper binaries redistributed. Synthetic C fixtures were stopped and removed.
+Source clones in the user workspace are synchronized. Full Instagram parity,
+advanced video/audio, Social messaging/live, physical Android/iOS push/capture,
+clean-host restore and independent security review remain documented gates.
+The predecessor1/47 tags/assets stay immutable and their notes are superseded.
+Do not revive shared-folder ACL storage. Existing nonempty legacy media still
+requires a separate explicit migration; this local owner had no legacy media.
