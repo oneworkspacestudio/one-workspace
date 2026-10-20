@@ -79,9 +79,9 @@
   },
   "chat": {
     "repository": "oneworkspacestudio/chat",
-    "tag": "v0.1.0-preview.9",
-    "asset": "chat-0.1.0-preview.9-windows-amd64.zip",
-    "sha256": "8bb4b18d578d84b17d4b1d8ecc1f44927bfe0ab78ef30fbe315f6d22dee43474"
+    "tag": "v0.1.0-preview.10",
+    "asset": "chat-0.1.0-preview.10-windows-amd64.zip",
+    "sha256": "2d7b345aacc3d78dec45bf761c62f92b19d027394969108e99b9ec6e438c2c3e"
   },
   "myHosting": {
     "repository": "oneworkspacestudio/my-hosting",

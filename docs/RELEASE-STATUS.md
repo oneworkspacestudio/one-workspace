@@ -1,5 +1,19 @@
 # October 20 release status
 
+## Preview49: Chat outage continuity
+
+Packages Chat10 with cached same-URL loading, local emoji/stickers, durable
+message queues, automatic authenticated public discovery and shared navigation
+styles. Real Chrome checks cover disabling network and restoring it, and both
+clients reloading/reconnecting with the entire synthetic Workspace stopped.
+Exact release acceptance and component hashes accompany the release assets.
+
+The complete21-app suite retains Social2 and its scoped private-originals
+adapter from48. Other component versions remain pinned. Built locally without
+GitHub Actions. Outage grants expire after at most two hours; unavailable public
+discovery/direct routes leave messages queued. No TURN/native background
+delivery/full messaging E2EE or separate-network acceptance is implied.
+
 ## Preview48: My Social with scoped private originals
 
 Publishes Social2 and the complete21-app suite. The other20 component versions

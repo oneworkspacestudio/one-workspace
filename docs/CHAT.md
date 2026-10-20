@@ -123,3 +123,23 @@ Chat9 uses a compact branded header, search and filters, a separate compose acti
 readable working navigation tabs and actual conversation timestamps. Workspace
 has a fixed close action above its scrolling app grid. See the
 [mobile reference and verification scope](https://github.com/oneworkspacestudio/chat/blob/master/docs/whatsapp-parity/MOBILE-LAYOUT.md).
+
+## Offline continuity in Chat10
+
+Workspace49 includes Chat10. After an online visit, the cached app and history
+can reload at the same address during an outage. Chrome network-disabled checks
+cover composing, durable queueing across reloads and exact-ID synchronization
+when the network returns. Local emoji and six Workspace stickers are included.
+
+Recent existing one-to-one conversations automatically prepare signed device
+permissions and public Nostr discovery. With Internet still available, browsers
+can reconnect over WebRTC while the main server is down, without a separately
+installed signaling service. Queued, directly delivered and server-saved states
+are displayed separately. The desktop rail uses shared design-system buttons.
+
+Permissions last at most two hours and public relays/direct routes may be
+unavailable. No TURN service is included. First-time visits, new sign-ins,
+groups/files/calls and mobile background delivery still need server support.
+Acceptance used real Chrome profiles and synthetic accounts on one Windows PC;
+separate-network and physical Android/iOS checks remain open. Normal server
+messages are not application E2EE.

@@ -105,7 +105,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
     <tr>
       <td align="center" valign="middle" width="64"><img src="internal/branding/icons/my_chat.svg" alt="Chat logo" width="40" height="40"></td>
       <td valign="middle"><strong>Chat</strong></td>
-      <td valign="middle">Direct messages, group conversations and attachments, connected to MyAccounts.</td>
+      <td valign="middle">Messages, groups and attachments with MyAccounts sign-in, local stickers and offline continuity.</td>
       <td valign="middle"><a href="https://github.com/oneworkspacestudio/chat">chat</a></td>
     </tr>
     <tr>
@@ -164,6 +164,12 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
     </tr>
 </tbody>
 </table>
+
+**Preview 49 improves [Chat continuity](docs/CHAT.md#offline-continuity-in-chat10).**
+Previously opened Chat pages load during outages, messages stay in a durable
+queue, and existing one-to-one chats can reconnect directly while the server is
+down. Includes the shared navigation styling fix and all 21 apps, including
+Social2 from Preview48. Built locally without GitHub Actions.
 
 **Preview 41 improves My Tube playback.** Automatic verified video tools, bounded adaptive qualities and conservative Auto playback reduce the bandwidth needed for remote watching. Existing originals remain unchanged. [Streaming details](docs/MY-TUBE-STREAMING.md).
 
