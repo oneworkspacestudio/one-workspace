@@ -2,7 +2,7 @@
   <img src="internal/branding/icons/one_workspace.svg" alt="One Workspace logo" width="112" height="112">
   <h1>One Workspace</h1>
   <p>Your apps and files, together on your own Windows PC.</p>
-  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> Â· <a href="#get-started">Get started</a> Â· <a href="docs/TECHNICAL.md">Technical guide</a></p>
+  <p><a href="https://github.com/oneworkspacestudio/one-workspace/releases"><strong>Download for Windows</strong></a> · <a href="#get-started">Get started</a> · <a href="docs/TECHNICAL.md">Technical guide</a></p>
 </div>
 
 ![One Workspace brings files, documents, photos and more together](docs/images/one-workspace-showcase-94fac59e.png)
@@ -15,7 +15,7 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 
 - **Your files stay yours.** Work with ordinary folders on your own storage.
 - **Connected sign-in.** Sign in once with MyAccounts and open connected apps without repeating their sign-in buttons. My Vault keeps its independent master password. [How sign-in works](docs/SIGN-IN.md).
-- **Optional backups.** The ownerâ€™s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
+- **Optional backups.** The owner’s built-in Backups app can copy the whole workspace to another local NTFS drive on a schedule. Scheduling starts off. [Backup setup and recovery](docs/BACKUPS.md).
 - **Choose your apps.** Advanced setup remembers unchecked apps and handles their dependencies. Workspace updates automatically include newly added default apps.
 - **Room to grow.** Add more apps as your needs change.
 

@@ -1,6 +1,6 @@
 # October 20 release status
 
-## Preview45 preparation: Chat identity, navigation and safe retry
+## Preview45: Chat identity, navigation and safe retry
 
 Chat7 repairs the actual Retry menu so it uses the original queued publication
 and durable ID. A real server ACK was deliberately dropped after recipient
@@ -16,8 +16,21 @@ a late-data-end callback crash during navigation. Failed8 candidates were held.
 Owned/guarded callback cleanup, deferred-pin fencing, stale subscribe handling
 and pending-leave re-entry now pass ordered real-frame network delay,13 controller
 units and the complete packaged native/browser/security/UI/restart regressions.
-Rebuild45 with the final released8 bytes; complete45 download/fresh/upgrade checks
-remain outstanding until recorded separately. No8/45 immutable assets rewritten.
+Final45 was built with the released8 bytes. Actual anonymous installer/bundle
+downloads passed size/SHA checks; default-online fresh setup, browser/security/UI,
+supported rollback and paired42→45 upgrade passed. Existing browser SSO, client
+credentials, IDs/history/document bytes and explicit opt-outs were preserved.
+No8/45 immutable assets were rewritten. [Exact evidence](CHAT-PUBLIC45-ACCEPTANCE.json).
+
+The operational installation was then updated from42 to45 using those published
+bytes. Its20 selected apps comprise18 process apps and2 built-in routes; all18
+app processes and Cloudflare are running. Public Workspace, Accounts and dedicated
+Chat health endpoints return200. Existing locations/owner/issuer and the latest
+verified recovery backup remain. No owner conversation or sign-in flow was tested.
+
+This is still an **incomplete parity candidate**. Application E2EE, signed
+device/recovery, complete rich/social/calling and native Android/iOS work remain
+unfinished. No production/full-parity, physical-phone or independent-audit claim.
 
 ## Preview44: Chat discovery, receipts and identity binding
 

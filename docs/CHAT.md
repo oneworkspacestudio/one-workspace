@@ -105,4 +105,14 @@ acceptance remain open. [Recorded Chat checks](https://github.com/oneworkspacest
 configured by this installer. Tinode is not an end-to-end encrypted messenger by
 default. Keep the server and its backups private.
 
+## Public45 integration verification
+
+Actual published installer/bundle downloads passed default-online fresh setup,
+supported rollback/reapply and the paired42→45 upgrade. Synthetic browser tests
+cover SSO, preserved IDs/history/document bytes, delayed-login QR, ordered late
+data navigation, lost-ACK Retry, offline/logout and seven viewports in both themes.
+The operational installation now runs45/Chat8, with its permanent dedicated
+Chat address healthy through Cloudflare. Owner conversations and owner browser
+sign-in were not test fixtures. [Recorded boundaries and hashes](CHAT-PUBLIC45-ACCEPTANCE.json).
+
 Source and component notices: https://github.com/oneworkspacestudio/chat

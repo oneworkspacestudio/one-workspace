@@ -269,3 +269,39 @@ local45r2-chat-parity-20261020, not the removed old local45 path. One first r2 f
 attempt correctly refused the retained old I program folder; helper now uses empty
 I local45-r2. Its failed C root held only test credentials and was verified/removed.
 Preserve owner/newest recovery and the four unrelated untracked histories.
+
+## Latest: public45 installed and tunnel verified
+
+Anonymous public45 downloads833e9b40/6b9fb648 completed and were hash-verified.
+Actual default-online fresh setup and six real browser suites passed at31760,
+with Chat8/provider20,2apps/18optouts. Actual public45 supported rollback to42 and
+paired reapply preserved client credentials, owner/issuer/locations, browser SSO,
+IDs/history and actual document filename/bytes. Public integration record now
+docs/CHAT-PUBLIC45-ACCEPTANCE.json. All source/binary mappings stay unchanged.
+
+Owner C:/tmp/workspace/Private was updated42→45 using actual public files,
+selecting workspace/accounts/chat. Manager58840dde, Chatb06d2102, Accountsc3a309d3
+match pins.20 app tiles include18process +2builtin Docs/Studio; health has19 running
+entries including Cloudflare. The first external verification guard mistakenly
+expected20 process entries and failed AFTER native update success. Corrected
+verification compared process apps and retained pre42 backup metadata, without
+reinstall. Owner/issuer/paths preserved; public Workspace/Accounts/dedicated Chat
+health all200. Actual permanent origin https://chat.m8e.co.uk/chat saved in
+chat/workspace-hosting.json, ready. Owner content/sign-in/browser safety warning
+were not tested. Codex preview open returned queued, not confirmation of viewing.
+
+Latest verified owner rollback update-20261020T043741-fb353976043a retained;
+native cleanup removed1 older owner update backup only after verification,
+~3244.6MB. Never remove newest recovery. Synthetic primary/local/public suites
+were stopped/ref/path/reparse checked and removed after sanitized results/captures
+saved I. A shutdown race initially caused cleanup to refuse safely; resumed after
+processes exited. C frontend/Rust/test caches removed; encrypted provider .age
+proof preserved/hash-verified on I. C free~20.18GiB. No preview services remain.
+
+Current docs distinguish actual public install/rollback tests from operational
+owner service checks and keep application E2EE/full parity/native acceptance
+false. Full Chat brief remains incomplete, especially signed client trust,
+encrypted storage/media/recovery, rich/social families, SFU/TURN/calls and complete
+Android/iOS source/signing/device proof. User mobile/Mac question unanswered.
+Published8/45 assets/tags immutable; source-only documentation follow-ups are
+allowed without retagging. Preserve the four unrelated untracked histories.
