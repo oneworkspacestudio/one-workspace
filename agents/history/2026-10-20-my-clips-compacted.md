@@ -67,3 +67,12 @@ immutable and preserve four unrelated histories.
 Before publication, packaged short-height checks exposed an off-screen Clips
 sidebar footer. Clips3 now scrolls only the sidebar menu and keeps Workspace
 visible at1024x740. Built UI regression passes after correction; pin updated.
+
+Owner update preflight rejected insufficient NTFS free space before changes.
+Automatic/manual51 restart exposed inherited Clips2/3 migration sequencing bug:
+Migrate1 is called even when max schema is3. Never reset the owner's database.
+Clips4 skips completed steps, retains future-schema guard, and tests repeated
+reopen. Workspace52 draft418787958 was cancelled/deleted before publication; its
+source tag remains immutable. Supersede with53/Clips4. Test initialized51 data
+and a second complete53 restart. Older backups are compressed in place with
+checksums and unchanged paths; no snapshot is removed to make space.

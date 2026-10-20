@@ -50,7 +50,11 @@ privacy, HLS/ranges, throttled playback, drafts, capture, social actions, live v
 and a390px layout. See the app's public acceptance record and this release's
 machine-readable receipts. Never use the owner's installation as a fixture.
 
-Workspace52 and Clips3 place Workspace inside the mobile navigation and desktop
+Workspace53 and Clips4 place Workspace inside the mobile navigation and desktop
 sidebar. Shared navigation enhances data-workspace-apps-trigger links into the
 picker, retaining their href fallback. The floating launcher is hidden only while
 an integrated trigger is visible; resizing and SPA changes restore it as needed.
+
+Clips4 also fixes reopening initialized databases: only pending migrations run.
+Clips2/3 rejected their own completed schema on restart. Workspace52 was held
+before publication;53 includes the correction. Existing data is preserved.
