@@ -20,8 +20,8 @@ func fourDefaultCatalogs() (catalog.Catalog, catalog.Catalog) {
 		incoming.Packages[id] = p
 	}
 	incoming.Packages["manager"] = fixturePackage("Workspace.exe", []byte("new-manager"))
-	for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social"} {
-		name := map[string]string{"tasks": "MyTasks", "pdf": "MyPDF", "monitor": "MyMonitor", "search": "MySearch", "slicer": "MySlicer", "social": "MySocial"}[id]
+	for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social", "clips"} {
+		name := map[string]string{"tasks": "MyTasks", "pdf": "MyPDF", "monitor": "MyMonitor", "search": "MySearch", "slicer": "MySlicer", "social": "MySocial", "clips": "MyClips"}[id]
 		incoming.Packages[id] = fixturePackage(name+".exe", []byte("new-"+id))
 		for _, notice := range []string{"LICENSE", "NOTICE", "THIRD-PARTY-LICENSES.txt"} {
 			incoming.Packages[id+"-"+notice] = fixturePackage("licenses/"+name+"-"+notice, []byte("license-"+notice))
@@ -41,7 +41,7 @@ func TestManagerUpdateAutomaticallyAddsNewDefaultsAndPreservesOptOuts(t *testing
 		if e != nil {
 			t.Fatal(e)
 		}
-		for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social"} {
+		for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social", "clips"} {
 			app, installed := target.Find(id)
 			want := !(id == "pdf" || id == "search") || excluded == nil
 			if installed != want {
@@ -87,7 +87,7 @@ func TestOnlinePlanDiscoversSameFourNewApplications(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	for _, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social"} {
+	for _, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social", "clips"} {
 		if _, ok := target.Find(id); !ok {
 			t.Fatal("new app missing", id)
 		}
@@ -95,7 +95,7 @@ func TestOnlinePlanDiscoversSameFourNewApplications(t *testing.T) {
 			t.Fatal("new executable not downloaded", id)
 		}
 	}
-	if len(downloads) < 21 {
-		t.Fatal(fmt.Sprintf("expected manager plus executable/notices for six apps; got %d", len(downloads)))
+	if len(downloads) < 29 {
+		t.Fatal(fmt.Sprintf("expected manager plus executable/notices for seven apps; got %d", len(downloads)))
 	}
 }

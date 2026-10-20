@@ -1,3 +1,14 @@
+# Workspace50: My Clips preview
+
+Adds My Clips1 as the22nd app, with isolated read-only account scopes in native
+Drive, MyAccounts sign-in, app navigation, media-capture policy and validated
+app-update capabilities. Existing21 application payloads and versions from49
+are preserved. See [My Clips](MY-CLIPS.md) for features and acceptance limits.
+
+The app provides a standalone EXE/PWA and signed Android WebView client; this
+release does not claim full TikTok parity, proprietary ranking, commercial
+music rights or physical-device/background-push acceptance.
+
 # October 20 release status
 
 ## Preview49: Chat outage continuity

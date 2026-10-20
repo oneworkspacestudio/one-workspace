@@ -165,6 +165,8 @@ Browse files, edit documents, enjoy your photos and music, and move between apps
 </tbody>
 </table>
 
+**Preview 50 adds [My Clips](docs/MY-CLIPS.md)**: an original short-video app, private Drive originals, adaptive HLS, creator tools, recommendations and a signed Android client. Existing app pins are preserved. This is a first preview with documented parity and device limits.
+
 **Preview 49 improves [Chat continuity](docs/CHAT.md#offline-continuity-in-chat10).**
 Previously opened Chat pages load during outages, messages stay in a durable
 queue, and existing one-to-one chats can reconnect directly while the server is

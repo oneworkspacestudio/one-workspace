@@ -101,6 +101,7 @@ var updateGroups = []updateGroup{
 	{"monitor", "My Monitor", "my-monitor", []string{"monitor"}},
 	{"search", "My Search", "my-search", []string{"search"}},
 	{"slicer", "My Slicer", "my-slicer", []string{"slicer"}},
+	{"clips", "My Clips", "my-clips", []string{"clips"}},
 	{"social", "My Social", "my-social", []string{"social"}},
 }
 
@@ -253,6 +254,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "clips" || strings.HasPrefix(id, "clips-") {
+		return "clips"
+	}
 	if id == "social" || strings.HasPrefix(id, "social-") {
 		return "social"
 	}

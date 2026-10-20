@@ -124,5 +124,11 @@
     "tag": "v0.1.0-preview.2",
     "asset": "my-social-0.1.0-preview.2-windows-amd64.zip",
     "sha256": "0eb0b87a5a125b68334e90d86eeb8d1e0b13dd9cd4fe1d78fe40b0a5dee5655a"
+  },
+  "myClips": {
+    "repository": "oneworkspacestudio/my-clips",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-clips-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "2b28b032dd9d84f7a4f96d840c7dc83c4d4e59bce3af90c76de6b868b1a4f3ad"
   }
 }

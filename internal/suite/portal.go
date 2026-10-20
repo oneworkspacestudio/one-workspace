@@ -186,6 +186,7 @@ func (p *Portal) Handler(control string) http.Handler {
 	p.navigationRoutes(mux)
 	p.monitorRegistry(mux)
 	p.socialStorageRoutes(mux)
+	p.clipsStorageRoutes(mux)
 	p.chatCatalogRoute(mux)
 	mux.HandleFunc("GET /_workspace/open/{id}", p.appOpen)
 	p.vaultRoutes(mux)
