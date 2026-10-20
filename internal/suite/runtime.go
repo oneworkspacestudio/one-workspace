@@ -268,6 +268,11 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 			return e
 		}
 	}
+	if app.ID == "drive" {
+		if e := ensureSocialDriveSource(rt.Config); e != nil {
+			return e
+		}
+	}
 	if app.ID == "my-tube" {
 		if e := ensureMyTubeConfig(rt.Config); e != nil {
 			return e

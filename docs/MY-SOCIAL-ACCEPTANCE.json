@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "workspace": "0.3.0-preview.47",
-  "social": "0.1.0-preview.1",
+  "workspace": "0.3.0-preview.48",
+  "social": "0.1.0-preview.2",
   "checks": [
     "fresh isolated Windows installer",
     "three selected apps",
@@ -10,9 +10,9 @@
     "private photo published",
     "original byte identity",
     "Drive OIDC immutable subject matches",
-    "Quantum raw download original denied",
-    "Photos raw media original denied",
-    "Quantum protected folder denied",
+    "native own scoped original byte identity",
+    "cross-account traversal and case variants denied",
+    "broad My Drive aliases denied",
     "Workspace picker"
   ],
   "ownerDataUsed": false,

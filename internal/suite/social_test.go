@@ -1,68 +1,48 @@
 package suite
 
 import (
+	"encoding/json"
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
-	"net"
-	"net/http"
-	"net/http/httptest"
-	"strconv"
-	"strings"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
-func TestSocialStorageDeniesAncestorAndDescendantAllows(t *testing.T) {
-	base := map[string]socialRule{socialPath: {DenyAll: true}}
-	if !safeSocialRules(base) {
-		t.Fatal("reserved root denied")
-	}
-	for _, p := range []string{"/", "/My Photos/", "/My Photos/My Social/", "/My Photos/My Social/users/a/"} {
-		r := map[string]socialRule{socialPath: {DenyAll: true}}
-		allow := socialRule{}
-		allow.Allow.Users = []string{"another-user"}
-		r[p] = allow
-		if safeSocialRules(r) {
-			t.Fatal("allow rule could expose originals", p)
-		}
-	}
-	if safeSocialRules(map[string]socialRule{}) {
-		t.Fatal("missing deny accepted")
-	}
-}
-
-func TestSocialGuardReusesOnlyAuthenticationAndRechecksACL(t *testing.T) {
-	logins, reads := 0, 0
-	conflict := false
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch {
-		case strings.Contains(r.URL.Path, "auth/login"):
-			logins++
-			w.Write([]byte("fixture.jwt.token"))
-		case r.Method == "POST":
-			w.Write([]byte(`{}`))
-		default:
-			reads++
-			if conflict {
-				w.Write([]byte(`{"/My Photos/My Social/":{"denyAll":true},"/":{"allow":{"users":["another"]}}}`))
-			} else {
-				w.Write([]byte(`{"/My Photos/My Social/":{"denyAll":true}}`))
-			}
-		}
-	}))
-	defer server.Close()
-	_, raw, _ := net.SplitHostPort(strings.TrimPrefix(server.URL, "http://"))
-	port, _ := strconv.Atoi(raw)
-	rt := &Runtime{Config: Config{Files: t.TempDir(), Catalog: catalog.Catalog{Apps: []catalog.App{{ID: "drive", Port: port}}}}, Secrets: Secrets{RecoveryPassword: "synthetic"}}
+func TestSocialStorageOutsideSharedRoot(t *testing.T) {
+	base := t.TempDir()
+	c := Config{Data: filepath.Join(base, "Private"), Files: filepath.Join(base, "Files")}
+	rt := &Runtime{Config: c}
 	if e := rt.verifySocialStorage(t.Context(), true); e != nil {
 		t.Fatal(e)
 	}
-	if e := rt.verifySocialStorage(t.Context(), false); e != nil {
+	if containedPath(c.Files, socialRoot(c)) {
+		t.Fatal("shared root")
+	}
+	if socialScope("a", "issuer") == socialScope("b", "issuer") {
+		t.Fatal("identity collision")
+	}
+	legacy := filepath.Join(c.Files, "My Photos", "My Social")
+	os.MkdirAll(legacy, 0700)
+	os.WriteFile(filepath.Join(legacy, "original.jpg"), []byte("fixture"), 0600)
+	if rt.verifySocialStorage(t.Context(), true) == nil {
+		t.Fatal("legacy plaintext silently migrated")
+	}
+}
+func TestSocialSourceRejectsBroadPrivateAlias(t *testing.T) {
+	base := t.TempDir()
+	c := Config{Data: filepath.Join(base, "Private"), Files: filepath.Join(base, "Files"), Catalog: catalog.Catalog{Apps: []catalog.App{{ID: "social"}}}}
+	os.MkdirAll(filepath.Join(c.Data, "drive"), 0700)
+	file := filepath.Join(c.Data, "drive", "config.yaml")
+	save := func(p string) {
+		b, _ := json.Marshal(map[string]any{"server": map[string]any{"sources": []any{map[string]any{"name": "My Drive", "path": p}}}})
+		os.WriteFile(file, b, 0600)
+	}
+	save(c.Files)
+	if e := ensureSocialDriveSource(c); e != nil {
 		t.Fatal(e)
 	}
-	conflict = true
-	if e := rt.verifySocialStorage(t.Context(), false); e == nil {
-		t.Fatal("changed ACL accepted")
-	}
-	if logins != 1 || reads != 3 {
-		t.Fatal("must reuse auth without caching authorization", logins, reads)
+	save(base)
+	if ensureSocialDriveSource(c) == nil {
+		t.Fatal("broad source alias accepted")
 	}
 }

@@ -13,7 +13,7 @@ device push and production acceptance remain open. The app's
 [acceptance matrix](https://github.com/oneworkspacestudio/my-social/blob/main/docs/ACCEPTANCE.md)
 is authoritative for feature status.
 
-All originals reside under the configured Files/My Photos/My Social root, keyed
+All originals reside under the configured Private/photos-social/My Photos/My Social root, keyed
 by immutable issuer/subject. The manager reserves it in native Quantum ACLs and
 rejects conflicting explicit allow rules, including ancestor rules. Each media
 operation verifies a loopback capability guard; only authentication is briefly
@@ -32,3 +32,23 @@ Story expiry is server enforced; retention is conservative and owner managed.
 Install/update/uninstall uses existing package size/SHA verification and reversible
 maintenance. OIDC handoff/logout and shared app navigation include Social. Source:
 https://github.com/oneworkspacestudio/my-social. Existing apps' pins remain unchanged.
+
+## Scoped storage correction (Workspace48 / Social preview2)
+
+Supersedes the preview1/Workspace47 shared-folder adapter. Native Quantum folder
+ACL keys preserve case on Windows; alternate casing can bypass a deny rule.
+Do not use preview1 for private uploads. No local owner media existed when this
+was discovered. Published predecessor artifacts remain immutable for provenance.
+
+The authoritative My Photos/My Social source now resides under
+`Private/photos-social/My Photos/My Social`, outside every broad Files source.
+`My Social Originals` is disabled by default. The server binds a verified
+MyAccounts issuer/subject to `/users/<sha256(issuer + NUL + subject)>`, with native
+view/download only. Native canonical physical scope containment protects other
+accounts, including casing and traversal variants. Generated derivatives stay
+outside all user scopes; Social applies post audiences. Shared My Drive remains
+unchanged. Never add a broad source overlapping this private source.
+
+Upgrades refuse a nonempty legacy Social folder: stop services, back up app state
+and both source roots, and perform a separately reviewed migration. Empty legacy
+markers may remain inert. Back up the new private source together with Social DB.

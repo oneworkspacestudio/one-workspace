@@ -34,3 +34,24 @@ its token in memory for two minutes; authorization rules are fetched every time
 passed Windows CI39410458193 and packaged EXEf8de0bce repeated Chrome workflow.
 Social ZIPa78f08d7 is pinned; existing20 component app versions remain unchanged.
 Final full21-app installer, CI, release and normal owner update are next.
+
+Security correction: Windows native logical ACLs preserve casing. An isolated
+real Drive probe returned404 for exact denied path but200 and identical marker
+for lower/upper-case paths. Earlier exact-path acceptance was insufficient.
+Do not use preview1/Workspace47 storage for private media. Published tags/assets
+remain immutable; release notes mark predecessors superseded. The local owner
+root contained only its marker, no media, and uploads were paused by renaming
+that marker. The new adapter uses Data/photos-social/My Photos/My Social outside
+all shared sources, default-disabled My Social Originals native source, and
+read-only per-subject scopes; physical native scope containment provides the
+boundary. Social2 requires Workspace48 and scoped-social-storage-v2.
+Existing legacy media is refused, never silently moved. Managed tests and final
+release48/publication/local update are pending this correction handoff.
+
+Scoped adapter acceptance now passes on a fresh native installer: one MyAccounts
+sign-in, Social upload and publication, original exact bytes via Social and
+native own My Photos scope, cross-account traversal/case denial, and shared
+Drive alias denial. CreateUser applies defaults to incoming source permissions;
+bootstrap creates without a private scope, then PATCHes read-only scope. Scope
+provisioning is serialized to avoid concurrent first-login create races.
+Social source0744a86 passes CI39429278014 and packaged Chrome checks.

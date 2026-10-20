@@ -11,7 +11,7 @@ var managerRequirementVersion = regexp.MustCompile(`^[0-9]+\.[0-9]+\.[0-9]+(?:-[
 // Add a capability only after its manager integration exists and is tested.
 // The origin capability is exercised with actual native SSO, catalog and logout
 // fixtures. It does not claim application E2EE, calling or native mobile support.
-var managerCapabilities = map[string]bool{"app-update-requirements-v1": true, "chat-state-v2": true, "isolated-chat-origin-v1": true, "guarded-social-storage-v1": true}
+var managerCapabilities = map[string]bool{"app-update-requirements-v1": true, "chat-state-v2": true, "isolated-chat-origin-v1": true, "guarded-social-storage-v1": true, "scoped-social-storage-v2": true}
 
 func checkRequirements(current, minimum string, capabilities []string) error {
 	if len(minimum) > 80 || !managerRequirementVersion.MatchString(minimum) {

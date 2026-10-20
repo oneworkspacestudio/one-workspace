@@ -121,8 +121,8 @@
   },
   "mySocial": {
     "repository": "oneworkspacestudio/my-social",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-social-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "a78f08d7e3b56b610f87801aad0e6c4dd05d279baf5171a15a0da42e45cd73cb"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-social-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "0eb0b87a5a125b68334e90d86eeb8d1e0b13dd9cd4fe1d78fe40b0a5dee5655a"
   }
 }
