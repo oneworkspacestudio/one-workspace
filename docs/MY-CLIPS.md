@@ -49,3 +49,8 @@ traversal, case-variant and broad-source denial. Browser tests exercise renderin
 privacy, HLS/ranges, throttled playback, drafts, capture, social actions, live video
 and a390px layout. See the app's public acceptance record and this release's
 machine-readable receipts. Never use the owner's installation as a fixture.
+
+Workspace52 and Clips3 place Workspace inside the mobile navigation and desktop
+sidebar. Shared navigation enhances data-workspace-apps-trigger links into the
+picker, retaining their href fallback. The floating launcher is hidden only while
+an integrated trigger is visible; resizing and SPA changes restore it as needed.
