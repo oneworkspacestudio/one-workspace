@@ -32,3 +32,22 @@ Full native browser check found a first-use restart race too. Mail now waits for
 authenticated engine registry readiness before returning setup success or serving
 configured startup. Immediate access, retry and restart Go tests pass; updated
 Mail17 source 7e17754 is pinned before regenerating the unreleased60 bundle.
+
+## Consumer-facing incoming-mail status follow-up
+
+Native59-to60 protected upgrade and real MyAccounts browser inbox passed at
+desktop/mobile widths after engine readiness was added. Mail17 source7e17754c
+is public. Normal backed-up owner58-to60 installation passed: all24 services
+healthy, Mail configured with no identity error, encrypted Mail config unchanged,
+all24 other app contracts/packages including Chat9 retained, recovery verified.
+
+Operational startup also exposed an existing separate incoming-network warning:
+the detailed router/IP/TCP25/SMTP/ISP diagnostics were still copied directly into
+the consumer checklist. Version61 keeps the genuine warning, states Mail is ready
+on this computer and asks the user to open Mail to finish the incoming connection
+check. Detailed diagnostics stay in protected logs/Mail setup; no false Internet
+delivery claim. Reachable/unknown/checking messages are also plain language.
+Unit regressions reject network jargon in the startup detail. Suite/setup/update
+tests and vet pass. Mail17 and all25 app bytes/contracts remain unchanged from60.
+Use new61 tag/artifacts;60 tags/assets stay immutable. Final61 build/publication,
+manager-only normal local update, proof and cleanup are to be recorded.

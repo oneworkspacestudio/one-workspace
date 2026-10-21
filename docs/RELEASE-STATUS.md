@@ -585,3 +585,14 @@ was sent externally. Network/DNS requirements for Internet mail still apply.
 
 Mail17 also waits for authenticated engine readiness after normal starts, fixing
 setup completing before the first mailbox sign-in could reach the engine.
+
+
+## Workspace61: readable Mail connection checks
+
+Retains Mail17 and its verified fresh/interrupted setup and engine-readiness fixes.
+The installer startup checklist now explains incoming-email connection warnings
+in plain language. Router addresses, protocol names and port/ISP diagnostics stay
+in protected logs and Mail's detailed setup guidance. Genuine unverified or blocked
+Internet receiving remains a warning; local Mail readiness is distinguished from
+delivery proof. Tests cover all network-state messages without technical jargon.
+All25 app versions/contracts and payloads are unchanged from verified60.

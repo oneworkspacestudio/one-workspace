@@ -16,7 +16,7 @@ func TestFirstRunMailNetworkProgress(t *testing.T) {
 	for _, tt := range []struct{ network, want string }{{"reachable", "done"}, {"attention", "warning"}, {"unverified", "warning"}, {"", "warning"}} {
 		t.Run(tt.network, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				json.NewEncoder(w).Encode(map[string]any{"configured": true, "hostingBusy": false, "inboundState": tt.network, "inboundMessage": "Network needs guidance"})
+				json.NewEncoder(w).Encode(map[string]any{"configured": true, "hostingBusy": false, "inboundState": tt.network, "inboundMessage": "Router 192.168.1.1 TCP25 SMTP ISP diagnostics"})
 			}))
 			defer server.Close()
 			u, _ := url.Parse(server.URL)
@@ -29,6 +29,11 @@ func TestFirstRunMailNetworkProgress(t *testing.T) {
 			}
 			if tt.want == "warning" && !strings.Contains(step.Detail, "Mail") {
 				t.Fatal("missing recovery guidance")
+			}
+			for _, jargon := range []string{"192.168.1.1", "TCP25", "SMTP", "ISP"} {
+				if strings.Contains(step.Detail, jargon) {
+					t.Fatalf("technical diagnostic exposed in startup: %s", step.Detail)
+				}
 			}
 		})
 	}

@@ -55,15 +55,16 @@ func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {
 		if e == nil && status.Configured && !status.Busy {
 			switch status.InboundState {
 			case "reachable":
-				rt.progress.Step(app.ID, "done", "Mail is available and its incoming TCP25 connection was verified. Message delivery and spam placement are separate checks.")
+				rt.progress.Step(app.ID, "done", "Mail is ready, and its incoming email connection was checked. Individual message delivery is checked separately.")
 				return
 			case "attention", "unverified", "configured":
-				rt.progress.Step(app.ID, "warning", status.InboundMessage+" Open Mail setup for network guidance. Other apps are ready to use.")
+				rt.logMailSetupProblem(status.InboundMessage)
+				rt.progress.Step(app.ID, "warning", "Mail is ready on this computer. Incoming Internet email still needs a connection check. Open Mail for help finishing this step; your other apps are ready to use.")
 				return
 			case "checking":
-				status.Phase = status.InboundMessage
+				status.Phase = "Checking your incoming email connection…"
 			default:
-				rt.progress.Step(app.ID, "warning", "Mail is available locally, but incoming Internet email has not been verified. Open Mail setup to check router TCP25, Windows Security and your ISP.")
+				rt.progress.Step(app.ID, "warning", "Mail is ready on this computer. Open Mail to finish checking its incoming Internet email connection.")
 				return
 			}
 		}
