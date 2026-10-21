@@ -83,3 +83,15 @@ Mail startup warnings show a plain next step. Use Reconnect Mail in Mail setup
 for a connection problem. Technical diagnostics remain in protected Mail logs
 and Workspace logs/mail-setup.log. Incoming Internet delivery remains separate
 from mailbox sign-in and can still need network or existing-provider decisions.
+
+
+## Setup repair verification
+
+The original missing-role failure was reproduced in a fresh Workspace59 fixture.
+The protected update to60/Mail17 resumed its setup and opened an empty inbox through
+real MyAccounts sign-in. Mail17 is unchanged in61;61 additionally simplifies the
+startup connection-check wording. The native test sent no external messages and
+used no owner data. Delivery and source receipts are in
+[the verification record](evidence/mail-setup-deployment-20261021.json).
+
+![Mail17 after recovering interrupted setup](screenshots/mail-setup-fixed-desktop.png)

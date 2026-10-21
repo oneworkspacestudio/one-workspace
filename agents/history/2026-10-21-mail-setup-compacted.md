@@ -51,3 +51,32 @@ Unit regressions reject network jargon in the startup detail. Suite/setup/update
 tests and vet pass. Mail17 and all25 app bytes/contracts remain unchanged from60.
 Use new61 tag/artifacts;60 tags/assets stay immutable. Final61 build/publication,
 manager-only normal local update, proof and cleanup are to be recorded.
+
+## Final verified delivery
+
+Mail17 (7e17754c) and Workspace60 (f1e5e90) are public. Final Workspace61
+(c31eaf3) is public with unchanged Mail17 and all25 app contracts/payloads.
+Every published asset size and GitHub SHA256 matches the local artifact.
+Source tags/assets remain immutable; final documentation commits are separate.
+
+Native59 broken setup ->60 protected update and real MyAccounts browser inbox
+passed with no browser errors at desktop/mobile widths. Signed-token native
+engine tests prove immediate access after setup, resumed setup, restart, user
+isolation, no administrator role for mail users, wrong-audience denial and custom
+policy preservation. Earlier login-driver failures were corrected to handle both
+provider SSO and login forms; an actual engine-readiness race was then fixed.
+
+Normal backed-up owner58->60/Mail17 and manager-only60->61 updates completed.
+All24 service entries healthy; Mail configured, no identity error, encrypted Mail
+configuration unchanged, identity/paths/ports/selections retained, all25 app
+contracts/packages retained from60 including Chat9. Latest recovery manifest
+verified. Incoming Internet receiving still has a genuine connection warning;
+startup now shows a plain next step instead of router/IP/protocol diagnostics.
+No external email sent, no live DNS mutation as a test, and no owner data fixture.
+
+Verified final installer in Downloads/WorkspaceSetup-0.3.0-preview.61-windows-amd64.exe.
+Evidence and synthetic screenshots: docs/evidence/mail-setup-deployment-20261021.json,
+docs/screenshots/mail-setup-fixed-*.png. Native services/browser stopped. Named
+C task cache removed with explicit contained file cleanup after no reparse/no
+active-reference checks. Durable artifacts remain on I. Preserve current owner61
+and its newest verified recovery copy. No clean-host/reboot or delivery proof claim.
