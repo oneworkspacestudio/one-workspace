@@ -582,3 +582,6 @@ signed owner/user mailbox access, user isolation, administrator API denial, wron
 audience refusal and restart stability. Go and JS regressions pass; full native
 suite upgrade/UI and deployed delivery evidence are recorded separately. No mail
 was sent externally. Network/DNS requirements for Internet mail still apply.
+
+Mail17 also waits for authenticated engine readiness after normal starts, fixing
+setup completing before the first mailbox sign-in could reach the engine.

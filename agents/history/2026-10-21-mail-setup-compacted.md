@@ -27,3 +27,8 @@ C:/Projects/.cache/mail-setup-20261021. Build from committed sources. Native59
 broken fresh setup ->60 protected upgrade/SSO UI, owner deployment, publication
 and cleanup to be recorded after verification. Preserve current owner data,
 all unselected app versions (including installed Chat9) and verified recovery.
+
+Full native browser check found a first-use restart race too. Mail now waits for
+authenticated engine registry readiness before returning setup success or serving
+configured startup. Immediate access, retry and restart Go tests pass; updated
+Mail17 source 7e17754 is pinned before regenerating the unreleased60 bundle.

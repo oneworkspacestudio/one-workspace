@@ -35,7 +35,7 @@
     "repository": "oneworkspacestudio/mail",
     "tag": "workspace-mail-v0.1.0-preview.17",
     "asset": "Mail.exe",
-    "sha256": "79fa1b478082c6bb597569fc4b77523072740b729c92b40934a73367307caf33"
+    "sha256": "75e3abc38c105d45b94a9c9332ad1592e2435f97e86d9a24f3b8945155227e8a"
   },
   "calendar": {
     "sha256": "da46245cb29c83c908aaab63e0b13c4f3e32f7ccd583acc49331b3d340bbd29a",
