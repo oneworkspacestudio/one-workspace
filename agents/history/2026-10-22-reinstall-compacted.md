@@ -31,9 +31,55 @@ or arbitrary folder-emptying override is introduced.
 Tests passed for interrupted state retention, stale decision, active lock,
 junction refusal, same-version force repair incl missing manager, invalid staged
 payload rejection before downtime and independent-app retention. All packages and
-vet passed before final UI-bound consent test; repeat targeted test as appropriate.
-Next: final native full installer64 tests (same-version repair, partial restart,
-real identity preservation/browser mobile/desktop), publish64 immutable assets,
-normal backed-up owner manager-only63->64 (not a reinstall fixture), record proof
-and cleanup exact C:/Projects/.cache/reinstall-20261022. Build artifacts on
-I:/Projects/tooling/reinstall-20261022. Preserve source63 and earlier releases.
+vet passed, followed by successful final suite/setup tests after UI consent changes.
+The planned native acceptance, publication, local update and bounded cleanup
+are complete; final evidence and constraints follow.
+
+
+## Delivery completed
+
+Immutable code/tag: 28163e2fd3c8edee5710b8ed0cf89a371e640552,
+[v0.3.0-preview.64](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.64).
+All published asset sizes/SHA256 digests were checked against the tested local
+artifacts before publication. All 25 app contracts/bytes unchanged from 63; seven
+Windows PNG icon frames verified. Downloads installer matches public asset.
+Delivery documentation is a later main commit; do not move the source tag.
+
+Native full Windows GUI/CLI acceptance passed on isolated NTFS fixtures:
+incomplete setup retention, Files preservation, same-version repair after deleting
+the manager/damaging Tasks, and public 63-to-64 reinstall. Real MyAccounts login
+with the same owner/password, unchanged account choices/ports and app files
+verified before/after. Folder edits invalidate consent; existing entry needs no
+new account form. Desktop 1440/mobile 390 layouts reviewed, no horizontal overflow
+or browser errors. All Go packages, final suite/setup tests, vet and embedded JS
+syntax checks passed. See docs/evidence/reinstall-20261022.json and the reinstall
+screenshots in docs/screenshots. User guide: docs/REINSTALL.md.
+
+Owner received the normal protected manager-only 63-to-64 update, never a reinstall
+or reset fixture. All 25 installed app contracts/packages retained, including
+independent Chat 9 and Mail 17; identities/settings/paths/selections unchanged.
+Encrypted Mail configuration unchanged, no identity error. All 24 local/public
+service states healthy; final transaction complete and rollback manifest checked.
+The Mail incoming-network warning remains truthful; no external delivery claim.
+
+The first GUI fixture inherited real APPDATA and replaced the live Start Menu
+shortcut. This test isolation mistake was disclosed, then the task-owned target
+was restored to the live manager and verified after delivery. Subsequent native
+GUI tests override APPDATA inside the named task cache and precreate the fake
+Start Menu Programs folder. Preserve this isolation for future installer tests.
+Other failed harness attempts were driver/fixture mistakes: missing parenthesis,
+shadowed Node process binding, folder blur without change, and a Tasks marker
+written before first initialization. Corrected final immutable source passed all
+native scenarios. No owner data was used in these fixtures.
+
+All named native suites and descendants stopped. The exact named task C: cache
+was removed only after checking containment, no junctions and no process
+references; files deleted individually, no broad recursive cleanup. Durable source,
+release artifacts and receipts remain on I:/Projects/tooling/reinstall-20261022.
+Newest owner recovery retained; no global temp sweep, physical print, external
+email, DNS replacement, clean-host/service or reboot test. No GitHub Actions.
+Earlier public releases and unpublished62 candidate preserved. No remaining
+implementation/delivery work for this request.
+
+Verified public assets: 23. Task cache removed: 3141 files, 3834701237 bytes.
+Installer SHA256: `ad74e83ad24952a96cf96d808d6dd7cc22d321ed5459074cec0713eb0e68ab51`.

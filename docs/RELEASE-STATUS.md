@@ -639,3 +639,11 @@ before a fresh sign-in setup, with Files left in place. The wizard explains this
 difference. Folder-specific consent is reset after edits or stale reviews. Active
 setups, junctions, overlapping storage and unsuitable private-data volumes are
 refused. App startup failures remain independently retryable as introduced in63.
+
+Final64 Windows acceptance passed for incomplete setup, same-version repair with
+missing/damaged programs and63-to64 reinstall with existing sign-in and files.
+All published assets match tested hashes. The owner received the normal backed-up
+manager update to64 with all25 app contracts retained and24 services healthy.
+[Delivery evidence](evidence/reinstall-20261022.json),
+[reinstall guide](REINSTALL.md), and
+[phone preview](screenshots/reinstall-repair-mobile.png).
