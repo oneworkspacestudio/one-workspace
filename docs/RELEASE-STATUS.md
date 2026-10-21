@@ -544,5 +544,7 @@ configured ports and identities.
 Pins Monitor3: exact registry-authorized loopback checks send the same localhost
 HTTP Host as the supervisor, correcting MyAccounts' numeric-host rejection without
 widening target permissions. Real failures and historical samples are retained.
-Port-collision, readiness and SSRF regressions passed; native installation and
-local deployment evidence are recorded separately after verification.
+Port-collision, readiness and SSRF regressions passed. Actual occupied-port fresh
+setup, OIDC and the green MyAccounts dashboard passed. The normal backed-up local
+update preserved identity, settings, history and all other app versions; all24
+services are healthy. See docs/evidence/ports-health-deployment.json.

@@ -1,0 +1,110 @@
+{
+  "repository": "oneworkspacestudio/one-workspace",
+  "tag": "v0.3.0-preview.58",
+  "draft": false,
+  "publishedAt": "2026-10-21T17:53:12Z",
+  "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.58",
+  "everyPublishedAssetMatchesLocal": true,
+  "assets": [
+    {
+      "name": "BACKUPS.md",
+      "size": 7908,
+      "sha256": "a2871fb2b5b13aaaa12f0ad3ada3048f9659d72103e4ab86f64ce35c995927f7"
+    },
+    {
+      "name": "catalog.json",
+      "size": 40923,
+      "sha256": "dc778462f20d99b49bfd2a3a1c4500afd2aea419686cf6ae342b7e34a7bed15f"
+    },
+    {
+      "name": "bundle-verification.json",
+      "size": 344,
+      "sha256": "067d69229a0da6aa532697af8ca3c700c39e9f138f7437945533d48ca716cb91"
+    },
+    {
+      "name": "BRANDING.md",
+      "size": 2919,
+      "sha256": "6c17e400c83580b75743e0005902f35359fa52b53bbc22bc927e9e61966337f8"
+    },
+    {
+      "name": "build-info.json",
+      "size": 384,
+      "sha256": "fc043a3521ce34856bd4f767b399b6958a67311a02b3aec711de0e392e8d610d"
+    },
+    {
+      "name": "MY-CREATE.md",
+      "size": 1597,
+      "sha256": "4cdde35a87c6097574a196cbfdca961a443261147562e10e3904886da23cd80b"
+    },
+    {
+      "name": "LICENSE.txt",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "native-acceptance.json",
+      "size": 450,
+      "sha256": "13e0157eb5105af8d28b192615a347215b9247b95d53bb7328518e8e060a9612"
+    },
+    {
+      "name": "NOTICE.txt",
+      "size": 664,
+      "sha256": "ba5d1ffddbef7cfd9ff5aabab279657194dbb1deab201ca981a546237f8977bc"
+    },
+    {
+      "name": "one-workspace-source.zip",
+      "size": 9091580,
+      "sha256": "d079cd58da80fff96423ee08cb732f990ff253e160f4cfe9f3c253965ae15a6f"
+    },
+    {
+      "name": "organization-components.json",
+      "size": 9463,
+      "sha256": "cff151f5ba0af8143488bbb3b749b8ae3b242211981551b38395c796bc10d782"
+    },
+    {
+      "name": "RELEASE-NOTES.md",
+      "size": 1366,
+      "sha256": "c78cec18f2ebe7f439960b5061a18a0ded671e6a3bcddc07283a0ad7a9d964e7"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "size": 1525,
+      "sha256": "ca3beed07e29e859e49d281b826287b91b0ed4517ce5db15d38855b2a2dae387"
+    },
+    {
+      "name": "RELEASE-STATUS.md",
+      "size": 34194,
+      "sha256": "6fd47c903ce6ae05615b2c6afd0f3c93c35432280854f2a374868c4aa7b78555"
+    },
+    {
+      "name": "SIGN-IN.md",
+      "size": 6527,
+      "sha256": "bc0cc70c0363ea403154e5e1d44088f5974f32736612f5068300eee63149ffed"
+    },
+    {
+      "name": "SOURCE-MANIFEST.json",
+      "size": 4598,
+      "sha256": "296ae9dfd7eefb14f7a3344369b1f2e2fee789cb35c05d2fa016dbfda3ab71d0"
+    },
+    {
+      "name": "UPDATES.md",
+      "size": 12802,
+      "sha256": "471b96cf1ae609c213b6a8e112819dc39d2444a973c144f07a15d08ec0a16773"
+    },
+    {
+      "name": "workspace-bundle.zip",
+      "size": 818407249,
+      "sha256": "b5527fc6bba1b00578ee5abbee25bd915c7eccbe542d4702707d107aade7e5f7"
+    },
+    {
+      "name": "Workspace.exe",
+      "size": 12191744,
+      "sha256": "733620cd841870728362e6ba0b9c562bd6e63afacd06abb3f66dcd67ede8a16b"
+    },
+    {
+      "name": "WorkspaceSetup-windows-amd64.exe",
+      "size": 827870720,
+      "sha256": "6cde33698c8a4c2774c7d96da1a0a203587b7a98071371f605b7c0a9a945b337"
+    }
+  ]
+}
