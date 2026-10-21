@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/calendar/shared"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 type BackupSettings struct {
@@ -254,6 +254,8 @@ func (rt *Runtime) runBackup(ctx context.Context, destination string) {
 			if errJob != nil {
 				rt.progress.Finish("failed", "App restart after backup needs attention", errJob)
 				err = errors.Join(err, fmt.Errorf("apps could not restart: %w; restart Workspace and inspect startup progress", errJob))
+			} else {
+				rt.finishStartup()
 			}
 		}
 		b.mu.Lock()

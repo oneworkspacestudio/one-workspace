@@ -105,7 +105,7 @@ func (s *Server) Handler() http.Handler {
 		if s.ready {
 			var startup suite.Progress
 			if platform.LoadJSON(filepath.Join(s.config.Data, "startup-progress.json"), &startup) == nil && (s.launchStarted.IsZero() || !startup.StartedAt.Before(s.launchStarted.Add(-time.Second))) {
-				if (startup.State == "starting" || startup.State == "ready") && !platform.ProcessRunning(startup.PID, filepath.Join(s.config.Data, "Workspace.exe")) {
+				if (startup.State == "starting" || startup.State == "ready" || startup.State == "retrying") && !platform.ProcessRunning(startup.PID, filepath.Join(s.config.Data, "Workspace.exe")) {
 					startup.State = "failed"
 					startup.Phase = "Workspace is no longer running"
 					startup.Error = "The Workspace launcher stopped. Retry startup or inspect the startup log."
@@ -260,6 +260,20 @@ func (s *Server) Handler() http.Handler {
 				s.cat = c.Catalog
 			}
 		}()
+		w.WriteHeader(http.StatusAccepted)
+	})
+	mux.HandleFunc("POST /api/retry-apps", func(w http.ResponseWriter, r *http.Request) {
+		s.mu.Lock()
+		ready, c := s.ready, s.config
+		s.mu.Unlock()
+		if !ready {
+			http.Error(w, "Install Workspace first", 409)
+			return
+		}
+		if err := suite.RetryInstalledApps(r.Context(), c); err != nil {
+			http.Error(w, err.Error(), 409)
+			return
+		}
 		w.WriteHeader(http.StatusAccepted)
 	})
 	mux.HandleFunc("POST /api/launch", func(w http.ResponseWriter, r *http.Request) {

@@ -21,6 +21,9 @@ func TestWizardCapabilityOriginAndHost(t *testing.T) {
 		{"state", "GET", "/api/state", "localhost:12345", "secret", "", 200},
 		{"DNS rebinding", "GET", "/api/state", "evil.test", "secret", "", 403},
 		{"CSRF", "POST", "/api/install", "localhost:12345", "secret", "http://evil.test", 403},
+		{"retry capability", "POST", "/api/retry-apps", "localhost:12345", "wrong", "http://localhost:12345", 403},
+		{"retry CSRF", "POST", "/api/retry-apps", "localhost:12345", "secret", "http://evil.test", 403},
+		{"retry before install", "POST", "/api/retry-apps", "localhost:12345", "secret", "http://localhost:12345", 409},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			r := httptest.NewRequest(tc.method, s.origin+tc.path, nil)

@@ -19,6 +19,9 @@ func appWorkingDir(c Config, app string) string {
 	}
 }
 func prepareRuntimeTemp(c Config, app string) error {
+	// Normalize slash spelling before the ancestor walk so it terminates at
+	// the same Windows directory even with a forward-slash data path.
+	c.Data = filepath.Clean(c.Data)
 	working := appWorkingDir(c, app)
 	if working != c.Data {
 		if _, err := os.Lstat(working); err == nil {

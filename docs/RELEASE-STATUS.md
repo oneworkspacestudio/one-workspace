@@ -596,3 +596,21 @@ in protected logs and Mail's detailed setup guidance. Genuine unverified or bloc
 Internet receiving remains a warning; local Mail readiness is distinguished from
 delivery proof. Tests cover all network-state messages without technical jargon.
 All25 app versions/contracts and payloads are unchanged from verified60.
+
+
+## Workspace62: keep working when one app cannot start
+
+Optional app startup failures no longer stop the remaining apps or the Workspace
+portal. Failed apps and apps waiting on a dependency stay visible and can be
+retried in setup or the owner's App status and retry page without restarting
+healthy apps. Sign-in remains required. Windows low-memory process creation is
+retried briefly, then explains how to close unused apps and retry. Detailed errors
+stay in protected logs. Each app owns an isolated process tree, so timed-out
+attempts are fully stopped before retry. Retries respect backups and shutdown.
+
+All25 application versions and payloads remain unchanged from61; manager/setup
+changes only. The screenshot's memory shortage cannot be inferred to be fixed at
+the operating-system level: no Windows memory settings are silently altered.
+Native isolated process tests cover continuation, dependency retry, unchanged
+healthy process identities and primary/descendant cleanup. No physical printing,
+external email or owner-data fixture; no clean-host/reboot acceptance claimed.

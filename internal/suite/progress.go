@@ -44,7 +44,7 @@ func (p *ProgressTracker) save() {
 	p.value.UpdatedAt = time.Now().UTC()
 	p.value.Completed = 0
 	for _, step := range p.value.Steps {
-		if step.State == "done" || step.State == "warning" {
+		if step.State == "done" || step.State == "warning" || step.State == "failed" || step.State == "blocked" {
 			p.value.Completed++
 		}
 	}
@@ -85,6 +85,7 @@ func (p *ProgressTracker) Finish(state, phase string, err error) {
 	defer p.mu.Unlock()
 	p.value.State = state
 	p.value.Phase = phase
+	p.value.Error = ""
 	if err != nil {
 		p.value.Error = err.Error()
 		for i := range p.value.Steps {

@@ -210,7 +210,8 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 	}); e != nil {
 		return e
 	}
-	// Run writes the ready marker after all app checks and the portal have passed.
+	// Run writes ready once sign-in and the portal are available. Optional app
+	// failures remain visible and retryable without rolling back a valid update.
 	deadline := time.Now().Add(10 * time.Second)
 	for time.Now().Before(deadline) {
 		var progress Progress
@@ -219,7 +220,7 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 		}
 		time.Sleep(100 * time.Millisecond)
 	}
-	return errors.New("Workspace did not confirm all startup checks")
+	return errors.New("Workspace did not confirm that sign-in and the portal are ready")
 }
 
 type UpdateRequest struct {

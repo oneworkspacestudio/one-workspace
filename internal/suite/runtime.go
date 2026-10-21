@@ -30,6 +30,8 @@ type Runtime struct {
 	job                *platform.Job
 	tunnelJob          *platform.Job
 	appCancel          context.CancelFunc
+	appContext         context.Context
+	active             map[string]bool
 	supervisors        sync.WaitGroup
 	children           sync.WaitGroup
 	appTasks           sync.WaitGroup
@@ -140,7 +142,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	errc := make(chan error, 1)
 	go func() { errc <- server.Serve(listener) }()
 	progress.Step("portal", "done", "Workspace is listening and ready to open")
-	progress.Finish("ready", "Your Workspace is running", nil)
+	rt.finishStartup()
 	_ = platform.SaveJSON(filepath.Join(c.Data, "running.json"), map[string]any{"pid": os.Getpid(), "origin": c.Origin, "started": time.Now().UTC()})
 	go rt.backupSchedule(ctx)
 	go startupUpdateCleanup(ctx, c)
@@ -225,7 +227,23 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	cmd.Stderr = log
 	return cmd
 }
-func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
+func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) {
+	rt.mu.Lock()
+	if rt.active == nil {
+		rt.active = map[string]bool{}
+	}
+	if rt.active[app.ID] {
+		rt.mu.Unlock()
+		return nil
+	}
+	rt.active[app.ID] = true
+	rt.mu.Unlock()
+	release := func() { rt.mu.Lock(); delete(rt.active, app.ID); rt.mu.Unlock() }
+	defer func() {
+		if startErr != nil {
+			release()
+		}
+	}()
 	if e := prepareRuntimeTemp(rt.Config, app.ID); e != nil {
 		return e
 	}
@@ -305,13 +323,38 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 		return e
 	}
 	cmd := rt.command(app)
-	if e = rt.job.Start(cmd); e != nil {
+	// Each app owns its process tree. A failed health check or retry must not
+	// leave an old child listening, or terminate unrelated healthy apps.
+	appJob, e := platform.NewJob()
+	if e != nil {
 		held.Close()
 		return e
 	}
+	supervised := false
+	var exited chan struct{}
+	defer func() {
+		if !supervised {
+			appJob.Close()
+			if exited != nil {
+				<-exited
+			}
+			held.Close()
+		}
+	}()
+	if e = startWithMemoryRetry(ctx, func() error { return appJob.Start(cmd) }, func() {
+		rt.progress.Step(app.ID, "running", "Windows is low on available memory. Waiting briefly before trying again.")
+		cmd = rt.command(app)
+	}); e != nil {
+		return e
+	}
 	done := make(chan error, 1)
+	exited = make(chan struct{})
 	rt.children.Add(1)
-	go func() { defer rt.children.Done(); done <- cmd.Wait() }()
+	go func(cmd *exec.Cmd, exited chan struct{}) {
+		defer rt.children.Done()
+		defer close(exited)
+		done <- cmd.Wait()
+	}(cmd, exited)
 	rt.set(app.ID, "starting")
 	health := app.Health
 	if health == "" {
@@ -322,7 +365,6 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 		startupTimeout = 3 * time.Minute
 	}
 	if e = WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
-		held.Close()
 		return e
 	}
 	rt.set(app.ID, "running")
@@ -337,9 +379,10 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 		rt.mailHostingProgress(ctx, app)
 	}
 	rt.supervisors.Add(1)
+	supervised = true
 	go func() {
 		defer rt.supervisors.Done()
-		defer held.Close()
+		defer func() { appJob.Close(); <-exited; held.Close(); release() }()
 		delay := time.Second
 		for {
 			select {
@@ -358,21 +401,33 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) error {
 			}
 			if app.ID == "music" {
 				if e := prepareMusicTemp(rt.Config); e != nil {
-					rt.set(app.ID, "failed: Music temporary storage needs attention")
+					rt.appFailed(app, e)
 					return
 				}
 			}
 			cmd = rt.command(app)
-			if e := rt.job.Start(cmd); e != nil {
-				rt.set(app.ID, "failed: see logs")
+			if e := startWithMemoryRetry(ctx, func() error { return appJob.Start(cmd) }, func() { cmd = rt.command(app) }); e != nil {
+				rt.appFailed(app, e)
 				return
 			}
+			exited = make(chan struct{})
 			rt.children.Add(1)
-			go func(cmd *exec.Cmd) { defer rt.children.Done(); done <- cmd.Wait() }(cmd)
+			go func(cmd *exec.Cmd, exited chan struct{}) {
+				defer rt.children.Done()
+				defer close(exited)
+				done <- cmd.Wait()
+			}(cmd, exited)
 			if delay < 30*time.Second {
 				delay *= 2
 			}
+			if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
+				if ctx.Err() == nil {
+					rt.appFailed(app, e)
+				}
+				return
+			}
 			rt.set(app.ID, "running")
+			rt.progress.Step(app.ID, "done", "App health check passed")
 		}
 	}()
 	return nil
@@ -450,16 +505,14 @@ func Stop(ctx context.Context, c Config) error {
 func (rt *Runtime) startApps(ctx context.Context, publicCheck bool) error {
 	appContext, cancel := context.WithCancel(ctx)
 	rt.appCancel = cancel
+	rt.appContext = appContext
 	apps, err := rt.Config.Catalog.Order()
 	if err != nil {
 		return err
 	}
-	for _, app := range apps {
-		if app.Kind != "process" {
-			continue
-		}
-		if err = rt.start(appContext, app); err != nil {
-			return fmt.Errorf("start %s: %w", app.ID, err)
+	err = rt.startAvailable(appContext, apps, func(ctx context.Context, app catalog.App) error {
+		if err := rt.start(ctx, app); err != nil {
+			return err
 		}
 		if app.ID == "accounts" && publicCheck && rt.Config.Tunnel {
 			rt.progress.Step("public-accounts", "running", "Waiting for the secure sign-in connection")
@@ -468,6 +521,10 @@ func (rt *Runtime) startApps(ctx context.Context, publicCheck bool) error {
 			}
 			rt.progress.Step("public-accounts", "done", "Your secure sign-in address is reachable")
 		}
+		return nil
+	})
+	if err != nil {
+		return err
 	}
 	if _, ok := rt.Config.Catalog.Find("mail"); ok && !usesShared(rt.Config, "mail") {
 		rt.appTasks.Add(1)
