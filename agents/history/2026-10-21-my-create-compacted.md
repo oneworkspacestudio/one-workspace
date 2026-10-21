@@ -33,5 +33,19 @@ icon URL all verified. Processes stopped, owner never used as a fixture.
 Artifacts/build tools: I:/Projects/tooling/my-create-20261020. Synthetic private
 roots: C:/Projects/.cache/my-create-20261020. Powershell startup stalled midway;
 explicit C Node/Python executables continued successfully. I remains readable.
-Final suite publication and owner56-to57 update receipts still need recording.
-Use normal backed-up updater; preserve current owner data and newest rollback.
+Workspace57 is public from a401b4e; all release assets verified by GitHub SHA-256.
+Normal backed-up owner56-to57 update completed: 25 apps, all 24 service entries
+healthy, all 24 previous app versions/packages and owner identity/paths preserved.
+Installed manager/Create hashes match public artifacts; rollback manifest verified.
+Local and public content-addressed My Create icon bytes match source. Evidence
+is in docs/evidence/my-create-deployment-20261021.json and workspace57-publication.json.
+Installed My Chat preview9 was retained through independent update selection.
+Release tags/assets remain immutable. Preserve the current owner installation and
+newest usable rollback backup. No clean-host reboot or production acceptance claim.
+
+Operational note: stale global Git safe-directory entries for unavailable drives
+can stall Git when working on exFAT. Per-command GIT_CONFIG_GLOBAL=NUL and
+GIT_CONFIG_NOSYSTEM=1 with this exact safe.directory and explicit author identity
+worked; no global configuration was changed. Task-owned blocked diagnostic
+processes received termination requests; some Windows I/O waits did not exit.
+These are separate from the stopped synthetic app services.

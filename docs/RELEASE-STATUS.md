@@ -525,6 +525,9 @@ Adds My Create, a native local design editor with editable SVG/PPTX imports,
 best-effort PDF/PSD recovery, comparison, immutable revisions, portable templates
 and optional Windows OCR. Includes the new blue app icon and installer/updater
 contract. All 24 existing app versions and packages are retained from the verified
-Workspace56 deployment. See [My Create](MY-CREATE.md) for fidelity limits.
-Built and tested locally; GitHub Actions remain disabled. Publication and local
-deployment are recorded in the release receipt after verification.
+Workspace56 bundle. See [My Create](MY-CREATE.md) for fidelity limits.
+Built and tested locally; GitHub Actions remain disabled. Workspace57 and My Create1 are public, with every uploaded asset digest verified.
+The normal protected update installed My Create locally, preserved the 24 existing
+app versions/packages and identity/storage paths, and verified all 24 service
+entries plus the newest rollback manifest. Local and public My Create icon bytes
+match the package. See docs/evidence/my-create-deployment-20261021.json.
