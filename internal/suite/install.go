@@ -16,6 +16,31 @@ import (
 )
 
 func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog, progress func(string)) (Config, error) {
+	if err := r.ResolveStorage(); err != nil {
+		return Config{}, err
+	}
+	review, err := InspectSetupStorage(r)
+	if err != nil {
+		return Config{}, err
+	}
+	if review.Kind != "new" && !r.Reinstall {
+		return Config{}, errors.New("Workspace is already here. Choose Reinstall in this folder to keep your files and save a recovery copy.")
+	}
+	if err = os.MkdirAll(filepath.Dir(r.Data), 0700); err != nil {
+		return Config{}, err
+	}
+	guard, err := platform.Lock(setupLockPath(r))
+	if err != nil {
+		return Config{}, errors.New("Setup is already working in this folder. Wait for it to finish, then retry.")
+	}
+	defer guard.Close()
+	if r.Reinstall {
+		return reinstall(ctx, r, z, cat, progress)
+	}
+	return installFresh(ctx, r, z, cat, progress)
+}
+
+func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog, progress func(string)) (Config, error) {
 	var empty Config
 	var overrides map[string]string
 	if e := r.ResolveStorage(); e != nil {

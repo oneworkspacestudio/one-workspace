@@ -229,6 +229,7 @@ type UpdateRequest struct {
 }
 
 type updateOperations struct {
+	repair    bool // Only the explicitly reviewed reinstall path enables this.
 	preflight func(context.Context, Config) error
 	stop      func(context.Context, Config) error
 	start     func(context.Context, Config, string) error
@@ -283,10 +284,10 @@ func verifyInstalledPrograms(c Config) error {
 	held.Close()
 	return nil
 }
-func cacheUpdateController(c Config, target catalog.Catalog, stage string) error {
+func cacheUpdateController(c Config, target catalog.Catalog, stage string, preferStage ...bool) error {
 	source := filepath.Join(c.Data, "Workspace.exe")
 	p := c.Catalog.Packages["manager"]
-	if !distribution.UpdateControllerSupported(c.Version) {
+	if len(preferStage) > 0 && preferStage[0] || !distribution.UpdateControllerSupported(c.Version) {
 		p = target.Packages["manager"]
 		source = filepath.Join(stage, p.File)
 	}
@@ -421,8 +422,14 @@ func applyStagedUpdate(ctx context.Context, c Config, s Secrets, target catalog.
 }
 func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Catalog, stage, backupRoot string, report func(string), ops updateOperations) (result error) {
 	operationprogress.Report(ctx, "preflight", "Checking installed programs and update compatibility", 0, 0, "")
-	if e := verifyInstalledPrograms(c); e != nil {
-		return e
+	if ops.repair {
+		if e := verifyRepairStage(target, stage); e != nil {
+			return e
+		}
+	} else {
+		if e := verifyInstalledPrograms(c); e != nil {
+			return e
+		}
 	}
 	for _, app := range target.Apps {
 		old, ok := c.Catalog.Find(app.ID)
@@ -461,14 +468,14 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if target.Packages["manager"].File != "Workspace.exe" {
 		return errors.New("manager update changes its executable location")
 	}
-	if ops.preflight != nil {
+	if ops.preflight != nil && !ops.repair {
 		operationprogress.Report(ctx, "preflight", "Checking files, storage and Windows restart permissions", 0, 0, "")
 		report("Checking Windows can restart Workspace before stopping your apps")
 		if e := ops.preflight(ctx, c); e != nil {
 			return e
 		}
 	}
-	if e := cacheUpdateController(c, target, stage); e != nil {
+	if e := cacheUpdateController(c, target, stage, ops.repair); e != nil {
 		return e
 	}
 	before, _, e := fileDigest(filepath.Join(c.Data, "workspace.json"))
@@ -504,7 +511,11 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e = CheckPorts(next); e != nil {
 		return fmt.Errorf("new app ports are unavailable: %w", e)
 	}
-	backup, e := makeBackupDetailed(ctx, c, backupRoot, report, nil, "update")
+	purpose := "update"
+	if ops.repair {
+		purpose = "repair"
+	}
+	backup, e := makeBackupDetailed(ctx, c, backupRoot, report, nil, purpose)
 	if e != nil {
 		lock.Close()
 		lock = nil
@@ -564,14 +575,14 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	})
 	changed := 0
 	for _, id := range ids {
-		if c.Catalog.Packages[id] != target.Packages[id] {
+		if ops.repair || c.Catalog.Packages[id] != target.Packages[id] {
 			changed++
 		}
 	}
 	installed := 0
 	for _, id := range ids {
 		p := target.Packages[id]
-		if c.Catalog.Packages[id] == p {
+		if !ops.repair && c.Catalog.Packages[id] == p {
 			continue
 		}
 		src, e := platform.Inside(stage, p.File)
@@ -644,6 +655,10 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		return e
 	}
 	committed = true
+	if ops.repair {
+		report("Reinstall complete. Your accounts, app data and files are kept. Previous setup saved in " + backup.Path)
+		return nil
+	}
 	cleanup := cleanupSuccessfulUpdate(ctx, next, backup, stage, report)
 	report("Update complete. All apps are healthy. " + cleanup.Summary() + " Recovery backup: " + backup.Path)
 	return nil

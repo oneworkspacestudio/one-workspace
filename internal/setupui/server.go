@@ -179,13 +179,13 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, e.Error(), 400)
 			return
 		}
-		volume, e := request.PreflightStorage()
+		review, e := suite.InspectSetupStorage(request)
 		if e != nil {
 			http.Error(w, e.Error(), 400)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(map[string]any{"folder": request.Folder, "volume": volume})
+		_ = json.NewEncoder(w).Encode(map[string]any{"folder": request.Folder, "volume": review.Volume, "reinstall": review})
 	})
 	mux.HandleFunc("POST /api/install", func(w http.ResponseWriter, r *http.Request) {
 		var request suite.Request
@@ -200,12 +200,27 @@ func (s *Server) Handler() http.Handler {
 			http.Error(w, e.Error(), 400)
 			return
 		}
-		if _, e := request.PreflightStorage(); e != nil {
-			http.Error(w, e.Error(), 400)
+		review, storageErr := suite.InspectSetupStorage(request)
+		if storageErr != nil {
+			http.Error(w, storageErr.Error(), 400)
 			return
 		}
+		if review.Kind != "new" && (!request.Reinstall || request.ReinstallReview != review.Review) {
+			http.Error(w, "Review this folder and choose Reinstall in this folder before continuing", 409)
+			return
+		}
+		if request.Reinstall && (review.Kind == "new" || request.ReinstallReview != review.Review) {
+			http.Error(w, "This folder changed. Check the reinstall option again.", 409)
+			return
+		}
+		if !request.Reinstall {
+			if _, e := request.PreflightStorage(); e != nil {
+				http.Error(w, e.Error(), 400)
+				return
+			}
+		}
 		s.mu.Lock()
-		if request.Mode == "automatic" {
+		if request.Mode == "automatic" && review.Kind != "repair" {
 			domain, e := suite.NormalizeDomain(request.Domain)
 			if e != nil || s.hosting == nil || s.connecting || s.hosting.Domain != domain {
 				s.mu.Unlock()
@@ -220,11 +235,11 @@ func (s *Server) Handler() http.Handler {
 			}
 		}
 		s.mu.Unlock()
-		if e := request.Validate(); e != nil {
+		if e := request.Validate(); e != nil && review.Kind != "repair" {
 			http.Error(w, e.Error(), 400)
 			return
 		}
-		if _, e := suite.SelectInstallApps(s.cat, request); e != nil {
+		if _, e := suite.SelectInstallApps(s.cat, request); e != nil && review.Kind != "repair" {
 			http.Error(w, e.Error(), 400)
 			return
 		}
@@ -236,20 +251,36 @@ func (s *Server) Handler() http.Handler {
 		}
 		s.busy = true
 		s.installation = suite.InstallProgress(request.Mode == "cloudflare")
+		if review.Kind == "repair" {
+			s.installation = suite.ReinstallProgress()
+		}
 		s.installation.InstallPhase("Preparing storage and ports")
 		s.problem = ""
 		s.mu.Unlock()
 		go func() {
-			ctx, cancel := context.WithTimeout(context.Background(), 15*time.Minute)
+			limit := 15 * time.Minute
+			if request.Reinstall {
+				limit = 45 * time.Minute
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), limit)
 			defer cancel()
-			c, e := suite.Install(ctx, request, s.z, s.cat, func(phase string) { s.mu.Lock(); s.phase = phase; s.installation.InstallPhase(phase); s.mu.Unlock() })
+			c, e := suite.Install(ctx, request, s.z, s.cat, func(phase string) {
+				s.mu.Lock()
+				s.phase = phase
+				if review.Kind == "repair" {
+					s.installation.ReinstallPhase(phase)
+				} else {
+					s.installation.InstallPhase(phase)
+				}
+				s.mu.Unlock()
+			})
 			s.mu.Lock()
 			defer s.mu.Unlock()
 			s.busy = false
 			if e != nil {
 				s.installation.Finish("failed", "Installation stopped", e)
 				s.problem = e.Error()
-				s.phase = "Setup stopped; inspect the error before retrying in fresh folders"
+				s.phase = "Setup stopped. Return to the folder step and choose Reinstall in this folder to try again."
 			} else {
 				for _, step := range s.installation.Snapshot().Steps {
 					s.installation.Step(step.ID, "done", "")

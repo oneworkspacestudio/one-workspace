@@ -407,6 +407,9 @@ func startupUpdateCleanup(ctx context.Context, c Config) {
 			return
 		}
 		if j.Phase == "complete" {
+			if j.Backup.Purpose == "repair" {
+				return
+			}
 			last, e := LoadUpdateCleanup(c)
 			if e == nil && last != nil && last.KeptBackup == j.Backup.ID && !last.Finished.Before(j.Updated) && len(last.Warnings) == 0 {
 				return

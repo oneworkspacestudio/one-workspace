@@ -190,7 +190,9 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 		report = func(string) {}
 	}
 	var receipt BackupReceipt
-	partial := false
+	// Repair snapshots may contain missing or damaged original programs. Keep
+	// them for data recovery, without labelling them a known working rollback.
+	partial := purpose == "repair"
 	if actual, _, err := Load(c.Data); err == nil {
 		if actual.Data != c.Data || actual.Programs != c.Programs || actual.Files != c.Files {
 			return receipt, errors.New("installation locations changed during update")

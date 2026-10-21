@@ -5,6 +5,8 @@ import (
 	"github.com/oneworkspacestudio/one-workspace/internal/suite"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -36,6 +38,46 @@ func TestWizardCapabilityOriginAndHost(t *testing.T) {
 				t.Fatalf("got %d want %d", w.Code, tc.want)
 			}
 		})
+	}
+}
+
+func TestOccupiedFolderReviewRequiresBoundReinstallConsent(t *testing.T) {
+	root := filepath.Clean(t.TempDir())
+	private := filepath.Join(root, "Private")
+	os.MkdirAll(private, 0700)
+	os.WriteFile(filepath.Join(private, "partial.db"), []byte("retained"), 0600)
+	s := &Server{token: "secret", origin: "http://localhost:12345"}
+	call := func(path string, body any) *httptest.ResponseRecorder {
+		raw, _ := json.Marshal(body)
+		r := httptest.NewRequest("POST", s.origin+"/api/"+path, strings.NewReader(string(raw)))
+		r.Host = "localhost:12345"
+		r.Header.Set("X-Setup-Token", "secret")
+		r.Header.Set("Origin", s.origin)
+		w := httptest.NewRecorder()
+		s.Handler().ServeHTTP(w, r)
+		return w
+	}
+	w := call("storage", map[string]any{"folder": root})
+	if w.Code != 200 {
+		t.Fatal(w.Code, w.Body.String())
+	}
+	var result struct {
+		Reinstall suite.SetupStorageReview `json:"reinstall"`
+	}
+	if err := json.Unmarshal(w.Body.Bytes(), &result); err != nil {
+		t.Fatal(err)
+	}
+	if result.Reinstall.Kind != "restart" || result.Reinstall.Review == "" {
+		t.Fatal(result)
+	}
+	for _, body := range []map[string]any{{"folder": root}, {"folder": root, "reinstall": true, "reinstallReview": "old-review"}} {
+		w = call("install", body)
+		if w.Code != 409 {
+			t.Fatal(w.Code, w.Body.String())
+		}
+	}
+	if bytes, _ := os.ReadFile(filepath.Join(private, "partial.db")); string(bytes) != "retained" {
+		t.Fatal("review mutated existing data")
 	}
 }
 

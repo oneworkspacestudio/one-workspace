@@ -105,6 +105,32 @@ func InstallProgress(tunnel bool) *ProgressTracker {
 	steps = append(steps, ProgressStep{ID: "finish", Label: "Save settings and shortcuts"})
 	return NewProgress("installing", steps, "")
 }
+
+func ReinstallProgress() *ProgressTracker {
+	return NewProgress("installing", []ProgressStep{{ID: "prepare", Label: "Review this Workspace"}, {ID: "extract", Label: "Verify replacement apps"}, {ID: "apps", Label: "Save recovery copy and reinstall"}, {ID: "finish", Label: "Check Workspace and finish"}}, "")
+}
+
+func (p *ProgressTracker) ReinstallPhase(phase string) {
+	id := "extract"
+	switch {
+	case strings.HasPrefix(phase, "Copying"), strings.HasPrefix(phase, "Verifying every"), strings.HasPrefix(phase, "Stopping"), strings.HasPrefix(phase, "Installing verified"):
+		id = "apps"
+	case strings.HasPrefix(phase, "Restarting"), strings.HasPrefix(phase, "Checking the recovery"), strings.HasPrefix(phase, "Update complete"):
+		id = "finish"
+	}
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	for i := range p.value.Steps {
+		if p.value.Steps[i].ID == id {
+			p.value.Steps[i].State = "running"
+			p.value.Steps[i].Detail = phase
+			break
+		}
+		p.value.Steps[i].State = "done"
+	}
+	p.value.Phase = phase
+	p.save()
+}
 func (p *ProgressTracker) InstallPhase(phase string) {
 	id := "prepare"
 	switch {

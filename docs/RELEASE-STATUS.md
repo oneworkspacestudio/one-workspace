@@ -622,3 +622,20 @@ Includes the Workspace62 startup recovery changes. Built-in shortcuts such as
 Docs now follow Drive recovery without retaining a stale failed-process entry.
 The unpublished62 draft and its source tag are preserved;63 is the final release.
 All25 application versions and payloads remain unchanged from61.
+
+
+## Workspace64: reinstall in the same folder
+
+Setup now recognises existing or incomplete installations and offers Reinstall
+in this folder. A recognised installation retains identity, app data, settings,
+ports, app selection and independent app versions. Verified replacement files
+can repair missing or damaged programs even at the same version, using the
+existing durable backup/recovery transaction. Repair snapshots are retained for
+data recovery and are not labelled known-working rollback copies; older working
+backups are kept. Normal update verification remains strict.
+
+Incomplete setups are moved into a unique protected ReinstallRecovery folder
+before a fresh sign-in setup, with Files left in place. The wizard explains this
+difference. Folder-specific consent is reset after edits or stale reviews. Active
+setups, junctions, overlapping storage and unsuitable private-data volumes are
+refused. App startup failures remain independently retryable as introduced in63.
