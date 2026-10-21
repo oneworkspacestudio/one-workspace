@@ -120,6 +120,7 @@ func (s *Server) Handler() http.Handler {
 		_ = json.NewEncoder(w).Encode(state)
 	})
 	mux.HandleFunc("POST /api/hosting/connect", s.connectHosting)
+	mux.HandleFunc("POST /api/hosting/review", s.reviewHosting)
 	mux.HandleFunc("POST /api/updates/open", func(w http.ResponseWriter, r *http.Request) {
 		var in struct {
 			Folder string `json:"folder"`
@@ -212,8 +213,11 @@ func (s *Server) Handler() http.Handler {
 				return
 			}
 			h := *s.hosting
-			request.Mode, request.Domain, request.Origin, request.Issuer = h.Mode, h.Domain, h.Origin, h.Issuer
-			request.CFToken, request.AccountID, request.ZoneID, request.Authorize = h.CFToken, h.AccountID, h.ZoneID, true
+			if e := applyHostingSelection(&request, h); e != nil {
+				s.mu.Unlock()
+				http.Error(w, e.Error(), 400)
+				return
+			}
 		}
 		s.mu.Unlock()
 		if e := request.Validate(); e != nil {

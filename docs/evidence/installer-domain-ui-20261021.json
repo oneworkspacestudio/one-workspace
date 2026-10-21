@@ -1,0 +1,13 @@
+{
+  "nativeInstaller": false,
+  "customAddresses": true,
+  "editsSurvivePolling": true,
+  "conflictsShown": 2,
+  "explicitConsentRequired": true,
+  "editingClearsConsent": true,
+  "chosenAddressesSubmitted": true,
+  "mobileNoOverflow": true,
+  "browserErrors": [],
+  "liveDNSChanged": false,
+  "ownerDataUsedAsFixture": false
+}

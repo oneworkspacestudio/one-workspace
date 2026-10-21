@@ -9,11 +9,56 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/one-workspace/internal/suite"
 )
+
+// Keep the browser's reviewed addresses while taking credentials only from the
+// server-side connection. A reconnect or changed DNS invalidates the digest.
+func applyHostingSelection(request *suite.Request, h suite.Request) error {
+	if request.DNSReview == "" || request.Origin == "" || request.Issuer == "" {
+		return errors.New("check your chosen addresses before installing")
+	}
+	request.Mode, request.Domain = h.Mode, h.Domain
+	request.CFToken, request.AccountID, request.ZoneID, request.Authorize = h.CFToken, h.AccountID, h.ZoneID, true
+	return nil
+}
+
+func (s *Server) reviewHosting(w http.ResponseWriter, r *http.Request) {
+	var in struct {
+		Domain string `json:"domain"`
+		Origin string `json:"origin"`
+		Issuer string `json:"issuer"`
+	}
+	d := json.NewDecoder(http.MaxBytesReader(w, r.Body, 4096))
+	d.DisallowUnknownFields()
+	if d.Decode(&in) != nil {
+		http.Error(w, "Enter both web addresses", 400)
+		return
+	}
+	domain, e := suite.NormalizeDomain(in.Domain)
+	s.mu.Lock()
+	if e != nil || s.hosting == nil || s.hosting.Domain != domain || s.connecting || s.busy || s.ready {
+		s.mu.Unlock()
+		http.Error(w, "Connect Cloudflare for this domain before checking addresses", 409)
+		return
+	}
+	h := *s.hosting
+	s.mu.Unlock()
+	h.Origin, h.Issuer = strings.TrimSpace(in.Origin), strings.TrimSpace(in.Issuer)
+	ctx, cancel := context.WithTimeout(r.Context(), time.Minute)
+	defer cancel()
+	review, e := suite.ReviewHosting(ctx, h)
+	if e != nil {
+		http.Error(w, e.Error(), 400)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(review)
+}
 
 func (s *Server) connectHosting(w http.ResponseWriter, r *http.Request) {
 	var in struct {

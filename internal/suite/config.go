@@ -67,6 +67,8 @@ type Request struct {
 	Authorize    bool     `json:"authorize"`
 	Domain       string   `json:"domain,omitempty"`
 	CFCertFile   string   `json:"-"`
+	ReplaceDNS   bool     `json:"replaceDNS,omitempty"`
+	DNSReview    string   `json:"dnsReview,omitempty"`
 }
 
 func (r Request) Validate() error {

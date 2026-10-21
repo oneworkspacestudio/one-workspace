@@ -40,11 +40,28 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		if e != nil {
 			return empty, e
 		}
-		r.Mode, r.Domain, r.Origin, r.Issuer = h.Mode, h.Domain, h.Origin, h.Issuer
+		r.Mode, r.Domain = h.Mode, h.Domain
+		if r.Origin == "" {
+			r.Origin = h.Origin
+		}
+		if r.Issuer == "" {
+			r.Issuer = h.Issuer
+		}
 		r.CFToken, r.AccountID, r.ZoneID, r.Authorize = h.CFToken, h.AccountID, h.ZoneID, true
 	}
 	if e := r.Validate(); e != nil {
 		return empty, e
+	}
+	// Fail before creating identities or downloading packages if a custom address
+	// is invalid, occupied without consent, or changed since the owner reviewed it.
+	if r.Mode == "cloudflare" {
+		review, e := ReviewHosting(ctx, r)
+		if e != nil {
+			return empty, e
+		}
+		if e = review.validateConsent(r); e != nil {
+			return empty, e
+		}
 	}
 	// Record exclusions against the apps actually offered by this installer.
 	// A newer online bundle can contain apps absent from its embedded app picker.

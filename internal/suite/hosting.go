@@ -116,7 +116,9 @@ func ResolveHosting(ctx context.Context, domain, certPath string) (Request, erro
 			}
 		}
 		if chosen == "" {
-			return r, errors.New("could not find an unused Workspace address; use Advanced connection")
+			// Let the owner review and explicitly reclaim the original address
+			// even when every automatic suggestion is already in use.
+			chosen = "https://" + prefix + suffix + "." + zone.Name
 		}
 		hosts = append(hosts, chosen)
 	}

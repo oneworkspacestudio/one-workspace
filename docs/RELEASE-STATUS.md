@@ -548,3 +548,22 @@ Port-collision, readiness and SSRF regressions passed. Actual occupied-port fres
 setup, OIDC and the green MyAccounts dashboard passed. The normal backed-up local
 update preserved identity, settings, history and all other app versions; all24
 services are healthy. See docs/evidence/ports-health-deployment.json.
+
+
+## Workspace59: choose and reuse installation addresses
+
+The automatic installer keeps address suggestions editable. Check addresses to
+see existing destinations, then explicitly choose replacement of those exact
+A/AAAA/CNAME records to reclaim the original names. Editing clears approval;
+changed DNS requires review again. MX/TXT/other record types, unrelated names and
+existing tunnels/routes are preserved. A protected original-record snapshot and
+provisioning-failure recovery retain old record values and writable metadata.
+
+Go suite/setup/distribution/branding checks and vet passed. Browser fixtures
+verified desktop/mobile editing, polling, conflict consent, summary and submitted
+addresses. Cloudflare behavior was exercised against a local fake API, including
+multiple records, pagination, stale approvals, concurrent changes, partial
+failures, a lost response, rollback and incomplete recovery. Real DNS was not
+changed as a development test. Native installer/package verification is recorded
+separately after the local build. Other25 app contracts and payloads stay pinned
+to public Workspace58; no GitHub Actions or owner-data fixture was used.

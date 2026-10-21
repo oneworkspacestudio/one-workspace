@@ -1,8 +1,7 @@
 # Automatic domain hosting
 
-This guide describes the local hosting development preview. Its implementation
-and installer updates have not been published with this documentation update;
-existing GitHub release assets retain their previous setup flow.
+Connect a domain you manage in Cloudflare to give Workspace and MyAccounts their
+own secure web addresses.
 
 ## Normal setup
 
@@ -12,13 +11,39 @@ existing GitHub release assets retain their previous setup flow.
 2. Select **Host on my domain**, enter a domain managed by Cloudflare, then click
    **Connect Cloudflare**. Approve the official Cloudflare browser authorization
    when prompted. A matching existing connector login can be reused.
-3. Install and launch Workspace. Open Mail to see its hosting progress.
+3. Edit the suggested **Workspace address** and **MyAccounts address** if you
+   prefer different names, then select **Check addresses**. You can type a name
+   such as `workspace.example.com`, with or without `https://`.
+4. If an address is already in use, setup shows its current destination. Choose
+   another address, or tick **Use these addresses for this installation** to
+   reuse it. Visitors to that address will then reach your new Workspace.
+5. Continue to review your choices, then install and launch Workspace. Open Mail
+   to see its hosting progress.
 
 The installer discovers the account/zone and selects unused first-level web
 addresses. Root domains use `workspace.example.com` and `accounts.example.com`.
 Subdomains use an installation-domain hash in those labels to remain within the
 zone's standard wildcard TLS coverage. If a web address is occupied, another is
-chosen. The chosen addresses are shown before installation.
+suggested. Suggestions remain editable, so you can reuse the original names or
+choose your own. Use two different direct subdomains of the connected Cloudflare
+zone, such as `my-space.example.com` and `my-login.example.com`, so Cloudflare's
+standard secure certificate covers both.
+
+Reusing an address replaces only the exact A, AAAA or CNAME records shown in the
+review. Setup leaves existing tunnels and their routes, unrelated addresses and
+mail records alone. An address with MX, TXT, NS or another non-web record cannot
+be taken over by this option. Editing either address clears the review and the
+replacement checkbox. Setup checks the records again before installing and
+before changing DNS; a changed destination requires a new review.
+
+Before replacing records, setup saves their original values in
+`Private/cloudflare-dns-before.json`. If tunnel or DNS provisioning fails, it attempts
+to remove its new records and tunnel and restore the old record values, including
+comments and tags. Restored records can have new provider IDs. If recovery cannot
+finish, setup reports this and retains the original values for recovery in
+Cloudflare. DNS changes are not atomic and propagation can take time. Review the
+current destinations before reclaiming an address that serves another installation.
+The record behavior follows the [Cloudflare DNS API](https://developers.cloudflare.com/api/resources/dns/subresources/records/).
 
 It creates a dedicated Cloudflare tunnel, its two web DNS records, MyAccounts,
 the owner, application clients and exact callbacks. Mail receives the chosen
@@ -36,9 +61,9 @@ by this installation can be reused on retry; edited records or IP changes need
 review. Failed operations may leave the recorded subset created so far. Retry
 continues from those receipts; unknown outcomes require provider inspection.
 
-![Domain-first hosting screen](screenshots/domain-hosting.png)
+![Choose or reuse your domain addresses](screenshots/domain-addresses-desktop.png)
 
-*Local installer screen; this capture does not represent a completed public deployment.*
+*Installer screen with example addresses; no real DNS changes were made for this capture.*
 
 ## What a domain cannot authorize
 
