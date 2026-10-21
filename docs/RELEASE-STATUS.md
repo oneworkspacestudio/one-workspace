@@ -567,3 +567,18 @@ failures, a lost response, rollback and incomplete recovery. Real DNS was not
 changed as a development test. Native installer/package verification is recorded
 separately after the local build. Other25 app contracts and payloads stay pinned
 to public Workspace58; no GitHub Actions or owner-data fixture was used.
+
+
+## Workspace60: Mail setup without manual permission repair
+
+Pins Mail17, fixing the fresh-install ordinary User role error by initializing
+the engine's own standard role defaults before MyAccounts connection. Retry
+updates omit read-only listener names. Mail and Workspace expose plain recovery
+actions while preserving technical details in protected logs. Reconnect Mail
+retains messages and custom access settings. Includes the shared blue Mail icon.
+
+Real pinned-engine tests pass for fresh setup and both interrupted setup stages,
+signed owner/user mailbox access, user isolation, administrator API denial, wrong
+audience refusal and restart stability. Go and JS regressions pass; full native
+suite upgrade/UI and deployed delivery evidence are recorded separately. No mail
+was sent externally. Network/DNS requirements for Internet mail still apply.

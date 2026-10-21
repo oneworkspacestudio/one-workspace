@@ -69,3 +69,17 @@ review process; SMTP delivery alone cannot clear a website classification.
 See [Mail browser-warning recovery](https://github.com/oneworkspacestudio/mail/blob/main/workspace-mail/RECOVERY.md).
 Keep browser protections enabled. Online setup resolves the newest compatible
 organization Mail release; deliberate offline16 retains bundled13.
+
+
+## Automatic account setup
+
+Workspace60 pins Mail17. Fresh setup lets the engine create its standard user
+permissions after explicit installation listeners are saved, then connects
+MyAccounts. Users do not edit roles. Interrupted setup reuses existing listener
+IDs without attempting to change their read-only names. Existing custom access
+settings and mailbox assignments are preserved.
+
+Mail startup warnings show a plain next step. Use Reconnect Mail in Mail setup
+for a connection problem. Technical diagnostics remain in protected Mail logs
+and Workspace logs/mail-setup.log. Incoming Internet delivery remains separate
+from mailbox sign-in and can still need network or existing-provider decisions.

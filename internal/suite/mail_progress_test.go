@@ -33,3 +33,23 @@ func TestFirstRunMailNetworkProgress(t *testing.T) {
 		})
 	}
 }
+
+func TestMailStartupKeepsDiagnosticsOutOfUserMessage(t *testing.T) {
+	for _, state := range []map[string]any{
+		{"identityError": "Mail's ordinary User role is missing or changed. Restore the standard User role before repairing sign-in"},
+		{"hostingError": "Mail's ordinary User role is missing or changed. Restore the standard User role before repairing sign-in"},
+		{"configured": true, "hostingError": "x:Role/set: invalidProperties"},
+		{"hostingError": "Existing DNS conflict", "hostingIssue": map[string]string{"code": "existing_mail_dns"}},
+	} {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { _ = json.NewEncoder(w).Encode(state) }))
+		u, _ := url.Parse(server.URL)
+		port, _ := strconv.Atoi(u.Port())
+		rt := &Runtime{progress: NewProgress("starting", []ProgressStep{{ID: "mail", Label: "Mail"}}, "")}
+		rt.mailHostingProgress(context.Background(), catalog.App{ID: "mail", Port: port})
+		step := rt.progress.Snapshot().Steps[0]
+		server.Close()
+		if step.State != "warning" || !strings.Contains(step.Detail, "Open Mail") || strings.Contains(step.Detail, "User role") || strings.Contains(step.Detail, "x:Role") {
+			t.Fatalf("unsafe or unhelpful startup warning: %+v", step)
+		}
+	}
+}

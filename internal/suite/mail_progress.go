@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"time"
 
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
 func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {
@@ -25,17 +27,29 @@ func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {
 			IdentityError  string `json:"identityError"`
 			InboundState   string `json:"inboundState"`
 			InboundMessage string `json:"inboundMessage"`
+			Issue          struct {
+				Code string `json:"code"`
+			} `json:"hostingIssue"`
 		}
 		if e == nil {
 			e = json.NewDecoder(resp.Body).Decode(&status)
 			resp.Body.Close()
 		}
 		if e == nil && status.IdentityError != "" {
-			rt.progress.Step(app.ID, "warning", status.IdentityError+" Open Mail settings to repair mailbox access.")
+			rt.logMailSetupProblem(status.IdentityError)
+			rt.progress.Step(app.ID, "warning", "Mail couldn't finish connecting your Workspace account. Open Mail and choose Reconnect Mail. Your other apps are ready to use.")
 			return
 		}
 		if e == nil && status.Error != "" {
-			rt.progress.Step(app.ID, "warning", status.Error)
+			rt.logMailSetupProblem(status.Error)
+			message := "Mail setup couldn't finish. Open Mail and choose Retry automatic setup. Your other apps are ready to use."
+			if status.Configured {
+				message = "Mail is available on this computer, but Internet email needs attention. Open Mail for help finishing setup."
+			}
+			if status.Issue.Code == "existing_mail_dns" {
+				message = "Mail found an existing email service on your domain. Open Mail to choose how you want to connect it."
+			}
+			rt.progress.Step(app.ID, "warning", message)
 			return
 		}
 		if e == nil && status.Configured && !status.Busy {
@@ -65,4 +79,12 @@ func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {
 		case <-time.After(2 * time.Second):
 		}
 	}
+}
+
+func (rt *Runtime) logMailSetupProblem(detail string) {
+	if rt.Config.Data == "" {
+		return
+	}
+	log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", "mail-setup.log")}
+	_, _ = fmt.Fprintln(log, time.Now().UTC().Format(time.RFC3339), detail)
 }
