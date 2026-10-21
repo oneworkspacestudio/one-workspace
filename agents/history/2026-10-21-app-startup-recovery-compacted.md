@@ -62,3 +62,35 @@ with20 small assets (large uploads stopped). Prepare final63 from new source.
 Normal owner61->62 backup/update was already in progress and must finish safely;
 then apply63 normally. Do not interrupt or tamper with an active transaction.
 Final source/release/local claims must refer to63 and reconcile both receipts.
+
+## Final verified delivery (supersedes pending next steps)
+
+Source b018b00 and immutable v0.3.0-preview.63 are public, all 22 release asset
+sizes/digests verified. Normal protected owner 61->62->63 manager-only update passed:
+all 25 app contracts/packages retained including Mail 17 and newer installed Chat 9,
+identity/settings/paths/selections unchanged, all 24 service entries running.
+Newest recovery manifest verified. Exact tested local artifacts were applied
+while large GitHub uploads continued; public-download status is claimed only
+after final publication verification. No source tag or published asset replaced.
+
+Actual final installer installed fresh Accounts/Drive/Docs/Slicer/Tasks. Deliberately
+unavailable Slicer retained a failed row while Tasks/portal stayed ready. Real
+MyAccounts login, owner retry, setup retry with Open Workspace still available,
+Slicer recovery, unchanged healthy PIDs, phone/desktop screenshots and zero browser
+errors passed. First browser run caught malformed punctuation encoding in setup;
+it was corrected and installer rebuilt before the 62 tag. Manager and
+all app payloads remained byte-identical across this setup-only correction.
+Final 63 includes the separate tested built-in shortcut dependency fix; 62 draft/tag remain preserved and unpublished.
+
+Synthetic managers, descendants and browsers stopped; exact named C task cache
+removed after no active-reference/reparse checks. Current owner installation and
+newest recovery retained. Installer 63 SHA-verified in Downloads. Evidence:
+docs/evidence/app-startup-recovery-20261021.json and startup-retry screenshots.
+Historical real Windows memory pressure cannot be recreated from current free
+memory; bounded retry/degraded operation tested via Win32 1455 injection and real
+process failures, with no OS pagefile tuning or physical printing. Native owner
+Slicer currently healthy. No clean-host/reboot or Internet-mail delivery claim.
+
+Final public portal health confirms all 24 services healthy; Actions remains
+disabled. Removed 5,828,934,177 bytes / 1,103 known synthetic cache files after
+process/reparse checks. Preserved owner63 and its newest verified recovery.
