@@ -149,3 +149,37 @@ func TestProgressPartialAndRecoveryClearStaleError(t *testing.T) {
 		t.Fatal(s)
 	}
 }
+
+func TestBuiltinShortcutFollowsDependencyRecovery(t *testing.T) {
+	apps := []catalog.App{{ID: "drive", Kind: "process"}, {ID: "docs", Kind: "builtin", Depends: []string{"drive"}}, {ID: "consumer", Kind: "process", Depends: []string{"docs"}}}
+	rt := &Runtime{Config: Config{Data: t.TempDir(), Catalog: catalog.Catalog{Apps: apps}}, status: map[string]string{}, active: map[string]bool{}, progress: NewProgress("starting", nil, "")}
+	fail := true
+	start := func(_ context.Context, a catalog.App) error {
+		if a.ID == "drive" && fail {
+			return os.ErrPermission
+		}
+		rt.set(a.ID, "running")
+		rt.active[a.ID] = true
+		return nil
+	}
+	if err := rt.startAvailable(context.Background(), apps, start); err != nil {
+		t.Fatal(err)
+	}
+	if rt.Status()["consumer"] != "blocked" {
+		t.Fatal(rt.Status())
+	}
+	fail = false
+	if err := rt.startAvailable(context.Background(), apps, start); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := rt.Status()["docs"]; ok {
+		t.Fatal("shortcut retained a fake process status", rt.Status())
+	}
+	if rt.Status()["consumer"] != "running" {
+		t.Fatal(rt.Status())
+	}
+	rt.finishStartup()
+	if strings.Contains(rt.progress.Snapshot().Phase, "retry") {
+		t.Fatal(rt.progress.Snapshot())
+	}
+}

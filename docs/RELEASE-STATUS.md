@@ -614,3 +614,11 @@ the operating-system level: no Windows memory settings are silently altered.
 Native isolated process tests cover continuation, dependency retry, unchanged
 healthy process identities and primary/descendant cleanup. No physical printing,
 external email or owner-data fixture; no clean-host/reboot acceptance claimed.
+
+
+## Workspace63: dependency recovery for app shortcuts
+
+Includes the Workspace62 startup recovery changes. Built-in shortcuts such as
+Docs now follow Drive recovery without retaining a stale failed-process entry.
+The unpublished62 draft and its source tag are preserved;63 is the final release.
+All25 application versions and payloads remain unchanged from61.

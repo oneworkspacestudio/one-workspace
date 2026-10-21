@@ -75,6 +75,10 @@ func (rt *Runtime) startAvailable(ctx context.Context, apps []catalog.App, start
 		if err := ctx.Err(); err != nil {
 			return err
 		}
+		// Shortcuts follow their dependencies without a fake process status.
+		if app.Kind != "process" {
+			continue
+		}
 		rt.mu.RLock()
 		active := rt.active[app.ID]
 		rt.mu.RUnlock()
@@ -96,9 +100,6 @@ func (rt *Runtime) startAvailable(ctx context.Context, apps []catalog.App, start
 			}
 			rt.set(app.ID, "blocked")
 			rt.progress.Step(app.ID, "blocked", "Waiting for "+name+". Retry after that app is running.")
-			continue
-		}
-		if app.Kind != "process" {
 			continue
 		}
 		if err := start(ctx, app); err != nil {

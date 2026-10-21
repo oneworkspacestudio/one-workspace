@@ -51,3 +51,14 @@ latest rollback and all services, cleanup named task cache. Artifacts/logs on
 I:/Projects/tooling/app-startup-20261021; only C:/Projects/.cache/app-startup-20261021
 is disposable after task-process/reparse checks. Preserve owner/live data and
 latest verified recovery. No physical printing, external mail or live DNS tests.
+
+## Shortcut recovery follow-up before publication
+
+Final review found built-in Docs could retain a blocked status after Drive
+recovered. Built-ins now derive dependency readiness without fake process entries;
+a targeted regression proves recovery through a built-in dependency. Keep the
+public62 source tag immutable; its release420043453 remains an unpublished draft
+with20 small assets (large uploads stopped). Prepare final63 from new source.
+Normal owner61->62 backup/update was already in progress and must finish safely;
+then apply63 normally. Do not interrupt or tamper with an active transaction.
+Final source/release/local claims must refer to63 and reconcile both receipts.
