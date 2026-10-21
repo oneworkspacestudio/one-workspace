@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "version": "0.3.0-preview.59",
+  "compiledSourceCommit": "c9397f8dbb61dc7e4f49c58aae7171f63103bc6c",
+  "release": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.59",
+  "publicReleaseAssetsVerified": 22,
+  "allReleaseAssetsSHA256Verified": true,
+  "installerSHA256": "59e9d19bd480c6981f26dfef66244b6e1f822a3c83ae975a10f27415362b5c47",
+  "verifiedInstallerInDownloads": true,
+  "nativeUI": {
+    "nativeInstaller": true,
+    "customAddresses": true,
+    "editsSurvivePolling": true,
+    "conflictsShown": 2,
+    "explicitConsentRequired": true,
+    "editingClearsConsent": true,
+    "chosenAddressesSubmitted": true,
+    "mobileNoOverflow": true,
+    "browserErrors": [],
+    "liveDNSChanged": false,
+    "ownerDataUsedAsFixture": false
+  },
+  "bundle": {
+    "schema": 1,
+    "workspace": "0.3.0-preview.59",
+    "apps": 25,
+    "payloads": 124,
+    "allPayloadHashesVerified": true,
+    "all25AppContractsAndPayloadsUnchanged": true,
+    "baseline": "public Workspace58",
+    "baselineSHA256": "b5527fc6bba1b00578ee5abbee25bd915c7eccbe542d4702707d107aade7e5f7",
+    "ownerDataUsedAsFixture": false,
+    "liveDNSChangedAsFixture": false
+  },
+  "windowsIconFramesVerified": 7,
+  "nativeProcessStopped": true,
+  "taskCacheRemoved": true,
+  "goChecks": [
+    "go test ./internal/suite ./internal/setupui ./internal/distribution ./internal/branding",
+    "go vet ./internal/suite ./internal/setupui"
+  ],
+  "githubActionsUsed": false,
+  "ownerInstallationChanged": false,
+  "liveDNSChangedAsFixture": false
+}
