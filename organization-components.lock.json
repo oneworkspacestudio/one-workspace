@@ -102,10 +102,10 @@
     "sha256": "4afe27f0cc0e741d05f7e56b8bec577dab2dbef54205f1bb44e623da5ac952b6"
   },
   "myMonitor": {
-    "sha256": "e12fa691948a175e4408973cbf0266eb905cff4d08a0c73e914ddd8884c0bb25",
-    "asset": "my-monitor-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "8a9c644106a4ebbb5726beeb4f01b67baa3f8f3cd6d8fc12bcd8e6c0ec8d9a47",
+    "asset": "my-monitor-0.1.0-preview.3-windows-amd64.zip",
     "repository": "oneworkspacestudio/my-monitor",
-    "tag": "v0.1.0-preview.2"
+    "tag": "v0.1.0-preview.3"
   },
   "mySearch": {
     "sha256": "4e0fc1b825e506e184f01c38705766a88ea5a676d4d8f96446688e71cbb1c75d",

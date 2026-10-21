@@ -215,6 +215,34 @@ func Save(c Config, s Secrets) error {
 	}
 	return platform.SaveJSON(filepath.Join(c.Data, "workspace.json"), c)
 }
+
+// A fresh installation can choose another base before any identities, addresses
+// or app settings are written. Check every app and auxiliary TCP/UDP port as a
+// group so moving the portal alone cannot leave a later app unable to start.
+func availableInstallConfig(r Request, cat catalog.Catalog) (Config, error) {
+	c := NewConfig(r, cat)
+	first := CheckPorts(c)
+	if first == nil {
+		return c, nil
+	}
+	// Stay below Meet's media-port ceiling. Trying separate 32-port blocks also
+	// avoids repeatedly probing the same busy application's neighbouring ports.
+	const low, high, stride = 1024, 63974, 32
+	base := r.Port
+	for attempts := 0; attempts < (high-low)/stride+1; attempts++ {
+		base += stride
+		if base > high {
+			base = low
+		}
+		r.Port = base
+		candidate := NewConfig(r, cat)
+		if CheckPorts(candidate) == nil {
+			return candidate, nil
+		}
+	}
+	return Config{}, fmt.Errorf("could not find an available set of Workspace ports; choose another base port or close unused services: %w", first)
+}
+
 func CheckPorts(c Config) error {
 	ports := []int{c.Port}
 	mediaUDP := []int{}
@@ -251,14 +279,14 @@ func CheckPorts(c Config) error {
 		}
 		l, e := net.Listen("tcp4", fmt.Sprintf("127.0.0.1:%d", p))
 		if e != nil {
-			return fmt.Errorf("port %d is already in use", p)
+			return fmt.Errorf("TCP port %d is unavailable: %w", p, e)
 		}
 		listeners = append(listeners, l)
 	}
 	for _, p := range mediaUDP {
 		l, e := net.ListenPacket("udp4", fmt.Sprintf("0.0.0.0:%d", p))
 		if e != nil {
-			return fmt.Errorf("My Meet media UDP port %d is already in use; choose a different Workspace base port", p)
+			return fmt.Errorf("My Meet media UDP port %d is unavailable: %w", p, e)
 		}
 		l.Close()
 	}

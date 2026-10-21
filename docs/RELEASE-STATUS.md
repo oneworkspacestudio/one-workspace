@@ -531,3 +531,18 @@ The normal protected update installed My Create locally, preserved the 24 existi
 app versions/packages and identity/storage paths, and verified all 24 service
 entries plus the newest rollback manifest. Local and public My Create icon bytes
 match the package. See docs/evidence/my-create-deployment-20261021.json.
+
+
+## Workspace58: automatic installation ports and accurate MyAccounts health
+
+Fresh setup finds another free group when requested ports are occupied, checking
+app ports and auxiliary TCP/UDP ports before creating account identities. Local
+addresses follow the chosen group; public identity addresses stay unchanged.
+The installer reports the selected port. Existing installations retain their
+configured ports and identities.
+
+Pins Monitor3: exact registry-authorized loopback checks send the same localhost
+HTTP Host as the supervisor, correcting MyAccounts' numeric-host rejection without
+widening target permissions. Real failures and historical samples are retained.
+Port-collision, readiness and SSRF regressions passed; native installation and
+local deployment evidence are recorded separately after verification.

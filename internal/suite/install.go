@@ -79,8 +79,15 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 		return empty, selectionErr
 	}
 	selected.Selection = offered.Selection
-	c := NewConfig(r, selected)
-	if e := CheckPorts(c); e != nil {
+	c, portErr := availableInstallConfig(r, selected)
+	if portErr != nil {
+		return empty, portErr
+	}
+	if c.Port != r.Port {
+		progress(fmt.Sprintf("The requested ports are unavailable; using Workspace port %d and free app ports", c.Port))
+		r.Port = c.Port
+	}
+	if e := ctx.Err(); e != nil {
 		return empty, e
 	}
 	if e := platform.RequireNewDir(c.Data); e != nil {
