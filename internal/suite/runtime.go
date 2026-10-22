@@ -259,7 +259,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 		err := rt.prepareChatIdentity(identityContext)
 		cancel()
 		if err != nil {
-			return err
+			return startupStage("chat-sign-in", "Chat could not connect its separate browser address to MyAccounts. Retry; check logs/chat.log if it continues.", err)
 		}
 	}
 	if app.ID == "vault" {
@@ -304,7 +304,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 	}
 	if usesShared(rt.Config, app.ID) {
 		if e := rt.ensureShared(ctx); e != nil {
-			return e
+			return startupStage("shared-backend", "The background service used by Calendar and Contacts could not start. Repair Workspace with the latest installer, then retry. See shared/startup.log and shared/engine.log.", e)
 		}
 	}
 	if app.ID == "clips" {
@@ -361,7 +361,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 		health = "/"
 	}
 	startupTimeout := 90 * time.Second
-	if app.ID == "gitea" || app.ID == "mail" {
+	if app.ID == "gitea" || app.ID == "mail" || app.ID == "chat" {
 		startupTimeout = 3 * time.Minute
 	}
 	if e = WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {

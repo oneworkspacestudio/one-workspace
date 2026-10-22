@@ -86,6 +86,29 @@ func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	s.recoveryRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
+	mux.HandleFunc("GET /api/startup-report", func(w http.ResponseWriter, r *http.Request) {
+		s.mu.Lock()
+		c, ready := s.config, s.ready
+		s.mu.Unlock()
+		if !ready {
+			http.Error(w, "Install Workspace first", 409)
+			return
+		}
+		var progress suite.Progress
+		if err := platform.LoadJSON(filepath.Join(c.Data, "startup-progress.json"), &progress); err != nil {
+			http.Error(w, "Start Workspace to create a diagnostic report", 409)
+			return
+		}
+		apps := []map[string]string{}
+		for _, app := range c.Catalog.Apps {
+			apps = append(apps, map[string]string{"id": app.ID, "name": app.Name, "version": app.Version})
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Content-Disposition", `attachment; filename="Workspace-startup-report.json"`)
+		// Same bounded status already displayed in the capability-protected wizard;
+		// no account details, secrets, environment, raw logs or command lines.
+		_ = json.NewEncoder(w).Encode(map[string]any{"schema": 1, "workspaceVersion": c.Catalog.Version, "createdAt": time.Now().UTC(), "startup": progress, "apps": apps, "logsFolder": filepath.Join(c.Data, "logs"), "sharedLogsFolder": filepath.Join(c.Data, "shared"), "note": "This report contains startup status, not raw diagnostic logs or credentials."})
+	})
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
@@ -113,6 +136,7 @@ func (s *Server) Handler() http.Handler {
 			state["installation"] = s.installation.Snapshot()
 		}
 		if s.ready {
+			state["diagnosticFolder"] = s.config.Data
 			var startup suite.Progress
 			if platform.LoadJSON(filepath.Join(s.config.Data, "startup-progress.json"), &startup) == nil && (s.launchStarted.IsZero() || !startup.StartedAt.Before(s.launchStarted.Add(-time.Second))) {
 				if (startup.State == "starting" || startup.State == "ready" || startup.State == "retrying") && !platform.ProcessRunning(startup.PID, filepath.Join(s.config.Data, "Workspace.exe")) {

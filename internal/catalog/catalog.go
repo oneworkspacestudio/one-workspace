@@ -58,11 +58,18 @@ var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
 func (c Catalog) Validate() error {
-	if c.InstallerIntegration < 0 || c.InstallerIntegration > 2 {
+	if c.InstallerIntegration < 0 || c.InstallerIntegration > 3 {
 		return errors.New("this application bundle needs a newer Workspace installer")
 	}
 	if c.Schema != 1 || c.Version == "" {
 		return errors.New("unsupported or unversioned app catalog")
+	}
+	if _, shared := c.Packages["stalwart-shared"]; shared && c.InstallerIntegration >= 3 {
+		for _, name := range []string{"concrt140", "msvcp140", "msvcp140_1", "msvcp140_2", "msvcp140_atomic_wait", "msvcp140_codecvt_ids", "vcruntime140", "vcruntime140_1", "vcruntime140_threads"} {
+			if p, ok := c.Packages["msvc-"+name]; !ok || p.File != "runtime/msvc/"+name+".dll" {
+				return errors.New("shared engine is missing its required Microsoft x64 runtime package")
+			}
+		}
 	}
 	if c.Selection != nil {
 		excluded := map[string]bool{}

@@ -712,3 +712,24 @@ navigation without a floating obstruction. [Evidence](evidence/slicer-flow-20261
 ## Installer recovery — preview68
 
 Setup now retains status across refresh and installer restarts, follows active installations, recognises completed apps, and offers checked continuation after interruption. Verified packages are reused; partial bytes and user data are retained. Older incomplete installs without checkpoints use protected recovery. See INSTALL-RECOVERY.md. All 25 app versions and payloads stay pinned to public67; this is an installer/manager change. Actual failure on the reported remote machine remains unknown.
+
+
+## Startup prerequisites and diagnostics — preview69
+
+Calendar/Contacts' Windows shared engine requires Microsoft C++ x64 runtime DLLs
+that were absent from the bundle. New setup supplies nine signed, hash-pinned
+release CRT files beside its private engine. This fixes the dependency gap without
+requiring administrator rights or changing system libraries. Integration3 prevents
+older setup code silently dropping these packages. Protected manager repair also
+adds them to existing Calendar/Contacts installations.
+
+Shared service bootstrap errors now reach protected shared/startup.log; early
+process exit is detected promptly. Startup rows distinguish memory, permissions,
+missing files, process exit, readiness timeout and Chat identity preparation.
+Chat has a three-minute first-start allowance. Save startup report retains check
+results, app versions and timestamps without credentials or raw logs.
+
+All25 application contracts/payloads remain pinned to public68. This is a manager,
+installer and prerequisite packaging change. The reported remote machine's exact
+cause remains unconfirmed without its diagnostics. See STARTUP-TROUBLESHOOTING.md
+and MSVC-RUNTIME-NOTICE.md. No clean-host/reboot/remote-host test claim.

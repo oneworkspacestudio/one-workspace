@@ -78,6 +78,11 @@ func InstallPackageIDs(c Catalog, selected map[string]bool) map[string]bool {
 		}
 		if a.ID == "calendar" || a.ID == "contacts" || (a.ID == "mail" && a.Env["WORKSPACE_MAIL_BACKEND"] != "private") {
 			keep["stalwart-shared"], keep["services-shared"] = true, true
+			for id := range c.Packages {
+				if strings.HasPrefix(id, "msvc-") {
+					keep[id] = true
+				}
+			}
 		}
 	}
 	for id, p := range c.Packages {

@@ -19,6 +19,8 @@ func TestWizardCapabilityOriginAndHost(t *testing.T) {
 	}{
 		{"page", "GET", "/", "localhost:12345", "", "", 200},
 		{"no capability", "GET", "/api/state", "localhost:12345", "", "", 403},
+		{"report capability", "GET", "/api/startup-report", "localhost:12345", "", "", 403},
+		{"report before install", "GET", "/api/startup-report", "localhost:12345", "secret", "", 409},
 		{"wrong capability", "GET", "/api/state", "localhost:12345", "wrong", "", 403},
 		{"state", "GET", "/api/state", "localhost:12345", "secret", "", 200},
 		{"DNS rebinding", "GET", "/api/state", "evil.test", "secret", "", 403},

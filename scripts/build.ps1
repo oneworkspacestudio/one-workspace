@@ -16,6 +16,7 @@ param(
  [string]$Contacts='',
  [string]$Services='',
  [string]$Stalwart='',
+ [string]$MSVCRuntime='',
  [string]$Studio='',
  [string]$StudioVersion='studio-v0.1.0',
  [string]$Notes='',
@@ -94,7 +95,19 @@ try {
  }
  if(($Calendar -or $Contacts) -and (-not $Services -or -not $Stalwart)){throw 'Calendar/Contacts require the one shared service package'}
  if([bool]$Services -ne [bool]$Stalwart){throw 'Supply Services and Stalwart together'}
- if($Services){$inputs['services-shared']=@{source=$Services;file='services/WorkspaceServices.exe'};$inputs['stalwart-shared']=@{source=$Stalwart;file='services/stalwart.exe'}}
+ if($Services){
+  if(-not $MSVCRuntime){throw 'Shared Stalwart requires the pinned Microsoft x64 CRT DLL directory; developer-machine system DLLs are not a bundle dependency'}
+  $runtimePin=Get-Content (Join-Path $root 'docs/evidence/msvc-runtime-20261022.json') -Raw | ConvertFrom-Json
+  $inputs['services-shared']=@{source=$Services;file='services/WorkspaceServices.exe'};$inputs['stalwart-shared']=@{source=$Stalwart;file='services/stalwart.exe'}
+  foreach($name in @('concrt140','msvcp140','msvcp140_1','msvcp140_2','msvcp140_atomic_wait','msvcp140_codecvt_ids','vcruntime140','vcruntime140_1','vcruntime140_threads')){
+   $path=Join-Path $MSVCRuntime ($name+'.dll');$signature=Get-AuthenticodeSignature -LiteralPath $path
+   if($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation'){throw "Invalid Microsoft signature: $name"}
+   $pin=$runtimePin.files | Where-Object {$_.name -eq ($name+'.dll')}
+   if(-not $pin -or (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -ne $pin.sha256){throw "Microsoft runtime does not match reviewed package pin: $name"}
+   $inputs['msvc-'+$name]=@{source=$path;file=('runtime/msvc/'+$name+'.dll')}
+  }
+  $inputs['msvc-notice']=@{source=(Join-Path $root 'docs/MSVC-RUNTIME-NOTICE.md');file='licenses/MSVC-RUNTIME-NOTICE.md'}
+ }
  if($Calendar){$inputs['calendar']=@{source=$Calendar;file='Calendar.exe'}}
  if($Contacts){$inputs['contacts']=@{source=$Contacts;file='Contacts.exe'}}
  if($Studio){$inputs['studio']=@{source=$Studio;file='Studio.exe'};$inputs['studio-license']=@{source=(Join-Path $root 'docs/licenses/miniPaint-MIT.txt');file='licenses/Photo-Editor-MIT.txt'}}
@@ -152,7 +165,7 @@ try {
  if($MyMonitor){$apps+=@{id='monitor';name='My Monitor';description='Private uptime monitoring and opt-in public status';version=$MyMonitorVersion;kind='process';package='monitor';executable='MyMonitor.exe';port=9010;route='/monitor';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/monitor/auth/callback';args=@('--data','${DATA}/monitor','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/monitor','--no-browser');source='https://github.com/oneworkspacestudio/my-monitor/releases/tag/v'+$MyMonitorVersion}}
  if($MySearch){$apps+=@{id='search';name='My Search';description='Search connected apps with your own permissions';version=$MySearchVersion;kind='process';package='search';executable='MySearch.exe';port=9011;route='/search';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/search/auth/callback';args=@('--data','${DATA}/search','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/search','--no-browser');source='https://github.com/oneworkspacestudio/my-search/releases/tag/v'+$MySearchVersion}}
  foreach($app in $apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/'){throw ('App source must be an organization repository: '+$app.id)}}
- $catalog=@{schema=1;installerIntegration=2;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
+ $catalog=@{schema=1;installerIntegration=3;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  Add-Type -AssemblyName System.IO.Compression
  $payload=Join-Path $root 'internal/payload/bundle/payload.zip'

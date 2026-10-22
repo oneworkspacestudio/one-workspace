@@ -257,6 +257,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if strings.HasPrefix(id, "msvc-") {
+		return "workspace"
+	}
 	for _, app := range []string{"create", "maps", "meet"} {
 		if id == app || strings.HasPrefix(id, app+"-") {
 			return app
@@ -361,7 +364,15 @@ func scopeUpdateChoice(current catalog.Catalog, ch UpdateChoice) UpdateChoice {
 	keep := catalog.InstallPackageIDs(catalog.Catalog{Apps: apps, Packages: ch.Packages}, selected)
 	hasNew := len(ch.NewApps) > 0
 	for id := range ch.Packages {
-		if _, ok := current.Packages[id]; !ok && !(hasNew && keep[id]) {
+		prerequisite := false
+		if ch.ID == "workspace" && strings.HasPrefix(id, "msvc-") {
+			for _, app := range current.Apps {
+				if app.ID == "calendar" || app.ID == "contacts" || app.ID == "mail" && app.Env["WORKSPACE_MAIL_BACKEND"] != "private" {
+					prerequisite = true
+				}
+			}
+		}
+		if _, ok := current.Packages[id]; !ok && !(hasNew && keep[id]) && !prerequisite {
 			delete(ch.Packages, id)
 			delete(ch.Downloads, id)
 		}

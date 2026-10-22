@@ -39,17 +39,19 @@ func startWithMemoryRetry(ctx context.Context, start func() error, prepare func(
 }
 
 func appStartMessage(app catalog.App, err error) string {
-	if memoryStartError(err) {
-		return app.Name + " couldn't start because Windows is low on available memory. Close unused apps, then retry. Your files are safe."
-	}
-	return app.Name + " couldn't start. Retry this app; if it still won't open, check for an app update. Your other apps can keep running."
+	code, message := startupDiagnosis(err)
+	return app.Name + ": " + message + " Diagnostic: " + code + "."
 }
 
 func (rt *Runtime) appFailed(app catalog.App, err error) {
 	log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", app.ID+".log")}
 	_, _ = fmt.Fprintf(log, "App startup failed: %v\n", err)
 	rt.set(app.ID, "failed")
-	rt.progress.Step(app.ID, "failed", appStartMessage(app, err))
+	message := appStartMessage(app, err) + " Log: logs/" + app.ID + ".log."
+	if usesShared(rt.Config, app.ID) {
+		message += " Shared service: shared/startup.log and shared/engine.log."
+	}
+	rt.progress.Step(app.ID, "failed", message)
 	if rt.progress != nil && rt.progress.Snapshot().State == "ready" {
 		rt.finishStartup()
 	}

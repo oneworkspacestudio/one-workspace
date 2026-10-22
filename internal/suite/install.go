@@ -374,7 +374,7 @@ func WaitHTTPDetailed(ctx context.Context, target string, timeout time.Duration,
 		}
 		select {
 		case <-ctx.Done():
-			return fmt.Errorf("health check timed out after %s; last result: %s", timeout, last)
+			return startupStage("health-timeout", fmt.Sprintf("The app did not become ready after %s. Last check: %s. Retry after closing unused apps; inspect its log if it continues.", timeout, last), fmt.Errorf("health check timed out after %s; last result: %s", timeout, last))
 		case e := <-exit:
 			if e == nil {
 				return errors.New("application exited before it became ready")

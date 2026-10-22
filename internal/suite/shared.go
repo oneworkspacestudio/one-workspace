@@ -3,8 +3,8 @@ package suite
 import (
 	"context"
 	"errors"
-	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/calendar/shared"
+	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"os"
 	"path/filepath"
 	"time"
@@ -73,14 +73,19 @@ func (rt *Runtime) ensureShared(parent context.Context) error {
 			rt.sharedErr = e
 			return
 		}
+		var installed shared.Config
 		for _, app := range c.Catalog.Apps {
 			if usesShared(c, app.ID) {
-				if _, e = shared.Install(root, app.ID, app.Version, initial); e != nil {
+				if installed, e = shared.Install(root, app.ID, app.Version, initial); e != nil {
 					rt.sharedErr = e
 					return
 				}
 				initial = nil
 			}
+		}
+		if e = prepareSharedRuntime(c, installed.EnginePath); e != nil {
+			rt.sharedErr = e
+			return
 		}
 		privateManager := filepath.Join(root, "WorkspaceServices.exe")
 		if e = platform.CopyFile(managerPath, privateManager); e != nil && !os.IsExist(e) {
@@ -91,7 +96,7 @@ func (rt *Runtime) ensureShared(parent context.Context) error {
 		}
 		ctx, cancel := context.WithTimeout(parent, 2*time.Minute)
 		defer cancel()
-		rt.sharedErr = shared.Ensure(ctx, root, privateManager)
+		rt.sharedErr = ensureSharedReady(ctx, root, privateManager)
 	})
 	return rt.sharedErr
 }
