@@ -1,7 +1,7 @@
 # Microsoft Visual C++ runtime
 
-Calendar and Contacts' shared Stalwart engine imports Microsoft C++ x64 runtime
-libraries. Workspace supplies the release CRT files beside its private engine;
+Calendar and Contacts' shared Stalwart engine and Mail's private engine imports Microsoft C++ x64 runtime
+libraries. Workspace supplies the release CRT files beside each private engine;
 no administrator privilege or global runtime installation is required.
 
 Copyright Microsoft Corporation. All rights reserved. Microsoft binaries are

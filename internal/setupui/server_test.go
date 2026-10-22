@@ -11,6 +11,28 @@ import (
 	"testing"
 )
 
+func TestStartupReportContainsStatusWithoutAccountDataOrRawLogs(t *testing.T) {
+	root := t.TempDir()
+	progress := suite.NewProgress("starting", []suite.ProgressStep{{ID: "chat", Label: "Start Chat"}}, filepath.Join(root, "startup-progress.json"))
+	progress.Step("chat", "failed", "Chat: required file missing. Diagnostic: file-missing.")
+	os.WriteFile(filepath.Join(root, "secrets.dpapi"), []byte("private-account-token"), 0600)
+	os.MkdirAll(filepath.Join(root, "logs"), 0700)
+	os.WriteFile(filepath.Join(root, "logs", "chat.log"), []byte("private-log-content"), 0600)
+	s := &Server{token: "test-capability", origin: "http://localhost:12345", ready: true, config: suite.Config{Data: root, Owner: "private-owner-subject"}}
+	r := httptest.NewRequest("GET", s.origin+"/api/startup-report", nil)
+	r.Header.Set("X-Setup-Token", s.token)
+	w := httptest.NewRecorder()
+	s.Handler().ServeHTTP(w, r)
+	if w.Code != 200 || !strings.Contains(w.Body.String(), "file-missing") {
+		t.Fatal(w.Code, w.Body.String())
+	}
+	for _, secret := range []string{"private-owner-subject", "private-account-token", "private-log-content"} {
+		if strings.Contains(w.Body.String(), secret) {
+			t.Fatal("private material in report")
+		}
+	}
+}
+
 func TestWizardCapabilityOriginAndHost(t *testing.T) {
 	s := &Server{token: "secret", origin: "http://localhost:12345"}
 	for _, tc := range []struct {

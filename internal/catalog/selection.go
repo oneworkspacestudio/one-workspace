@@ -73,6 +73,13 @@ func InstallPackageIDs(c Catalog, selected map[string]bool) map[string]bool {
 			continue
 		}
 		keep[a.Package] = true
+		if a.ID == "mail" {
+			for id := range c.Packages {
+				if strings.HasPrefix(id, "msvc-") {
+					keep[id] = true
+				}
+			}
+		}
 		if a.ID == "studio" {
 			keep["studio"] = true
 		}

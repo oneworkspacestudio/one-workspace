@@ -307,6 +307,13 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 			return startupStage("shared-backend", "The background service used by Calendar and Contacts could not start. Repair Workspace with the latest installer, then retry. See shared/startup.log and shared/engine.log.", e)
 		}
 	}
+	if app.ID == "mail" && !usesShared(rt.Config, "mail") {
+		// The standalone Mail wrapper extracts its engine into this documented
+		// private runtime folder. It needs the same native prerequisites.
+		if e := prepareNativeRuntime(rt.Config, filepath.Join(rt.Config.Data, "mail", "runtime")); e != nil {
+			return startupStage("mail-runtime", "Mail's Windows runtime needs repair with the latest installer.", e)
+		}
+	}
 	if app.ID == "clips" {
 		if e := rt.verifyClipsStorage(ctx, true); e != nil {
 			return e

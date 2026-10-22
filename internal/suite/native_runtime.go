@@ -16,13 +16,15 @@ import (
 // the private engine, rather than relying on a developer machine's System32.
 var nativeRuntimeDLLs = []string{"concrt140.dll", "msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "msvcp140_codecvt_ids.dll", "vcruntime140.dll", "vcruntime140_1.dll", "vcruntime140_threads.dll"}
 
-func prepareSharedRuntime(c Config, enginePath string) error {
+func prepareNativeRuntime(c Config, target string) error {
 	// Older catalogs remain launchable with their existing system prerequisites.
 	_, supplied := c.Catalog.Packages["msvc-msvcp140"]
 	if !supplied {
 		return nil
 	}
-	target := filepath.Dir(enginePath)
+	if err := os.MkdirAll(target, 0700); err != nil {
+		return err
+	}
 	if err := platform.RejectReparse(target); err != nil {
 		return err
 	}

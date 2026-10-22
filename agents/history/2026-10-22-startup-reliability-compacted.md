@@ -33,3 +33,14 @@ checking GitHub releases for version collisions. Preserve all25 app contracts an
 payloads, add CRT/provenance, replace manager+release notice only. Publish verified
 assets and copy installer to Downloads. Owner67 stays untouched. No clean-host,
 reboot, remote-host or external DNS acceptance claim.
+
+
+Wider import review includes Mail17's private Stalwart engine, which extracts to
+Data/mail/runtime. Manager supplies the same pinned app-local CRT there and keeps
+packages for Mail-only selection. Shared and private Mail storage remain separate.
+Runtime packages belong to the manager repair group, so protected repair of an
+existing68 installation adds prerequisites without app upgrades/downgrades. Tests
+cover this scoping, all three consumer selections and status report privacy.
+All Go packages/vet and setup JS syntax passed after these changes. First local69
+candidate93f86f2 only covered the shared engine; unpublished artifacts are retained
+as candidate-first69, never public assets. Final69 must use the next source commit.

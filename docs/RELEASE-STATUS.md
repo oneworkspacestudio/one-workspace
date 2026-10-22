@@ -718,7 +718,7 @@ Setup now retains status across refresh and installer restarts, follows active i
 
 Calendar/Contacts' Windows shared engine requires Microsoft C++ x64 runtime DLLs
 that were absent from the bundle. New setup supplies nine signed, hash-pinned
-release CRT files beside its private engine. This fixes the dependency gap without
+release CRT files beside the shared engine and Mail's private engine. This fixes the dependency gap without
 requiring administrator rights or changing system libraries. Integration3 prevents
 older setup code silently dropping these packages. Protected manager repair also
 adds them to existing Calendar/Contacts installations.

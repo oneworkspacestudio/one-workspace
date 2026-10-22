@@ -83,7 +83,7 @@ func (rt *Runtime) ensureShared(parent context.Context) error {
 				initial = nil
 			}
 		}
-		if e = prepareSharedRuntime(c, installed.EnginePath); e != nil {
+		if e = prepareNativeRuntime(c, filepath.Dir(installed.EnginePath)); e != nil {
 			rt.sharedErr = e
 			return
 		}

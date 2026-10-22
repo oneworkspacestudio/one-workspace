@@ -28,15 +28,15 @@ func TestSharedRuntimeVerifiedLocalDeploymentAndTamperRetention(t *testing.T) {
 		}
 		c.Catalog.Packages["msvc-"+name[:len(name)-4]] = catalog.Package{File: rel, SHA256: hex.EncodeToString(sum[:]), Size: int64(len(b))}
 	}
-	if err := prepareSharedRuntime(c, engine); err != nil {
+	if err := prepareNativeRuntime(c, filepath.Dir(engine)); err != nil {
 		t.Fatal(err)
 	}
-	if err := prepareSharedRuntime(c, engine); err != nil {
+	if err := prepareNativeRuntime(c, filepath.Dir(engine)); err != nil {
 		t.Fatal("restart must reuse identical runtime", err)
 	}
 	dest := filepath.Join(filepath.Dir(engine), "msvcp140.dll")
 	os.WriteFile(dest, []byte("unfamiliar"), 0600)
-	if err := prepareSharedRuntime(c, engine); err == nil {
+	if err := prepareNativeRuntime(c, filepath.Dir(engine)); err == nil {
 		t.Fatal("overwrote an unverified DLL")
 	}
 	b, _ := os.ReadFile(dest)

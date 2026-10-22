@@ -367,7 +367,7 @@ func scopeUpdateChoice(current catalog.Catalog, ch UpdateChoice) UpdateChoice {
 		prerequisite := false
 		if ch.ID == "workspace" && strings.HasPrefix(id, "msvc-") {
 			for _, app := range current.Apps {
-				if app.ID == "calendar" || app.ID == "contacts" || app.ID == "mail" && app.Env["WORKSPACE_MAIL_BACKEND"] != "private" {
+				if app.ID == "calendar" || app.ID == "contacts" || app.ID == "mail" {
 					prerequisite = true
 				}
 			}
