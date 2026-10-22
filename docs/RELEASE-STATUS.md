@@ -1,3 +1,17 @@
+# Workspace67: visible model previews
+
+Includes My Slicer4. Bambu 3MF parts and saved positions now appear on the plate
+before slicing, including retained imports. STL loading has visible feedback,
+a bounds outline and retry; background mesh preparation keeps the page responsive.
+The camera frames the model. Full original models and print settings are preserved.
+
+Both supplied car files rendered in isolated Windows acceptance. Real native
+engine slicing and 3MF roundtrip, delayed/failing preview retry, phone layout,
+Go tests/vet and frontend checks pass. Managed update acceptance is recorded in
+the release assets. No physical printer test or clean-host certification is claimed.
+Other24 application contracts and payloads remain unchanged from Workspace66.
+Built locally, without GitHub Actions.
+
 # Workspace55: Maps, Meet and visible Office creation
 
 Adds My Maps2 and My Meet3 to the default 24-app catalogue, shared MyAccounts

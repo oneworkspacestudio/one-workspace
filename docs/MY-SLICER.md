@@ -1,6 +1,6 @@
 # My Slicer in One Workspace
 
-Workspace66 includes My Slicer 0.1.0-preview.3 from the public
+Workspace67 includes My Slicer 0.1.0-preview.4 from the public
 [organization repository](https://github.com/oneworkspacestudio/my-slicer).
 New default apps are added on update; explicit advanced-install exclusions remain.
 My Slicer depends on MyAccounts and Drive, uses the normal `/slicer/` route,
@@ -15,6 +15,10 @@ A1 and A1 mini slice checks before activation. It does not bundle the separate
 proprietary networking plugin. No Docker, router change or new public port is needed.
 
 Open My Slicer and choose **Add model** on Prepare. No project form is required.
+STL and Bambu 3MF models appear on the plate before slicing. The 3MF view shows
+saved parts and positions while preserving the original file and print settings.
+A loading message and STL outline show progress; **Retry model preview** recovers
+a failed preview without another upload.
 Recent plates are kept automatically; **Save project** is optional. Slice the
 plate, inspect its real layers on Preview and add a printer from Printers. The
 guided setup uses a normal screen with Details, Trust device and Check connection

@@ -115,9 +115,9 @@
   },
   "mySlicer": {
     "repository": "oneworkspacestudio/my-slicer",
-    "tag": "v0.1.0-preview.3",
-    "asset": "my-slicer-0.1.0-preview.3-windows-amd64.zip",
-    "sha256": "dff05f87412292875f9b34c58f1262af7d87e621eb429940f8dfd33cd650ba20"
+    "tag": "v0.1.0-preview.4",
+    "asset": "my-slicer-0.1.0-preview.4-windows-amd64.zip",
+    "sha256": "98aba9e7c40c4710a365a391aacc2d5c84f0cc19e3bf2d9e15284586f5c67609"
   },
   "mySocial": {
     "repository": "oneworkspacestudio/my-social",
