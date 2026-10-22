@@ -24,6 +24,8 @@ func (s *Server) restore(request suite.Request) error {
 		return e
 	}
 	if active {
+		s.ready = false
+		s.problem = ""
 		s.recovered = &status
 		s.following = true
 		s.busy = true
@@ -43,6 +45,7 @@ func (s *Server) restore(request suite.Request) error {
 		return nil
 	}
 	if status.Schema == 1 {
+		s.ready = false
 		s.recovered = &status
 		s.recoveryRequest = request
 		s.phase = status.Phase
@@ -51,6 +54,7 @@ func (s *Server) restore(request suite.Request) error {
 	}
 	var legacy map[string]string
 	if platform.LoadJSON(filepath.Join(request.Data, "install-state.json"), &legacy) == nil {
+		s.ready = false
 		s.recovered = &suite.SetupSession{Schema: 1, Data: request.Data, Programs: request.Programs, Files: request.Files, State: "interrupted", Phase: legacy["phase"], Error: "An older installer stopped here. Its files have been kept. Review recovery to finish safely; this version did not save a continuation checkpoint."}
 		if info, e := os.Stat(filepath.Join(request.Data, "install-state.json")); e == nil {
 			s.recovered.UpdatedAt = info.ModTime()
