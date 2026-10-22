@@ -685,3 +685,12 @@ restarting64 with all24 services healthy. Final owner delivery uses66 after
 removing only known task staging and executing exact verified files from I:,
 while recovery remains on the protected local NTFS volume. No owner backup is
 removed manually and no memory/pagefile settings are changed.
+
+
+Final66/Slicer3 delivery is complete. All public release hashes match tested files;
+owner64-to66 normal protected update passed with25 apps/24 healthy services and
+other24 application contracts retained. Exact managed upgrade preserved existing
+models/printers/files and verified SSO, Drive copies, phone import and header apps
+navigation without a floating obstruction. [Evidence](evidence/slicer-flow-20261022.json),
+[desktop screen](screenshots/slicer3-prepare-desktop.png),
+[phone screen](screenshots/slicer3-prepare-phone.png).
