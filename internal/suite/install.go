@@ -37,16 +37,30 @@ func Install(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog,
 	if r.Reinstall {
 		return reinstall(ctx, r, z, cat, progress)
 	}
+	if e := prepareSetupSession(r); e != nil {
+		return Config{}, e
+	}
+	if e := saveSetupCheckpoint(r, Config{}, "prepare"); e != nil {
+		return Config{}, e
+	}
 	return installFresh(ctx, r, z, cat, progress)
 }
 
 func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog, progress func(string)) (Config, error) {
+	return installFreshFrom(ctx, r, z, cat, progress, nil)
+}
+func installFreshFrom(ctx context.Context, r Request, z *zip.Reader, cat catalog.Catalog, progress func(string), saved *setupCheckpoint) (Config, error) {
 	var empty Config
 	var overrides map[string]string
 	if e := r.ResolveStorage(); e != nil {
 		return empty, e
 	}
-	if _, e := r.PreflightStorage(); e != nil {
+	if saved == nil || saved.Config.Schema == 0 {
+		if _, e := r.PreflightStorage(); e != nil {
+			return empty, e
+		}
+	}
+	if e := prepareSetupSession(r); e != nil {
 		return empty, e
 	}
 	if r.Mode == "automatic" {
@@ -88,62 +102,79 @@ func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Cat
 			return empty, e
 		}
 	}
-	// Record exclusions against the apps actually offered by this installer.
-	// A newer online bundle can contain apps absent from its embedded app picker.
-	offered, selectionErr := SelectInstallApps(cat, r)
-	if selectionErr != nil {
-		return empty, selectionErr
-	}
-	if !r.Offline {
-		downloadRoot := filepath.Dir(r.Programs)
-		if err := os.MkdirAll(downloadRoot, 0700); err != nil {
-			return empty, err
-		}
-		bundle, err := distribution.Latest(ctx, progress, downloadRoot)
-		if err != nil {
-			return empty, err
-		}
-		defer bundle.Close()
-		if err = distribution.CheckInstallerBundle(cat, bundle.Catalog); err != nil {
-			return empty, err
-		}
-		z, cat = bundle.ZIP, bundle.Catalog
-		overrides = bundle.Overrides
+	var c Config
+	if saved != nil && saved.Config.Schema == 1 {
+		c = saved.Config
+		cat = c.Catalog
 	} else {
-		progress("Using this installer’s bundled versions (offline mode)")
-	}
-	r.SelectedApps = []string{}
-	for _, app := range cat.DefaultApps(offered.Selection) {
-		r.SelectedApps = append(r.SelectedApps, app.ID)
-	}
-	selected, selectionErr := SelectInstallApps(cat, r)
-	if selectionErr != nil {
-		return empty, selectionErr
-	}
-	selected.Selection = offered.Selection
-	c, portErr := availableInstallConfig(r, selected)
-	if portErr != nil {
-		return empty, portErr
-	}
-	if c.Port != r.Port {
-		progress(fmt.Sprintf("The requested ports are unavailable; using Workspace port %d and free app ports", c.Port))
-		r.Port = c.Port
+		// Record exclusions against the apps actually offered by this installer.
+		// A newer online bundle can contain apps absent from its embedded app picker.
+		offered, selectionErr := SelectInstallApps(cat, r)
+		if selectionErr != nil {
+			return empty, selectionErr
+		}
+		if !r.Offline {
+			downloadRoot := filepath.Dir(r.Programs)
+			if err := os.MkdirAll(downloadRoot, 0700); err != nil {
+				return empty, err
+			}
+			bundle, err := distribution.Latest(ctx, progress, downloadRoot)
+			if err != nil {
+				return empty, err
+			}
+			defer bundle.Close()
+			if err = distribution.CheckInstallerBundle(cat, bundle.Catalog); err != nil {
+				return empty, err
+			}
+			z, cat = bundle.ZIP, bundle.Catalog
+			overrides = bundle.Overrides
+		} else {
+			progress("Using this installer’s bundled versions (offline mode)")
+		}
+		r.SelectedApps = []string{}
+		for _, app := range cat.DefaultApps(offered.Selection) {
+			r.SelectedApps = append(r.SelectedApps, app.ID)
+		}
+		selected, selectionErr := SelectInstallApps(cat, r)
+		if selectionErr != nil {
+			return empty, selectionErr
+		}
+		selected.Selection = offered.Selection
+		var portErr error
+		c, portErr = availableInstallConfig(r, selected)
+		if portErr != nil {
+			return empty, portErr
+		}
+		if c.Port != r.Port {
+			progress(fmt.Sprintf("The requested ports are unavailable; using Workspace port %d and free app ports", c.Port))
+			r.Port = c.Port
+		}
 	}
 	if e := ctx.Err(); e != nil {
 		return empty, e
 	}
-	if e := platform.RequireNewDir(c.Data); e != nil {
-		return empty, e
-	}
-	if e := platform.ProtectDir(c.Data); e != nil {
-		return empty, e
+	if saved == nil || saved.Config.Schema == 0 {
+		if e := platform.RequireNewDir(c.Data); e != nil {
+			return empty, e
+		}
+		if e := platform.ProtectDir(c.Data); e != nil {
+			return empty, e
+		}
 	}
 	lock, e := platform.Lock(filepath.Join(c.Data, "install.lock"))
 	if e != nil {
 		return empty, e
 	}
 	defer lock.Close()
-	if e = platform.RequireNewDir(c.Programs); e != nil {
+	if e = saveSetupCheckpoint(r, c, "extract"); e != nil {
+		return empty, e
+	}
+	if saved != nil {
+		e = os.MkdirAll(c.Programs, 0700)
+	} else {
+		e = platform.RequireNewDir(c.Programs)
+	}
+	if e != nil {
 		return empty, e
 	}
 	if e = os.MkdirAll(c.Files, 0700); e != nil {
@@ -159,16 +190,40 @@ func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Cat
 		_ = platform.SaveJSON(filepath.Join(c.Data, "install-state.json"), map[string]string{"phase": phase, "version": c.Version})
 	}
 	state("Verifying and extracting Workspace " + cat.Version + " applications")
-	if e = catalog.Extract(z, c.Catalog, c.Programs, overrides); e != nil {
+	if e = catalog.ExtractContinue(z, c.Catalog, c.Programs, saved != nil, progress, overrides); e != nil {
 		return empty, e
 	}
 	// Keep the trusted manager and catalog on the protected data volume. Large
 	// component packages remain at the selected program location, hash-locked at launch.
 	manager := filepath.Join(c.Data, "Workspace.exe")
-	if e = platform.CopyFile(filepath.Join(c.Programs, "Workspace.exe"), manager); e != nil {
-		return empty, e
+	copyManager := true
+	if saved != nil {
+		if e = platform.RejectReparse(manager); e != nil && !os.IsNotExist(e) {
+			return empty, e
+		}
+		if sum, n, err := fileDigest(manager); err == nil && sum == c.Catalog.Packages["manager"].SHA256 && n == c.Catalog.Packages["manager"].Size {
+			copyManager = false
+		} else if _, err := os.Stat(manager); err == nil {
+			if e = os.Rename(manager, manager+".incomplete-"+platform.Token()); e != nil {
+				return empty, e
+			}
+		}
 	}
-	s := Secrets{AdminEmail: r.Email, AdminPassword: platform.Token(), RecoveryPassword: platform.Token(), Clients: map[string]Client{}}
+	if copyManager {
+		if e = platform.CopyFile(filepath.Join(c.Programs, "Workspace.exe"), manager); e != nil {
+			return empty, e
+		}
+	}
+	s := Secrets{}
+	if saved != nil {
+		e = platform.LoadSecret(filepath.Join(c.Data, "secrets.dpapi"), &s)
+		if e != nil && !os.IsNotExist(e) {
+			return empty, e
+		}
+	}
+	if s.AdminPassword == "" {
+		s = Secrets{AdminEmail: r.Email, AdminPassword: platform.Token(), RecoveryPassword: platform.Token(), Clients: map[string]Client{}}
+	}
 	if e = platform.SaveSecret(filepath.Join(c.Data, "secrets.dpapi"), s); e != nil {
 		return empty, e
 	}
@@ -218,7 +273,7 @@ func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Cat
 	if e = WaitHTTP(ctx, fmt.Sprintf("http://localhost:%d/healthz", a.Port), 90*time.Second); e != nil {
 		return empty, e
 	}
-	if e = ConfigureIdentity(ctx, &c, &s, r); e != nil {
+	if e = configureIdentity(ctx, &c, &s, r, saved != nil); e != nil {
 		return empty, e
 	}
 	stop := exec.Command(exe, "-data", filepath.Join(c.Data, "accounts"), "stop")
@@ -236,6 +291,9 @@ func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Cat
 	}
 	if r.Mode == "cloudflare" {
 		state("Creating the authorized Cloudflare tunnel and exact DNS records")
+		if e = saveSetupCheckpoint(r, c, "domain"); e != nil {
+			return empty, e
+		}
 		s.TunnelToken, e = ProvisionCloudflare(ctx, r, c)
 		if e != nil {
 			return empty, e
@@ -260,6 +318,7 @@ func installFresh(ctx context.Context, r Request, z *zip.Reader, cat catalog.Cat
 	if e = platform.SaveJSON(filepath.Join(c.Programs, "workspace-location.json"), map[string]string{"data": c.Data}); e != nil {
 		return empty, e
 	}
+	_ = os.Remove(filepath.Join(setupSessionDir(r.Data), "continue.dpapi"))
 	state("Ready to launch Workspace")
 	return c, nil
 }

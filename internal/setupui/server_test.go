@@ -25,6 +25,9 @@ func TestWizardCapabilityOriginAndHost(t *testing.T) {
 		{"CSRF", "POST", "/api/install", "localhost:12345", "secret", "http://evil.test", 403},
 		{"retry capability", "POST", "/api/retry-apps", "localhost:12345", "wrong", "http://localhost:12345", 403},
 		{"retry CSRF", "POST", "/api/retry-apps", "localhost:12345", "secret", "http://evil.test", 403},
+		{"continue capability", "POST", "/api/continue", "localhost:12345", "wrong", "http://localhost:12345", 403},
+		{"continue CSRF", "POST", "/api/continue", "localhost:12345", "secret", "http://evil.test", 403},
+		{"continue without checkpoint", "POST", "/api/continue", "localhost:12345", "secret", "http://localhost:12345", 409},
 		{"retry before install", "POST", "/api/retry-apps", "localhost:12345", "secret", "http://localhost:12345", 409},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

@@ -138,7 +138,7 @@ func (p *ProgressTracker) InstallPhase(phase string) {
 		id = "extract"
 	case strings.HasPrefix(phase, "Creating Accounts"):
 		id = "identity"
-	case strings.HasPrefix(phase, "Connecting Drive"):
+	case strings.HasPrefix(phase, "Connecting Drive"), strings.HasPrefix(phase, "Connecting your selected"):
 		id = "apps"
 	case strings.HasPrefix(phase, "Creating the authorized"):
 		id = "domain"

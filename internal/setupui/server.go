@@ -25,6 +25,9 @@ import (
 )
 
 type Server struct {
+	recovered                  *suite.SetupSession
+	following                  bool
+	recoveryRequest            suite.Request
 	offline                    bool
 	z                          *zip.Reader
 	cat                        catalog.Catalog
@@ -61,6 +64,11 @@ func serve(ctx context.Context, z *zip.Reader, c catalog.Catalog, open bool, ins
 		s.ready = true
 		s.phase = "Apps installed. Check startup status below."
 	}
+	if installed == nil {
+		if previous, e := suite.LastSetup(); e == nil {
+			_ = s.restore(previous)
+		}
+	}
 	server := &http.Server{Handler: s.Handler(), ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
 	go func() { <-ctx.Done(); _ = server.Close() }()
 	link := s.origin + "/#" + s.token
@@ -76,6 +84,7 @@ func serve(ctx context.Context, z *zip.Reader, c catalog.Catalog, open bool, ins
 }
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
+	s.recoveryRoutes(mux)
 	mux.Handle("GET /branding/", branding.Handler())
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
@@ -90,6 +99,7 @@ func (s *Server) Handler() http.Handler {
 		defer s.mu.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		state := map[string]any{"busy": s.busy, "ready": s.ready, "phase": s.phase, "error": s.problem, "version": s.cat.Version, "origin": s.config.Origin, "connecting": s.connecting, "hostingPhase": s.hostingPhase, "hostingError": s.hostingError}
+		s.recoveredState(state)
 		available := []map[string]any{}
 		for _, a := range s.cat.Apps {
 			available = append(available, map[string]any{"id": a.ID, "name": a.Name, "description": a.Description, "depends": a.Depends})
@@ -250,17 +260,21 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		s.busy = true
+		s.recovered = nil
+		s.recoveryRequest = request
+		_ = suite.RememberSetup(request)
 		s.installation = suite.InstallProgress(request.Mode == "cloudflare")
 		if review.Kind == "repair" {
 			s.installation = suite.ReinstallProgress()
 		}
 		s.installation.InstallPhase("Preparing storage and ports")
+		_ = suite.SaveSetupSession(request, s.installation.Snapshot())
 		s.problem = ""
 		s.mu.Unlock()
 		go func() {
-			limit := 15 * time.Minute
+			limit := 2 * time.Hour
 			if request.Reinstall {
-				limit = 45 * time.Minute
+				limit = 2 * time.Hour
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), limit)
 			defer cancel()
@@ -272,11 +286,19 @@ func (s *Server) Handler() http.Handler {
 				} else {
 					s.installation.InstallPhase(phase)
 				}
+				_ = suite.SaveSetupSession(request, s.installation.Snapshot())
 				s.mu.Unlock()
 			})
 			s.mu.Lock()
 			defer s.mu.Unlock()
 			s.busy = false
+			defer func() {
+				_ = suite.SaveSetupSession(request, s.installation.Snapshot())
+				if !s.ready {
+					p := s.installation.Snapshot()
+					s.recovered = &suite.SetupSession{Schema: 1, Data: request.Data, Programs: request.Programs, Files: request.Files, State: p.State, Phase: p.Phase, Error: p.Error, UpdatedAt: p.UpdatedAt, Progress: p}
+				}
+			}()
 			if e != nil {
 				s.installation.Finish("failed", "Installation stopped", e)
 				s.problem = e.Error()

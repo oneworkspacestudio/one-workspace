@@ -16,6 +16,7 @@ import (
 )
 
 type identityAPI struct {
+	resume bool
 	base   string
 	client *http.Client
 }
@@ -23,7 +24,7 @@ type identityAPI struct {
 func newIdentity(c Config) *identityAPI {
 	a, _ := c.Catalog.Find("accounts")
 	jar, _ := cookiejar.New(nil)
-	return &identityAPI{fmt.Sprintf("http://localhost:%d", a.Port), &http.Client{Jar: jar, Timeout: 30 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}
+	return &identityAPI{base: fmt.Sprintf("http://localhost:%d", a.Port), client: &http.Client{Jar: jar, Timeout: 30 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}
 }
 func (a *identityAPI) call(ctx context.Context, path string, body any, out any) error {
 	var data io.Reader
@@ -69,7 +70,11 @@ func (a *identityAPI) login(ctx context.Context, s Secrets) error {
 	return a.call(ctx, "/api/login", map[string]any{"organization": "built-in", "username": s.AdminEmail, "password": s.AdminPassword, "application": "app-built-in", "type": "login", "signinMethod": "Password"}, nil)
 }
 func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) error {
+	return configureIdentity(ctx, c, s, r, false)
+}
+func configureIdentity(ctx context.Context, c *Config, s *Secrets, r Request, resume bool) error {
 	api := newIdentity(*c)
+	api.resume = resume
 	if e := api.login(ctx, *s); e != nil {
 		return e
 	}
@@ -87,7 +92,17 @@ func ConfigureIdentity(ctx context.Context, c *Config, s *Secrets, r Request) er
 		return e
 	}
 	user := map[string]any{"owner": "myaccounts", "name": "owner", "displayName": r.Name, "email": r.Email, "emailVerified": false, "type": "normal-user", "isAdmin": true, "passwordType": "plain", "password": r.Password, "signupApplication": "myaccounts", "createdTime": time.Now().UTC().Format(time.RFC3339)}
-	if e := api.call(ctx, "/api/add-user", user, nil); e != nil {
+	var prior map[string]any
+	if resume {
+		if e := api.call(ctx, "/api/get-user?id=myaccounts/owner", nil, &prior); e != nil {
+			return e
+		}
+	}
+	if prior != nil {
+		if prior["email"] != r.Email || prior["id"] == "" {
+			return errors.New("Saved account did not match this installation")
+		}
+	} else if e := api.call(ctx, "/api/add-user", user, nil); e != nil {
 		return e
 	}
 	var saved struct {
@@ -144,6 +159,20 @@ func registerClientRedirects(ctx context.Context, api *identityAPI, id, name str
 	var result Client
 	if e := api.call(ctx, "/api/get-application?id=admin/myaccounts", nil, &app); e != nil {
 		return result, e
+	}
+	var existing map[string]any
+	if api.resume {
+		if e := api.call(ctx, "/api/get-application?id=admin/workspace-"+id, nil, &existing); e != nil {
+			return result, e
+		}
+		if existing != nil {
+			clientID, _ := existing["clientId"].(string)
+			secret, _ := existing["clientSecret"].(string)
+			if clientID != "workspace-"+id || secret == "" {
+				return result, errors.New("Existing app sign-in did not match this setup")
+			}
+			return Client{ID: clientID, Secret: secret}, nil
+		}
 	}
 	result = Client{ID: "workspace-" + id, Secret: platform.Token()}
 	app["name"] = result.ID

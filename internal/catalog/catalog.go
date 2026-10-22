@@ -208,6 +208,12 @@ func Read(data []byte) (Catalog, error) {
 	return c, e
 }
 func Extract(z *zip.Reader, c Catalog, dest string, overrides ...map[string]string) error {
+	return extractContinue(z, c, dest, false, nil, overrides...)
+}
+func ExtractContinue(z *zip.Reader, c Catalog, dest string, resume bool, report func(string), overrides ...map[string]string) error {
+	return extractContinue(z, c, dest, resume, report, overrides...)
+}
+func extractContinue(z *zip.Reader, c Catalog, dest string, resume bool, report func(string), overrides ...map[string]string) error {
 	if e := c.Validate(); e != nil {
 		return e
 	}
@@ -225,13 +231,47 @@ func Extract(z *zip.Reader, c Catalog, dest string, overrides ...map[string]stri
 		}
 		entries[key] = f
 	}
+	checked := 0
 	for _, p := range c.Packages {
+		checked++
+		if report != nil {
+			report(fmt.Sprintf("Verifying app file %d of %d: %s", checked, len(c.Packages), p.File))
+		}
 		path, e := platform.Inside(dest, p.File)
 		if e != nil {
 			return e
 		}
 		if e = os.MkdirAll(filepath.Dir(path), 0700); e != nil {
 			return e
+		}
+		if resume {
+			for parent := filepath.Dir(path); ; parent = filepath.Dir(parent) {
+				if err := platform.RejectReparse(parent); err != nil {
+					return err
+				}
+				if parent == filepath.Clean(dest) {
+					break
+				}
+				if filepath.Dir(parent) == parent {
+					return errors.New("package directory escaped installation")
+				}
+			}
+			if e = platform.RejectReparse(path); e != nil && !os.IsNotExist(e) {
+				return e
+			}
+			if f, err := os.Open(path); err == nil {
+				h := sha256.New()
+				n, err := io.Copy(h, io.LimitReader(f, p.Size+1))
+				f.Close()
+				if err == nil && n == p.Size && hex.EncodeToString(h.Sum(nil)) == p.SHA256 {
+					continue
+				}
+				if err = os.Rename(path, path+".incomplete-"+platform.Token()); err != nil {
+					return err
+				}
+			} else if !os.IsNotExist(err) {
+				return err
+			}
 		}
 		out, e := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 		if e != nil {

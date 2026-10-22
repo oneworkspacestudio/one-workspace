@@ -708,3 +708,7 @@ models/printers/files and verified SSO, Drive copies, phone import and header ap
 navigation without a floating obstruction. [Evidence](evidence/slicer-flow-20261022.json),
 [desktop screen](screenshots/slicer3-prepare-desktop.png),
 [phone screen](screenshots/slicer3-prepare-phone.png).
+
+## Installer recovery — preview68
+
+Setup now retains status across refresh and installer restarts, follows active installations, recognises completed apps, and offers checked continuation after interruption. Verified packages are reused; partial bytes and user data are retained. Older incomplete installs without checkpoints use protected recovery. See INSTALL-RECOVERY.md. All 25 app versions and payloads stay pinned to public67; this is an installer/manager change. Actual failure on the reported remote machine remains unknown.
