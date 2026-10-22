@@ -1,6 +1,6 @@
 # My Slicer in One Workspace
 
-Workspace65 includes My Slicer 0.1.0-preview.2 from the public
+Workspace66 includes My Slicer 0.1.0-preview.3 from the public
 [organization repository](https://github.com/oneworkspacestudio/my-slicer).
 New default apps are added on update; explicit advanced-install exclusions remain.
 My Slicer depends on MyAccounts and Drive, uses the normal `/slicer/` route,
@@ -31,3 +31,6 @@ acceptance. Physical A1/A1 mini/AMS printing, representative desktop modifier/
 painting comparisons, clean second-machine/reboot/SCM and independent audit remain
 explicit checks until recorded. This is an unsigned preview, built locally without
 GitHub Actions. Existing ecosystem component limitations remain.
+
+The header **Apps** button opens Workspace navigation. Its floating shortcut is
+hidden while that control is available, keeping phone slicer controls clear.

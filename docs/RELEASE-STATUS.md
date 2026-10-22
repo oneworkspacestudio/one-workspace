@@ -668,3 +668,20 @@ passed; no physical printer/AMS, clean-host/reboot or new hardware claim.
 Workspace65 changes the manager version and Slicer payload/docs/provenance only.
 All other24 application contracts and bytes remain as in public64. Normal updates
 keep newer independently installed apps, existing accounts, paths and settings.
+
+
+## Workspace66: keep the slicer controls clear
+
+Includes My Slicer3, retaining the model-first workflow from2 and connecting the
+header Apps button to Workspace's existing native-navigation trigger contract.
+Workspace hides its floating launcher while that header control is available;
+it no longer covers model actions or printer labels on phones. The header picker
+also falls back to the app's own accessible dialog when native modal support is
+unavailable. No printer, project or model data format changes from2 to3.
+
+Workspace65 and Slicer2 remain immutable published releases. An owner65 update
+attempt stopped at backup-capacity preflight before replacement, automatically
+restarting64 with all24 services healthy. Final owner delivery uses66 after
+removing only known task staging and executing exact verified files from I:,
+while recovery remains on the protected local NTFS volume. No owner backup is
+removed manually and no memory/pagefile settings are changed.
