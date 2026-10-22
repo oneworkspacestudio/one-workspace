@@ -61,3 +61,36 @@ All-package Go tests, vet and setup JS syntax passed. Extended native continuati
 after identity exposed a duplicate private-manager CopyFile; fixed by hashing and
 reusing the recorded manager, or retaining partial bytes before replacement.
 Final68 exact-package tests must cover this path before publication.
+
+
+## Final delivery complete
+
+Public Workspace68 source f9e9c96054507c16f40faf6cf4f674bc41c10375,
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.68.
+All uploaded assets match their tested local sizes/SHA256;125 bundled payloads
+verified and all25 application contracts/bytes retained from public67. Seven
+Windows icon frames verified. Exact public installer copied/hash-checked as
+Downloads/WorkspaceSetup-0.3.0-preview.68-windows-amd64.exe.
+
+Final exact Windows68 tests passed: second-process attachment; reload after
+capability hash removal; killing installer during extraction; checked continuation;
+replaying a checkpoint after account/client creation with unchanged owner ID and
+original password; completed discovery after installer process exit; app file
+inventory; launch, real MyAccounts sign-in, phone390 layout and zero page errors.
+Screenshots reviewed. Explicit recovery-review mode remains stable while polling
+is paused; interrupted UI offers both continuation and recovery options.
+All Go packages/vet and embedded setup JavaScript syntax passed. No external DNS,
+clean-host/reboot, actual remote-machine crash diagnosis or Actions claim.
+
+Owner67/Slicer4 was not updated or used as a functional fixture by this task;
+all24 services observed healthy afterward. Other authorized concurrent67 delivery
+was retained. User on the other machine must run68, choose the same Workspace
+folder and Check installation / continue setup. Older failed installs without
+checkpoints use protected recovery; do not claim automatic restoration of their
+unknown in-memory state. Keep existing owner data and latest rollback untouched.
+
+Evidence docs/evidence/installer-continuation-20261022.json and installer-resume
+screenshots. All named native services/browsers stopped; bounded synthetic roots
+removed after process/reparse checks. Durable artifacts and delivery scripts on
+I:/Projects/tooling/installer-resume-20261022. Published tags/assets are immutable;
+the later documentation commit must not rebuild or replace68. No work remains.

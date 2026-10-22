@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "installer": "0.3.0-preview.68",
+  "sourceCommit": "f9e9c96054507c16f40faf6cf4f674bc41c10375",
+  "publicURL": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.68",
+  "allPublishedAssetsVerified": true,
+  "publicAssets": 21,
+  "all25AppContractsAndPayloadsPreservedFrom67": true,
+  "nativeChecks": {
+    "schema": 1,
+    "installer": "0.3.0-preview.68",
+    "activeSecondProcessReattached": true,
+    "refreshRetainsCapabilityAndProgress": true,
+    "installerProcessKilledDuringSetup": true,
+    "encryptedCheckpointContinued": true,
+    "existingOwnerPasswordWorks": true,
+    "continuedIdentityWithoutReset": true,
+    "completedStatusSurvivesProcessExit": true,
+    "perAppFileInventory": true,
+    "mobile390NoOverflow": true,
+    "pageErrors": [],
+    "ownerDataUsedAsFixture": false
+  },
+  "windowsIconFramesVerified": 7,
+  "observedOwnerWorkspace": "0.3.0-preview.67",
+  "observedOwnerHealthyServices": 24,
+  "ownerUpdatedByThisTask": false,
+  "ownerUsedAsFixture": false,
+  "downloadsInstallerSHA256": "9ef69ae08c3ccb41b07f9a1435d13a30a5ef3469b1b97f0738525e65923b5b67"
+}
