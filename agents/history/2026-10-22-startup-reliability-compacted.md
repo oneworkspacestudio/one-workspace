@@ -44,3 +44,23 @@ cover this scoping, all three consumer selections and status report privacy.
 All Go packages/vet and setup JS syntax passed after these changes. First local69
 candidate93f86f2 only covered the shared engine; unpublished artifacts are retained
 as candidate-first69, never public assets. Final69 must use the next source commit.
+
+
+All25 selected native candidate69 install/retry/report/real owner sign-in and390px
+layout passed. Local mode has23 process apps; owner24 also counts its connector.
+Initial test wrongly expected24 locally; corrected assertion, not product code.
+Another rerun lost its synthetic random password; a fresh fixture with protected
+test-only credential passed. All healthy root app PIDs retained through retry.
+Shared engine loaded MSVCP140/VCRUNTIME140/VCRUNTIME140_1 from private shared/bin;
+all nine Mail runtime DLL bytes match pins. Mail remains at its normal first-use
+configuration screen; no configured mailbox/external delivery acceptance claim.
+
+Protected68-to69 repair test exposed a real setup bug before publication: ready
+state blocked an explicit reviewed repair, and restore replaced the new embedded
+catalog with the old installed catalog. Fixed both; setup retains immutable bundle
+catalog and allows reviewed repair while serializing busy operations. Added visible
+Repair this installation button to completed status, using the existing bound
+folder/recovery review. Regression covers68 display with69 repair catalog retained.
+These last changes are setupui-only; seal must prove manager/bundle byte identity,
+rebuild setup from final committed source, replay all25 existing app recovery using
+the final wizard, and pass real protected68-to69 repair before publication.

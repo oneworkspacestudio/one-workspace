@@ -38,7 +38,6 @@ func (s *Server) restore(request suite.Request) error {
 		s.config = c
 		s.ready = true
 		s.busy = false
-		s.cat = c.Catalog
 		s.phase = "Installation found. Check its app startup status below."
 		s.recoveryRequest = request
 		s.recovered = &status
@@ -123,7 +122,6 @@ func (s *Server) recoveryRoutes(mux *http.ServeMux) {
 				}
 				s.installation.Finish("installed", "Installation completed. Ready to start.", nil)
 				s.config = c
-				s.cat = c.Catalog
 				s.ready = true
 				s.phase = "Installation completed. Ready to start."
 			}

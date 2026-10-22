@@ -137,6 +137,7 @@ func (s *Server) Handler() http.Handler {
 		}
 		if s.ready {
 			state["diagnosticFolder"] = s.config.Data
+			state["workspaceFolder"] = filepath.Dir(s.config.Data)
 			var startup suite.Progress
 			if platform.LoadJSON(filepath.Join(s.config.Data, "startup-progress.json"), &startup) == nil && (s.launchStarted.IsZero() || !startup.StartedAt.Before(s.launchStarted.Add(-time.Second))) {
 				if (startup.State == "starting" || startup.State == "ready" || startup.State == "retrying") && !platform.ProcessRunning(startup.PID, filepath.Join(s.config.Data, "Workspace.exe")) {
@@ -278,12 +279,13 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		s.mu.Lock()
-		if s.busy || s.ready || s.connecting {
+		if s.busy || s.connecting || (s.ready && !(request.Reinstall && review.Kind == "repair")) {
 			s.mu.Unlock()
 			http.Error(w, "Setup is already running or complete", 409)
 			return
 		}
 		s.busy = true
+		s.ready = false
 		s.recovered = nil
 		s.recoveryRequest = request
 		_ = suite.RememberSetup(request)
@@ -334,7 +336,6 @@ func (s *Server) Handler() http.Handler {
 				s.installation.Finish("installed", "Apps installed. Ready to start.", nil)
 				s.ready = true
 				s.config = c
-				s.cat = c.Catalog
 			}
 		}()
 		w.WriteHeader(http.StatusAccepted)

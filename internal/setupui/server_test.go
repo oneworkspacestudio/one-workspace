@@ -2,6 +2,7 @@ package setupui
 
 import (
 	"encoding/json"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/suite"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +11,23 @@ import (
 	"strings"
 	"testing"
 )
+
+func TestRestoreOlderInstallationRetainsNewInstallerCatalog(t *testing.T) {
+	root := filepath.Clean(t.TempDir())
+	r := suite.Request{Data: filepath.Join(root, "Private"), Programs: filepath.Join(root, "Apps"), Files: filepath.Join(root, "Files")}
+	os.MkdirAll(r.Data, 0700)
+	installed := suite.Config{Schema: 1, Version: "0.3.0-preview.68", Data: r.Data, Programs: r.Programs, Files: r.Files, Owner: "fixture-owner", Catalog: catalog.Catalog{Schema: 1, Version: "0.3.0-preview.68"}}
+	if err := suite.Save(installed, suite.Secrets{}); err != nil {
+		t.Fatal(err)
+	}
+	s := &Server{cat: catalog.Catalog{Schema: 1, Version: "0.3.0-preview.69", InstallerIntegration: 3}}
+	if err := s.restore(r); err != nil {
+		t.Fatal(err)
+	}
+	if !s.ready || s.config.Version != "0.3.0-preview.68" || s.cat.Version != "0.3.0-preview.69" || s.cat.InstallerIntegration != 3 {
+		t.Fatal("installed display state replaced the new repair catalog")
+	}
+}
 
 func TestStartupReportContainsStatusWithoutAccountDataOrRawLogs(t *testing.T) {
 	root := t.TempDir()
