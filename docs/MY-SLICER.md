@@ -1,6 +1,6 @@
 # My Slicer in One Workspace
 
-Workspace preview42 installs My Slicer 0.1.0-preview.1 from the public
+Workspace65 includes My Slicer 0.1.0-preview.2 from the public
 [organization repository](https://github.com/oneworkspacestudio/my-slicer).
 New default apps are added on update; explicit advanced-install exclusions remain.
 My Slicer depends on MyAccounts and Drive, uses the normal `/slicer/` route,
@@ -14,8 +14,11 @@ approximately570 MB installed), resolves its complete profiles and performs real
 A1 and A1 mini slice checks before activation. It does not bundle the separate
 proprietary networking plugin. No Docker, router change or new public port is needed.
 
-Open My Slicer, install the verified engine, create a project and follow its
-printer wizard. Only confirmed 0.4 mm A1/A1 mini configurations are enabled.
+Open My Slicer and choose **Add model** on Prepare. No project form is required.
+Recent plates are kept automatically; **Save project** is optional. Slice the
+plate, inspect its real layers on Preview and add a printer from Printers. The
+guided setup uses a normal screen with Details, Trust device and Check connection
+steps. Install the verified slicing engine once when prompted. Only confirmed 0.4 mm A1/A1 mini configurations are enabled.
 The browser supports STL transforms and preserves imported native3MF projects for
 selected-plate slicing. Layers and estimates come from native output. Printer
 start needs an explicit physical check and confirmation; unknown outcomes never

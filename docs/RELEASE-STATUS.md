@@ -647,3 +647,24 @@ manager update to64 with all25 app contracts retained and24 services healthy.
 [Delivery evidence](evidence/reinstall-20261022.json),
 [reinstall guide](REINSTALL.md), and
 [phone preview](screenshots/reinstall-repair-mobile.png).
+
+
+## Workspace65: My Slicer starts with the model
+
+Includes My Slicer2 with model-first Prepare, Preview and Printers screens.
+Add model stays above the plate on laptop and phone. Import creates a durable
+recent plate without a project naming step; Save project is optional. Existing
+named projects and ordinary files are retained. Native3MF imports open their own
+plate when needed to preserve the native layout, and clear unrelated old previews.
+
+Printer setup is a routed Details, Trust device and Connection check flow that
+opens before any model/project and keeps values after validation errors. It does
+not depend on native dialog support; other dialogs have fallback/focus recovery.
+An older-browser missing-modal crash was reproduced, but the user's exact browser
+was not established. Profile loading must complete for the selected model before
+slicing. Actual native A1 mini and3MF roundtrip and desktop/phone software tests
+passed; no physical printer/AMS, clean-host/reboot or new hardware claim.
+
+Workspace65 changes the manager version and Slicer payload/docs/provenance only.
+All other24 application contracts and bytes remain as in public64. Normal updates
+keep newer independently installed apps, existing accounts, paths and settings.
