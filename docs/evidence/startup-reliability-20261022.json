@@ -1,0 +1,319 @@
+{
+  "schema": 1,
+  "date": "2026-10-22",
+  "scope": "Installer startup reliability for Chat, Calendar and Contacts; native runtime also supplied for private Mail",
+  "finding": "Pinned Windows shared Stalwart imports MSVCP140.dll, VCRUNTIME140.dll and VCRUNTIME140_1.dll, absent from the earlier bundle. This proves a packaging dependency gap, not the reported remote host specific cause.",
+  "remoteScreenshotCauseConfirmed": false,
+  "chatPayloadChanged": false,
+  "chatColdStartSeconds": 180,
+  "sourceCommit": "f0e773b0f1c03dbc219950cf7b60eb5ee415f9a6",
+  "version": "0.3.0-preview.69",
+  "tests": {
+    "goAllPackages": true,
+    "goVet": true,
+    "setupJavaScriptSyntax": true,
+    "fresh25AppInstallWithFinalManagerAndBundle": {
+      "schema": 1,
+      "installer": "0.3.0-preview.69",
+      "all25AppsInstalled": true,
+      "controlledMissingPackagesDetected": [
+        "chat",
+        "calendar",
+        "contacts",
+        "mail"
+      ],
+      "failedAppsRetriedWithoutReinstall": true,
+      "healthyProcessIDsUnchanged": true,
+      "all23ServicesHealthy": true,
+      "sharedEngineLoadedThreeAppLocalMicrosoftDLLs": true,
+      "modules": [
+        {
+          "name": "MSVCP140.dll",
+          "location": "private shared/bin"
+        },
+        {
+          "name": "VCRUNTIME140.dll",
+          "location": "private shared/bin"
+        },
+        {
+          "name": "VCRUNTIME140_1.dll",
+          "location": "private shared/bin"
+        }
+      ],
+      "startupReportDownloaded": true,
+      "reportHasNoPassword": true,
+      "existingOwnerPasswordWorks": true,
+      "mobile390NoOverflow": true,
+      "pageErrors": [],
+      "ownerDataUsedAsFixture": false,
+      "cleanHostOrRebootTest": false,
+      "sourceCommit": "b0a2c0b60f18501afd0cc4d09f79bbc5a42bdd2a",
+      "installerSHA256": "29aa331b649f5073065b1b53ab66b22d6717b22908676ae7f1074a0f94f88af5",
+      "managerAndBundleIdenticalToFinal": true,
+      "scope": "Fresh all25 install before final setup-only repair-catalog refinement. Final setup and same manager/bundle replayed all25 successfully afterward."
+    },
+    "finalWizardAll25Replay": {
+      "schema": 1,
+      "installer": "0.3.0-preview.69",
+      "all25AppsInstalled": true,
+      "finalWizardAll25Replay": true,
+      "repairButtonAvailable": true,
+      "freshInstallSameManagerAndBundlePreviouslyVerified": true,
+      "controlledMissingPackagesDetected": [
+        "chat",
+        "calendar",
+        "contacts",
+        "mail"
+      ],
+      "failedAppsRetriedWithoutReinstall": true,
+      "healthyProcessIDsUnchanged": true,
+      "all23ServicesHealthy": true,
+      "sharedEngineLoadedThreeAppLocalMicrosoftDLLs": true,
+      "modules": [
+        {
+          "name": "MSVCP140.dll",
+          "location": "private shared/bin"
+        },
+        {
+          "name": "VCRUNTIME140.dll",
+          "location": "private shared/bin"
+        },
+        {
+          "name": "VCRUNTIME140_1.dll",
+          "location": "private shared/bin"
+        }
+      ],
+      "startupReportDownloaded": true,
+      "reportHasNoPassword": true,
+      "existingOwnerPasswordWorks": true,
+      "mobile390NoOverflow": true,
+      "pageErrors": [],
+      "ownerDataUsedAsFixture": false,
+      "cleanHostOrRebootTest": false,
+      "sourceCommit": "f0e773b0f1c03dbc219950cf7b60eb5ee415f9a6",
+      "installerSHA256": "de33e8ff00db83a0ed78c3fd35192977ab3e2f79173edd1d15641216cb64c3cd",
+      "managerSHA256": "878652eca4ebcdc8556739706950ff7324d13ae92d6c1d5418ef3f868c81c603",
+      "bundleSHA256": "eeff9265b8d970fdfcb7158cb5e75751d4805eabf9e6c1755c1834ac4bdb6ae8"
+    },
+    "protected68Repair": {
+      "schema": 1,
+      "from": "0.3.0-preview.68",
+      "to": "0.3.0-preview.69",
+      "protectedInstallerRepairPassed": true,
+      "comparedAgainstOriginalProtectedRecoveryCopy": true,
+      "recoveryManifestRetained": true,
+      "ownerIDPreserved": true,
+      "allFourAppContractsAndVersionsPreserved": true,
+      "allExistingApplicationPackagesPreserved": true,
+      "userFilePreserved": true,
+      "threeRequiredRuntimePackagesAdded": true,
+      "allFourProcessesHealthy": true,
+      "newInstallerCatalogRetained": true,
+      "repairReviewButtonAvailable": true,
+      "ownerDataUsedAsFixture": false,
+      "sourceCommit": "f0e773b0f1c03dbc219950cf7b60eb5ee415f9a6",
+      "installerSHA256": "de33e8ff00db83a0ed78c3fd35192977ab3e2f79173edd1d15641216cb64c3cd",
+      "managerSHA256": "878652eca4ebcdc8556739706950ff7324d13ae92d6c1d5418ef3f868c81c603",
+      "bundleSHA256": "eeff9265b8d970fdfcb7158cb5e75751d4805eabf9e6c1755c1834ac4bdb6ae8"
+    },
+    "windowsIcons": {
+      "expectedFrames": 7,
+      "allFramesEmbedded": {
+        "Workspace.exe": 7,
+        "WorkspaceSetup-windows-amd64.exe": 7
+      }
+    }
+  },
+  "runtimeSource": "https://aka.ms/vc14/vc_redist.x64.exe",
+  "runtimeProvenance": "msvc-runtime-20261022.json",
+  "cleanup": {
+    "syntheticRegistrationsRemoved": 3,
+    "ownerAndNewestOwnerRollbackRetained": true,
+    "task": "startup-reliability-20261022",
+    "allTaskRuntimeProcessesStopped": true,
+    "syntheticRootsRemoved": [
+      {
+        "files": 16956,
+        "bytes": 3671499475.0,
+        "path": "C:\\Projects\\.cache\\startup-reliability-20261022"
+      },
+      {
+        "files": 495,
+        "bytes": 1789929208.0,
+        "path": "I:\\Projects\\tooling\\startup-reliability-20261022\\fixture-programs"
+      },
+      {
+        "files": 0,
+        "bytes": null,
+        "path": "I:\\Projects\\tooling\\startup-reliability-20261022\\fixture-files"
+      },
+      {
+        "files": 495,
+        "bytes": 1789929209.0,
+        "path": "I:\\Projects\\tooling\\startup-reliability-20261022\\fixture-programs-final2"
+      },
+      {
+        "files": 0,
+        "bytes": null,
+        "path": "I:\\Projects\\tooling\\startup-reliability-20261022\\fixture-files-final2"
+      }
+    ]
+  },
+  "ownerRuntimeUpdated": false,
+  "ownerServicesObservedHealthy": 24,
+  "boundaries": {
+    "noOwnerDataFixture": true,
+    "noActualRemoteHostTest": true,
+    "noCleanHostOrRebootAcceptance": true,
+    "noExternalDNSChanges": true,
+    "noConfiguredMailboxOrExternalDeliveryClaim": true,
+    "githubActionsUsed": false
+  },
+  "publication": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.69",
+    "sourceCommit": "f0e773b0f1c03dbc219950cf7b60eb5ee415f9a6",
+    "draft": false,
+    "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.69",
+    "everyPublishedAssetMatchesLocal": true,
+    "assets": [
+      {
+        "name": "bundle-verification.json",
+        "size": 329,
+        "sha256": "f7d0c06a2688609820cc3aa9b9af949516b437ade491dfc7a489393327fcb92f"
+      },
+      {
+        "name": "build-info.json",
+        "size": 207,
+        "sha256": "44f17bbf4d18984fb5334f7fd2d14f986962b933f2c5bb561cf336ba7bedefc2"
+      },
+      {
+        "name": "catalog.json",
+        "size": 43200,
+        "sha256": "47203573357239b955e1107a6ab27f03be4737ed66bc609461a22b36b00e4e93"
+      },
+      {
+        "name": "BACKUPS.md",
+        "size": 7908,
+        "sha256": "a2871fb2b5b13aaaa12f0ad3ada3048f9659d72103e4ab86f64ce35c995927f7"
+      },
+      {
+        "name": "BRANDING.md",
+        "size": 2919,
+        "sha256": "6c17e400c83580b75743e0005902f35359fa52b53bbc22bc927e9e61966337f8"
+      },
+      {
+        "name": "INSTALL-RECOVERY.md",
+        "size": 2319,
+        "sha256": "2ec0fdb215f2fa784f2326e1acef3f5ecf432d9171b30c8b17fe6d1711cbebc9"
+      },
+      {
+        "name": "fresh-install-acceptance.json",
+        "size": 1208,
+        "sha256": "4325476d5aaf9a791746cd08855279d7fb331d999c15b522f8a71618ddea0637"
+      },
+      {
+        "name": "LICENSE.txt",
+        "size": 11558,
+        "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+      },
+      {
+        "name": "MSVC-RUNTIME-NOTICE.md",
+        "size": 1230,
+        "sha256": "fa38608f100abac9fe863bc22db178624ac56ad357e424fc5f24ef6b927c363b"
+      },
+      {
+        "name": "msvc-runtime-provenance.json",
+        "size": 3467,
+        "sha256": "7114777db87f3f800ffd884b533bd4fd84461f80649a0e40041d857dd47b9eed"
+      },
+      {
+        "name": "MY-CREATE.md",
+        "size": 1597,
+        "sha256": "4cdde35a87c6097574a196cbfdca961a443261147562e10e3904886da23cd80b"
+      },
+      {
+        "name": "NOTICE.txt",
+        "size": 664,
+        "sha256": "ba5d1ffddbef7cfd9ff5aabab279657194dbb1deab201ca981a546237f8977bc"
+      },
+      {
+        "name": "native-installer-acceptance.json",
+        "size": 1306,
+        "sha256": "be8d61249b7560381156b88cb6b2ca998d21a3664da892aca42de7ef21088359"
+      },
+      {
+        "name": "one-workspace-source.zip",
+        "size": 10216785,
+        "sha256": "e3ab5569a57a120ff42527e2888aa70cbaf17ed90f1580d0d93e3cfd28048cd9"
+      },
+      {
+        "name": "organization-components.json",
+        "size": 8715,
+        "sha256": "82bedb6dbdcdead538c1225158dad7b35061c237f428e72ee8cd5c232709b07b"
+      },
+      {
+        "name": "protected-repair-acceptance.json",
+        "size": 885,
+        "sha256": "c3810a74475bd2d3fd1d211add69027787940fb7ec1866dfe6e54b729dd300af"
+      },
+      {
+        "name": "REINSTALL.md",
+        "size": 1503,
+        "sha256": "589e17776b0973aead4511cb8d1fec0e1b2f7391f43b9a3d21ccaba307d5c956"
+      },
+      {
+        "name": "RELEASE-STATUS.md",
+        "size": 44872,
+        "sha256": "ceb799216798dd3a2f7451667b6f793f5adfb026b02f07665696de203e5f1e5d"
+      },
+      {
+        "name": "SIGN-IN.md",
+        "size": 6527,
+        "sha256": "bc0cc70c0363ea403154e5e1d44088f5974f32736612f5068300eee63149ffed"
+      },
+      {
+        "name": "SOURCE-MANIFEST.json",
+        "size": 8022,
+        "sha256": "a13fd56a5bedbf111cc2616ac1575c8a60062f5e4a27228c0b7bd1c2fadf84aa"
+      },
+      {
+        "name": "STARTUP-TROUBLESHOOTING.md",
+        "size": 2022,
+        "sha256": "b0cbf697119b8384f5d4caebb84eebffd542a2b762e0aad29198beec09e70cab"
+      },
+      {
+        "name": "UPDATES.md",
+        "size": 12802,
+        "sha256": "471b96cf1ae609c213b6a8e112819dc39d2444a973c144f07a15d08ec0a16773"
+      },
+      {
+        "name": "windows-icons-verification.json",
+        "size": 103,
+        "sha256": "5ef03ece0210994942f44b48a30d133b4e87c672e38635d482a6988c1a9ad98c"
+      },
+      {
+        "name": "workspace-bundle.zip",
+        "size": 819157114,
+        "sha256": "eeff9265b8d970fdfcb7158cb5e75751d4805eabf9e6c1755c1834ac4bdb6ae8"
+      },
+      {
+        "name": "Workspace.exe",
+        "size": 12253696,
+        "sha256": "878652eca4ebcdc8556739706950ff7324d13ae92d6c1d5418ef3f868c81c603"
+      },
+      {
+        "name": "WorkspaceSetup-windows-amd64.exe",
+        "size": 828768256,
+        "sha256": "de33e8ff00db83a0ed78c3fd35192977ab3e2f79173edd1d15641216cb64c3cd"
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 2252,
+        "sha256": "1ea6cd34b60bb609740fda12f6a021909aa85f2ae2eea22d780a79a21cb181aa"
+      }
+    ]
+  },
+  "downloadedInstallerSHA256Verified": true,
+  "downloadedInstallerName": "WorkspaceSetup-0.3.0-preview.69-windows-amd64.exe"
+}

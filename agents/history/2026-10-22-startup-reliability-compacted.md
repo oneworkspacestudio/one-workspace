@@ -64,3 +64,49 @@ folder/recovery review. Regression covers68 display with69 repair catalog retain
 These last changes are setupui-only; seal must prove manager/bundle byte identity,
 rebuild setup from final committed source, replay all25 existing app recovery using
 the final wizard, and pass real protected68-to69 repair before publication.
+
+
+## Final delivery complete
+
+Immutable public v0.3.0-preview.69 source
+f0e773b0f1c03dbc219950cf7b60eb5ee415f9a6:
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.69.
+All27 published asset lengths and GitHub SHA256 digests match tested local files.
+All136 bundle payload hashes verified; all25 app contracts and existing app bytes
+retained from public68, adding9 signed MSVC DLLs plus notices/provenance. Final
+manager is byte-identical to the fresh25 tested manager; final setup rebuilt from
+the source tag and replayed all25 diagnostics/retry/report/sign-in/phone checks.
+Both executable resources contain all7 expected icon frames. Exact final installer
+copied/hash-verified in Downloads/WorkspaceSetup-0.3.0-preview.69-windows-amd64.exe.
+
+Final real protected68-to69 repair passed. Compared current config/packages against
+its original protected68 recovery copy: owner ID, all4 selected app contracts and
+versions, existing application packages and a user file retained; new CRT packages
+added, all4 processes healthy. Final repair button/review and retained latest
+installer catalog verified in browser. Repair automatically starts the target
+manager; the first test incorrectly launched another copy afterward and received
+the correct runtime-lock refusal. Corrected test then verified the completed
+transaction against its original recovery copy and restarted the installation once.
+
+Final wizard25-app replay: controlled missing Chat/native runtime failures clearly
+classified; independent apps stayed available; report downloaded without password;
+retry recovered all23 local process apps with healthy root PIDs retained. Real
+owner sign-in,390px no overflow and zero page errors passed. Shared engine loaded
+three CRT imports from private shared/bin; all9 private Mail runtime files matched
+pins. No configured Mail mailbox/external delivery or actual remote-host/clean-host/
+reboot/DNS acceptance claim. Original reported Chat failure remains unconfirmed.
+
+All named synthetic services/browsers stopped;16956+ files and task-owned C NTFS
+fixtures plus I program/file roots removed after process/reparse checks. Three
+synthetic service registrations removed. Owner67 and newest owner rollback not
+changed; all24 owner services observed healthy. Source/evidence/docs delivered on
+main; later documentation commit must not replace source tag or published assets.
+Evidence docs/evidence/startup-reliability-20261022.json; three startup69 screenshots.
+Durable scripts/artifacts I:/Projects/tooling/startup-reliability-20261022.
+
+Maintenance constraint: do not blindly bump app-local CRT pins. Unfamiliar private
+DLL bytes are intentionally retained/refused; a future runtime-version upgrade
+needs an explicit stopped-service migration for previously installed private DLLs.
+This release adds the first private set to older installations. No current work
+remains; on a still-failing remote PC, use69 Repair this installation and collect
+its new startup report plus relevant private logs rather than inventing a cause.

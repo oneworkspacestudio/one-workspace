@@ -733,3 +733,16 @@ All25 application contracts/payloads remain pinned to public68. This is a manage
 installer and prerequisite packaging change. The reported remote machine's exact
 cause remains unconfirmed without its diagnostics. See STARTUP-TROUBLESHOOTING.md
 and MSVC-RUNTIME-NOTICE.md. No clean-host/reboot/remote-host test claim.
+
+
+Final69 delivery is public and all27 release asset sizes/digests match tested files.
+Fresh25-app installation with the final manager/bundle and final-wizard retry/report/
+sign-in checks passed;23 local process apps became ready, with healthy PIDs retained.
+Exact protected68-to69 repair retained the original owner,4 selected app contracts,
+application packages and user file while adding missing runtimes. Reopening setup
+retains its new repair catalog and offers Repair this installation. Seven Windows
+icon frames verified in both executables. [Evidence](evidence/startup-reliability-20261022.json),
+[repaired installation](screenshots/startup69-repair-completed.png),
+[phone status](screenshots/startup69-healthy-phone.png).
+Owner67/its newest rollback retained;24 owner services remain healthy. All named
+synthetic installations stopped and removed. Reported remote cause remains unknown.

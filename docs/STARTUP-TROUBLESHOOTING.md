@@ -32,3 +32,13 @@ app log, not shown in the browser.
 The screenshot alone cannot establish a remote machine's exact error. A saved
 startup report and the relevant private log distinguish runtime dependencies,
 resource pressure, security software and identity connection failures.
+
+
+## Repair an existing installation
+
+Run the latest Workspace installer on the affected PC. If it does not automatically
+find your installation, choose **Check installation / continue setup** and select
+the existing Workspace parent folder. Choose **Repair this installation**, review
+the existing folder, and check **Reinstall in this folder and save a recovery copy
+first**. Continue to repair program files while retaining accounts, app data and
+ordinary files. Repair starts Workspace automatically; follow the startup results.
