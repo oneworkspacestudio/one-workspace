@@ -31,7 +31,10 @@ func (rt *Runtime) maintainMailboxes(ctx context.Context) {
 		cancel()
 		state := "ready"
 		message := fmt.Sprintf("%d MyAccounts mailboxes connected. New users are checked every 15 seconds.", count)
-		if err != nil {
+		if errors.Is(err, errMainMailService) {
+			state = "shared"
+			message = "Mail accounts and mailboxes are managed on the main Workspace. Add new people there."
+		} else if err != nil {
 			state = "attention"
 			message = err.Error()
 		}
@@ -53,6 +56,11 @@ func (rt *Runtime) syncMailboxes(ctx context.Context, api *identityAPI) (int, er
 	app, ok := rt.Config.Catalog.Find("mail")
 	if !ok {
 		return 0, nil
+	}
+	if shared, err := mailUsesMain(ctx, app); err != nil {
+		return 0, errors.New("Mail status is unavailable; mailbox setup will retry automatically")
+	} else if shared {
+		return 0, errMainMailService
 	}
 	count := 0
 	seen := map[string]bool{}

@@ -1,3 +1,27 @@
+# Preview 76: One main Mail service across PCs
+
+Mail22 offers an owner-reviewed main-service connection, discovers standard main
+Workspace addresses, checks public availability without exchanging credentials,
+and preserves separate local messages/settings. Additional PCs open the same Mail
+service and use accounts on that main installation. There is no fixed PC count;
+capacity depends on the main server, which must remain available.
+
+Workspace76 stops local mailbox provisioning on shared Mail clients, reports the
+shared role during startup, and avoids a redundant local Mail sign-in before the
+main service opens. Owner settings and local mailbox authentication stay guarded.
+Independent MyAccounts issuers are not merged, and independent mailbox stores
+still require a deliberate routing/queue gateway or separate SMTP endpoints.
+Existing receiver routes are preserved; external SMTP permissions, ISP blocks,
+reverse DNS and actual message delivery cannot be inferred from DNS or health.
+
+This release includes the locally built Windows x64 manager/full installer and
+Mail22, with the other app contracts retained from the verified public75 suite.
+Windows compilation and every bundled package size/SHA256 are checked. No new
+automated tests, clean-host, physical reboot or multi-PC SMTP acceptance claimed.
+Builds, publication and channel promotion run locally without GitHub Actions.
+
+---
+
 # Preview 75: Public update checks without anonymous API limits
 
 The installer, update window and startup app reconciliation now read the
@@ -846,3 +870,4 @@ synthetic installations stopped and removed. Reported remote cause remains unkno
 Adds a native responsive OpenCascade modelling app with private MyAccounts projects, optional same-user Drive copies, real boolean operations and slicer exports. The UI follows the supplied pastel phone-stand reference. The new app is not a TweakCAD fork: its linked source was unavailable. This release implements dimensioned profiles rather than a general sketch constraint solver; additional advanced CAD/import/manufacturing checks remain in the app capability matrix. No printer connection is simulated.
 
 All25 previous app contracts and payloads remain byte-for-byte from public71; only the manager, suite notice and new My3D-owned packages are changed. Tests are performed on synthetic NTFS fixtures, never owner data. See app/suite acceptance receipts for exact binaries and known limits.
+

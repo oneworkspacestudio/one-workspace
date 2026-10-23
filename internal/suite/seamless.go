@@ -181,6 +181,13 @@ func (p *Portal) seamlessApp(w http.ResponseWriter, r *http.Request) bool {
 	if relative == "/setup" || relative == "/setup/" || publicDriveRoute(r.URL.Path) {
 		return false
 	}
+	if app.id == "mail" {
+		if installed, ok := p.rt.Config.Catalog.Find("mail"); ok {
+			if shared, _ := mailUsesMain(r.Context(), installed); shared {
+				return false // Serve the shared-service shell without a redundant local Mail login.
+			}
+		}
+	}
 	if p.mailNeedsSetup(r, app) {
 		u, ok := p.user(r)
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")

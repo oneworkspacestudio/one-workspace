@@ -149,3 +149,9 @@ when anonymous Mail metadata is protected, its exact authentication response and
 public Workspace health confirm only that Mail is running. Mailbox setup and
 message delivery are not inferred. New shared clients report readiness without a
 local mailbox; forwarding chains do not automatically redirect indefinitely.
+
+
+Workspace76 recognises shared Mail clients in its startup, mailbox provisioning
+and app launcher. It skips local mailbox creation and the extra local Mail OIDC
+flow, and tells owners to add people on the main Workspace. Mail22 checks that
+main service when opening. Existing local messages are never silently migrated.

@@ -61,3 +61,18 @@ service has returned after Slicer6, but browser owner sign-in expired. Requested
 private browser sign-in while deployment continues. Secondary normal20/Slicer6
 update completed successfully in12minutes and kept its latest rollback. Do not
 replay that transaction; next operation should select Mail22 only.
+
+
+## Workspace76 role coordination
+Integration review found legacy managers continue their local MyAccounts mailbox
+provisioner after selecting a main service, and start local Mail SSO before the
+shared shell. Added bounded credential-free loopback role checks: shared clients
+skip local provisioning and report that accounts belong to the main Workspace;
+startup describes the shared role; already-authenticated portal users can open
+the shared shell without another local Mail OIDC flow. No portal/engine auth
+is bypassed for local mailbox access. Build/release76 needed for full integration.
+Current secondary22 update is running with a verified backup. Main75+22 normal
+update is also running after the unrelated Slicer7 lock cleared; first attempt
+stopped at prepare before changes. A published75 manager controls that operation
+from task tooling because the installed74 check used the obsolete API path.
+Only public binary bytes on I; controller capability logs remain in protected C.

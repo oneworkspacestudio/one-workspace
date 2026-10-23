@@ -20,6 +20,7 @@ func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {
 		req, _ := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("http://localhost:%d/api/status", app.Port), nil)
 		resp, e := client.Do(req)
 		var status struct {
+			MainMailURL    string `json:"mainMailURL"`
 			Configured     bool   `json:"configured"`
 			Busy           bool   `json:"hostingBusy"`
 			Phase          string `json:"hostingPhase"`
@@ -34,6 +35,10 @@ func (rt *Runtime) mailHostingProgress(ctx context.Context, app catalog.App) {
 		if e == nil {
 			e = json.NewDecoder(resp.Body).Decode(&status)
 			resp.Body.Close()
+		}
+		if e == nil && status.MainMailURL != "" {
+			rt.progress.Step(app.ID, "done", "Mail uses the main Workspace. Its availability is checked when Mail opens; incoming delivery is managed there.")
+			return
 		}
 		if e == nil && status.IdentityError != "" {
 			rt.logMailSetupProblem(status.IdentityError)
