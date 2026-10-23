@@ -76,3 +76,24 @@ update is also running after the unrelated Slicer7 lock cleared; first attempt
 stopped at prepare before changes. A published75 manager controls that operation
 from task tooling because the installed74 check used the obsolete API path.
 Only public binary bytes on I; controller capability logs remain in protected C.
+
+
+## Public76 / Mail23 and installation checkpoint
+Workspace76 sourcea66d81de1a9750ab68f518898feeaa0116713737 and Mail23 source
+3be197b35921a65182044473d008a99d93790a12 are public. Every uploaded size/SHA256
+verified, no Actions. The76 bundle retains26 apps, replaces manager/Mail22 and
+matching notices, and verifies every bundled package plus embedded icon frames.
+It reuses unchanged verified74 payload bytes matching public75 contracts; current
+Mail22 is included offline and latest23 is promoted for online installation.
+Windows compilation and JS syntax passed; no automated/new clean-host acceptance.
+Artifacts stay under task I tooling. Only full-installer linking used the bounded
+C:/Projects/.cache/mail-shared76-build scratch, to be removed after process check.
+
+Main normal75+Mail22 update completed with all apps healthy and newest rollback
+retained. Secondary20-to22 normal update also completed in12m16s, healthy with
+latest rollback retained. Other apps remain unselected (Slicer/Social/My3D updates
+are separate tasks). Final76/23 update and main-service pairing are next.
+Actual main SMTP is still blocked at an upstream router refusing automatic setup.
+Opened router sign-in and requested owner action; never overwrite its receiver
+route or bypass login. Main browser MyAccounts session also expired after restart;
+private sign-in requested. Do not claim external delivery or signed-in Mail UI.

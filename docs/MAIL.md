@@ -155,3 +155,11 @@ Workspace76 recognises shared Mail clients in its startup, mailbox provisioning
 and app launcher. It skips local mailbox creation and the extra local Mail OIDC
 flow, and tells owners to add people on the main Workspace. Mail22 checks that
 main service when opening. Existing local messages are never silently migrated.
+
+
+Mail23 improves the upstream-router permission state: a router refusing automatic
+discovery now gets the existing owner-only router-settings action and a clear
+permission explanation. This is a real network prerequisite on the main receiving
+PC. Joining PCs reuse the main service and do not need separate incoming rules.
+The public online installer/update channel resolves23; the immutable76 evaluation
+bundle contains Mail22, with the shared-role functionality and prior settings fix.
