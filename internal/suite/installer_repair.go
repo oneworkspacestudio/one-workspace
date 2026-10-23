@@ -175,7 +175,10 @@ func (p *installerRepairOutput) Write(b []byte) (int, error) {
 func checkInstallerRepair(ctx context.Context, c Config, version string) (*InstallerRepairResult, error) {
 	// Read only the stable location header, so an older controller can report
 	// completion even when it deliberately cannot read the new catalog format.
-	var actual Config
+	var actual struct {
+		Version, Owner, Origin, Data, Programs, Files string
+		Port                                          int
+	}
 	if e := platform.LoadJSON(filepath.Join(c.Data, "workspace.json"), &actual); e != nil {
 		return nil, e
 	}

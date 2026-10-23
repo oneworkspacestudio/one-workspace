@@ -4,6 +4,11 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -44,5 +49,23 @@ func TestInstallerProgressSurvivesSplitWritesAndIgnoresNonProtocolOutput(t *test
 func TestInstallerRepairCannotRestartAnIncompleteSetup(t *testing.T) {
 	if _, e := ReinstallInstalled(context.Background(), t.TempDir(), nil, catalog.Catalog{}, true, nil); e == nil {
 		t.Fatal("incomplete data could reset accounts")
+	}
+}
+
+func TestInstallerRepairReadsOnlyStableHeaderAfterFutureCatalogChange(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, `{"status":"ok","apps":{"accounts":"running"}}`)
+	}))
+	defer server.Close()
+	u, _ := url.Parse(server.URL)
+	port, _ := strconv.Atoi(u.Port())
+	data := t.TempDir()
+	c := Config{Data: data, Programs: "apps", Files: "files", Owner: "same-owner", Origin: "https://workspace.example", Port: port, Catalog: catalog.Catalog{Apps: []catalog.App{{ID: "accounts", Kind: "process"}}}}
+	body := `{"version":"next","owner":"same-owner","origin":"https://workspace.example","data":` + strconv.Quote(data) + `,"programs":"apps","files":"files","port":` + strconv.Itoa(port) + `,"catalog":{"apps":"future format old controller cannot read"}}`
+	if e := os.WriteFile(filepath.Join(data, "workspace.json"), []byte(body), 0600); e != nil {
+		t.Fatal(e)
+	}
+	if r, e := checkInstallerRepair(context.Background(), c, "next"); e != nil || len(r.NeedsAttention) != 0 {
+		t.Fatal(r, e)
 	}
 }
