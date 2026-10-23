@@ -890,3 +890,18 @@ unchanged76 source (new role-status probe vs older fixtures). These are retained
 as baseline failures, not reported as a passing full suite. No physical reboot or
 clean-host acceptance is claimed. Existing application contracts/payloads are
 retained from the verified public76 bundle.
+
+
+## Workspace78 — overlapping portal sign-in recovery
+
+Fixes the shared portal state cookie that could be overwritten by another sign-in
+tab, producing “Login state did not match”. Per-request cookies are host-only,
+HttpOnly, Secure on HTTPS, SameSite=Lax and restricted to /auth/callback. Expiry,
+state comparison, single use, PKCE, nonce, issuer, audience and signature validation
+are retained. Correctly bound restart/expired requests discard the old code and
+start a fresh flow; unbound callbacks remain rejected with a useful retry page.
+Mail24 is included with the shared-main integration. All26 apps are retained.
+Regression checks use synthetic in-memory flows and loopback fixtures only.
+Windows compilation, complete bundle checks, deployment and real browser sign-in
+verification are tracked in agents/history/2026-10-24-concurrent-sign-in-compacted.md.
+No production, arbitrary-provider or clean-host/reboot acceptance is implied.

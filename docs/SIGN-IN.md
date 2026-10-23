@@ -108,3 +108,15 @@ existing-session navigation. Vault was outside this installation's selected app
 set; fresh logged-out Mail/Vault, email delivery, editing/playback, reboot and
 Windows service behavior were not tested in this review. The earlier fresh Vault
 trust and component acceptance limits remain. No live credentials were reset.
+
+
+## Several sign-in tabs and requests left open during updates
+
+Workspace78 gives each portal sign-in its own protected, short-lived browser
+cookie. Opening several apps or administration tabs together no longer replaces
+another tab's pending request. Each request still has its own PKCE verifier,
+nonce, exact callback, single-use server record and normal token verification.
+A correctly bound request interrupted by a restart starts fresh authorization
+without reusing its old code. An unbound request stays rejected and now offers a
+clear **Continue sign-in** button. Use your normal Workspace address when reopening
+an old tab; authorization and callback addresses are temporary.

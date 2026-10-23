@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.76',
+ [string]$Version='0.3.0-preview.78',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261020.1',
  [string]$DriveVersion='photos-preview-local',

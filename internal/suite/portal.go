@@ -137,23 +137,13 @@ func (p *Portal) login(w http.ResponseWriter, r *http.Request) {
 	}
 	p.flows[state] = loginFlow{Verifier: v, Nonce: nonce, ReturnTo: safeReturnPath(r.URL.Query().Get("returnTo")), Expires: time.Now().Add(5 * time.Minute)}
 	p.mu.Unlock()
-	p.cookie(w, "workspace_flow", state, 300)
+	p.flowCookie(w, state, state, 300)
 	http.Redirect(w, r, p.oauth.AuthCodeURL(state, oidc.Nonce(nonce), oauth2.S256ChallengeOption(v)), http.StatusFound)
 }
 func (p *Portal) callback(w http.ResponseWriter, r *http.Request) {
-	state := r.URL.Query().Get("state")
-	cookie, e := r.Cookie("workspace_flow")
-	if e != nil || state == "" || subtle.ConstantTimeCompare([]byte(cookie.Value), []byte(state)) != 1 {
-		http.Error(w, "Login state did not match", 400)
-		return
-	}
-	p.mu.Lock()
-	f, ok := p.flows[state]
-	delete(p.flows, state)
-	p.mu.Unlock()
-	p.cookie(w, "workspace_flow", "", -1)
-	if !ok || time.Now().After(f.Expires) {
-		http.Error(w, "Login expired", 400)
+	w.Header().Set("Cache-Control", "no-store")
+	f, ok := p.consumeLoginFlow(w, r)
+	if !ok {
 		return
 	}
 	ctx, cancel := context.WithTimeout(r.Context(), 20*time.Second)
