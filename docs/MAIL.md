@@ -126,7 +126,7 @@ single public SMTP port between independent PCs. The existing receiver stays
 protected. Mail shows that blocker and next check rather than claiming delivery.
 
 
-## One main Mail service across PCs (Mail 21)
+## One main Mail service across PCs (Mail 22)
 
 Choose **Use an existing Mail service** in Mail settings on another PC. Setup
 checks an optional zone TXT service pointer, then the standard main Workspace
@@ -142,3 +142,10 @@ This PC's private Mail engine and incoming-router checks stop after connecting.
 Local messages/settings are kept, not moved; /mail/setup retains owner controls
 and can resume the separate server. Main receiver routes are never replaced.
 This is shared service access, not replicated mailbox stores or an SMTP gateway.
+
+
+Mail22 also handles existing Workspace sign-in gates without bypassing them:
+when anonymous Mail metadata is protected, its exact authentication response and
+public Workspace health confirm only that Mail is running. Mailbox setup and
+message delivery are not inferred. New shared clients report readiness without a
+local mailbox; forwarding chains do not automatically redirect indefinitely.

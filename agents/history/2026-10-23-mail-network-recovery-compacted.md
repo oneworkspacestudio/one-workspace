@@ -50,3 +50,14 @@ Mail21 deployment/pairing remains pending until the ongoing operation returns.
 Main Mail address returns502 and its local installation is also undergoing a
 separate Slicer update, holding the install lock. Do not kill those installers.
 The original receiver remains the approved main; do not replace its port25 rule.
+
+
+Mail22 source9b0e7c50 corrects legacy-manager compatibility before21 deployment:
+protected anonymous metadata remains protected; exact401 + public Mail-process
+health proves availability only. Linked fresh clients report configured/ready
+without local mailboxes. Main redirects retain a handoff marker to stop client
+chains. All22 release assets publicly verified by size/SHA256; no Actions. Main
+service has returned after Slicer6, but browser owner sign-in expired. Requested
+private browser sign-in while deployment continues. Secondary normal20/Slicer6
+update completed successfully in12minutes and kept its latest rollback. Do not
+replay that transaction; next operation should select Mail22 only.
