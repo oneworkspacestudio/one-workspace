@@ -1,4 +1,4 @@
-# Workspace72: remote owner administration
+# Workspace73: remote owner administration
 
 Updates, reinstall, recovery and backup restore now run from the owner's browser
 at the regular Workspace address. No separate browser window on the server is
@@ -13,7 +13,7 @@ and initial installation are separate from the installed administration website.
 Scheduling stays optional and off by default. Backup folders still require local
 NTFS permissions on the server. Windows compilation and UI JavaScript syntax
 passed; full remote update/restore, reboot and clean-host acceptance are not
-claimed. Built locally without Actions. App payloads are retained from public71.
+claimed. Built locally without Actions. All26 app payloads, including My 3D, are retained from public72.
 
 # Workspace71.1: clear app controls
 

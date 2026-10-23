@@ -7,6 +7,22 @@ do not apply the separate prior I:/Workspace machine's deployment assumptions.
 Dedicated branch/worktree codex/remote-administration. Preserve other worktrees.
 Artifacts on I: under tooling/remote-admin-20261023. Target72, no Actions/agents.
 
+Publication collision: the independent My3D task published72 during this build.
+Do not overwrite its tag/assets. Fast-forwarded to mainfbcfb51, retaining both
+remote administration and My3D. Final target73 must use verified public72 bundle
+as baseline and preserve all26 app contracts/payloads. Retain existing installed
+app contracts and allow the new default My3D app through the normal installer.
+
+Separate71.1 local deployment failed public Accounts discovery and recovery's
+free-space check. Its task encrypted/archived older rollback copies with keys
+in Private, retained the newest full67 rollback, and reached rolled-back during
+this task. Do not duplicate/delete those archives. Our attempted older-backup
+archive aborted during verification of already-archived66, before any keys,
+archive or removal. Latest full rollback stays on C:. E cache creation failed
+with filesystem corruption; I artifacts plus bounded named C NTFS build scratch
+are used. Clear only our C scratch after final builds. Prior candidate72 files
+are unpublished and must be rebuilt for73; no release receipt yet.
+
 Updates portal brokers only a fixed allowlist of update-controller methods to a
 verified exact-path running helper at its protected loopback URL. No client-chosen
 upstream, cookies or Authorization forwarding; local controller token is injected
