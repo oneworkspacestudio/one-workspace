@@ -1,3 +1,20 @@
+# Workspace 74: automatic Mail domain setup
+
+Includes Mail 18 in the full installer and updater. Compatible DNS is reused
+without edits. Unpublished installations automatically choose a free mail
+subdomain when the original domain has conflicting mail records. Existing
+published mail domains and other installations' records are preserved.
+
+The setup screen now offers Finish automatic setup and Open Mail, with technical
+DNS details collapsed. Interrupted changes retain account IDs, folders and
+readable mailbox assignments. SMTP reachability, TLS, signing and reverse DNS
+remain separate delivery requirements. This release claims compilation, syntax
+and package-integrity checks, not automated or external-delivery acceptance.
+All other 25 app contracts/payloads are retained from public Workspace 73.
+Built locally; no GitHub Actions. Previous limitations below remain applicable.
+
+## Previous release
+
 # Workspace73: remote owner administration
 
 Updates, reinstall, recovery and backup restore now run from the owner's browser

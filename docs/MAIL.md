@@ -95,3 +95,17 @@ used no owner data. Delivery and source receipts are in
 [the verification record](evidence/mail-setup-deployment-20261021.json).
 
 ![Mail17 after recovering interrupted setup](screenshots/mail-setup-fixed-desktop.png)
+
+
+## Automatic domain selection (Mail 18)
+
+Workspace 74 includes Mail 18 in both the full installer and updates. Managed
+setup reuses compatible DNS unchanged. If the requested domain has another mail
+route, an unpublished installation chooses an unused subdomain automatically.
+Existing published domains remain unchanged. An occupied candidate belonging to
+another installation is skipped, even if it has the same public IP.
+
+Mail setup offers Finish automatic setup, Open Mail and expandable DNS details.
+Journalled domain changes preserve native mailbox IDs, folders and readable
+address assignments. Internet delivery still requires SMTP reachability, TLS,
+signing and suitable reverse DNS; DNS publication alone does not prove delivery.
