@@ -34,3 +34,10 @@ device certificate trust are not public administration endpoints.
 Compilation, release packaging, publication and protected local installation
 pending. No automated tests requested or run; do not claim end-to-end update,
 rollback, scheduled backup, clean-host or reboot acceptance from compilation.
+
+During packaging the separate71.1 local transaction entered startup checks and
+failed portal discovery with a public Cloudflare502. Added bounded two-minute
+discovery retries (each HTTP request still bounded45s) so transient tunnel startup
+does not abort immediately. Issuer/signature/owner validation is unchanged. This
+is not evidence that a persistent DNS/tunnel error is resolved. Member/anonymous
+sign-out does not revoke other browsers' owner continuations; owner logout does.
