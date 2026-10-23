@@ -109,3 +109,17 @@ Mail setup offers Finish automatic setup, Open Mail and expandable DNS details.
 Journalled domain changes preserve native mailbox IDs, folders and readable
 address assignments. Internet delivery still requires SMTP reachability, TLS,
 signing and suitable reverse DNS; DNS publication alone does not prove delivery.
+
+
+## Incoming connection recovery (Mail 19)
+
+The public update channel and online installer resolve Mail 19. Advanced settings
+and connection details remain open during checks; late status responses cannot
+replace the custom settings form. Repair connection retries the network without
+rerunning DNS/account setup. Known router rules can be repaired automatically;
+missing outer rules require a verified downstream destination.
+
+If another PC already receives incoming mail through this public address, choose
+one shared receiver or deliberately migrate the route. Subdomains cannot split a
+single public SMTP port between independent PCs. The existing receiver stays
+protected. Mail shows that blocker and next check rather than claiming delivery.
