@@ -43,3 +43,8 @@ its actually served page passes the browser outage/timeout/no-replay checks.
 Initial fixture omitted its Windows owner marker and exited before serving;
 fixed harness to call normal ProtectDir. No product workaround. Test process
 stopped automatically. Native receipt records the exact executable digest.
+
+
+Published immutable77 fromf7f74562f048e05e4cb3ee6bc35e987e7223f1e0. All public
+asset sizes/SHA256 match. Promoting public update index; unauthenticated selection
+and both owner deployments follow. Do not move the source release tag.
