@@ -8,8 +8,20 @@ with separate storage locations, use the command below with its Private folder.
 This bootstraps installations made before the update window existed.
 
 After the first update, the Workspace owner can choose **Updates and backups**
-under Workspace administration. The update window opens on the Windows server PC.
-Remote visitors cannot receive its local maintenance capability or run updates.
+under Workspace administration from any device at the normal Workspace address.
+Check, install, reinstall, recover and restore run on the server with progress in
+your browser. An idle older controller is replaced automatically. An active
+operation is never interrupted to open another window.
+
+The private update controller stays on loopback; its capability is never sent to
+the remote browser. Every remote action requires owner access and a matching
+Workspace origin. A protected, HttpOnly owner continuation lasts at most two
+hours so an existing update page can reconnect after a manager restart; signing
+out revokes all update continuations. If it expires, sign in again to resume
+viewing progress. Updates may briefly disconnect the tunnel while services
+restart. Keep the page open; do not repeat an installation request during that
+period. Your PC must be running and reachable. Backup folder paths always refer
+to the server, including when administration is opened from a phone.
 
 To repair program files or install a required newer installer, choose **Check for
 updates**, then **Back up and reinstall Workspace**. The update window downloads

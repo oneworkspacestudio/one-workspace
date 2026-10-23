@@ -10,9 +10,12 @@ Workspace apps switcher. It is an internal app; there is no separate executable
 or account. Scheduling is **off by default** on new and upgraded installations.
 
 1. Choose a dedicated backup folder, preferably on a different physical drive,
-   such as `E:\Workspace backups`. **Browse on server PC** opens the Windows
-   folder picker on the computer running Workspace. Remote users can enter a
-   server path instead.
+   such as `E:\Workspace backups`. **Browse server folders** lists drives and
+   ordinary folders on the Workspace server directly in your browser, including
+   on a phone or remote PC. Choose a parent and enter a new folder name in the
+   destination field if needed. **Check folder** still validates the destination.
+   The browser picker never shows files or follows junctions. Large folder
+   listings are bounded; you can enter a full server path directly.
 2. Use **Check folder**. Private account data needs Windows ACLs, so the destination
    must be local NTFS storage. FAT, exFAT, mapped network shares, junctions, drive
    roots and folders overlapping the installation are refused. A same-volume
