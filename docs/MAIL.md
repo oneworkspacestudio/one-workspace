@@ -124,3 +124,21 @@ If another PC already receives incoming mail through this public address, choose
 one shared receiver or deliberately migrate the route. Subdomains cannot split a
 single public SMTP port between independent PCs. The existing receiver stays
 protected. Mail shows that blocker and next check rather than claiming delivery.
+
+
+## One main Mail service across PCs (Mail 21)
+
+Choose **Use an existing Mail service** in Mail settings on another PC. Setup
+checks an optional zone TXT service pointer, then the standard main Workspace
+hostname, and offers a reachable Mail service before creating new local mailboxes.
+For custom or offline main servers the owner enters its HTTPS address in the app.
+The app remembers the connection, checks availability when opening Mail, and
+shows an unavailable main server with automatic retry rather than hiding it.
+
+The main PC receives and stores email; other PCs open that same Mail service and
+use accounts from its MyAccounts installation. There is no fixed client-PC limit;
+capacity depends on the main server. Separate issuers/accounts are not merged.
+This PC's private Mail engine and incoming-router checks stop after connecting.
+Local messages/settings are kept, not moved; /mail/setup retains owner controls
+and can resume the separate server. Main receiver routes are never replaced.
+This is shared service access, not replicated mailbox stores or an SMTP gateway.

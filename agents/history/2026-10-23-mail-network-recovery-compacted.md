@@ -32,3 +32,21 @@ Preserve that SMTP route. Multiple PCs should access the main Mail service and
 its identities/mailboxes; independent stores require a gateway and routing.
 Central URL/connection mode is being clarified. Do not equate identities across
 separate MyAccounts issuers. Mail20 remote owner deployment remains pending.
+
+
+## Mail21 published
+Source c3dba4e6 implements a generic owner flow for multiple PCs sharing one main
+Mail server. See Mail README and docs/MAIL.md: fresh discovery, explicit choice,
+custom/offline address, no credential probes/issuer merging, saved private mode,
+stopped satellite engine/router checks, retained local state, guarded owner setup
+login, readiness checks/retry and explicit independent-server recovery. Source
+and Windows release21 are public with every asset size/SHA256 verified. JS syntax
+and Windows compilation passed; no automated tests or end-to-end delivery claim.
+Refreshed the public channel using the repository publisher script and pinned21.
+
+The real owner UI started Mail20 plus Slicer6 while21 was being built. It is now
+reconnecting during that normal update; do not replay the install POST. Current
+Mail21 deployment/pairing remains pending until the ongoing operation returns.
+Main Mail address returns502 and its local installation is also undergoing a
+separate Slicer update, holding the install lock. Do not kill those installers.
+The original receiver remains the approved main; do not replace its port25 rule.
