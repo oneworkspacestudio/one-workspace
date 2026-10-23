@@ -124,7 +124,9 @@ func releasesFor(ctx context.Context, h *http.Client, token, repo string) ([]Rel
 		if !exists {
 			return nil, fmt.Errorf("Published update list is missing %s; contact the Workspace publisher", repo)
 		}
-		return append([]Release(nil), rs...), nil
+		copy := append([]Release(nil), rs...)
+		sort.SliceStable(copy, func(i, j int) bool { return copy[i].Published.After(copy[j].Published) })
+		return copy, nil
 	}
 	req, e := request(ctx, "https://api.github.com/repos/"+repo+"/releases?per_page=100", token)
 	if e != nil {

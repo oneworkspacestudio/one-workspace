@@ -154,3 +154,21 @@ func TestAuthenticatedFallbackRateLimitGuidance(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestPublicChannelOrdersDelayedAppReleasesByPublication(t *testing.T) {
+	// GitHub's release list order is not a guarantee about publication time.
+	// App discovery must not stop at an older release before seeing a newer one.
+	index := &releaseIndex{Repositories: map[string][]Release{mailRepository: {
+		{Tag: "older", Published: time.Unix(1, 0)},
+		{Tag: "newer", Published: time.Unix(3, 0)},
+		{Tag: "middle", Published: time.Unix(2, 0)},
+	}}}
+	ctx := context.WithValue(context.Background(), indexContextKey{}, index)
+	rs, err := releasesFor(ctx, nil, "", mailRepository)
+	if err != nil || rs[0].Tag != "newer" || rs[1].Tag != "middle" || rs[2].Tag != "older" {
+		t.Fatal(rs, err)
+	}
+	if index.Repositories[mailRepository][0].Tag != "older" {
+		t.Fatal("shared channel mutated")
+	}
+}

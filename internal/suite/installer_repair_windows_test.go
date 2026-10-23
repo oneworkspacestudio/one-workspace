@@ -43,7 +43,7 @@ func TestNativeVerifiedInstallerRepair(t *testing.T) {
 		t.Skip("requires named disposable native fixture")
 	}
 	data := filepath.Clean(os.Getenv("WORKSPACE_NATIVE_REPAIR_DATA"))
-	want := filepath.Clean(`C:\Projects\.cache\release-check-403-20261023\fixture\Private`)
+	want := filepath.Clean(`C:\Projects\.cache\release-check-403-20261023\final-fixture\Private`)
 	if !strings.EqualFold(data, want) {
 		t.Fatal("not the named disposable fixture")
 	}

@@ -26,3 +26,11 @@ changes; only release-status needed textual conflict resolution (kept both).
 Next fix release75 uses verified public73 bundle plus verified Mail18 from the
 current lockfile, retains all26 apps and remote controls. Local user is still
 I:/Workspace71; the remote history's C:/tmp deployment is another machine.
+
+First75 candidate b72cb84 exact native repair passed in125.72s. Final review
+caught the channel fast path lacking the API path's publication-time sort;
+fixed sorting a copy and added a delayed-publication ordering regression test.
+Candidate b72 is not released. Final75 gets a new immutable source commit,
+source75-final/release75-final and a fresh final-fixture NTFS installation.
+Old task fixture was stopped by native test cleanup and retained until final
+bounded cleanup. Do not treat first candidate receipt as final acceptance.
