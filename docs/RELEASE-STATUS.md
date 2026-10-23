@@ -769,3 +769,10 @@ icon frames verified in both executables. [Evidence](evidence/startup-reliabilit
 [phone status](screenshots/startup69-healthy-phone.png).
 Owner67/its newest rollback retained;24 owner services remain healthy. All named
 synthetic installations stopped and removed. Reported remote cause remains unknown.
+
+
+## My 3D preview / Workspace72
+
+Adds a native responsive OpenCascade modelling app with private MyAccounts projects, optional same-user Drive copies, real boolean operations and slicer exports. The UI follows the supplied pastel phone-stand reference. The new app is not a TweakCAD fork: its linked source was unavailable. This release implements dimensioned profiles rather than a general sketch constraint solver; additional advanced CAD/import/manufacturing checks remain in the app capability matrix. No printer connection is simulated.
+
+All25 previous app contracts and payloads remain byte-for-byte from public71; only the manager, suite notice and new My3D-owned packages are changed. Tests are performed on synthetic NTFS fixtures, never owner data. See app/suite acceptance receipts for exact binaries and known limits.
