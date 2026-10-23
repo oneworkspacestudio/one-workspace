@@ -71,6 +71,11 @@ type UpdatePlan struct {
 	Choices           []UpdateChoice    `json:"choices"`
 }
 
+// Fresh bounds how long a reviewed release can be used without another check.
+func (p UpdatePlan) Fresh(now time.Time) bool {
+	return !p.CheckedAt.IsZero() && !p.CheckedAt.After(now.Add(time.Minute)) && now.Sub(p.CheckedAt) <= 30*time.Minute
+}
+
 func catalogIdentity(c catalog.Catalog) string {
 	b, _ := json.Marshal(c)
 	h := sha256.Sum256(b)

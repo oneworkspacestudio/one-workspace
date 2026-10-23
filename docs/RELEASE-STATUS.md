@@ -1,3 +1,14 @@
+# Workspace71: updates from an idle window
+
+Install and reinstall automatically refresh an expired release check. They
+continue when the reviewed files are unchanged, or display the new choices for
+review when files or the installation changed. Request errors remain visible
+through status refreshes, and progress comes into view when an operation starts.
+
+All25 app contracts and payloads are retained from Workspace70. Individual app
+updates remain separately selectable. Built locally without GitHub Actions.
+No physical reboot or clean-host acceptance is claimed; this is an evaluation.
+
 # Workspace70: automatic installer handoff and reinstall
 
 The Windows update window can download and verify the latest installer, run the

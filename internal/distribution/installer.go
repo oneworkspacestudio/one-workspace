@@ -46,7 +46,7 @@ func requiresInstaller(raw []byte) bool {
 
 func ValidateInstallerPlan(current catalog.Catalog, p UpdatePlan) error {
 	i := p.Installer
-	if p.BaseCatalogSHA256 != catalogIdentity(current) || time.Since(p.CheckedAt) > 30*time.Minute || p.CheckedAt.After(time.Now().Add(time.Minute)) {
+	if p.BaseCatalogSHA256 != catalogIdentity(current) || !p.Fresh(time.Now()) {
 		return errors.New("Workspace or the release check changed. Check for updates again")
 	}
 	if i == nil || i.Version != strings.TrimPrefix(i.Download.Tag, "v") || i.Source != "https://github.com/"+Repository+"/releases/tag/"+i.Download.Tag || i.Download.Repository != Repository || i.Download.Member != "" || !validNamedAsset(i.Download.Asset, Repository, i.Download.Tag, installerName, maxBundleSize) {

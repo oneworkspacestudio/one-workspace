@@ -37,6 +37,12 @@ downloaded installer.
 5. Choose **Back up and install selected updates**. Wait for **Update complete**
    after verification and startup checks, then choose **Open Workspace**.
 
+You can leave the update window open. If its release check is over 30 minutes old,
+install and reinstall refresh it automatically before changing anything. They
+continue only when the selected program files still match what you reviewed.
+If releases or the installation changed, review the refreshed choices and try
+again. Failed requests stay visible while the page checks status.
+
 Downloads and every extracted executable/helper/notice are SHA256 and size
 verified before downtime. Installed program hashes are checked too. A stale plan
 is refused if another operation changed the installed catalog. The updater only

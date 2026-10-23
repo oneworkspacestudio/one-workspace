@@ -197,9 +197,6 @@ func (s *Server) Handler() http.Handler {
 		plan := *s.Plan
 		s.mu.Unlock()
 		c, e := suite.LoadUpdateConfig(s.Data)
-		if e == nil {
-			e = distribution.ValidateInstallerPlan(c.Catalog, plan)
-		}
 		if e != nil {
 			http.Error(w, e.Error(), 409)
 			return
@@ -209,6 +206,10 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		s.work("reinstall", func(ctx context.Context) error {
+			plan, e := s.preparePlan(ctx, plan, nil, true)
+			if e != nil {
+				return e
+			}
 			result, e := suite.RunInstallerRepair(ctx, s.Data, plan, s.progress)
 			s.mu.Lock()
 			defer s.mu.Unlock()
@@ -237,12 +238,12 @@ func (s *Server) Handler() http.Handler {
 		}
 		plan := *s.Plan
 		s.mu.Unlock()
-		if time.Since(plan.CheckedAt) > 30*time.Minute {
-			http.Error(w, "Release check expired; check again", 409)
-			return
-		}
 		s.work("apply", func(ctx context.Context) error {
-			e := suite.ApplyUpdates(ctx, s.Data, plan, in, s.progress)
+			plan, e := s.preparePlan(ctx, plan, in.Selected, false)
+			if e != nil {
+				return e
+			}
+			e = suite.ApplyUpdates(ctx, s.Data, plan, in, s.progress)
 			if e == nil {
 				s.mu.Lock()
 				s.Plan = nil
