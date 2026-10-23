@@ -1,0 +1,175 @@
+{
+  "release": {
+    "tag": "v0.3.0-preview.70",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.70",
+    "published": true,
+    "verifiedAssets": 25,
+    "publicManagerDownloadVerified": true,
+    "installerSha256": "aee05c0acc89629f71ea8ebe588ef3083227172312bac79c702626fb2475bba3",
+    "downloadsCopyVerified": true
+  },
+  "sourceCommit": "2f2d8df91001c34eb4b2288cd1dec6799db3c1fd",
+  "checks": {
+    "sourceCommit": "2f2d8df91001c34eb4b2288cd1dec6799db3c1fd",
+    "allGoPackages": "passed",
+    "goVet": "passed",
+    "updaterJavaScriptSyntax": "passed",
+    "futureCatalogHandoff": "passed",
+    "tamperedInstallerRefused": "passed",
+    "stalePlanRefused": "passed",
+    "capabilityOriginAndBusyGates": "passed",
+    "nativeExactInstallerRepair": "passed",
+    "realOwnerLoginBeforeAfter": "passed",
+    "realRebootTested": false,
+    "cleanHostTested": false,
+    "githubActionsUsed": false
+  },
+  "nativeExactInstallerRepair": {
+    "appContractsPreserved": true,
+    "damagedTaskRepaired": true,
+    "documentPreserved": true,
+    "identityPreserved": true,
+    "result": {
+      "version": "0.3.0-preview.70",
+      "origin": "http://localhost:19110",
+      "checked": "2026-10-23T11:08:12.4288272Z",
+      "apps": {
+        "accounts": "running",
+        "calendar": "running",
+        "contacts": "running",
+        "drive": "running",
+        "tasks": "running"
+      }
+    },
+    "sourceVersion": "0.3.0-preview.68",
+    "version": "0.3.0-preview.70"
+  },
+  "nativeOwnerLogin": {
+    "syntheticFixture": true,
+    "before": {
+      "realOwnerLogin": "passed",
+      "version": "0.3.0-preview.68",
+      "health": {
+        "apps": {
+          "accounts": "running",
+          "calendar": "running",
+          "contacts": "running",
+          "drive": "running",
+          "tasks": "running"
+        },
+        "status": "ok"
+      }
+    },
+    "after": {
+      "health": {
+        "apps": {
+          "accounts": "running",
+          "calendar": "running",
+          "contacts": "running",
+          "drive": "running",
+          "tasks": "running"
+        },
+        "status": "ok"
+      },
+      "realOwnerLogin": "passed",
+      "pid": 16900,
+      "version": "0.3.0-preview.70"
+    },
+    "originalPasswordRetained": true
+  },
+  "localDelivery": {
+    "version": "0.3.0-preview.70",
+    "previousVersion": "0.3.0-preview.66",
+    "services": {
+      "accounts": "running",
+      "calendar": "running",
+      "chat": "running",
+      "clips": "running",
+      "cloudflare": "running",
+      "contacts": "running",
+      "create": "running",
+      "drive": "running",
+      "gitea": "running",
+      "hosting": "running",
+      "mail": "running",
+      "maps": "running",
+      "meet": "running",
+      "monitor": "running",
+      "music": "running",
+      "my-tube": "running",
+      "notes": "running",
+      "pdf": "running",
+      "photos": "running",
+      "search": "running",
+      "slicer": "running",
+      "social": "running",
+      "tasks": "running",
+      "vault": "running"
+    },
+    "allServicesRunning": true,
+    "ownerAndCredentialsPreserved": true,
+    "appContractsAndPrimaryPackagesPreserved": true,
+    "storageAndConnectionSettingsPreserved": true,
+    "appSelectionPreserved": true,
+    "autostartEnabled": true,
+    "autostartCommandVerified": true,
+    "verifiedRecoveryRetained": true,
+    "rebootTested": false
+  },
+  "publicHealth": {
+    "http": 200,
+    "health": {
+      "apps": {
+        "accounts": "running",
+        "calendar": "running",
+        "chat": "running",
+        "clips": "running",
+        "cloudflare": "running",
+        "contacts": "running",
+        "create": "running",
+        "drive": "running",
+        "gitea": "running",
+        "hosting": "running",
+        "mail": "running",
+        "maps": "running",
+        "meet": "running",
+        "monitor": "running",
+        "music": "running",
+        "my-tube": "running",
+        "notes": "running",
+        "pdf": "running",
+        "photos": "running",
+        "search": "running",
+        "slicer": "running",
+        "social": "running",
+        "tasks": "running",
+        "vault": "running"
+      },
+      "status": "ok"
+    }
+  },
+  "localUpdater": {
+    "version": "0.3.0-preview.70",
+    "installerVersion": "0.3.0-preview.70",
+    "reinstallReady": true,
+    "error": ""
+  },
+  "cleanup": {
+    "processReferences": 0,
+    "reparsePoints": 0,
+    "registrationsRemoved": 1,
+    "bytesRemoved": 2253009369
+  },
+  "ui": {
+    "reinstallActionEnabled": true,
+    "installerVersion": "0.3.0-preview.70",
+    "browserErrors": 0,
+    "screenshot": "docs/screenshots/installer-handoff-ready.jpg"
+  },
+  "limitations": {
+    "physicalRebootTested": false,
+    "cleanHostTested": false,
+    "fullApplicationFormatRegressionRepeated": false,
+    "githubActionsUsed": false
+  }
+}
