@@ -56,3 +56,10 @@ not completion. Rebuild the manager or affected app binaries, install with the
 normal backed-up update flow and verify the running deployment serves the new
 content-addressed icon bytes. Distinguish source artwork from deployed artwork
 in the completion report.
+
+## Shared app navigation
+
+Never inject a floating Workspace launcher into app content. It can cover phone
+bottom tabs and actions. Use existing app header Apps menus/triggers and the shared
+picker event; retain keyboard navigation. Scrolling, route changes, hidden headers
+and apps without an explicit trigger must never create an overlay button.
