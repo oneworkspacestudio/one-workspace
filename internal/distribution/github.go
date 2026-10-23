@@ -6,7 +6,6 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -104,23 +103,13 @@ func Latest(ctx context.Context, progress func(string), temporaryRoots ...string
 	progress("Checking GitHub for the latest Workspace apps")
 	token := githubToken(ctx)
 	httpClient := client()
-	metadataCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
-	defer cancel()
-	req, err := request(metadataCtx, "https://api.github.com/repos/"+Repository+"/releases?per_page=100", token)
+	ctx, err := withReleaseIndex(ctx, token)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := httpClient.Do(req)
+	releases, err := releasesFor(ctx, httpClient, token, Repository)
 	if err != nil {
-		return nil, errors.New("Could not check GitHub. Check your Internet connection and retry. To deliberately use this installer's bundled versions, run it with --offline.")
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("GitHub release check failed (HTTP %d). Private downloads require GitHub access: supply GH_TOKEN with read access. Retry installation after connecting. Use --offline only to deliberately install bundled versions", resp.StatusCode)
-	}
-	var releases []Release
-	if err = json.NewDecoder(io.LimitReader(resp.Body, 4<<20)).Decode(&releases); err != nil {
-		return nil, errors.New("GitHub returned unreadable release information; retry installation")
+		return nil, err
 	}
 	release, asset, err := choose(releases)
 	if err != nil {
@@ -151,8 +140,8 @@ func Latest(ctx context.Context, progress func(string), temporaryRoots ...string
 	}
 	downloadCtx, downloadCancel := context.WithTimeout(ctx, 10*time.Minute)
 	defer downloadCancel()
-	// The asset API works for both public and private releases.
-	req, err = request(downloadCtx, asset.APIURL, token)
+	// Public downloads avoid API quotas; authenticated private releases use the API.
+	req, err := request(downloadCtx, assetEndpoint(asset, token), token)
 	if err != nil {
 		file.Close()
 		return nil, err

@@ -65,6 +65,7 @@ type UpdateChoice struct {
 	RequiredCapabilities []string                   `json:"requiredCapabilities,omitempty"`
 }
 type UpdatePlan struct {
+	IndexPublishedAt  time.Time         `json:"indexPublishedAt,omitempty"`
 	Installer         *InstallerRelease `json:"installer,omitempty"`
 	CheckedAt         time.Time         `json:"checkedAt"`
 	BaseCatalogSHA256 string            `json:"baseCatalogSha256"`
@@ -117,6 +118,13 @@ var updateGroups = []updateGroup{
 const withheldMusicSHA = "5f0d121cd9733775b327ac3b39b46b32cf5d9cbdef1b014880a89d6421239837"
 
 func releasesFor(ctx context.Context, h *http.Client, token, repo string) ([]Release, error) {
+	if index, ok := ctx.Value(indexContextKey{}).(*releaseIndex); ok {
+		rs, exists := index.Repositories[repo]
+		if !exists {
+			return nil, fmt.Errorf("Published update list is missing %s; contact the Workspace publisher", repo)
+		}
+		return append([]Release(nil), rs...), nil
+	}
 	req, e := request(ctx, "https://api.github.com/repos/"+repo+"/releases?per_page=100", token)
 	if e != nil {
 		return nil, e
@@ -127,7 +135,7 @@ func releasesFor(ctx context.Context, h *http.Client, token, repo string) ([]Rel
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("release check for %s failed (HTTP %d)", repo, res.StatusCode)
+		return nil, releaseHTTPError(repo, res)
 	}
 	var rs []Release
 	e = json.NewDecoder(io.LimitReader(res.Body, 4<<20)).Decode(&rs)
@@ -146,7 +154,7 @@ func fetchUpdateBytes(ctx context.Context, h *http.Client, token, repo string, r
 	if !validNamedAsset(a, repo, r.Tag, a.Name, max) {
 		return nil, errors.New("invalid update release asset")
 	}
-	req, e := request(ctx, a.APIURL, token)
+	req, e := request(ctx, assetEndpoint(a, token), token)
 	if e != nil {
 		return nil, e
 	}
@@ -405,7 +413,11 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 	}
 	operationprogress.Report(ctx, "check", "Checking One Workspace releases", 0, int64(totalGroups), "repositories")
 	h, token := client(), githubToken(ctx)
-	plan := UpdatePlan{CheckedAt: time.Now().UTC(), BaseCatalogSHA256: catalogIdentity(current)}
+	ctx, indexErr := withReleaseIndex(ctx, token)
+	if indexErr != nil {
+		return UpdatePlan{}, indexErr
+	}
+	plan := UpdatePlan{IndexPublishedAt: indexPublishedAt(ctx), CheckedAt: time.Now().UTC(), BaseCatalogSHA256: catalogIdentity(current)}
 	rs, e := releasesFor(ctx, h, token, Repository)
 	if e != nil {
 		return plan, e
@@ -852,6 +864,11 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 func StartupDefaultPlan(ctx context.Context, current catalog.Catalog) (UpdatePlan, error) {
 	plan := UpdatePlan{CheckedAt: time.Now().UTC(), BaseCatalogSHA256: catalogIdentity(current)}
 	h, token := client(), githubToken(ctx)
+	ctx, indexErr := withReleaseIndex(ctx, token)
+	if indexErr != nil {
+		return plan, indexErr
+	}
+	plan.IndexPublishedAt = indexPublishedAt(ctx)
 	rs, err := releasesFor(ctx, h, token, Repository)
 	if err != nil {
 		return plan, err

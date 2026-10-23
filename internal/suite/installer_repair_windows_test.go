@@ -43,11 +43,11 @@ func TestNativeVerifiedInstallerRepair(t *testing.T) {
 		t.Skip("requires named disposable native fixture")
 	}
 	data := filepath.Clean(os.Getenv("WORKSPACE_NATIVE_REPAIR_DATA"))
-	want := filepath.Clean(`C:\Projects\.cache\installer-handoff-20261023\fixture\Private`)
+	want := filepath.Clean(`C:\Projects\.cache\release-check-403-20261023\fixture\Private`)
 	if !strings.EqualFold(data, want) {
 		t.Fatal("not the named disposable fixture")
 	}
-	if !strings.Contains(strings.ToLower(os.Getenv("APPDATA")), "installer-handoff-20261023") {
+	if !strings.Contains(strings.ToLower(os.Getenv("APPDATA")), "release-check-403-20261023") {
 		t.Fatal("fixture AppData not isolated")
 	}
 	c, s, e := Load(data)
@@ -97,7 +97,7 @@ func TestNativeVerifiedInstallerRepair(t *testing.T) {
 	identity := sha256.Sum256(b)
 	plan := distribution.UpdatePlan{CheckedAt: time.Now(), BaseCatalogSHA256: hex.EncodeToString(identity[:]), Installer: &distribution.InstallerRelease{Version: version, Source: "https://github.com/" + repo + "/releases/tag/" + tag, Download: distribution.UpdateDownload{Asset: asset, Repository: repo, Tag: tag}}}
 	original := http.DefaultTransport
-	http.DefaultTransport = installerFileTransport{original, asset.APIURL, installer}
+	http.DefaultTransport = installerFileTransport{original, asset.URL, installer}
 	defer func() { http.DefaultTransport = original }()
 	result, e := RunInstallerRepair(ctx, data, plan, func(s string) { t.Log(s) })
 	if e != nil {

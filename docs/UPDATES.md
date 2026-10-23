@@ -226,3 +226,13 @@ storage and recovery limits. Its snapshots appear in the same local recovery lis
 Workspace55 chooses the highest published Workspace version that supplies a bundle.
 Publication dates only break ties between equivalent version labels. An older
 release published later is not offered as a manager downgrade.
+
+
+## Public update list and GitHub limits
+
+Public installations read one publisher-maintained update list and download
+verified files from public release URLs. A GitHub account or token is not needed.
+The update window shows when the publisher refreshed the list. If it cannot be
+read, retry when your connection is available; no program files are changed.
+Authenticated/private repository checks may still show GitHub's API retry time.
+Publishers must follow [release promotion](../updates/README.md) after releases.

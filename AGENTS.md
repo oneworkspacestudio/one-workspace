@@ -7,6 +7,11 @@ may use another drive. Preserve component license/provenance and user files.
 Do not claim a production or clean-host/service/reboot test not performed.
 The bundle is an evaluation build while upstream acceptance gates remain open.
 
+After every public Workspace or managed app release, refresh and push the public
+update channel with scripts/publish-update-index.py and follow updates/README.md.
+Verify the promoted tag with an unauthenticated check before reporting delivery.
+Keep GitHub Actions disabled; publication, channel promotion and builds run locally.
+
 ## README and app branding
 
 Keep the main README friendly to people without technical knowledge. Explain

@@ -21,7 +21,35 @@ import (
 type updateTransport map[string][]byte
 
 func (tr updateTransport) RoundTrip(r *http.Request) (*http.Response, error) {
+	if r.URL.String() == publicIndexURL {
+		index := releaseIndex{Schema: 1, PublishedAt: time.Now().UTC(), Repositories: map[string][]Release{}}
+		for u, data := range tr {
+			if strings.HasPrefix(u, "https://api.github.com/repos/") && strings.HasSuffix(u, "/releases?per_page=100") {
+				var rs []Release
+				if json.Unmarshal(data, &rs) == nil {
+					index.Repositories[strings.TrimSuffix(strings.TrimPrefix(u, "https://api.github.com/repos/"), "/releases?per_page=100")] = rs
+				}
+			}
+		}
+		b, _ := json.Marshal(index)
+		return &http.Response{StatusCode: 200, Header: http.Header{}, Body: io.NopCloser(bytes.NewReader(b)), Request: r}, nil
+	}
 	body, ok := tr[r.URL.String()]
+	if !ok && r.URL.Host == "github.com" {
+		for _, data := range tr {
+			var rs []Release
+			if json.Unmarshal(data, &rs) != nil {
+				continue
+			}
+			for _, release := range rs {
+				for _, a := range release.Assets {
+					if a.URL == r.URL.String() {
+						body, ok = tr[a.APIURL]
+					}
+				}
+			}
+		}
+	}
 	status := 200
 	if !ok {
 		status = 404
@@ -139,7 +167,12 @@ func TestIndependentContractCannotReplaceOtherAppsOrEscapeArchive(t *testing.T) 
 	var releases []Release
 	json.Unmarshal(tr["https://api.github.com/repos/oneworkspacestudio/notes/releases?per_page=100"], &releases)
 	r := releases[0]
-	g := updateGroup{}; for _, candidate := range updateGroups { if candidate.id == "notes" { g=candidate } }
+	g := updateGroup{}
+	for _, candidate := range updateGroups {
+		if candidate.id == "notes" {
+			g = candidate
+		}
+	}
 	for _, mutate := range []func(*AppUpdateManifest){func(m *AppUpdateManifest) { m.Repository = "someone/notes" }, func(m *AppUpdateManifest) { m.Apps[0].ID = "accounts" }, func(m *AppUpdateManifest) {
 		p := m.Packages["notes"]
 		p.File = "MyAccounts.exe"
@@ -187,6 +220,7 @@ func TestStagedDownloadChecksumAndArchiveMemberChecks(t *testing.T) {
 		z.Close()
 		a := fixtureAsset("oneworkspacestudio/notes", "v0.1.0-preview.5", "portable.zip", "99", buf.Bytes())
 		tr[a.APIURL] = buf.Bytes()
+		tr[a.URL] = buf.Bytes()
 		d.Asset = a
 		d.Member = name
 		sources["notes"] = d

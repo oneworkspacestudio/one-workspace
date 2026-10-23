@@ -1,3 +1,30 @@
+# Preview 72: Public update checks without anonymous API limits
+
+The installer, update window and startup app reconciliation now read the
+publisher's public update channel in one HTTPS request. Public catalogs,
+compatibility manifests, app payloads and installers use public release URLs.
+Routine public checks and downloads no longer use GitHub's shared anonymous
+60-request API allowance. This fixes the HTTP 403 reported on preview 71 after
+that IP allowance was exhausted. Users do not need a GitHub token.
+
+Repository/tag allowlists, download sizes, SHA256 checks, reviewed plans,
+verified backups, exclusive operations and startup/rollback checks remain active.
+Missing or unreadable channel information stops the check with a visible error.
+The update window shows the channel's publication date. Publisher promotion is
+required after every managed app or Workspace release; see updates/README.md.
+Authenticated private/custom repositories retain API access with explicit
+rate-limit retry guidance. No request is automatically retried against an
+exhausted API allowance.
+
+All 25 app contracts and 134 payloads from preview 71 are retained, with only
+the manager and this suite release notice replaced. Existing independent app
+versions, selected apps, accounts, connection settings and user files are kept
+by the normal backed-up installer repair. This remains an evaluation build.
+No physical reboot or clean-host acceptance is claimed. Final native repair
+and delivery evidence is recorded separately after verification.
+
+---
+
 # Workspace71: updates from an idle window
 
 Install and reinstall automatically refresh an expired release check. They

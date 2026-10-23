@@ -65,7 +65,7 @@ func TestOrganizationMailRelease(t *testing.T) {
 				p.SHA256 = strings.TrimPrefix(exe.Digest, "sha256:")
 			}
 			cat := catalog.Catalog{Schema: 1, Version: "0.3.0", Packages: map[string]catalog.Package{"mail": p}, Apps: []catalog.App{{ID: "mail", Name: "Mail", Version: "old", Kind: "process", Package: "mail", Executable: "Mail.exe", Port: 8996, Route: "/mail"}}}
-			overrides, err := latestMail(context.Background(), client, "", t.TempDir(), &cat, func(string) {})
+			overrides, err := latestMail(context.Background(), client, "fixture-private-token", t.TempDir(), &cat, func(string) {})
 			want := mode == "new" || mode == "same"
 			if (err == nil) != want {
 				t.Fatalf("error=%v", err)

@@ -65,7 +65,7 @@ func DownloadInstaller(ctx context.Context, i InstallerRelease, dir string, repo
 		return "", errors.New("Installer release is not verified")
 	}
 	a := i.Download.Asset
-	req, e := request(ctx, a.APIURL, githubToken(ctx))
+	req, e := request(ctx, assetEndpoint(a, githubToken(ctx)), githubToken(ctx))
 	if e != nil {
 		return "", e
 	}

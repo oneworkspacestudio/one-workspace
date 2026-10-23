@@ -40,20 +40,8 @@ func latestMail(ctx context.Context, client *http.Client, token, dir string, cat
 	progress("Checking oneworkspacestudio/mail for the latest Mail release")
 	metaCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
-	req, err := request(metaCtx, "https://api.github.com/repos/"+mailRepository+"/releases?per_page=100", token)
+	releases, err := releasesFor(metaCtx, client, token, mailRepository)
 	if err != nil {
-		return nil, err
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Mail release check failed (HTTP %d)", resp.StatusCode)
-	}
-	var releases []Release
-	if err = json.NewDecoder(io.LimitReader(resp.Body, 4<<20)).Decode(&releases); err != nil {
 		return nil, err
 	}
 	release, exe, marker, err := chooseMail(releases)
@@ -140,7 +128,7 @@ func readMailManifest(data []byte, tag string) (mailManifest, error) {
 
 func downloadMailAsset(ctx context.Context, client *http.Client, token string, asset Asset, path string) error {
 	meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, asset.Size)
-	req, err := request(ctx, asset.APIURL, token)
+	req, err := request(ctx, assetEndpoint(asset, token), token)
 	if err != nil {
 		return err
 	}
