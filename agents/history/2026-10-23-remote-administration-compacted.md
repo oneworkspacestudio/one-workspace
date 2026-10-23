@@ -57,3 +57,41 @@ discovery retries (each HTTP request still bounded45s) so transient tunnel start
 does not abort immediately. Issuer/signature/owner validation is unchanged. This
 is not evidence that a persistent DNS/tunnel error is resolved. Member/anonymous
 sign-out does not revoke other browsers' owner continuations; owner logout does.
+
+## Published and installed (final outcome)
+
+The pending statements above describe intermediate work and are superseded here.
+Published [Workspace 73](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.73)
+from 64dcc617543155e35a68075487bd1186fd3a451a; public annotated tag remains
+immutable. All 24 uploaded asset sizes and SHA256 values matched local artifacts.
+Retained verified public 72's 26 app contracts/payloads, including My 3D; only manager
+and release-status payload changed. No GitHub Actions used. Source fixes include
+58a8715, 541a09f and 4520a9a. Main also contains the concurrent My 3D changes.
+
+Separate local deployment completed 72 before this deployment. Full snapshot-based
+73 update could not fit on C:. Installed the published 73 manager/status bytes with
+a protected changed-file backup at Private/backups/remote-admin-20261023, retaining
+the existing full 67 rollback. Preserved all existing app contracts, selections,
+paths, account/client credentials and settings. Local and public health returned
+ok with 25 services running, including tunnel. This was a compatible manager-only
+deployment, not a successful full-snapshot update. Do not rerun its one-use script.
+Artifacts and privacy-filtered receipts are in I:/Projects/tooling/remote-admin-20261023.
+
+Chrome owner session opened public /updates directly at installed 73 with check,
+install, reinstall and restore controls; no server desktop browser required.
+Public /backups opened with scheduling off; Browse server folders displayed
+server drives in the web dialog and Cancel dismissed it without changes.
+No second login or browser security interstitial was encountered in those pages.
+No install/restore/backup mutation was performed from the browser as a test.
+
+Compilation, JS syntax and package integrity checks passed; no automated tests,
+full remote restore/reboot or clean-host acceptance performed. C: free-space
+limits still apply to full snapshots. During a manager/tunnel restart the public
+page can briefly disconnect and reconnect; complete host/network outages still
+require restoring server connectivity. Native OS approvals remain local.
+
+Removed this task's named C: build scratch after verified final packaging. No
+task-owned preview suite was created; live suite and its update helper remain
+running intentionally. Preserve earlier encrypted archives and their private
+keys; this task did not delete/archive any existing user snapshots. E: reported
+filesystem corruption during cache creation; no drive repair/format attempted.
