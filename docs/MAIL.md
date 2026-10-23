@@ -163,3 +163,21 @@ permission explanation. This is a real network prerequisite on the main receivin
 PC. Joining PCs reuse the main service and do not need separate incoming rules.
 The public online installer/update channel resolves23; the immutable76 evaluation
 bundle contains Mail22, with the shared-role functionality and prior settings fix.
+
+
+Mail24 clarifies manually managed routers: unavailable automatic inspection does
+not mean UPnP is disabled or that working mail needs a new forwarding rule. The
+public SMTP response, the destination PC and actual delivery remain distinct
+checks. Keep a working route when messages arrive. The online installer resolves
+Mail24; immutable offline bundles keep their documented bundled Mail version.
+
+For several PCs, choose **Use an existing Mail service** in Mail settings and
+review the suggested main address. This PC stops its separate mail engine and
+incoming-router setup, keeps its existing data, and opens the main mailbox.
+People sign in using the main installation's MyAccounts. Other installations'
+accounts and messages are not merged. If the main PC is offline, the connection
+stays saved and the status page retries automatically. The main PC alone needs
+an Internet mail route. Router/ISP restrictions can require its owner's action.
+
+After an update, reopen Workspace or Mail from its normal address if an old
+sign-in request expired. Do not bookmark an OAuth authorization or callback URL.

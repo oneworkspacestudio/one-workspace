@@ -97,3 +97,40 @@ Actual main SMTP is still blocked at an upstream router refusing automatic setup
 Opened router sign-in and requested owner action; never overwrite its receiver
 route or bypass login. Main browser MyAccounts session also expired after restart;
 private sign-in requested. Do not claim external delivery or signed-in Mail UI.
+
+## Resumed October24 deployment and diagnostics
+Public Workspace76/Mail23 channel promoted on Workspace main (fe17dd7), rebased
+onto concurrent Music publication without dropping it. Unauthenticated raw index
+contains both tags; normal75 controller now offers76 and23. Main selected only
+Workspace/Mail and is running its normal verified-backup update. A separate
+secondary operation includes Mail23/Music/Slicer/Social; do not interrupt/replay it.
+Main Mail opened signed in and loaded its existing Inbox. Advanced details stayed
+expanded across a real incoming-status change. Secondary accounts-2 sign-in is
+reported failing; its browser still holds an old OAuth request and installation
+is restarting. Need fresh normal authorization after restart before diagnosing
+password vs callback; never reset credentials speculatively.
+Router owner has signed in. Read-only Archer inspection found no TCP25 static or
+UPnP rule; eero DHCP lease is .120 on upstream subnet, inner mapping routes25 to
+the main PC. Prepared TCP25 -> eero .120:25 in router UI; saving requires pending
+user confirmation for Internet exposure. No router setting changed. Main shared
+Mail pairing on secondary remains pending. C named76 link scratch removed after
+exact-path, reparse and build-process checks; free space was17.06GiB. Remote Run
+partial recovery command was cancelled without execution; on-screen-input restored
+to its original off state. No protected capabilities or authentication credentials
+were displayed, persisted in source or sent to another service.
+
+
+Main76/Mail23 normal update completed healthy in10m03s; preserved newest rollback
+and removed one older copy (~4412.9MB); an older verification-failed backup remains
+for manual review. Closed the temporary verified75 controller, launched installed
+76 normal maintenance helper. Secondary Mail23/Music/etc operation completed
+healthy in12m40s, then saved main shared connection before starting manager76-only
+update. Fresh accounts-2 and Mail-owner flows succeeded with no password change.
+Real Gmail -> main Inbox and main -> Gmail reply both delivered; exact labelled
+references checked in each UI. No message bodies are stored in source/history.
+User approved the missing outer TCP25 -> eero rule; saved it and matching eero
+address reservation, leaving other rules intact. Automatic upstream inspection
+still fails despite successful delivery. Published verified Mail24 sourcea42e9df0
+with accurate manual-router wording and matching Inbox guidance; no auth/delivery
+logic changed. Promote24 and deploy its wording fix next. Shared-mode persistence
+and client handoff after secondary76 update still need final observation.
