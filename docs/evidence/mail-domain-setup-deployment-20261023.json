@@ -1,0 +1,17 @@
+{
+  "all25OtherAppContractsPreserved": true,
+  "workspace": "0.3.0-preview.74",
+  "externalMailSent": false,
+  "automatedTestsRun": false,
+  "protectedMailDataAndChangedFileBackupVerified": true,
+  "mailHostingError": false,
+  "reportedOtherServerInstalled": false,
+  "secretsPathsSelectionsAndPublishedMailDomainPreserved": true,
+  "publicHealthOK": true,
+  "normalFullUpdaterBlockedByFreeSpace": true,
+  "deploymentMethod": "compatible changed-file deployment with full Mail data and settings backup",
+  "existingFullRollbackRetained": true,
+  "servicesRunning": 25,
+  "mailConfigured": true,
+  "mail": "0.1.0-preview.18"
+}
