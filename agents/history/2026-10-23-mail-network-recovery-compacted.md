@@ -18,3 +18,17 @@ cannot serve two independent internal hosts just by adding a new email subdomain
 This PC C:/tmp installation is stopped; do not start it as an unrelated fixture.
 Remote owner updater75 is available and can install Mail19 using normal snapshots.
 Deployment and UI observation pending. Artifacts I:/Projects/tooling/mail-network-20261023.
+
+## Mail20 correction and shared-receiver decision
+Mail19 managed-update check was correctly refused because it lacked
+workspace-update.json. No installation was attempted. Mail20 adds schema1 /
+integration2 metadata for all three owned packages, published and size/SHA256
+verified. Immutable19 remains intact. Updated the component lock and refreshed
+the public channel using scripts/publish-update-index.py. Windows compilation
+and JavaScript syntax checks passed; no automated tests run.
+
+The owner confirmed the other PC should remain the main incoming receiver.
+Preserve that SMTP route. Multiple PCs should access the main Mail service and
+its identities/mailboxes; independent stores require a gateway and routing.
+Central URL/connection mode is being clarified. Do not equate identities across
+separate MyAccounts issuers. Mail20 remote owner deployment remains pending.

@@ -111,9 +111,10 @@ address assignments. Internet delivery still requires SMTP reachability, TLS,
 signing and suitable reverse DNS; DNS publication alone does not prove delivery.
 
 
-## Incoming connection recovery (Mail 19)
 
-The public update channel and online installer resolve Mail 19. Advanced settings
+## Incoming connection recovery (Mail 20)
+
+The public update channel and online installer resolve Mail 20. Advanced settings
 and connection details remain open during checks; late status responses cannot
 replace the custom settings form. Repair connection retries the network without
 rerunning DNS/account setup. Known router rules can be repaired automatically;
