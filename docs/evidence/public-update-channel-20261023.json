@@ -1,0 +1,178 @@
+{
+  "sourceCommit": "9351f010753458cf54243eafeb60df42151a3bd8",
+  "release": {
+    "tag": "v0.3.0-preview.75",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.75",
+    "published": true,
+    "verifiedAssets": 26,
+    "publicChannelPromoted": true,
+    "publicManagerDownloadVerified": true,
+    "installerSha256": "89ae9047a5dcf9a5bf06386d739754607f012d89926ba52c57c3b1df3daa9cbb",
+    "downloadsCopyVerified": true,
+    "verificationUsedAnonymousAPI": false
+  },
+  "originalQuotaDiagnosis": {
+    "installedVersion": "0.3.0-preview.71",
+    "releaseCheckHTTPStatus": 403,
+    "anonymousRequestLimit": 60,
+    "remaining": 0,
+    "used": 60,
+    "cause": "shared public-IP GitHub REST core hourly allowance exhausted",
+    "credentialsEmbedded": false
+  },
+  "checks": {
+    "goTests": "all packages passed after current remote merge",
+    "goVet": "all packages passed after current remote merge",
+    "updaterJavaScriptSyntax": "passed",
+    "simulatedAPI403": "4 complete public checks, app staging and installer downloads; zero API calls",
+    "onlineSetupBundleVerification": "passed with API forbidden",
+    "invalidIndexAndDigestChecks": "passed",
+    "authenticatedRateGuidance": "passed",
+    "physicalRebootTested": false
+  },
+  "nativeExactInstallerRepair": {
+    "appContractsPreserved": true,
+    "damagedTaskRepaired": true,
+    "documentPreserved": true,
+    "identityPreserved": true,
+    "result": {
+      "version": "0.3.0-preview.75",
+      "origin": "http://localhost:19180",
+      "checked": "2026-10-23T17:11:08.1220111Z",
+      "apps": {
+        "accounts": "running",
+        "drive": "running",
+        "photos": "running",
+        "tasks": "running"
+      }
+    },
+    "sourceVersion": "0.3.0-preview.71",
+    "version": "0.3.0-preview.75"
+  },
+  "repeatedPublicChecks": {
+    "url": "https://raw.githubusercontent.com/oneworkspacestudio/one-workspace/main/updates/releases-v1.json",
+    "repositories": 24,
+    "publishedAt": "2026-10-23T17:41:48.338262Z",
+    "tag": "v0.3.0-preview.75",
+    "repeatedNativeChecks": 3,
+    "githubTokenUsed": false,
+    "allRepositoryChecksComplete": true
+  },
+  "ownerReinstall": {
+    "previousVersion": "0.3.0-preview.71",
+    "version": "0.3.0-preview.75",
+    "publicInstallerDownloadedAndVerified": true,
+    "maintenanceAPIReinstallCompleted": true,
+    "publicChannelUsed": true,
+    "githubTokenUsed": false,
+    "ownerAndCredentialsPreserved": true,
+    "appContractsSelectionAndPackagesPreserved": true,
+    "storageAndConnectionSettingsPreserved": true,
+    "localAndPublicHealth": "ok",
+    "services": {
+      "accounts": "running",
+      "calendar": "running",
+      "chat": "running",
+      "clips": "running",
+      "cloudflare": "running",
+      "contacts": "running",
+      "create": "running",
+      "drive": "running",
+      "gitea": "running",
+      "hosting": "running",
+      "mail": "running",
+      "maps": "running",
+      "meet": "running",
+      "monitor": "running",
+      "music": "running",
+      "my-tube": "running",
+      "notes": "running",
+      "pdf": "running",
+      "photos": "running",
+      "search": "running",
+      "slicer": "running",
+      "social": "running",
+      "tasks": "running",
+      "vault": "running"
+    },
+    "verifiedRecoveryRetained": true,
+    "backupId": "update-20261023T174840-176bc286545e",
+    "backupPurpose": "repair",
+    "backupRecoveryOnly": true,
+    "retainedWorkingRollback": "update-20261023T132539-9e3bcf930dcf",
+    "retainedWorkingRollbackManifestVerified": true,
+    "autostartEnabled": true,
+    "autostartCommandVerified": true,
+    "physicalRebootTested": false
+  },
+  "preservedDisabledServices": {
+    "mediaProcessesRunning": 0,
+    "umbrelSaved": true,
+    "mediaServices": [
+      {
+        "Name": "JellyfinServer",
+        "State": "Stopped",
+        "StartMode": "Disabled"
+      },
+      {
+        "Name": "Prowlarr",
+        "State": "Stopped",
+        "StartMode": "Disabled"
+      },
+      {
+        "Name": "Radarr",
+        "State": "Stopped",
+        "StartMode": "Disabled"
+      }
+    ],
+    "startupTasks": [
+      {
+        "TaskName": "Cloudflare Tunnel - Umbrel",
+        "State": 1
+      },
+      {
+        "TaskName": "NativeMediaStack-Jellyfin",
+        "State": 1
+      },
+      {
+        "TaskName": "NativeMediaStack-Prowlarr",
+        "State": 1
+      },
+      {
+        "TaskName": "NativeMediaStack-qBittorrent",
+        "State": 1
+      },
+      {
+        "TaskName": "NativeMediaStack-Radarr",
+        "State": 1
+      },
+      {
+        "TaskName": "NativeMediaStack-Sonarr",
+        "State": 1
+      },
+      {
+        "TaskName": "Umbrelos Watchdog",
+        "State": 1
+      }
+    ],
+    "umbrelAutostartOff": true
+  },
+  "fixtureCleanup": {
+    "processReferences": 0,
+    "reparsePoints": 0,
+    "registrationsRemoved": 0,
+    "cacheRemoved": "C:\\Projects\\.cache\\release-check-403-20261023",
+    "bytesRemoved": 4146518976
+  },
+  "normalInstalledController": {
+    "version": "0.3.0-preview.75",
+    "installerVersion": "0.3.0-preview.75",
+    "controllerSha256Verified": true,
+    "publicChannelPublishedAt": "2026-10-23T17:41:48.338262Z",
+    "reinstallReady": true,
+    "error": "",
+    "busy": false,
+    "pending": false
+  },
+  "fullPCRebootTested": false
+}
