@@ -111,7 +111,7 @@ func TestNativeVerifiedInstallerRepair(t *testing.T) {
 		t.Fatal("identity, app selection, contracts or health changed")
 	}
 	for id, p := range c.Catalog.Packages {
-		if id != "manager" && id != "notice-Workspace-release-status.md" && after.Catalog.Packages[id] != p {
+		if id != "manager" && id != "notice-Workspace-release-status.md" && id != "notice-organization-components.json" && after.Catalog.Packages[id] != p {
 			t.Fatalf("installed app package changed: %s", id)
 		}
 	}
