@@ -271,5 +271,38 @@
     "physicalPrinter": false,
     "cleanHostOrReboot": false
   },
-  "deliveryPending": "Owner normal backed-up installation is currently writing/verifying its backup; do not claim installed until owner-installation.json and health checks pass."
+  "deployment": {
+    "schema": 1,
+    "workspaceVersion": "0.3.0-preview.72",
+    "my3dVersion": "0.1.0-preview.1",
+    "allLocalServicesRunning": true,
+    "allPublicServicesRunning": true,
+    "services": 25,
+    "my3dAndBothManagerCopiesMatchRelease": true,
+    "nativeFrontendWorkerAndLogoMatch": [
+      "logo.svg",
+      "index-imWCQ5A6.js",
+      "kernel.worker-cSB6DUBJ.js"
+    ],
+    "deployedContentAddressedSuiteIconMatchesSource": true,
+    "verifiedBackupManifestRetained": true,
+    "ownerIdentityPathsClientsAndAllPreviousAppsPreserved": true,
+    "ordinaryFilesCoveredByNormalVerifiedBackup": true,
+    "ownerUsedForFunctionalIdentityOrDriveFixture": false,
+    "my3dURL": "https://workspace.m8e.co.uk/my3d/"
+  },
+  "protectedOwnerUpdate": {
+    "allPreviousAppContractsAndPackagesRetained": true,
+    "appCount": 26,
+    "existingOIDCClientsRetained": true,
+    "my3dExeMatchesCatalog": true,
+    "my3dSHA256": "d92865d05cbc45b2ddaf6ff61884176223081a942d648d314ee7be06920156e2",
+    "my3dVersion": "0.1.0-preview.1",
+    "normalBackedUpUpdate": true,
+    "ownerPathsPortsAndPreferencesRetained": true,
+    "previousVersion": "0.3.0-preview.67",
+    "recoveryCredentialsRetained": true,
+    "schema": 1,
+    "version": "0.3.0-preview.72"
+  }
 }
