@@ -26,3 +26,23 @@ func TestMaintenanceCapabilityOriginHostAndBusyGates(t *testing.T) {
 		}
 	}
 }
+
+func TestReinstallRequiresCapabilityOriginAndFreshPlan(t *testing.T) {
+	s := &Server{Token: "fixture-token", Origin: "http://localhost:38100", Context: context.Background()}
+	for _, tc := range []struct {
+		token, origin string
+		busy          bool
+		want          int
+	}{{"", "http://localhost:38100", false, 403}, {"fixture-token", "https://attacker.example", false, 403}, {"fixture-token", "http://localhost:38100", true, 409}, {"fixture-token", "http://localhost:38100", false, 409}} {
+		s.Busy = tc.busy
+		r := httptest.NewRequest("POST", "/api/reinstall", strings.NewReader("{}"))
+		r.Host = "localhost:38100"
+		r.Header.Set("X-Workspace-Update", tc.token)
+		r.Header.Set("Origin", tc.origin)
+		w := httptest.NewRecorder()
+		s.Handler().ServeHTTP(w, r)
+		if w.Code != tc.want {
+			t.Fatal(tc, w.Code)
+		}
+	}
+}

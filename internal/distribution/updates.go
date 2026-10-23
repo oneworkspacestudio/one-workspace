@@ -65,9 +65,10 @@ type UpdateChoice struct {
 	RequiredCapabilities []string                   `json:"requiredCapabilities,omitempty"`
 }
 type UpdatePlan struct {
-	CheckedAt         time.Time      `json:"checkedAt"`
-	BaseCatalogSHA256 string         `json:"baseCatalogSha256"`
-	Choices           []UpdateChoice `json:"choices"`
+	Installer         *InstallerRelease `json:"installer,omitempty"`
+	CheckedAt         time.Time         `json:"checkedAt"`
+	BaseCatalogSHA256 string            `json:"baseCatalogSha256"`
+	Choices           []UpdateChoice    `json:"choices"`
 }
 
 func catalogIdentity(c catalog.Catalog) string {
@@ -418,8 +419,21 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 	}
 	latest, e := catalog.Read(raw)
 	if e != nil {
+		if requiresInstaller(raw) {
+			plan.Installer = installerRelease(suiteRelease)
+			if plan.Installer != nil {
+				var header struct {
+					Version string `json:"version"`
+				}
+				if json.Unmarshal(raw, &header) == nil && header.Version == plan.Installer.Version {
+					plan.Installer.Required = true
+					return plan, nil
+				}
+			}
+		}
 		return plan, e
 	}
+	plan.Installer = installerRelease(suiteRelease)
 	if latest.Version != strings.TrimPrefix(suiteRelease.Tag, "v") || !validAsset(bundle, Repository, suiteRelease.Tag) {
 		return plan, errors.New("invalid Workspace release version or bundle")
 	}

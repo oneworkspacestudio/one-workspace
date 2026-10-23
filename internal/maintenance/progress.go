@@ -41,6 +41,12 @@ func (s *Server) beginLocked(kind string) {
 	if kind == "check" {
 		steps = []operationStep{{ID: "check", Label: "Check published app releases"}}
 	}
+	if kind == "reinstall" {
+		steps[0].Label = "Review this installation"
+		steps[1].Label = "Download the latest installer"
+		steps[2].Label = "Verify and start the installer"
+		steps[6].Label = "Reinstall Workspace"
+	}
 	if kind == "recover" || kind == "rollback" {
 		steps = []operationStep{{ID: "recovery", Label: "Preserve current data and restore verified backup"}, {ID: "restart", Label: "Restart and check apps"}}
 	}

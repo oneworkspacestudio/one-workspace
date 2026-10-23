@@ -11,6 +11,21 @@ After the first update, the Workspace owner can choose **Updates and backups**
 under Workspace administration. The update window opens on the Windows server PC.
 Remote visitors cannot receive its local maintenance capability or run updates.
 
+To repair program files or install a required newer installer, choose **Check for
+updates**, then **Back up and reinstall Workspace**. The update window downloads
+and verifies the installer from that exact release, runs it automatically, saves
+a recovery copy and restarts the suite. Existing accounts, selected apps, settings
+and files stay in place, including independently updated apps. No new password is
+required. Reinstall results list the restarted services; use **Open App status and
+retry** if any service needs attention. Keep the window open until checks finish.
+
+This also handles future releases that need an installer format the old update
+window cannot read. The old window hands execution to the verified new installer
+instead of trying to install an unfamiliar application catalog. If prompted after
+completion, close the old updater and reopen **Updates and backups** in Workspace.
+Older update windows without this action must be bootstrapped once using the latest
+downloaded installer.
+
 1. Schedule a maintenance window. Close editors and pause external writers such
    as mail delivery, sync jobs and independently configured app services until
    startup checks finish. Recovery retains newer state but does not merge concurrent

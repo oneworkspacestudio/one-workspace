@@ -28,6 +28,7 @@ func run() error {
 	headless := flag.Bool("headless", false, "Read setup JSON from standard input")
 	resume := flag.String("resume", "", "Show startup progress for an existing protected installation")
 	update := flag.String("update", "", "Open updates for an existing protected private data folder")
+	repair := flag.String("repair", "", "Back up, reinstall and restart a recognised Workspace private data folder")
 	apply := flag.Bool("apply", false, "Apply selected updates headlessly; requires --update")
 	apps := flag.String("apps", "", "Comma-separated update groups; empty selects all available updates")
 	bundlePath := flag.String("bundle", "", "Explicit verified offline update bundle ZIP")
@@ -37,6 +38,12 @@ func run() error {
 	flag.Parse()
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
+	if *repair != "" {
+		if *update != "" || *apply || *recoverUpdate || *rollback != "" || *bundlePath != "" || *checkUpdates || *headless || *resume != "" || *apps != "" || *backupRoot != "" {
+			return fmt.Errorf("--repair cannot be combined with other maintenance actions")
+		}
+		return repairInstalled(ctx, *repair, *offline)
+	}
 	if *update != "" {
 		report := func(s string) { fmt.Println(s) }
 		if *recoverUpdate {

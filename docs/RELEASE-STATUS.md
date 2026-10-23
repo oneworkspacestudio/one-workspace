@@ -1,3 +1,15 @@
+# Workspace70: automatic installer handoff and reinstall
+
+The Windows update window can download and verify the latest installer, run the
+protected reinstall automatically, and check every restarted service. It also
+offers this path when a future release needs a newer installer format. Accounts,
+app selection, independently installed app versions, settings and files are kept.
+Failed or missing app health is shown with a link to App status and retry.
+
+All25 app contracts and payloads are retained from Workspace69. Builds and native
+verification run locally. No GitHub Actions, physical reboot, clean-host or Windows
+service acceptance is claimed. This remains an evaluation release.
+
 # Workspace67: visible model previews
 
 Includes My Slicer4. Bambu 3MF parts and saved positions now appear on the plate

@@ -1,5 +1,13 @@
 # Reinstall One Workspace
 
+From Workspace administration, open **Updates and backups**, choose **Check for
+updates**, then **Back up and reinstall Workspace**. The latest verified installer
+downloads and runs automatically. It saves a recovery copy and restarts your apps;
+the results show any apps needing attention and link to their retry page. This
+action repairs recognised installations and never resets account setup.
+
+You can also use a downloaded installer:
+
 Open the latest Workspace installer. Choose **Already have One Workspace? Update
 or reinstall**, enter your existing Workspace folder and choose **Reinstall in
 this folder**. You can also choose that folder during normal setup.

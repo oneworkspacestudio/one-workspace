@@ -57,8 +57,10 @@ type AppSelection struct {
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
+const InstallerIntegration = 3
+
 func (c Catalog) Validate() error {
-	if c.InstallerIntegration < 0 || c.InstallerIntegration > 3 {
+	if c.InstallerIntegration < 0 || c.InstallerIntegration > InstallerIntegration {
 		return errors.New("this application bundle needs a newer Workspace installer")
 	}
 	if c.Schema != 1 || c.Version == "" {

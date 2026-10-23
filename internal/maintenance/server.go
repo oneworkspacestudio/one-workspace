@@ -34,6 +34,8 @@ type Server struct {
 	Plan                *distribution.UpdatePlan
 	Context             context.Context
 	Close               context.CancelFunc
+	Initial             suite.Config
+	Repair              *suite.InstallerRepairResult
 }
 
 func Serve(ctx context.Context, data string, open bool) error {
@@ -63,7 +65,7 @@ func Serve(ctx context.Context, data string, open bool) error {
 	defer listener.Close()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	s := &Server{Data: c.Data, Token: platform.Token(), Origin: fmt.Sprintf("http://localhost:%d", listener.Addr().(*net.TCPAddr).Port), Context: ctx, Close: cancel, Phase: "Check for updates when you are ready."}
+	s := &Server{Data: c.Data, Initial: c, Token: platform.Token(), Origin: fmt.Sprintf("http://localhost:%d", listener.Addr().(*net.TCPAddr).Port), Context: ctx, Close: cancel, Phase: "Check for updates when you are ready."}
 	exe, _ := os.Executable()
 	link := s.Origin + "/#" + s.Token
 	marker := filepath.Join(root, "window.json")
@@ -140,6 +142,13 @@ func (s *Server) Handler() http.Handler {
 		s.mu.Lock()
 		defer s.mu.Unlock()
 		c, e := suite.LoadUpdateConfig(s.Data)
+		newController := false
+		if e != nil && s.Repair != nil && s.Initial.Data == s.Data {
+			c = s.Initial
+			c.Version = s.Repair.Version
+			e = nil
+			newController = true
+		}
 		if e != nil {
 			http.Error(w, e.Error(), 500)
 			return
@@ -150,10 +159,13 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		cleanup, _ := suite.LoadUpdateCleanup(c)
-		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "cleanup": cleanup, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked()})
+		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "cleanup": cleanup, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked(), "repair": s.Repair, "newController": newController})
 	})
 	mux.HandleFunc("POST /api/check", func(w http.ResponseWriter, r *http.Request) {
 		s.work("check", func(ctx context.Context) error {
+			s.mu.Lock()
+			s.Plan = nil
+			s.mu.Unlock()
 			c, e := suite.LoadUpdateConfig(s.Data)
 			if e != nil {
 				return e
@@ -167,8 +179,47 @@ func (s *Server) Handler() http.Handler {
 			s.mu.Lock()
 			s.Plan = &p
 			s.Phase = "Release check complete. Choose the updates to install."
+			if p.Installer != nil && p.Installer.Required {
+				s.Phase = "A newer installer is needed. Choose Back up and reinstall Workspace below."
+			}
 			s.mu.Unlock()
 			return nil
+		})
+		w.WriteHeader(202)
+	})
+	mux.HandleFunc("POST /api/reinstall", func(w http.ResponseWriter, r *http.Request) {
+		s.mu.Lock()
+		if s.Plan == nil || s.Plan.Installer == nil {
+			s.mu.Unlock()
+			http.Error(w, "Check for updates to find the verified installer first", 409)
+			return
+		}
+		plan := *s.Plan
+		s.mu.Unlock()
+		c, e := suite.LoadUpdateConfig(s.Data)
+		if e == nil {
+			e = distribution.ValidateInstallerPlan(c.Catalog, plan)
+		}
+		if e != nil {
+			http.Error(w, e.Error(), 409)
+			return
+		}
+		if suite.UpdatePending(c) {
+			http.Error(w, "Recover the interrupted update before reinstalling", 409)
+			return
+		}
+		s.work("reinstall", func(ctx context.Context) error {
+			result, e := suite.RunInstallerRepair(ctx, s.Data, plan, s.progress)
+			s.mu.Lock()
+			defer s.mu.Unlock()
+			s.Repair = result
+			if result != nil {
+				s.Plan = nil
+			}
+			if e == nil {
+				s.Phase = "Workspace reinstalled and restarted. All apps are running."
+			}
+			return e
 		})
 		w.WriteHeader(202)
 	})
