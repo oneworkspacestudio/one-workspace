@@ -1,5 +1,5 @@
-// Package maintenance hosts the Windows-local update window. Its capability
-// token never passes through the remotely accessible Workspace portal.
+// Package maintenance hosts the loopback update controller. The owner portal
+// brokers remote requests without revealing its local capability to the browser.
 package maintenance
 
 import (
@@ -69,7 +69,7 @@ func Serve(ctx context.Context, data string, open bool) error {
 	exe, _ := os.Executable()
 	link := s.Origin + "/#" + s.Token
 	marker := filepath.Join(root, "window.json")
-	if e = platform.SaveJSON(marker, map[string]any{"pid": os.Getpid(), "executable": exe, "url": link}); e != nil {
+	if e = platform.SaveJSON(marker, map[string]any{"pid": os.Getpid(), "executable": exe, "url": link, "remoteProtocol": 1}); e != nil {
 		return e
 	}
 	defer os.Remove(marker)

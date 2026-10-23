@@ -795,6 +795,14 @@ func RollbackUpdate(ctx context.Context, data, id string, report func(string)) e
 }
 
 func LaunchUpdates(c Config) error {
+	return launchUpdates(c, true)
+}
+
+func LaunchUpdatesBackground(c Config) error {
+	return launchUpdates(c, false)
+}
+
+func launchUpdates(c Config, open bool) error {
 	root := filepath.Join(c.Data, "maintenance")
 	if e := os.MkdirAll(root, 0700); e != nil {
 		return e
@@ -802,7 +810,7 @@ func LaunchUpdates(c Config) error {
 	if e := platform.ProtectMaintenanceDir(root, c.Data); e != nil {
 		return e
 	}
-	if OpenExistingUpdates(c) {
+	if open && OpenExistingUpdates(c) {
 		return nil
 	}
 	helper := filepath.Join(root, "WorkspaceUpdate.exe")
@@ -816,7 +824,11 @@ func LaunchUpdates(c Config) error {
 	if e = writeReplace(current, helper); e != nil {
 		return e
 	}
-	cmd := exec.Command(helper, "--data", c.Data, "updates")
+	action := "updates"
+	if !open {
+		action = "updates-background"
+	}
+	cmd := exec.Command(helper, "--data", c.Data, action)
 	cmd.Dir = root
 	cmd.Stdout = &platform.Log{Path: filepath.Join(root, "window.log")}
 	cmd.Stderr = cmd.Stdout
