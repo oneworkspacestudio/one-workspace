@@ -48,9 +48,25 @@ type Portal struct {
 
 func NewPortal(ctx context.Context, rt *Runtime) (*Portal, error) {
 	ctx = oidc.ClientContext(ctx, &http.Client{Timeout: 45 * time.Second})
-	provider, e := oidc.NewProvider(ctx, rt.Config.Issuer)
-	if e != nil {
-		return nil, fmt.Errorf("Accounts discovery failed: %w", e)
+	// A healthy loopback account service does not guarantee that its public
+	// discovery route has propagated through a just-restarted tunnel yet.
+	// Retry discovery only; issuer, signatures and owner checks stay unchanged.
+	var provider *oidc.Provider
+	var e error
+	discoveryDeadline := time.Now().Add(2 * time.Minute)
+	for {
+		provider, e = oidc.NewProvider(ctx, rt.Config.Issuer)
+		if e == nil {
+			break
+		}
+		if ctx.Err() != nil || time.Now().After(discoveryDeadline) {
+			return nil, fmt.Errorf("Accounts discovery failed after waiting for the public sign-in connection: %w", e)
+		}
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(2 * time.Second):
+		}
 	}
 	var metadata struct {
 		Logout string `json:"end_session_endpoint"`
