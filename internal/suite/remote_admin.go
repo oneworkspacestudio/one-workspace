@@ -89,13 +89,15 @@ func (p *Portal) remoteUpdateOwner(w http.ResponseWriter, r *http.Request) bool 
 }
 
 func (p *Portal) revokeRemoteAdmin(w http.ResponseWriter, r *http.Request) bool {
-	// Logout revokes all update continuations for this installation. A cookie
-	// scoped to /updates is deliberately not sent to /auth/logout.
+	// Owner logout revokes its update continuations. A member or unauthenticated
+	// logout must not revoke a different browser's owner administration access.
 	p.adminMu.Lock()
 	defer p.adminMu.Unlock()
-	if e := os.Remove(filepath.Join(p.rt.Config.Data, "maintenance", "remote-owner.dpapi")); e != nil && !os.IsNotExist(e) {
-		http.Error(w, "Could not revoke update access. Retry sign-out.", 500)
-		return false
+	if user, ok := p.user(r); ok && user.Subject == p.rt.Config.Owner {
+		if e := os.Remove(filepath.Join(p.rt.Config.Data, "maintenance", "remote-owner.dpapi")); e != nil && !os.IsNotExist(e) {
+			http.Error(w, "Could not revoke update access. Retry sign-out.", 500)
+			return false
+		}
 	}
 	http.SetCookie(w, &http.Cookie{Name: adminCookie, Value: "", Path: "/updates", MaxAge: -1, HttpOnly: true, Secure: p.secure, SameSite: http.SameSiteStrictMode})
 	return true
