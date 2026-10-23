@@ -17,9 +17,6 @@
   style.rel = 'stylesheet'; style.href = '/_workspace/navigation.css'; shadow.append(style);
   const make = (tag, text, className) => {const el = document.createElement(tag); if(text) el.textContent = text; if(className) el.className = className; return el};
   const icon = (url, size=24) => {const img = make('img'); img.src=url; img.alt=''; img.width=size; img.height=size; return img};
-  const toggle = make('button', '', 'launcher'); toggle.type='button';
-  toggle.append(icon('/branding/icons/one_workspace.svg'), make('span','Workspace'));
-  toggle.setAttribute('aria-expanded','false'); toggle.setAttribute('aria-label','Open Workspace apps'); toggle.setAttribute('aria-haspopup','dialog');
   const panel = make('dialog'); panel.setAttribute('aria-label','Workspace apps');
   const heading = make('header'), home = make('a','One Workspace'); home.href='/'; heading.append(home);
   const close = make('button','×','close'); close.type='button'; close.setAttribute('aria-label','Close Workspace apps'); heading.append(close); panel.append(heading);
@@ -44,19 +41,19 @@
   const triggerSelector='[data-workspace-apps-trigger]';
   const triggers=()=>Array.from(document.querySelectorAll(triggerSelector));
   const visible=el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&r.bottom>0&&r.right>0&&r.top<innerHeight&&r.left<innerWidth&&getComputedStyle(el).visibility==='visible'};
-  const expanded=value=>{toggle.setAttribute('aria-expanded',value);for(const el of triggers())el.setAttribute('aria-expanded',value)};
+  const expanded=value=>{for(const el of triggers())el.setAttribute('aria-expanded',value)};
   let opener;
   const open = (focusSearch=false,trigger) => {if(!panel.open){opener=trigger || shadow.activeElement || document.activeElement; panel.showModal()} expanded('true'); (focusSearch && searchInput ? searchInput : close).focus()};
-  toggle.onclick=()=>open(); close.onclick=()=>panel.close();
-  panel.addEventListener('close',()=>{expanded('false');const target=opener?.isConnected&&visible(opener)?opener:triggers().find(visible)||toggle;target.focus()});
+  close.onclick=()=>panel.close();
+  panel.addEventListener('close',()=>{expanded('false');const target=opener?.isConnected&&visible(opener)?opener:triggers().find(visible)||document.body;target.focus()});
   panel.addEventListener('click',e=>{if(e.target===panel){const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)panel.close()}});
   window.addEventListener('workspace:open-apps',()=>open());
   // Apps may provide a normal navigation link as an accessible picker trigger.
-  // Keep its href as a fallback, and hide only the floating button, never the dialog.
+  // Keep its href as a fallback. Navigation belongs in the app header; never
+  // insert a floating control over app content or bottom navigation.
   const syncTriggers=()=>{
    const links=triggers();
    for(const el of links){el.setAttribute('role','button');el.setAttribute('aria-haspopup','dialog');el.setAttribute('aria-expanded',String(panel.open))}
-   toggle.hidden=links.some(visible);
   };
   let triggerFrame;
   const scheduleTriggers=()=>{if(!triggerFrame)triggerFrame=requestAnimationFrame(()=>{triggerFrame=0;syncTriggers()})};
@@ -72,7 +69,7 @@
    const trigger=e.target.closest?.(triggerSelector);
    if(trigger&&!e.defaultPrevented&&e.key===' '){e.preventDefault();open(false,trigger)}
   });
-  document.addEventListener('keydown',e=>{if(!e.defaultPrevented && !e.isComposing && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k' && searchInput){e.preventDefault();open(true)}});
+  document.addEventListener('keydown',e=>{if(!e.defaultPrevented && !e.isComposing && (e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){e.preventDefault();open(true)}});
   const decode = path => {try{return decodeURIComponent(path).replace(/\/$/,'')}catch{return path}};
   let currentApp;
   const title = () => {
@@ -87,7 +84,6 @@
    for(const {a} of entries)a.removeAttribute('aria-current');
    if(matched)matched.a.setAttribute('aria-current','page');
    current.textContent=matched ? 'You’re in '+matched.app.Name : 'Your apps, together';
-   toggle.title=matched ? 'Workspace apps · '+matched.app.Name : 'Workspace apps';
    currentApp=matched?.app; title();
   };
   new MutationObserver(title).observe(document.head,{childList:true,subtree:true,characterData:true});
@@ -98,7 +94,7 @@
   // Vue/React routers can change the path without popstate or a document load.
   let lastPath=location.pathname;
   setInterval(()=>{if(!document.hidden&&location.pathname!==lastPath){lastPath=location.pathname;active()}},1000);
-  shadow.append(panel,toggle); document.body.append(host); active(); theme(); syncTriggers();
+  shadow.append(panel); document.body.append(host); active(); theme(); syncTriggers();
   document.documentElement.dataset.workspaceNavigation='ready';
  }).catch(()=>{});
 })();

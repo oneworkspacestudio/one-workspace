@@ -1,3 +1,12 @@
+# Workspace71.1: clear app controls
+
+Removed the shared floating Workspace button from every app, at every screen
+size. It no longer covers mobile navigation or returns when a header scrolls out
+of view. Existing Apps menus and Workspace navigation continue to work. The shared
+picker supports header triggers and Ctrl/Cmd+K, with a dialog that fits short phones.
+All25 app contracts and application payloads remain unchanged from public71.
+Built locally, without GitHub Actions.
+
 # Workspace71: updates from an idle window
 
 Install and reinstall automatically refresh an expired release check. They
