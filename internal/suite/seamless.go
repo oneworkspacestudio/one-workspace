@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"my3d", "My 3D", "/my3d", "/api/me", "/my3d/auth/login", "/my3d/auth/logout", []string{"my3d_session"}},
 	{"maps", "My Maps", "/maps", "/api/me", "/maps/auth/login", "/maps/auth/logout", []string{"maps_session"}},
 	{"create", "My Create", "/create", "/api/me", "/create/auth/login", "/create/auth/logout", []string{"create_session"}},
 	{"meet", "My Meet", "/meet", "/api/me", "/meet/auth/login", "/meet/auth/logout", []string{"meet_session"}},

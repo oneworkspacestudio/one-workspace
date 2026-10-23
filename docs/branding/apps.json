@@ -187,5 +187,12 @@
     "id": "create",
     "description": "Create designs and edit imported text, shapes, pictures and pages.",
     "icon": "my_create"
+  },
+  {
+    "id": "my3d",
+    "icon": "my_3d",
+    "name": "My 3D",
+    "description": "Build 3D models from shapes and dimensioned profiles, then export for printing.",
+    "url": "https://github.com/oneworkspacestudio/my-3d"
   }
 ]

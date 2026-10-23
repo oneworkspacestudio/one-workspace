@@ -396,8 +396,14 @@ func (h *Host) Handler() http.Handler {
 			w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		}
 		scripts := "'self'"
-		if h.Config.ID == "pdf" {
+		if h.Config.ID == "pdf" || h.Config.ID == "my3d" {
 			scripts += " 'wasm-unsafe-eval'"
+		}
+		// OpenCascade's generated Embind glue constructs bindings with Function.
+		// Permit that only in the dedicated, same-origin CAD worker response.
+		// The document and all other scripts retain the normal strict policy.
+		if h.Config.ID == "my3d" && strings.Contains(r.URL.Path, "/assets/kernel.worker-") && strings.HasSuffix(r.URL.Path, ".js") {
+			scripts += " 'unsafe-eval'"
 		}
 		images := ""
 		for _, origin := range h.Config.ImageOrigins {
