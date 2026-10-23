@@ -1,7 +1,7 @@
 package maintenance
 
 const progressScript = `
-let operation=null,receivedAt=0,disconnected=false;
+let operation=null,receivedAt=0,disconnected=true;
 const panel=document.createElement('section');panel.id='operation';panel.hidden=true;panel.setAttribute('aria-labelledby','operation-title');
 panel.innerHTML='<div class="progress-head"><h2 id="operation-title">Updating Workspace</h2><span id="step-count" class="muted"></span></div><progress id="overall" aria-label="Update stages completed"></progress><p id="current-detail" role="status" aria-live="polite"></p><progress id="meter" aria-label="Current stage progress"></progress><p id="transfer"></p><p id="timing" class="muted"></p><p id="heartbeat" role="status"></p><ol id="steps"></ol><details><summary>Activity details</summary><ol id="activity"></ol></details>';
 $('error').after(panel);

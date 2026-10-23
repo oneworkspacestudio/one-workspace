@@ -248,3 +248,13 @@ The update window shows when the publisher refreshed the list. If it cannot be
 read, retry when your connection is available; no program files are changed.
 Authenticated/private repository checks may still show GitHub's API retry time.
 Publishers must follow [release promotion](../updates/README.md) after releases.
+
+## When the connection drops during an update
+
+Keep the Updates page open while Workspace and its tunnel restart. A short
+reconnection notice replaces gateway error pages; the last received progress
+remains visible. Controls stay disabled until the page receives current server
+status. A lost response does not resend the install, reinstall or restore request.
+If the server PC or its network stays offline, restore its connection first;
+the browser cannot restart an unreachable PC. Refresh an older open Updates tab
+after installing the new manager to load the current controller.

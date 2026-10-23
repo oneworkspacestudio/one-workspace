@@ -69,7 +69,7 @@ func Serve(ctx context.Context, data string, open bool) error {
 	exe, _ := os.Executable()
 	link := s.Origin + "/#" + s.Token
 	marker := filepath.Join(root, "window.json")
-	if e = platform.SaveJSON(marker, map[string]any{"pid": os.Getpid(), "executable": exe, "url": link, "remoteProtocol": 1}); e != nil {
+	if e = platform.SaveJSON(marker, map[string]any{"pid": os.Getpid(), "executable": exe, "url": link, "remoteProtocol": suite.RemoteUpdateProtocol}); e != nil {
 		return e
 	}
 	defer os.Remove(marker)

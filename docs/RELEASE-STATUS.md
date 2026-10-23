@@ -871,3 +871,22 @@ Adds a native responsive OpenCascade modelling app with private MyAccounts proje
 
 All25 previous app contracts and payloads remain byte-for-byte from public71; only the manager, suite notice and new My3D-owned packages are changed. Tests are performed on synthetic NTFS fixtures, never owner data. See app/suite acceptance receipts for exact binaries and known limits.
 
+
+
+## Workspace77: update-page reconnection
+
+Gateway HTML is no longer shown as update errors. The update page keeps the last
+verified state, shows a compact reconnect notice, bounds stalled requests, and
+keeps mutation controls disabled until current server status is available.
+Lost mutation acknowledgements are not retried automatically; stale in-flight
+polls cannot overwrite a newer action. Genuine request errors remain visible.
+Idle older update controllers are refreshed; active operations are preserved.
+This handles connection gaps during restart, not a persistently offline server.
+
+Browser and exact Windows executable acceptance use synthetic state and a fresh
+protected NTFS fixture. Maintenance/security and update tests pass; Go vet passes.
+The full Go suite has five existing Mail-related test failures reproduced on the
+unchanged76 source (new role-status probe vs older fixtures). These are retained
+as baseline failures, not reported as a passing full suite. No physical reboot or
+clean-host acceptance is claimed. Existing application contracts/payloads are
+retained from the verified public76 bundle.

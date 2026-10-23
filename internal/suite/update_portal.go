@@ -21,6 +21,10 @@ type updateWindow struct {
 	RemoteProtocol int    `json:"remoteProtocol"`
 }
 
+// Refresh idle older controllers so the owner receives the current reconnect UI.
+// Active operations still use the existing busy check before any retirement.
+const RemoteUpdateProtocol = 2
+
 func (p *Portal) updateWindow() (updateWindow, *url.URL, error) {
 	var window updateWindow
 	if e := platform.LoadJSON(filepath.Join(p.rt.Config.Data, "updates", "window.json"), &window); e != nil {
@@ -41,7 +45,7 @@ func (p *Portal) ensureUpdateWindow(ctx context.Context) (*url.URL, error) {
 	p.maintenanceMu.Lock()
 	defer p.maintenanceMu.Unlock()
 	old, u, e := p.updateWindow()
-	if e == nil && old.RemoteProtocol == 1 {
+	if e == nil && old.RemoteProtocol == RemoteUpdateProtocol {
 		return u, nil
 	}
 	if e == nil {
@@ -90,7 +94,7 @@ func (p *Portal) ensureUpdateWindow(ctx context.Context) (*url.URL, error) {
 	}
 	for i := 0; i < 60; i++ {
 		window, target, err := p.updateWindow()
-		if err == nil && window.RemoteProtocol == 1 {
+		if err == nil && window.RemoteProtocol == RemoteUpdateProtocol {
 			return target, nil
 		}
 		select {

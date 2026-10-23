@@ -1,0 +1,43 @@
+{
+  "tests": {
+    "baselineCommit": "fe17dd7",
+    "baselineFailures": [
+      "TestAppServerFailureDoesNotTriggerSignIn",
+      "TestEveryAppStartsNativeSignInWithoutAnotherLoginScreen",
+      "TestEveryAuthenticatedAppKeepsItsNativeSession",
+      "TestMailboxSyncBeforeFirstLogin",
+      "TestUnconfiguredMailExplainsSetupBeforeLogin"
+    ],
+    "changedSourceFailures": [
+      "TestAppServerFailureDoesNotTriggerSignIn",
+      "TestEveryAppStartsNativeSignInWithoutAnotherLoginScreen",
+      "TestEveryAuthenticatedAppKeepsItsNativeSession",
+      "TestMailboxSyncBeforeFirstLogin",
+      "TestUnconfiguredMailExplainsSetupBeforeLogin"
+    ],
+    "failuresUnchanged": true,
+    "goVetPassed": true,
+    "targetedUpdateSecurityTestsPassed": true
+  },
+  "native": {
+    "anonymousStateDenied": true,
+    "authenticatedSyntheticStatePassed": true,
+    "exactExecutableSHA256": "5608ea0a594aa63346a3a3a991b644df568d4cb7551eac4dcde1b1f186142b1b",
+    "nativePageBrowserPassed": true,
+    "remoteProtocol": 2,
+    "syntheticOnly": true,
+    "testRoot": "C:\\Projects\\.cache\\update-reconnect-20261023\\native-verified"
+  },
+  "browser": {
+    "checks": [
+      "502 gateway HTML becomes a short reconnect notice; last progress remains visible on desktop and phone",
+      "Lost install acknowledgement is not replayed; controls stay disabled until fresh authoritative state",
+      "Real HTTP409 action errors survive successful background polls",
+      "HTTP200 HTML and malformed state never erase the last valid UI",
+      "Stalled polls time out and polling resumes"
+    ],
+    "errors": [],
+    "syntheticOnly": true,
+    "nativePage": true
+  }
+}
