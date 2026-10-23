@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "release": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.71.1",
+  "sourceCommit": "6c5a37d933b26ffbbd6f364b47b8ff4cac785f78",
+  "publishedAssetsVerified": 25,
+  "workspace": "0.3.0-preview.72",
+  "sharedNavigation": {
+    "syntheticShell": true,
+    "actualEmbeddedSource": true,
+    "catalogRoutes": 25,
+    "phoneAndDesktop": true,
+    "shortPhoneModalScrollAndClose": true
+  },
+  "nativeWindowsAcceptance": {
+    "schema": 1,
+    "isolatedNativeWindows": true,
+    "ownerDataUsed": false,
+    "physicalPrintSent": false,
+    "previousFloatingButtonReproducedOnActualSocial": true,
+    "native67To71HotfixUpgrade": true,
+    "existingAccountsAppContractsAndOrdinaryFilesPreserved": true,
+    "socialFiveBottomTabsClickableAndCreateScreenClear": true,
+    "socialNativeAppsMenuWorks": true,
+    "slicerHeaderSharedPickerWorks": true,
+    "driveHasNoFloatingButton": true,
+    "browserErrors": []
+  },
+  "deployment": {
+    "schema": 2,
+    "workspace": "0.3.0-preview.72",
+    "deploymentRelease": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.72",
+    "deploymentSource": "3b13a2977d3244448f82259f76d19c0610bb6398",
+    "normalBackedUpUpdater": true,
+    "installedByConcurrentAuthorizedMy3DUpdate": true,
+    "navigationFixVerifiedIndependently": [
+      {
+        "name": "navigation.js",
+        "servedSHA256": "ba2d911c546e7aaf20570cec76602ef3117b9e627e03a10ed7e402b9353a98ea",
+        "matchesPublished72ManagerEmbeddedBytes": true,
+        "matchesTested71HotfixAfterLineEndingNormalization": true
+      },
+      {
+        "name": "navigation.css",
+        "servedSHA256": "4155aae357254ec69bff85505da75be89d231aab85765f45d145c39f74555883",
+        "matchesPublished72ManagerEmbeddedBytes": true,
+        "matchesTested71HotfixAfterLineEndingNormalization": true
+      }
+    ],
+    "apps": 26,
+    "healthyServices": 25,
+    "allHealthy": true,
+    "identityPathsPortsSettingsPreserved": true,
+    "originalAppRoutesAndPortsPreserved": true,
+    "concurrentAppContractChanges": [],
+    "encryptedMailConfigurationUnchanged": true,
+    "rollbackVerified": true,
+    "rollbackManifestSHA256": "5635c6706955b0c51150afa34cae73ea599a747c440143982707adb4d0eaffa9",
+    "managerSHA256": "1e902066ecd9cbc6f959c315561b76b53e89c9a7df35c7113e1ccf6fe94b606c",
+    "nonBlockingStartupWarnings": [
+      "mail"
+    ],
+    "ownerUsedAsFixture": false,
+    "physicalPrintSent": false,
+    "realHardwareTested": false
+  },
+  "installedNavigationBytesMatch": [
+    {
+      "name": "navigation.js",
+      "sha256": "ba2d911c546e7aaf20570cec76602ef3117b9e627e03a10ed7e402b9353a98ea",
+      "normalizedSourceSHA256": "c86fe67de479f68698992b84bc6e8226c6e12c07131e465809399e2e0ec8d9af",
+      "matchesTestedSourceAfterLineEndingNormalization": true
+    },
+    {
+      "name": "navigation.css",
+      "sha256": "4155aae357254ec69bff85505da75be89d231aab85765f45d145c39f74555883",
+      "normalizedSourceSHA256": "8ecaf83102d4d23740bd97c5e018b487a1fcb4775f9fc1a5192a27aefdeecc61",
+      "matchesTestedSourceAfterLineEndingNormalization": true
+    }
+  ],
+  "publicHealthy": true,
+  "localServicesHealthy": 25,
+  "actionsUsed": false,
+  "cleanHostRebootTested": false,
+  "ownerUsedAsFixture": false,
+  "interruptedUpdateRecoveredWithVerifiedBackup": true,
+  "olderPrivateRollbackArchivesEncryptedAndVerified": true
+}

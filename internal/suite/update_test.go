@@ -368,18 +368,18 @@ func TestUpdateRefusesJunctionsAndExternalInstallationPointers(t *testing.T) {
 	}
 }
 func TestUpdateOwnerAndOriginGates(t *testing.T) {
-	p := &Portal{rt: &Runtime{Config: Config{Owner: "owner", Origin: "http://localhost:29100"}}, sessions: map[string]session{"owner-token": {Subject: "owner", Expires: time.Now().Add(time.Hour)}, "member-token": {Subject: "member", Expires: time.Now().Add(time.Hour)}}}
-	mux := http.NewServeMux()
-	p.updateRoutes(mux)
+	c, _ := updateFixture(t)
+	c.Owner = "owner"
+	p := &Portal{rt: &Runtime{Config: c}, sessions: map[string]session{"owner-token": {Subject: "owner", Expires: time.Now().Add(time.Hour)}, "member-token": {Subject: "member", Expires: time.Now().Add(time.Hour)}}}
 	for _, tc := range []struct {
 		method, path, token, origin string
 		want                        int
-	}{{"GET", "/updates", "owner-token", "", 200}, {"GET", "/updates", "member-token", "", 403}, {"GET", "/updates", "", "", 403}, {"POST", "/updates/open", "owner-token", "https://other.example", 403}} {
+	}{{"GET", "/updates", "owner-token", "", 200}, {"GET", "/updates", "member-token", "", 403}, {"GET", "/updates", "", "", 303}, {"POST", "/updates/open", "owner-token", "https://other.example", 403}} {
 		r := httptest.NewRequest(tc.method, tc.path, nil)
 		r.AddCookie(&http.Cookie{Name: "workspace_session", Value: tc.token})
 		r.Header.Set("Origin", tc.origin)
 		w := httptest.NewRecorder()
-		mux.ServeHTTP(w, r)
+		p.remoteUpdateOwner(w, r)
 		if w.Code != tc.want {
 			t.Fatal(tc, w.Code)
 		}

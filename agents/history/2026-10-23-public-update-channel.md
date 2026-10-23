@@ -18,3 +18,11 @@ C:/Projects/.cache/release-check-403-20261023. Authoritative user I:/Workspace
 preserved. Keep independently updated Drive4/Mail17/Slicer4/Clips6. Keep Umbrel
 saved/autostart off and Jellyfin/Radarr/Prowlarr disabled. All native fixture
 processes must be stopped before bounded cleanup. Delivery pending verification.
+
+Publication preflight discovered remote main had advanced through public73 and
+prepared74, including My3D/navigation/remote administration/Mail18. Initial
+unpublished72 candidate is abandoned, never overwrite public72. Merged remote
+changes; only release-status needed textual conflict resolution (kept both).
+Next fix release75 uses verified public73 bundle plus verified Mail18 from the
+current lockfile, retains all26 apps and remote controls. Local user is still
+I:/Workspace71; the remote history's C:/tmp deployment is another machine.

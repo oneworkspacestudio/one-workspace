@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "app": {
+    "tag": "v0.1.0-preview.1",
+    "url": "https://github.com/oneworkspacestudio/my-3d/releases/tag/v0.1.0-preview.1",
+    "commit": "d9263861783306232fbd17d8d0908cf8bf2d12f4",
+    "allAssetSizesAndSHA256Match": true,
+    "assets": [
+      {
+        "name": "build-info.json",
+        "size": 344,
+        "digest": "sha256:f7771efd7e1c04a37befa99b594d7f6d6d33870e5019401dccc32b63a5c126a7"
+      },
+      {
+        "name": "cad-corresponding-source.zip",
+        "size": 94253103,
+        "digest": "sha256:d85fab8b7607cfdde87ce899245e89c3595f3cfdfbcd05dfbd4d73a19057fe23"
+      },
+      {
+        "name": "CAD-SOURCE-MANIFEST.json",
+        "size": 1174,
+        "digest": "sha256:1ba48159e6283925517e19f7fc173c3089e2fef9da5aaf11f98031999b5faa63"
+      },
+      {
+        "name": "my-3d-0.1.0-preview.1-windows-amd64.zip",
+        "size": 14749862,
+        "digest": "sha256:d8781627f100321d935bd41f920060b5536762308caff3eb5461cacf1a97991f"
+      },
+      {
+        "name": "my-3d-source.zip",
+        "size": 1471712,
+        "digest": "sha256:f2a695367840ea0c016364781bfd1357d1071558ebd61eb4f734a7fc43f95819"
+      },
+      {
+        "name": "My3D.exe",
+        "size": 38251520,
+        "digest": "sha256:d92865d05cbc45b2ddaf6ff61884176223081a942d648d314ee7be06920156e2"
+      },
+      {
+        "name": "native-acceptance.json",
+        "size": 2223,
+        "digest": "sha256:49a2dd79e3490cf870c5d7dbfcfb6b37d8ae4b5a5a3fe9a68dd8660d243af81e"
+      },
+      {
+        "name": "RELEASE-NOTES.md",
+        "size": 1215,
+        "digest": "sha256:5f0ccb5747c184c6089548dbd7dc74972bfac4aa85588604c31c506eab9a11ba"
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 712,
+        "digest": "sha256:9b126cb7e3b3cdfc3cc256824f74231fe3a593071daf3a0fd640b38d88c9b243"
+      }
+    ]
+  },
+  "workspace": {
+    "version": "0.3.0-preview.72",
+    "commit": "3b13a2977d3244448f82259f76d19c0610bb6398",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.72",
+    "allAssetSizesAndSHA256Match": true,
+    "assets": [
+      {
+        "name": "BACKUPS.md",
+        "size": 7908,
+        "digest": "sha256:a2871fb2b5b13aaaa12f0ad3ada3048f9659d72103e4ab86f64ce35c995927f7"
+      },
+      {
+        "name": "build-info.json",
+        "size": 570,
+        "digest": "sha256:85089a74f4e97e1f372cfc9212df7f8074ff2db63313f7ad61cbe78a56b4f86c"
+      },
+      {
+        "name": "bundle-verification.json",
+        "size": 237,
+        "digest": "sha256:375f956aabd3fa9fd4eb59264244396fe56f0055b505f9d05a37c43be6e80656"
+      },
+      {
+        "name": "catalog.json",
+        "size": 45920,
+        "digest": "sha256:0fbd04694796d072e345c036ed1ec3446f0f1459dc9b1419a2f15f3c801b0b3e"
+      },
+      {
+        "name": "checks.json",
+        "size": 468,
+        "digest": "sha256:1bd401ec48f8aed6b8d1ce7da1759ffd35fec449f582ba46eb054c2f0aef88b0"
+      },
+      {
+        "name": "LICENSE.txt",
+        "size": 11558,
+        "digest": "sha256:1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+      },
+      {
+        "name": "MY3D.md",
+        "size": 1578,
+        "digest": "sha256:88bdee339c6e3ccc341a6cfc380df038dc6a519e8ec8d4cf415e3707361fa6b4"
+      },
+      {
+        "name": "native-my3d-integration.json",
+        "size": 1009,
+        "digest": "sha256:6ea261e09acd2d3f0d769ab047cb46912a433f97bf8b8c4fda4abad9ea94b941"
+      },
+      {
+        "name": "NOTICE.txt",
+        "size": 664,
+        "digest": "sha256:ba5d1ffddbef7cfd9ff5aabab279657194dbb1deab201ca981a546237f8977bc"
+      },
+      {
+        "name": "one-workspace-source.zip",
+        "size": 11115349,
+        "digest": "sha256:9dfb572e5f09e9d39dadea84813b69b55fca8f6d4b76d9d74cf32bb70048c750"
+      },
+      {
+        "name": "organization-components.json",
+        "size": 9101,
+        "digest": "sha256:4e1256d118bdc3699c6c6b6b46f0a71396eef7c5efe421dd8a9a6e6500a326bd"
+      },
+      {
+        "name": "RELEASE-NOTES.md",
+        "size": 883,
+        "digest": "sha256:fedd8760e6456c4901a53bc666d870a02eedeec9aac3a1ab479fe281d03e46b7"
+      },
+      {
+        "name": "RELEASE-STATUS.md",
+        "size": 49148,
+        "digest": "sha256:093d4b8e0eb815a39f214ed0f7cd684b341a0cedec832a1c4f35544209090e28"
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 1610,
+        "digest": "sha256:676b345c7c6077d144494cd32a1a11f24f37b1875b68c40aaf73fd55ca65f222"
+      },
+      {
+        "name": "SIGN-IN.md",
+        "size": 6527,
+        "digest": "sha256:bc0cc70c0363ea403154e5e1d44088f5974f32736612f5068300eee63149ffed"
+      },
+      {
+        "name": "SOURCE-MANIFEST.json",
+        "size": 4942,
+        "digest": "sha256:f334a84277f4d310be528da880f49a0ef903e4ce64a4202738e93ef1f3c4dd75"
+      },
+      {
+        "name": "UPDATES.md",
+        "size": 14213,
+        "digest": "sha256:bc5fc56ee6ff505f2093f4f638d32ab1f3eabfbd4a6b76fb66927d459a7b3477"
+      },
+      {
+        "name": "workspace-bundle.zip",
+        "size": 832593762,
+        "digest": "sha256:c27e233469ba7a4597d8c731c9390882ba5371ed196b42da5eb84f1331bc434e"
+      },
+      {
+        "name": "Workspace.exe",
+        "size": 12302848,
+        "digest": "sha256:1e902066ecd9cbc6f959c315561b76b53e89c9a7df35c7113e1ccf6fe94b606c"
+      },
+      {
+        "name": "WorkspaceSetup-windows-amd64.exe",
+        "size": 842262528,
+        "digest": "sha256:357be412e91f5684cc1d2bcae5930aa1dbe646a2b941b84e6fe5ca5d654b3602"
+      }
+    ]
+  },
+  "nativeApp": {
+    "schema": 1,
+    "checks": [
+      "Native embedded WASM renders editable phone stand",
+      "All 12 primitives produce CAD solids; dimension changes regenerate exact extrusion",
+      "Exported STL is manifold and ray-tested through-hole; STEP and 3MF are real geometry",
+      "Inspector precision and persistence after reload",
+      "UI box/hole subtraction and undo/redo",
+      "Align centres three solids using CAD bounds",
+      "Logical group moves and restores editable children",
+      "Sketch extrusion and A1 mini 180 mm guard",
+      "390 px phone and 768 px tablet layouts, touch-sized shape controls"
+    ],
+    "errors": [],
+    "cadVolume": 74910.61828427829,
+    "manifold": true,
+    "primitiveResults": [
+      {
+        "kind": "box",
+        "volume": 7999.999999999998,
+        "triangles": 12
+      },
+      {
+        "kind": "rounded",
+        "volume": 7931.327412287183,
+        "triangles": 444
+      },
+      {
+        "kind": "cylinder",
+        "volume": 6283.185307179586,
+        "triangles": 460
+      },
+      {
+        "kind": "sphere",
+        "volume": 4188.790204786392,
+        "triangles": 5620
+      },
+      {
+        "kind": "cone",
+        "volume": 2096.4915918903107,
+        "triangles": 2172
+      },
+      {
+        "kind": "tube",
+        "volume": 3709.5926053588264,
+        "triangles": 920
+      },
+      {
+        "kind": "polygon",
+        "volume": 5196.152422706631,
+        "triangles": 20
+      },
+      {
+        "kind": "star",
+        "volume": 2703.8121605453766,
+        "triangles": 36
+      },
+      {
+        "kind": "heart",
+        "volume": 5076.6925402812085,
+        "triangles": 524
+      },
+      {
+        "kind": "wedge",
+        "volume": 4000,
+        "triangles": 8
+      },
+      {
+        "kind": "frame",
+        "volume": 4700.000000000001,
+        "triangles": 24
+      },
+      {
+        "kind": "text",
+        "volume": 3309.0299765268956,
+        "triangles": 2188
+      }
+    ],
+    "sketchVolumes": [
+      9999.999999999998,
+      15000
+    ],
+    "cleanHost": false,
+    "physicalPrinter": false,
+    "exactReleaseBinary": true,
+    "exeSHA256": "d92865d05cbc45b2ddaf6ff61884176223081a942d648d314ee7be06920156e2",
+    "sourceCommit": "d9263861783306232fbd17d8d0908cf8bf2d12f4",
+    "phoneTouchInput": true
+  },
+  "managedIntegration": {
+    "schema": 1,
+    "checks": [
+      "Exact Windows installer installs and starts Accounts, Drive, My Slicer and My 3D",
+      "Real MyAccounts OIDC/PKCE login opens the proxied CAD worker and saves private projects",
+      "My Drive receives a new editable copy through the same user session",
+      "A second authenticated browser reopens and retains the editable Drive project",
+      "Exported 3MF opens and renders in the real My Slicer application",
+      "Managed phone layout keeps controls accessible without a floating Workspace overlay"
+    ],
+    "errors": [],
+    "version": "0.3.0-preview.72",
+    "my3dVersion": "0.1.0-preview.1",
+    "freshSyntheticNTFS": true,
+    "realOIDC": true,
+    "secondBrowserDriveRoundtrip": true,
+    "realSlicer3MFPreview": true,
+    "ownerUsedAsFixture": false,
+    "physicalPrinter": false,
+    "cleanHostOrReboot": false
+  },
+  "deployment": {
+    "schema": 1,
+    "workspaceVersion": "0.3.0-preview.72",
+    "my3dVersion": "0.1.0-preview.1",
+    "allLocalServicesRunning": true,
+    "allPublicServicesRunning": true,
+    "services": 25,
+    "my3dAndBothManagerCopiesMatchRelease": true,
+    "nativeFrontendWorkerAndLogoMatch": [
+      "logo.svg",
+      "index-imWCQ5A6.js",
+      "kernel.worker-cSB6DUBJ.js"
+    ],
+    "deployedContentAddressedSuiteIconMatchesSource": true,
+    "verifiedBackupManifestRetained": true,
+    "ownerIdentityPathsClientsAndAllPreviousAppsPreserved": true,
+    "ordinaryFilesCoveredByNormalVerifiedBackup": true,
+    "ownerUsedForFunctionalIdentityOrDriveFixture": false,
+    "my3dURL": "https://workspace.m8e.co.uk/my3d/"
+  },
+  "protectedOwnerUpdate": {
+    "allPreviousAppContractsAndPackagesRetained": true,
+    "appCount": 26,
+    "existingOIDCClientsRetained": true,
+    "my3dExeMatchesCatalog": true,
+    "my3dSHA256": "d92865d05cbc45b2ddaf6ff61884176223081a942d648d314ee7be06920156e2",
+    "my3dVersion": "0.1.0-preview.1",
+    "normalBackedUpUpdate": true,
+    "ownerPathsPortsAndPreferencesRetained": true,
+    "previousVersion": "0.3.0-preview.67",
+    "recoveryCredentialsRetained": true,
+    "schema": 1,
+    "version": "0.3.0-preview.72"
+  }
+}

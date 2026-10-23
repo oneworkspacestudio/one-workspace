@@ -54,12 +54,15 @@ func run() error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 	switch action {
-	case "updates":
+	case "updates", "updates-background":
 		exe, _ := os.Executable()
 		if strings.EqualFold(filepath.Clean(exe), filepath.Join(c.Data, "Workspace.exe")) {
+			if action == "updates-background" {
+				return suite.LaunchUpdatesBackground(c)
+			}
 			return suite.LaunchUpdates(c)
 		}
-		return maintenance.Serve(ctx, c.Data, true)
+		return maintenance.Serve(ctx, c.Data, action != "updates-background")
 	case "run":
 		if len(args) == 0 {
 			go func() {

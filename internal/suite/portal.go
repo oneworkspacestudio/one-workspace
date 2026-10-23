@@ -34,6 +34,8 @@ type session struct {
 	Expires                       time.Time
 }
 type Portal struct {
+	maintenanceMu  sync.Mutex
+	adminMu        sync.Mutex
 	rt             *Runtime
 	oauth          oauth2.Config
 	verifier       *oidc.IDTokenVerifier
@@ -46,9 +48,25 @@ type Portal struct {
 
 func NewPortal(ctx context.Context, rt *Runtime) (*Portal, error) {
 	ctx = oidc.ClientContext(ctx, &http.Client{Timeout: 45 * time.Second})
-	provider, e := oidc.NewProvider(ctx, rt.Config.Issuer)
-	if e != nil {
-		return nil, fmt.Errorf("Accounts discovery failed: %w", e)
+	// A healthy loopback account service does not guarantee that its public
+	// discovery route has propagated through a just-restarted tunnel yet.
+	// Retry discovery only; issuer, signatures and owner checks stay unchanged.
+	var provider *oidc.Provider
+	var e error
+	discoveryDeadline := time.Now().Add(2 * time.Minute)
+	for {
+		provider, e = oidc.NewProvider(ctx, rt.Config.Issuer)
+		if e == nil {
+			break
+		}
+		if ctx.Err() != nil || time.Now().After(discoveryDeadline) {
+			return nil, fmt.Errorf("Accounts discovery failed after waiting for the public sign-in connection: %w", e)
+		}
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(2 * time.Second):
+		}
 	}
 	var metadata struct {
 		Logout string `json:"end_session_endpoint"`
@@ -206,6 +224,9 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		current, _ := p.user(r)
+		if !p.revokeRemoteAdmin(w, r) {
+			return
+		}
 		p.closeChatSession(r)
 		p.closeHostingSession(r)
 		p.closeFoundationSessions(r)
@@ -330,7 +351,7 @@ func (p *Portal) Handler(control string) http.Handler {
 	origin, _ := url.Parse(p.rt.Config.Origin)
 	local := fmt.Sprintf("localhost:%d", p.rt.Config.Port)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/healthz" && r.URL.Path != "/_control/stop" && r.URL.Path != "/_integration/monitor" && UpdatePending(p.rt.Config) {
+		if r.URL.Path != "/healthz" && r.URL.Path != "/_control/stop" && r.URL.Path != "/_integration/monitor" && !strings.HasPrefix(r.URL.Path, "/updates") && !strings.HasPrefix(r.URL.Path, "/auth/") && !strings.HasPrefix(r.URL.Path, "/branding/") && UpdatePending(p.rt.Config) {
 			http.Error(w, "Workspace is completing an update. Your data is protected; please wait.", http.StatusServiceUnavailable)
 			return
 		}

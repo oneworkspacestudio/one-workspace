@@ -1,4 +1,4 @@
-# Preview 72: Public update checks without anonymous API limits
+# Preview 75: Public update checks without anonymous API limits
 
 The installer, update window and startup app reconciliation now read the
 publisher's public update channel in one HTTPS request. Public catalogs,
@@ -16,14 +16,57 @@ Authenticated private/custom repositories retain API access with explicit
 rate-limit retry guidance. No request is automatically retried against an
 exhausted API allowance.
 
-All 25 app contracts and 134 payloads from preview 71 are retained, with only
-the manager and this suite release notice replaced. Existing independent app
+Retains public preview 73's 26-app suite, including My 3D and remote
+administration, with the verified Mail 18 payload pinned by the preview 74 source.
+The manager and this suite release notice are rebuilt. Existing independent app
 versions, selected apps, accounts, connection settings and user files are kept
 by the normal backed-up installer repair. This remains an evaluation build.
 No physical reboot or clean-host acceptance is claimed. Final native repair
 and delivery evidence is recorded separately after verification.
 
 ---
+# Workspace 74: automatic Mail domain setup
+
+Includes Mail 18 in the full installer and updater. Compatible DNS is reused
+without edits. Unpublished installations automatically choose a free mail
+subdomain when the original domain has conflicting mail records. Existing
+published mail domains and other installations' records are preserved.
+
+The setup screen now offers Finish automatic setup and Open Mail, with technical
+DNS details collapsed. Interrupted changes retain account IDs, folders and
+readable mailbox assignments. SMTP reachability, TLS, signing and reverse DNS
+remain separate delivery requirements. This release claims compilation, syntax
+and package-integrity checks, not automated or external-delivery acceptance.
+All other 25 app contracts/payloads are retained from public Workspace 73.
+Built locally; no GitHub Actions. Previous limitations below remain applicable.
+
+## Previous release
+
+# Workspace73: remote owner administration
+
+Updates, reinstall, recovery and backup restore now run from the owner's browser
+at the regular Workspace address. No separate browser window on the server is
+required. Backups includes a server-folder picker that works from other devices.
+Existing app status/retry and account controls remain remotely available.
+
+The update controller stays private on loopback. Owner authorization, mutation
+Origin checks, verified releases, operation locks and recovery copies remain
+required. A bounded owner continuation lets progress reconnect after restart;
+brief server/tunnel downtime still interrupts the connection. Physical OS approval
+and initial installation are separate from the installed administration website.
+Scheduling stays optional and off by default. Backup folders still require local
+NTFS permissions on the server. Windows compilation and UI JavaScript syntax
+passed; full remote update/restore, reboot and clean-host acceptance are not
+claimed. Built locally without Actions. All26 app payloads, including My 3D, are retained from public72.
+
+# Workspace71.1: clear app controls
+
+Removed the shared floating Workspace button from every app, at every screen
+size. It no longer covers mobile navigation or returns when a header scrolls out
+of view. Existing Apps menus and Workspace navigation continue to work. The shared
+picker supports header triggers and Ctrl/Cmd+K, with a dialog that fits short phones.
+All25 app contracts and application payloads remain unchanged from public71.
+Built locally, without GitHub Actions.
 
 # Workspace71: updates from an idle window
 
@@ -796,3 +839,10 @@ icon frames verified in both executables. [Evidence](evidence/startup-reliabilit
 [phone status](screenshots/startup69-healthy-phone.png).
 Owner67/its newest rollback retained;24 owner services remain healthy. All named
 synthetic installations stopped and removed. Reported remote cause remains unknown.
+
+
+## My 3D preview / Workspace72
+
+Adds a native responsive OpenCascade modelling app with private MyAccounts projects, optional same-user Drive copies, real boolean operations and slicer exports. The UI follows the supplied pastel phone-stand reference. The new app is not a TweakCAD fork: its linked source was unavailable. This release implements dimensioned profiles rather than a general sketch constraint solver; additional advanced CAD/import/manufacturing checks remain in the app capability matrix. No printer connection is simulated.
+
+All25 previous app contracts and payloads remain byte-for-byte from public71; only the manager, suite notice and new My3D-owned packages are changed. Tests are performed on synthetic NTFS fixtures, never owner data. See app/suite acceptance receipts for exact binaries and known limits.
