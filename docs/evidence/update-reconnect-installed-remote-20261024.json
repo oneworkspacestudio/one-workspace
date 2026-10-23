@@ -1,0 +1,28 @@
+{
+  "version": "0.3.0-preview.77",
+  "previousVersion": "0.3.0-preview.76",
+  "normalBackedUpUpdate": true,
+  "selectedOnlyWorkspace": true,
+  "normalUpdateCompleted": true,
+  "newestRecoveryCopyRetained": true,
+  "otherVisibleAppVersionsRetained": true,
+  "appVersionComparison": [
+    {
+      "before": {
+        "current": "0.3.0-preview.76",
+        "name": "One Workspace"
+      },
+      "after": {
+        "current": "0.3.0-preview.77",
+        "name": "One Workspace"
+      }
+    }
+  ],
+  "newReconnectStatusElementPresent": true,
+  "ownerSessionRetained": true,
+  "normalOwnerReleaseCheckSucceeded": true,
+  "uiError": "",
+  "healthStatus": "ok",
+  "servicesRunning": 25,
+  "manuallyHashedRemoteExecutable": false
+}

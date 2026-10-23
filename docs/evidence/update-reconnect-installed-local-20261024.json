@@ -1,0 +1,22 @@
+{
+  "allApplicationContractsRetained": true,
+  "allNonWorkspacePackagesRetained": true,
+  "appSelectionRetained": true,
+  "exactTestedManagerInstalled": true,
+  "identityAndCredentialsRetained": true,
+  "managerSHA256": "5608ea0a594aa63346a3a3a991b644df568d4cb7551eac4dcde1b1f186142b1b",
+  "normalBackedUpUpdate": true,
+  "ownerConfigurationRetained": true,
+  "previousVersion": "0.3.0-preview.76",
+  "version": "0.3.0-preview.77",
+  "normalTransactionComplete": true,
+  "localServicesRunning": 25,
+  "managerCopiesMatch": true,
+  "newestRecoveryCopyRetained": true,
+  "taskScratchRemoved": true,
+  "remoteControllerProtocol": 2,
+  "installedHelperMatchesTestedManager": true,
+  "actualOwnerPageShows77": true,
+  "newReconnectStatusElementPresent": true,
+  "normalOwnerReleaseCheckSucceeded": true
+}
