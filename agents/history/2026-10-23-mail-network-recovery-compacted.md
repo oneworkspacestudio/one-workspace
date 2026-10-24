@@ -147,3 +147,20 @@ and Advanced remained open through checking-to-responding status polling. Joinin
 PC's saved main role persisted through76 and normal Mail entry automatically
 opened the main Inbox. Secondary then had another normal77 operation; preserve
 its lock and backups. Final78 deployment/concurrent-browser verification remains.
+
+
+## Final outcome
+Workspace78 + Mail24 are public, promoted and installed on both real PCs; normal
+updates completed healthy and kept newest verified recovery copies. Detailed
+source, synthetic portal checks and Chrome results are in the October24 sign-in
+handoff. Concurrent normal sign-ins passed on both hosts; secondary Mail opened
+main Inbox automatically with the real owner account and no extra password prompt.
+After both78 deployments, a fresh labelled Gmail -> Mail -> Gmail round trip
+passed in the UI. Main installed manager/Mail hashes match verified public bytes.
+Advanced remained open across live status changes on24. No password or identity
+merge was performed. One primary receiver and its approved router route remain;
+additional PCs reuse it. Automatic router inspection remains unavailable across
+this upstream hop;24 explains that distinction without asking users to change a
+working route. Main must stay online. No claim of all-router, clean-host/reboot
+or production acceptance. C named scratch/task logs cleared; user data, separate
+local messages/settings and newest usable rollback preserved.

@@ -55,3 +55,45 @@ scratch was removed after exact-path/reparse/active-build checks. Source/assets
 stay on I. Raw-channel promotion and normal deployment are next. Another normal
 77 operation was observed on the secondary while78 built; never interrupt/replay.
 Main currently77 + Mail24; final78 browser verification still pending.
+
+
+## Deployment running
+Raw channel promotionf001b1c is pushed; unauthenticated index lists78 and Mail24.
+Both normal updater plans selected78, with Mail24 already current. Main and
+secondary accepted workspace-only transactions after prior77 operations completed.
+Do not replay apply on connection loss. Main control script reads its protected
+loopback window marker; no capability is logged. Secondary owner update page was
+replaced by another task's current tab; use the fresh current page, not an old
+OAuth callback. Main/secondary concurrent browser sign-in verification is next
+only after both normal updates finish. Preserve each newest verified rollback.
+
+
+## Completed real deployment and Chrome verification
+Both PCs completed normal77-to78 manager-only updates, Mail24 preserved, with all
+apps healthy. Main completed in9m15s and secondary15m01s. Each retained its newest
+verified rollback and removed one older automatic copy (~4413.2MB /3391.1MB).
+Main installed manager78 and Mail24 hashes match the verified release artifacts.
+MainC free space was17.03GiB; named build scratch and obsolete task-controller logs
+are removed. No unknown/recovery/user data was manually deleted.
+
+In Chrome, opened two normal portal authorization entries together on each host.
+Main Workspace and Mail both opened signed in as the real owner. On secondary,
+Workspace opened as the owner and Mail automatically handed off to the main
+Inbox, signed in and displaying retained verification messages. No password
+prompt or Login-state error appeared. This uses existing owner/provider sessions;
+it is not a new-password, arbitrary-provider or clean-host acceptance claim.
+A callback without credentials stayed rejected with the new plain-language
+recovery page; Continue sign-in returned to the authenticated secondary Workspace.
+All code/PKCE/token validation constraints remain as documented above.
+
+After both78 updates, sent a labelled Gmail message, opened its exact content in
+Mail via the shared client entry, replied from Mail and verified receipt in Gmail.
+No test message body, OAuth artifact or credential is copied into this history.
+Earlier24 Advanced-panel checks survived a live checking-to-responding transition.
+Shared main setting persisted through76,77,78. Main remains the only Internet
+receiver; no independent identity or mailbox stores were merged. No passwords
+changed. No remaining task-owned preview service or C build scratch is required.
+Public78/Mail24 plus promoted channel are delivered. Physical reboot, clean-host,
+arbitrary-router/provider, mobile and production acceptance remain unperformed.
+If a future issue occurs, capture its exact normal URL/error and relevant version;
+do not reset passwords or replace another receiver's rule speculatively.
