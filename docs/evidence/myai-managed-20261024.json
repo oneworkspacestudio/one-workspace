@@ -1,0 +1,23 @@
+{
+  "checks": [
+    "Exact release installer installs fresh selected MyAccounts/Drive/MyAI on synthetic NTFS data",
+    "Real MyAccounts PKCE/OIDC opens managed My AI and guards its private Drive projection",
+    "Authoritative session JSON exists only beneath its issuer+subject private My AI Drive scope",
+    "Same MyAccounts subject opens its actual Quantum file with a physically scoped read-only grant",
+    "Second browser signs in independently and reopens the same authoritative session",
+    "A second MyAccounts identity cannot list/read another session, download another physical Drive scope or register host projects",
+    "Approved project selection, official model/effort discovery and actual Git diff review work",
+    "Managed phone layout and shared header Apps trigger avoid floating navigation"
+  ],
+  "errors": [],
+  "realMyAccounts": true,
+  "realQuantum": true,
+  "secondBrowser": true,
+  "crossUser": true,
+  "cloudProviderTurns": false,
+  "sourceBundle": "Workspace81",
+  "ownerUsedAsFixture": false,
+  "root": "C:/Projects/.cache/my-ai-20261024/suite-1792856586625",
+  "programs": "I:/Projects/tooling/my-ai-20261024/fixture-programs-1792856586625",
+  "note": "Initial exact native candidate; final provider-stream/Stop corrections are separately verified before publication."
+}
