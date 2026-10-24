@@ -955,3 +955,10 @@ Regression checks use synthetic in-memory flows and loopback fixtures only.
 Windows compilation, complete bundle checks, deployment and real browser sign-in
 verification are tracked in agents/history/2026-10-24-concurrent-sign-in-compacted.md.
 No production, arbitrary-provider or clean-host/reboot acceptance is implied.
+
+
+## My AI preview / Workspace81
+
+Adds the original My AI application: streamed local/cloud provider adapters, per-session model controls, a Codex-style project/conversation/composer layout, Windows-protected per-user keys and isolated Codex app-server integration. MyAccounts and a dedicated My AI source reuse the existing native identity and Quantum private-source contract. All26 prior app contracts and binaries are retained from verified public80; only the manager, release notice and new MyAI-owned packages change.
+
+This is an evaluation preview. Local Ollama/native UI and a real Codex handshake are demonstrated; cloud keys and a full agent edit/test turn need further acceptance. Unverified local/DeepSeek Code configurations stay disabled. No Open WebUI code/assets are redistributed and no global Codex login/configuration is adopted. Unsupported advanced features and clean-host/service/reboot gates are explicit in the app support matrix.

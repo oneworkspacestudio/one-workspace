@@ -154,5 +154,11 @@
     "tag": "v0.1.0-preview.1",
     "asset": "my-3d-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "d8781627f100321d935bd41f920060b5536762308caff3eb5461cacf1a97991f"
+  },
+  "myAI": {
+    "repository": "oneworkspacestudio/my-ai",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-ai-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "bf33f8e658aafadfe31c27c3fc36afd13d1238f7ea18c2b7ee44106191c191d8"
   }
 }
