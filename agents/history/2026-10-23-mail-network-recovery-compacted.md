@@ -174,3 +174,12 @@ router actions/errors clear. Synthetic negative cases and isolated native engine
 configuration/reload passed. Workspace79 pins and bundles25 for new installations;
 all other app contracts are retained from the verified78 suite. Publication,
 channel promotion and normal updates on both real PCs remain pending here.
+
+Live79 main update completed healthy and accepted the authorized Gmail test, but
+Mail25's external checker was inconclusive, leaving its warning. Mail26 adds
+independent recent domain-matched Internet SMTP acceptance evidence, with a
+bounded protected suffix read on restart and two-hour expiry. Tests reject local,
+wrong-domain, old/future and conflicting/explicit-failure evidence. Workspace80
+pins and bundles26. Secondary79 public tunnel is unavailable; inspecting its
+local installed updater through Remote Desktop without replaying the operation.
+Final80/26 publication and both deployments remain pending at this checkpoint.

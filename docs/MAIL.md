@@ -194,3 +194,9 @@ repair actions and errors; monitoring continues every five minutes. Public TCP
 response alone, old mail and local connection tests are not accepted as proof.
 This verifies connectivity, not message delivery or spam placement. No mailbox
 content or credentials are sent to the external checking service.
+
+Workspace80 bundles Mail26. Recent Internet SMTP accepted for this exact mail
+domain also confirms useful incoming activity when the external checker is
+inconclusive. Only domain/time is retained, restored from bounded protected
+native metadata after restart and expired after two hours. Current explicit
+connection failures and another receiver's known route remain actionable.

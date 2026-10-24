@@ -1,3 +1,24 @@
+# Preview 80: independent incoming Mail evidence
+
+Bundles Mail26, retaining per-server probe matching and additionally recognising
+recent Internet SMTP accepted for the exact configured mail domain when the
+external checking service is inconclusive or unavailable. Working manual routes
+clear stale repair warnings automatically. Only domain/time evidence is retained;
+a protected bounded native log suffix supplies recent evidence after restart.
+It expires after two hours. Current explicit connection failures and a known
+other-receiver route are still actionable. Existing mail, identities and routes
+are preserved. Shared PCs continue to open the same main Mail service.
+
+Synthetic receipt/probe regression and isolated native engine bootstrap/reload
+checks passed. Windows compilation, bundle hashes/sizes and embedded icon frames
+are checked. Main79/Mail25 received a fresh Gmail test while the checker was
+inconclusive; this follow-up fixes that live verification finding. Final80/26
+deployment and round-trip evidence is recorded in repository history. No
+clean-host, physical reboot, arbitrary-router/provider or production acceptance
+is claimed. Built and published locally without GitHub Actions.
+
+---
+
 # Preview 79: Mail verifies its actual incoming connection
 
 Includes Mail25 in the offline bundle and online distribution. The external
