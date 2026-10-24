@@ -71,3 +71,15 @@ Native fixtures stopped, C native data and I fixture programs removed with bound
 process/reparse checks. Keep release/evidence/tooling and current owner recovery.
 Do not use owner data as fixtures, remove registry guards or regress to four-only
 release manifests; support both layouts in the validator. Chrome0.1.2 files unchanged.
+
+
+## Social7 channel promotion
+
+Promote native Social7 (live upload/check/import progress, five-row sample and
+one-click import-all) after verified public release. Exact83 manifest validator
+passes public five-package and legacy four-package catalogs; all unrelated app
+contracts/packages and manager83 retained. Negative ownership/path regressions
+pass. Source Social2ce4a4a; verified release v0.1.0-preview.7. Public native assets
+match anonymous downloads; channel refresh retains other repository records and
+withheld builds. No Workspace runtime change or Actions. Owner Social-only update
+will wait for an existing unrelated app update to finish before taking its lock.
