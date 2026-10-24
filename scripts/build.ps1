@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.83',
+ [string]$Version='0.3.0-preview.84',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261020.1',
  [string]$DriveVersion='photos-preview-local',
@@ -28,6 +28,9 @@ param(
  [string]$Chat='',
  [string]$ChatVersion='0.1.0-preview.10',
  [string]$ChatNotices='',
+ [string]$MyCinema='',
+ [string]$MyCinemaVersion='0.1.0-preview.1',
+ [string]$MyCinemaNotices='',
  [string]$MyAI='',
  [string]$MyAIVersion='0.1.0-preview.2',
  [string]$MyAINotices='',
@@ -130,6 +133,14 @@ try {
  if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","SIGN-IN.md","PRODUCTION-GATES.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
  if($MyMaps){$inputs['maps']=@{source=$MyMaps;file='Maps.exe'};if(-not $MyMapsNotices){throw 'My Maps requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['maps-'+$name]=@{source=(Join-Path $MyMapsNotices $name);file='licenses/MyMaps-'+$name}};$inputs['maps-contract']=@{source=(Join-Path $MyMapsNotices 'compatibility.json');file='docs/MyMaps/compatibility.json'}}
  if($MyCreate){$inputs['create']=@{source=$MyCreate;file='MyCreate.exe'};if(-not $MyCreateNotices){throw 'My Create requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['create-'+$name]=@{source=(Join-Path $MyCreateNotices $name);file='licenses/MyCreate-'+$name}};$inputs['create-contract']=@{source=(Join-Path $MyCreateNotices 'compatibility.json');file='docs/MyCreate/compatibility.json'}}
+ if($MyCinema){
+  if(-not $MyCinemaNotices){throw 'My Cinema requires runtime and licence notices'}
+  $inputs['cinema']=@{source=$MyCinema;file='MyCinema.exe'}
+  foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['cinema-'+$name]=@{source=(Join-Path $MyCinemaNotices $name);file=('licenses/MyCinema-'+$name)}}
+  $inputs['cinema-contract']=@{source=(Join-Path $MyCinemaNotices 'compatibility.json');file='docs/MyCinema/compatibility.json'}
+  $inputs['cinema-provenance']=@{source=(Join-Path $MyCinemaNotices 'SOURCE-PROVENANCE.json');file='docs/MyCinema/SOURCE-PROVENANCE.json'}
+  foreach($name in @('SETUP.md','SUPPORT.md','ADR-001-architecture.md','SECURITY-CHECKS.md')){$inputs['cinema-doc-'+$name]=@{source=(Join-Path $MyCinemaNotices ('docs/'+$name));file=('docs/MyCinema/'+$name)}}
+ }
  if($MyAI){$inputs['myai']=@{source=$MyAI;file='MyAI.exe'};if(-not $MyAINotices){throw 'My AI requires licence notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['myai-'+$name]=@{source=(Join-Path $MyAINotices $name);file='licenses/MyAI-'+$name}};$inputs['myai-contract']=@{source=(Join-Path $MyAINotices 'compatibility.json');file='docs/MyAI/compatibility.json'};foreach($name in @('SETUP.md','SUPPORT.md','ADR-001-architecture.md','SECURITY-CHECKS.md')){$inputs['myai-doc-'+$name]=@{source=(Join-Path $MyAINotices ('docs/'+$name));file=('docs/MyAI/'+$name)}}}
  if($My3D){$inputs['my3d']=@{source=$My3D;file='My3D.exe'};if(-not $My3DNotices){throw 'My 3D requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['my3d-'+$name]=@{source=(Join-Path $My3DNotices $name);file='licenses/My3D-'+$name}};$inputs['my3d-contract']=@{source=(Join-Path $My3DNotices 'compatibility.json');file='docs/My3D/compatibility.json'}}
  if($MyMeet){$inputs['meet']=@{source=$MyMeet;file='Meet.exe'};if(-not $MyMeetNotices){throw 'My Meet requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['meet-'+$name]=@{source=(Join-Path $MyMeetNotices $name);file='licenses/MyMeet-'+$name}};$inputs['meet-contract']=@{source=(Join-Path $MyMeetNotices 'compatibility.json');file='docs/MyMeet/compatibility.json'}}
@@ -164,6 +175,7 @@ try {
  }
  if($MyMaps){$apps+=@{id='maps';name='My Maps';description='Explore places, save lists and plan driving, walking and cycling routes';version=$MyMapsVersion;kind='process';package='maps';executable='Maps.exe';port=9015;route='/maps';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/maps/auth/callback';args=@('--data','${DATA}/maps','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/maps','--no-browser');source='https://github.com/oneworkspacestudio/my-maps/releases/tag/v'+$MyMapsVersion}}
  if($MyCreate){$apps+=@{id='create';name='My Create';description='Create designs and edit imported text, shapes, pictures and pages';version=$MyCreateVersion;kind='process';package='create';executable='MyCreate.exe';port=9017;route='/create';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/create/auth/callback';args=@('--data','${DATA}/create','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/create','--no-browser');source='https://github.com/oneworkspacestudio/my-create/releases/tag/v'+$MyCreateVersion}}
+ if($MyCinema){$apps+=@{id='cinema';name='My Cinema';description='Watch your movies and series with private family profiles';version=$MyCinemaVersion;kind='process';package='cinema';executable='MyCinema.exe';port=9020;route='/cinema';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/cinema/auth/callback';args=@('--data','${DATA}/cinema','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/cinema','--no-browser');source='https://github.com/oneworkspacestudio/my-cinema/releases/tag/v'+$MyCinemaVersion}}
  if($MyAI){$apps+=@{id='myai';name='My AI';description='Chat with AI models and build with your code projects';version=$MyAIVersion;kind='process';package='myai';executable='MyAI.exe';port=9019;route='/myai';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/myai/auth/callback';args=@('--data','${DATA}/myai','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/myai','--no-browser');source='https://github.com/oneworkspacestudio/my-ai/releases/tag/v'+$MyAIVersion}}
  if($My3D){$apps+=@{id='my3d';name='My 3D';description='Build 3D models, dimension profiles and export for printing';version=$My3DVersion;kind='process';package='my3d';executable='My3D.exe';port=9018;route='/my3d';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/my3d/auth/callback';args=@('--data','${DATA}/my3d','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/my3d','--no-browser');source='https://github.com/oneworkspacestudio/my-3d/releases/tag/v'+$My3DVersion}}
  if($MyMeet){$apps+=@{id='meet';name='My Meet';description='Host video meetings with screen sharing, admission controls and chat';version=$MyMeetVersion;kind='process';package='meet';executable='Meet.exe';port=9016;route='/meet';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/meet/auth/callback';args=@('--data','${DATA}/meet','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/meet','--no-browser');source='https://github.com/oneworkspacestudio/my-meet/releases/tag/v'+$MyMeetVersion}}

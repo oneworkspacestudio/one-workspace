@@ -979,3 +979,21 @@ native update when its version, bytes and launch contract match.
 
 Pins the verified public My Social6 native package. Other app payloads remain
 from the verified82 bundle. Built locally with Go1.27.3; Actions remain disabled.
+
+## My Cinema / Workspace84
+
+Adds an original cinematic streaming app with real MyAccounts sign-in, PIN-protected
+adult and restricted child profiles, private Jellyfin12.3/FFmpeg8.1.3, shared-folder
+indexing, movies/series, search, My List, resume, audio/subtitles and native/HLS video.
+The verified runtime is carried inside MyCinema.exe, so existing installers can
+install it atomically without understanding a new executable-helper package type.
+No user media folder or viewing profile is selected automatically.
+
+All27 prior app contracts/payloads remain from verified public83; only manager,
+release notice and Cinema-owned packages change. Selecting only Workspace/Cinema
+retains independently updated apps. Go1.27.3 and local builds; no Actions.
+
+This is a functional streaming preview. Advanced Drive import jobs, standalone
+restore wizard, offline/native-TV packaging and arbitrary codec/clean-host/reboot
+certification remain explicit in the app's feature matrix. Complete managed backup
+and restore use Workspace's existing stop/checkpoint/verify workflow.

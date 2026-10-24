@@ -201,5 +201,12 @@
     "name": "My AI",
     "description": "Chat with AI models and build with your code projects.",
     "url": "https://github.com/oneworkspacestudio/my-ai"
+  },
+  {
+    "id": "cinema",
+    "icon": "my_cinema",
+    "name": "My Cinema",
+    "description": "Watch your movies and series with private family profiles.",
+    "url": "https://github.com/oneworkspacestudio/my-cinema"
   }
 ]

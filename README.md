@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-8aa76680.png)
+![The complete One Workspace app collection](docs/branding/app-suite-a5486bd0.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -170,6 +170,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_ai.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-ai"><strong>My AI</strong></a></td>
       <td>Chat with AI models and build with your code projects.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_cinema.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-cinema"><strong>My Cinema</strong></a></td>
+      <td>Watch your movies and series with private family profiles.</td>
     </tr>
   </tbody>
 </table>
