@@ -66,3 +66,21 @@ track import resumed successfully: Complete,1 ready,Downloaded,Added to library.
 Other partial jobs left alone. Music repo has sanitized delivery receipts and
 history. Real Chrome screenshot capture timed out; no successful capture claimed.
 Task test fixtures stopped/C scratch removed. Immutable Music3 tag staysd6d28d52.
+
+## Playlist artwork follow-up
+
+Music4 source6124da1d6d5ab3d9ca06cf225744201fba472814, exact final Windows SHA256
+28e567a89dec5bcaab7db1edc443ff1405f1b2163384d4ad31b29ecec4064e41.
+Imports now save private playlist covers and current visualIdentity track art.
+Owner/CSRF-protected Refresh artwork repairs legacy jobs without song downloads,
+preserving existing covers, playlist identity and songs. Nine tests, synthetic
+phone/desktop import/cover/repair/recovery checks, public art fetch/decode, and fresh
+exact native play/share/OIDC/standalone plus public cover import/refresh/render and
+all bundled-tool execution checks pass. Build spec guards FFmpeg runtime filename.
+
+Artifacts I:/Projects/tooling/music-spotify-art-20261024. Named C scratch removed
+after fixture/process and21 symlink checks. Public4 upload underway. Regenerate
+full channel from current73edd6c and honor withheld81/app1 policy/concurrent82.
+Only Music selected for both normal backed-up installations; currently both80/3.
+Then repair actual secondary Dance import cover through Refresh artwork, verify
+natural image pixels in playlist header and save sanitized delivery proof.
