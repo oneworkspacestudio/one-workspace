@@ -98,7 +98,7 @@ func clearAppCookies(w http.ResponseWriter, r *http.Request, secure bool) {
 		"access_token_cookie": {"/", "/music/"}, "csrf_access_token": {"/", "/music/"}, "swingmusic_oidc": {"/", "/music/"},
 		"workspace_gitea": {"/", "/git", "/git/"},
 	}
-	for _, id := range []string{"my3d", "create", "maps", "meet", "clips", "social", "slicer", "tasks", "pdf", "monitor", "search"} {
+	for _, id := range []string{"myai", "my3d", "create", "maps", "meet", "clips", "social", "slicer", "tasks", "pdf", "monitor", "search"} {
 		names[id+"_session"] = []string{"/", "/" + id + "/"}
 		names[id+"_login"] = []string{"/", "/" + id + "/"}
 	}

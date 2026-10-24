@@ -194,5 +194,12 @@
     "name": "My 3D",
     "description": "Build 3D models from shapes and dimensioned profiles, then export for printing.",
     "url": "https://github.com/oneworkspacestudio/my-3d"
+  },
+  {
+    "id": "myai",
+    "icon": "my_ai",
+    "name": "My AI",
+    "description": "Chat with AI models and build with your code projects.",
+    "url": "https://github.com/oneworkspacestudio/my-ai"
   }
 ]

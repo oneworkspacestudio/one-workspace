@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-63e39f8d.png)
+![The complete One Workspace app collection](docs/branding/app-suite-8aa76680.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -165,6 +165,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_3d.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-3d"><strong>My 3D</strong></a></td>
       <td>Build 3D models from shapes and dimensioned profiles, then export for printing.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_ai.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-ai"><strong>My AI</strong></a></td>
+      <td>Chat with AI models and build with your code projects.</td>
     </tr>
   </tbody>
 </table>

@@ -196,6 +196,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "clips" {
 			cmd.Env = append(cmd.Env, "MYCLIPS_PHOTOS_ROOT="+clipsRoot(c), fmt.Sprintf("MYCLIPS_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/clips/storage", c.Port), "MYCLIPS_STORAGE_GUARD_TOKEN="+clipsCapability(client.Secret))
 		}
+		if app.ID == "myai" {
+			cmd.Env = append(cmd.Env, "MYAI_DRIVE_ROOT="+myaiRoot(c), fmt.Sprintf("MYAI_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/myai/storage", c.Port), "MYAI_STORAGE_GUARD_TOKEN="+myaiCapability(client.Secret))
+		}
 		if app.ID == "social" {
 			cmd.Env = append(cmd.Env, "MYSOCIAL_PHOTOS_ROOT="+socialRoot(c), fmt.Sprintf("MYSOCIAL_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/social/storage", c.Port), "MYSOCIAL_STORAGE_GUARD_TOKEN="+socialCapability(client.Secret))
 		}
@@ -293,6 +296,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 		if e := ensureClipsDriveSource(rt.Config); e != nil {
 			return e
 		}
+		if e := ensureMyAIDriveSource(rt.Config); e != nil {
+			return e
+		}
 		if e := ensureSocialDriveSource(rt.Config); e != nil {
 			return e
 		}
@@ -316,6 +322,11 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 	}
 	if app.ID == "clips" {
 		if e := rt.verifyClipsStorage(ctx, true); e != nil {
+			return e
+		}
+	}
+	if app.ID == "myai" {
+		if e := rt.verifyMyAIStorage(ctx, true); e != nil {
 			return e
 		}
 	}

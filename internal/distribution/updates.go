@@ -90,6 +90,7 @@ type updateGroup struct {
 
 var updateGroups = []updateGroup{
 	{"maps", "My Maps", "my-maps", []string{"maps"}},
+	{"myai", "My AI", "my-ai", []string{"myai"}},
 	{"my3d", "My 3D", "my-3d", []string{"my3d"}},
 	{"create", "My Create", "my-create", []string{"create"}},
 	{"meet", "My Meet", "my-meet", []string{"meet"}},
@@ -277,7 +278,7 @@ func updatePackageOwner(id string) string {
 	if strings.HasPrefix(id, "msvc-") {
 		return "workspace"
 	}
-	for _, app := range []string{"my3d", "create", "maps", "meet"} {
+	for _, app := range []string{"myai", "my3d", "create", "maps", "meet"} {
 		if id == app || strings.HasPrefix(id, app+"-") {
 			return app
 		}

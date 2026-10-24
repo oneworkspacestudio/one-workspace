@@ -75,7 +75,7 @@ func Icon(app string) string {
 		"backups": "backups", "calendar": "my_calendar", "contacts": "my_contacts", "drive": "my_drive", "docs": "my_office", "office": "my_office",
 		"photos": "my_photos", "gitea": "my_git", "git": "my_git",
 		"music": "my_music", "studio": "photo_editor", "photo-editor": "photo_editor",
-		"my3d": "my_3d", "create": "my_create", "maps": "my_maps", "meet": "my_meet", "clips": "my_clips", "social": "my_social", "slicer": "my_slicer", "tasks": "my_tasks", "pdf": "my_pdf", "monitor": "my_monitor", "search": "my_search", "hosting": "my_hosting", "chat": "my_chat", "mail": "my_mail", "accounts": "my_accounts", "myaccounts": "my_accounts", "notes": "my_notes", "my-tube": "my_tube", "vault": "my_vault",
+		"myai": "my_ai", "my3d": "my_3d", "create": "my_create", "maps": "my_maps", "meet": "my_meet", "clips": "my_clips", "social": "my_social", "slicer": "my_slicer", "tasks": "my_tasks", "pdf": "my_pdf", "monitor": "my_monitor", "search": "my_search", "hosting": "my_hosting", "chat": "my_chat", "mail": "my_mail", "accounts": "my_accounts", "myaccounts": "my_accounts", "notes": "my_notes", "my-tube": "my_tube", "vault": "my_vault",
 	}[app]
 	if name == "" {
 		name = "one_workspace"
