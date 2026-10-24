@@ -7,6 +7,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -287,5 +288,133 @@ func TestPublisherContractRoundTripAndCustomExtensionOwnership(t *testing.T) {
 	}
 	if target.Packages["notes-addon"] != current.Packages["notes-addon"] || len(target.Apps) != 2 {
 		t.Fatal("custom extension was replaced")
+	}
+}
+
+func setupCompatibilityUpdate(t *testing.T, tracked bool) (catalog.Catalog, updateTransport, AppUpdateManifest, Release) {
+	t.Helper()
+	repo, tag := "oneworkspacestudio/my-social", "v0.1.0-preview.6"
+	current := catalog.Catalog{Schema: 1, Version: "0.3.0-preview.82", InstallerIntegration: 3, Packages: map[string]catalog.Package{"manager": fixturePackage("Workspace.exe", []byte("manager")), "social": fixturePackage("MySocial.exe", []byte("old social"))}, Apps: []catalog.App{{ID: "social", Name: "My Social", Kind: "process", Package: "social", Executable: "MySocial.exe", Port: 29013, Route: "/social", Version: "0.1.0-preview.5", Source: "https://github.com/" + repo + "/releases/tag/v0.1.0-preview.5"}}}
+	document := []byte(`{"schema":1}`)
+	if tracked {
+		current.Packages["social-contract"] = fixturePackage("docs/MySocial/compatibility.json", []byte("old document"))
+	}
+	app := current.Apps[0]
+	app.Version = "0.1.0-preview.6"
+	app.Source = "https://github.com/" + repo + "/releases/tag/" + tag
+	exe := fixtureAsset(repo, tag, "MySocial.exe", "20", []byte("new social"))
+	doc := fixtureAsset(repo, tag, "compatibility.json", "21", document)
+	m := AppUpdateManifest{Schema: 1, Integration: 2, Repository: repo, Tag: tag, Apps: []catalog.App{app}, Packages: map[string]UpdatePackage{"social": {Package: fixturePackage("MySocial.exe", []byte("new social")), Asset: exe.Name}, "social-contract": {Package: fixturePackage("docs/MySocial/compatibility.json", document), Asset: doc.Name}}}
+	raw, _ := json.Marshal(m)
+	marker := fixtureAsset(repo, tag, "workspace-update.json", "22", raw)
+	release := Release{Tag: tag, Published: time.Unix(30, 0), Assets: []Asset{exe, doc, marker}}
+	suiteTag := "v" + current.Version
+	catalogRaw, _ := json.Marshal(current)
+	cat := fixtureAsset(Repository, suiteTag, "catalog.json", "1", catalogRaw)
+	bundle := fixtureAsset(Repository, suiteTag, "workspace-bundle.zip", "2", []byte("bundle"))
+	tr := updateTransport{cat.APIURL: catalogRaw, exe.APIURL: []byte("new social"), doc.APIURL: document, marker.APIURL: raw}
+	tr["https://api.github.com/repos/"+Repository+"/releases?per_page=100"], _ = json.Marshal([]Release{{Tag: suiteTag, Published: time.Unix(20, 0), Assets: []Asset{cat, bundle}}})
+	tr["https://api.github.com/repos/"+repo+"/releases?per_page=100"], _ = json.Marshal([]Release{release, {Tag: "v0.1.0-preview.5", Published: time.Unix(5, 0)}})
+	original := http.DefaultTransport
+	http.DefaultTransport = tr
+	t.Cleanup(func() { http.DefaultTransport = original })
+	t.Setenv("GH_TOKEN", "")
+	t.Setenv("GITHUB_TOKEN", "")
+	return current, tr, m, release
+}
+
+func TestIndependentUpdateWithOptionalUntrackedCompatibilityDocument(t *testing.T) {
+	for _, tracked := range []bool{false, true} {
+		t.Run(fmt.Sprint("tracked=", tracked), func(t *testing.T) {
+			current, _, _, _ := setupCompatibilityUpdate(t, tracked)
+			plan, e := CheckUpdates(context.Background(), current)
+			if e != nil {
+				t.Fatal(e)
+			}
+			var choice UpdateChoice
+			for _, c := range plan.Choices {
+				if c.ID == "social" {
+					choice = c
+				}
+			}
+			if !choice.Available || choice.Reason != "" || choice.ReviewURL != "" {
+				t.Fatal("ordinary update was blocked", choice)
+			}
+			target, sources, e := SelectUpdates(current, plan, []string{"social"})
+			if e != nil {
+				t.Fatal(e)
+			}
+			if target.Apps[0].Version != "0.1.0-preview.6" || target.Version != current.Version || target.Apps[0].Port != current.Apps[0].Port {
+				t.Fatal("wrong update target")
+			}
+			if _, ok := target.Packages["social-contract"]; ok != tracked {
+				t.Fatal("optional document registration changed")
+			}
+			if _, ok := sources["social-contract"]; ok != tracked {
+				t.Fatal("optional document download changed")
+			}
+			if target.Packages["manager"] != current.Packages["manager"] {
+				t.Fatal("manager package changed")
+			}
+			if e = StageUpdateFiles(context.Background(), target, sources, t.TempDir(), func(string) {}); e != nil {
+				t.Fatal(e)
+			}
+		})
+	}
+}
+
+func TestUntrackedCompatibilityDocumentDoesNotRelaxPackageBoundaries(t *testing.T) {
+	current, _, m, release := setupCompatibilityUpdate(t, false)
+	delete(m.Packages, "social-contract")
+	g := updateGroup{"social", "My Social", "my-social", []string{"social"}}
+	for _, tc := range []struct{ id, file string }{
+		{"clips-contract", "docs/MyClips/compatibility.json"},
+		{"social-contract", "MySocial.exe"},
+		{"social-runtime", "docs/MySocial/compatibility.json"},
+		{"social-contract", "docs/Other/compatibility.json"},
+		{"social-contract", "docs/MySocial/../compatibility.json"},
+	} {
+		t.Run(tc.id+"/"+tc.file, func(t *testing.T) {
+			copy := m
+			copy.Packages = map[string]UpdatePackage{}
+			for id, p := range m.Packages {
+				copy.Packages[id] = p
+			}
+			copy.Packages[tc.id] = UpdatePackage{Package: fixturePackage(tc.file, []byte("unexpected")), Asset: "unexpected"}
+			raw, _ := json.Marshal(copy)
+			if _, e := manifestChoice(g, current, m.Repository, release, raw); e == nil {
+				t.Fatal("unregistered runtime/foreign/path-changing package accepted")
+			}
+		})
+	}
+	current.Packages["social-contract"] = fixturePackage("docs/MySocial/compatibility.json", []byte("old"))
+	raw, _ := json.Marshal(m)
+	if _, e := manifestChoice(g, current, m.Repository, release, raw); e == nil {
+		t.Fatal("tracked document may not disappear")
+	}
+	m.Packages["social-contract"] = UpdatePackage{Package: fixturePackage("docs/Other/compatibility.json", []byte("moved")), Asset: "unexpected"}
+	raw, _ = json.Marshal(m)
+	if _, e := manifestChoice(g, current, m.Repository, release, raw); e == nil {
+		t.Fatal("tracked document may not move")
+	}
+}
+
+func TestComponentReleaseWithIdenticalNativeBytesIsNotAnotherAppUpdate(t *testing.T) {
+	current, _, m, release := setupCompatibilityUpdate(t, false)
+	current.Apps[0].Version = m.Apps[0].Version
+	current.Packages["social"] = m.Packages["social"].Package
+	// Only the release link differs, as for a Chrome extension component patch.
+	raw, _ := json.Marshal(m)
+	g := updateGroup{"social", "My Social", "my-social", []string{"social"}}
+	choice, e := manifestChoice(g, current, m.Repository, release, raw)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if choiceChanged(g, current, choice) {
+		t.Fatal("identical native app offered another update")
+	}
+	choice.Apps[0].Args = []string{"--changed-startup"}
+	if !choiceChanged(g, current, choice) {
+		t.Fatal("a real launch-contract change was hidden")
 	}
 }

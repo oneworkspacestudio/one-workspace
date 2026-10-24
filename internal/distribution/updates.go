@@ -338,6 +338,9 @@ func normalizedApps(apps []catalog.App) []catalog.App {
 	out := append([]catalog.App(nil), apps...)
 	for i := range out {
 		out[i].Port = 0
+		// Component-only releases can point at identical native app bytes.
+		// A different release link alone is not an app update.
+		out[i].Source = ""
 	}
 	return out
 }
@@ -624,6 +627,13 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 	for id, p := range m.Packages {
 		old, ok := allowedPackages[id]
 		if !ok {
+			// Older component updates did not register the optional integration
+			// document. Match scopeUpdateChoice: leave it uninstalled rather than
+			// blocking the executable update. Never ignore runtime packages or
+			// another application's files.
+			if untrackedCompatibilityDocument(g, current, id, p.File) {
+				continue
+			}
 			omitted := false
 			for _, a := range m.Apps {
 				if a.ID == id && a.Package == id && a.Executable == p.File && a.Kind == "process" {
@@ -680,6 +690,20 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 		return ch, e
 	}
 	return scopeUpdateChoice(current, ch), nil
+}
+
+func untrackedCompatibilityDocument(g updateGroup, current catalog.Catalog, id, file string) bool {
+	if updatePackageOwner(id) != g.id {
+		return false
+	}
+	for _, appID := range g.apps {
+		a, installed := current.Find(appID)
+		if installed && a.Kind == "process" && strings.HasSuffix(a.Executable, ".exe") &&
+			id == a.ID+"-contract" && file == "docs/"+strings.TrimSuffix(a.Executable, ".exe")+"/compatibility.json" {
+			return true
+		}
+	}
+	return false
 }
 
 // SelectUpdates retains unselected apps, custom extensions, locations and ports.

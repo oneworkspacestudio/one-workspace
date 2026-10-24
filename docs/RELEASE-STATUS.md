@@ -967,3 +967,15 @@ This is an evaluation preview. Local Ollama/native UI and a real Codex handshake
 ## My AI runtime patch / Workspace82
 
 Rebuilds Workspace and My AI with Go1.27.3 to resolve GO-2026-6809 (CVE-2026-111943), found in the final reachable-symbol scan of the Go1.27.2 candidates. My AI1 and Workspace81 are immutable historical builds withheld from promoted updates. They were not installed into the owner's environment by this task. New publication requires a clean reachable-symbol scan. My AI2 also resets reasoning effort when the selected model changes. Existing app contracts/payloads remain retained; the suite manager and MyAI-owned packages change. No full-suite/production certification is implied; prior Mail fixture failures and advanced feature limits remain documented.
+
+## Workspace83: component update compatibility
+
+An optional app compatibility document no longer blocks native app updates on
+older installations that never registered it. Existing registered documents still
+receive verified updates; untracked documents remain uninstalled. Runtime files,
+foreign package ownership and file-location checks remain enforced. A component
+release changing only a native app's release link no longer offers a redundant
+native update when its version, bytes and launch contract match.
+
+Pins the verified public My Social6 native package. Other app payloads remain
+from the verified82 bundle. Built locally with Go1.27.3; Actions remain disabled.
