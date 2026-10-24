@@ -56,3 +56,13 @@ and promote Music3. Both installed managers remain80/Music2; select only Music.
 Secondary owner import finished before deployment (completed songs retained).
 Verify raw channel, unauthenticated selection and both normal backed-up updates.
 Artifacts I:/Projects/tooling/music-spotify-match-20261024. Installations pending.
+
+Music3 delivery complete: channel62a62ec, default URL with normal updater headers
+and real credential-free selection pass. Main exact tested digest/config/identity/
+unselected app+package checks and all25 running services pass; secondary normal
+UI completed12m24s, healthy apps and newest recovery kept. Fresh secondary release
+check changes only Music2 ->3, manager80 retained. Actual reported failed single-
+track import resumed successfully: Complete,1 ready,Downloaded,Added to library.
+Other partial jobs left alone. Music repo has sanitized delivery receipts and
+history. Real Chrome screenshot capture timed out; no successful capture claimed.
+Task test fixtures stopped/C scratch removed. Immutable Music3 tag staysd6d28d52.
