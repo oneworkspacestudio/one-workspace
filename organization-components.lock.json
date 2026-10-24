@@ -157,8 +157,8 @@
   },
   "myAI": {
     "repository": "oneworkspacestudio/my-ai",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-ai-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "7ceb2f4212172d94a9d26a75b111c2b2c80bc8faf24e07bf97b03182016bdeb2"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-ai-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "89798c63db7ffa670845d3b6ebd9230cd2691b3a341ef8d095f4ed1886bcfe57"
   }
 }
