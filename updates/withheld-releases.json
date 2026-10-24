@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "releases": [
+    {
+      "repository": "oneworkspacestudio/my-ai",
+      "tag": "v0.1.0-preview.1",
+      "reason": "GO-2026-6809 in Go1.27.2; use the Go1.27.3 rebuild"
+    },
+    {
+      "repository": "oneworkspacestudio/one-workspace",
+      "tag": "v0.3.0-preview.81",
+      "reason": "GO-2026-6809 in Go1.27.2; use the Go1.27.3 rebuild"
+    }
+  ]
+}

@@ -39,3 +39,20 @@ both signed-in browsers. Music repo carries sanitized evidence and delivery hist
 Task-owned fixtures stopped and C scratch removed; protected owner state, recovery
 archives and global caches preserved. No delivery steps remain; preserve immutable
 Music tag atb27a0792 when recording these documentation-only results.
+
+## Audio matching follow-up
+
+Music3 is a new immutable release at d6d28d527dca5214f6c541a73b330ea093c23e62,
+SHA256 3fb3dd88401e3b70ac51b2edbf54470706c8a8bb29e84de394d3c91e5dfb5255.
+Fixes rare-title searches silently autocorrecting into unrelated results, short
+titles/credited artists/distributor labels, and match errors swallowed as JSON
+errors. Seven Python tests, final actual reported-recording MP3 download, exact
+native OIDC/play/share/mobile import preview and standalone checks pass. All20
+public asset sizes/digests verified; unchanged embedded UI reused from2. No
+Actions or owner test fixtures. Named C scratch removed after process/link checks.
+
+Regenerate full index from latest8efc390 (retaining concurrent MyAI/Workspace81)
+and promote Music3. Both installed managers remain80/Music2; select only Music.
+Secondary owner import finished before deployment (completed songs retained).
+Verify raw channel, unauthenticated selection and both normal backed-up updates.
+Artifacts I:/Projects/tooling/music-spotify-match-20261024. Installations pending.

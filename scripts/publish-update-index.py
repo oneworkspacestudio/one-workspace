@@ -15,6 +15,16 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 ORG = 'oneworkspacestudio'
 
+def withheld_releases():
+    data = json.loads((ROOT / 'updates/withheld-releases.json').read_text(encoding='utf-8'))
+    assert data['schema'] == 1
+    result = set()
+    for row in data['releases']:
+        assert row['repository'].startswith(ORG + '/') and row['tag'] and row['reason']
+        result.add((row['repository'], row['tag']))
+    return result
+
+
 
 def main():
     token = os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN')
@@ -31,6 +41,7 @@ def main():
     repos = sorted(set(re.findall(r'^\s*\{"[^"\n]+", "[^"\n]+", "([^"\n]+)"', groups, re.MULTILINE)))
     assert 'one-workspace' in repos and len(repos) >= 20
     repositories = {}
+    withheld = withheld_releases()
     for name in repos:
         repo = ORG + '/' + name
         req = urllib.request.Request('https://api.github.com/repos/' + repo + '/releases?per_page=100',
@@ -40,7 +51,7 @@ def main():
             releases = json.load(response)
         public = []
         for release in releases:
-            if release['draft'] or not release['published_at']:
+            if release['draft'] or not release['published_at'] or (repo, release['tag_name']) in withheld:
                 continue
             public.append({
                 'tag_name': release['tag_name'], 'draft': False, 'published_at': release['published_at'],

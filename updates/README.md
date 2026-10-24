@@ -29,3 +29,5 @@ After **every** public Workspace or managed app release:
 Do not announce delivery until this promotion is complete. Run publishing and
 builds locally; GitHub Actions must remain disabled. Draft releases are excluded.
 Do not replace a published release's files; publish and promote a new version.
+
+`withheld-releases.json` excludes explicitly withheld builds during every promotion. Keep those immutable historical artifacts out of the default channel; never remove a withholding record merely because a newer build is published.
