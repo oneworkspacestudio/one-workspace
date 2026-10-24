@@ -47,3 +47,33 @@ completed successfully with all apps running. Verify current operation lock and
 catalog immediately before installation; preserve all unselected apps, locations,
 accounts, OIDC clients/recovery credentials and newest verified rollback. Publish
 and verify immutable assets, promote public index, then install/verify both PCs.
+
+## Corrected final delivery
+
+Final review superseded84/app1: Home videos were omitted from browse queries and
+saved language defaults were not selected. App1 was published/promoted but is now
+withheld in source; do not mutate its immutable assets. Unpublished84 release draft
+removed, source tag preserved. Main's normal84 install preserved every old app,
+executable, non-manager package pin, client, owner/path and recovery credential,
+but8.1.3 encoder preflight failed. Generic apphost health masked media readiness;
+that preliminary install is not final success.
+
+Final targets: app2 / Workspace85. Official FFmpeg8.1.2-1 passed80 native launches
+with and80 without OS app-health context. The earlier workaround is removed.
+Vendor binaries remain unmodified; source provenance records the assembly.
+Versioned private runtime folders preserve old pins on upgrades. Runtime ZIP SHA256
+5de2eb4e17fe77132c3f681fcc80cd63846f9ce78d8e7b75d7f9ed7e292b16b3.
+App2 EXE378e0ebba0c31d6c319e48480ff34496e3ea237af3d5c9a91f5ad9e7e5dd375b
+passed12 fresh native checks, including Home videos and actual preferred audio/
+converted captions. Exact85 full installer passed7 managed OIDC, shared Quantum,
+Apps/mobile and account/profile isolation checks. New /cinema-health returns503
+until the private media engine is ready; suite85 uses that actual readiness.
+
+App2 source c41734b/tag2 pushed, publishing underway. Pin its final ZIP hash before
+source85 commit/tag. Final public85 release, both channel promotions and actual
+85/app2 installs remain pending at this checkpoint. Main currently84/app1, remote
+last observed82 after completed repair. Delivery helper must upgrade Cinema1 and
+audit all other apps/packages unchanged. Verify media readiness and real
+OneAccount first-run UI on both PCs. Never create real PINs/media libraries as
+fixtures. Keep newest verified owner recovery; clean only stopped named synthetic
+folders after saving evidence. No clean-host/reboot certification claim.

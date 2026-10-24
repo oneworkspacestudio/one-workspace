@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.84',
+ [string]$Version='0.3.0-preview.85',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261020.1',
  [string]$DriveVersion='photos-preview-local',
@@ -29,7 +29,7 @@ param(
  [string]$ChatVersion='0.1.0-preview.10',
  [string]$ChatNotices='',
  [string]$MyCinema='',
- [string]$MyCinemaVersion='0.1.0-preview.1',
+ [string]$MyCinemaVersion='0.1.0-preview.2',
  [string]$MyCinemaNotices='',
  [string]$MyAI='',
  [string]$MyAIVersion='0.1.0-preview.2',
@@ -175,7 +175,7 @@ try {
  }
  if($MyMaps){$apps+=@{id='maps';name='My Maps';description='Explore places, save lists and plan driving, walking and cycling routes';version=$MyMapsVersion;kind='process';package='maps';executable='Maps.exe';port=9015;route='/maps';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/maps/auth/callback';args=@('--data','${DATA}/maps','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/maps','--no-browser');source='https://github.com/oneworkspacestudio/my-maps/releases/tag/v'+$MyMapsVersion}}
  if($MyCreate){$apps+=@{id='create';name='My Create';description='Create designs and edit imported text, shapes, pictures and pages';version=$MyCreateVersion;kind='process';package='create';executable='MyCreate.exe';port=9017;route='/create';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/create/auth/callback';args=@('--data','${DATA}/create','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/create','--no-browser');source='https://github.com/oneworkspacestudio/my-create/releases/tag/v'+$MyCreateVersion}}
- if($MyCinema){$apps+=@{id='cinema';name='My Cinema';description='Watch your movies and series with private family profiles';version=$MyCinemaVersion;kind='process';package='cinema';executable='MyCinema.exe';port=9020;route='/cinema';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/cinema/auth/callback';args=@('--data','${DATA}/cinema','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/cinema','--no-browser');source='https://github.com/oneworkspacestudio/my-cinema/releases/tag/v'+$MyCinemaVersion}}
+ if($MyCinema){$apps+=@{id='cinema';name='My Cinema';description='Watch your movies and series with private family profiles';version=$MyCinemaVersion;kind='process';package='cinema';executable='MyCinema.exe';port=9020;route='/cinema';stripPrefix=$true;health='/cinema-health';depends=@('accounts','drive');oidc=$true;callback='/cinema/auth/callback';args=@('--data','${DATA}/cinema','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/cinema','--no-browser');source='https://github.com/oneworkspacestudio/my-cinema/releases/tag/v'+$MyCinemaVersion}}
  if($MyAI){$apps+=@{id='myai';name='My AI';description='Chat with AI models and build with your code projects';version=$MyAIVersion;kind='process';package='myai';executable='MyAI.exe';port=9019;route='/myai';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/myai/auth/callback';args=@('--data','${DATA}/myai','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/myai','--no-browser');source='https://github.com/oneworkspacestudio/my-ai/releases/tag/v'+$MyAIVersion}}
  if($My3D){$apps+=@{id='my3d';name='My 3D';description='Build 3D models, dimension profiles and export for printing';version=$My3DVersion;kind='process';package='my3d';executable='My3D.exe';port=9018;route='/my3d';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/my3d/auth/callback';args=@('--data','${DATA}/my3d','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/my3d','--no-browser');source='https://github.com/oneworkspacestudio/my-3d/releases/tag/v'+$My3DVersion}}
  if($MyMeet){$apps+=@{id='meet';name='My Meet';description='Host video meetings with screen sharing, admission controls and chat';version=$MyMeetVersion;kind='process';package='meet';executable='Meet.exe';port=9016;route='/meet';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/meet/auth/callback';args=@('--data','${DATA}/meet','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/meet','--no-browser');source='https://github.com/oneworkspacestudio/my-meet/releases/tag/v'+$MyMeetVersion}}

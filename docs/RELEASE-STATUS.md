@@ -980,10 +980,10 @@ native update when its version, bytes and launch contract match.
 Pins the verified public My Social6 native package. Other app payloads remain
 from the verified82 bundle. Built locally with Go1.27.3; Actions remain disabled.
 
-## My Cinema / Workspace84
+## My Cinema / Workspace85
 
 Adds an original cinematic streaming app with real MyAccounts sign-in, PIN-protected
-adult and restricted child profiles, private Jellyfin12.3/FFmpeg8.1.3, shared-folder
+adult and restricted child profiles, private Jellyfin12.3/FFmpeg8.1.2, shared-folder
 indexing, movies/series, search, My List, resume, audio/subtitles and native/HLS video.
 The verified runtime is carried inside MyCinema.exe, so existing installers can
 install it atomically without understanding a new executable-helper package type.
@@ -997,3 +997,7 @@ This is a functional streaming preview. Advanced Drive import jobs, standalone
 restore wizard, offline/native-TV packaging and arbitrary codec/clean-host/reboot
 certification remain explicit in the app's feature matrix. Complete managed backup
 and restore use Workspace's existing stop/checkpoint/verify workflow.
+
+Final review also includes Home videos in catalog/search/rows/My List and applies saved audio/subtitle language preferences at playback start. The unpublished84 installer candidate is superseded by85; public83 remains its baseline.
+
+Pins official FFmpeg8.1.2 after8.1.3 intermittently failed native process initialization on the reference Windows host. Native probes passed80 launches with and80 without inherited app-health context; the compatibility-layer workaround is removed. Cinema readiness now requires the private media engine; its versioned runtime folder supports safe pin changes.

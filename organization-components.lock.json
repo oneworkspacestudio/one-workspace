@@ -163,8 +163,8 @@
   },
   "myCinema": {
     "repository": "oneworkspacestudio/my-cinema",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-cinema-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "97fea44ecca32a815b90c57fb9a037416d4ac1e65c3d745f4559cb286be985f7"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-cinema-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "148f0ca04d8bf20511d586e69d85348e00f5607798b47207d34be1f6ef1427ff"
   }
 }
