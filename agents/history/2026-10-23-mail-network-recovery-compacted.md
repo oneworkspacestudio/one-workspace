@@ -183,3 +183,10 @@ wrong-domain, old/future and conflicting/explicit-failure evidence. Workspace80
 pins and bundles26. Secondary79 public tunnel is unavailable; inspecting its
 local installed updater through Remote Desktop without replaying the operation.
 Final80/26 publication and both deployments remain pending at this checkpoint.
+
+Final80 source now pins Mail27: uncertainty stays informational even after receipt
+evidence expires; current explicit failures and conflicts remain actionable.
+The unpublished80/26 artifact is superseded and rebuilt before creating80's tag.
+Secondary79 completed in22m35s, normal local updater confirmed all healthy and
+its public tunnel subsequently returned. Remote on-screen input was temporarily
+enabled for that status inspection; restore it off before finishing.

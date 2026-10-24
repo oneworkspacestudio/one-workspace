@@ -1,6 +1,6 @@
 # Preview 80: independent incoming Mail evidence
 
-Bundles Mail26, retaining per-server probe matching and additionally recognising
+Bundles Mail27, retaining per-server probe matching and additionally recognising
 recent Internet SMTP accepted for the exact configured mail domain when the
 external checking service is inconclusive or unavailable. Working manual routes
 clear stale repair warnings automatically. Only domain/time evidence is retained;
@@ -16,6 +16,11 @@ inconclusive; this follow-up fixes that live verification finding. Final80/26
 deployment and round-trip evidence is recorded in repository history. No
 clean-host, physical reboot, arbitrary-router/provider or production acceptance
 is claimed. Built and published locally without GitHub Actions.
+
+Inconclusive checks remain informational after receipt evidence expires, with
+Check again and automatic test-message recognition. They do not show a broken
+Inbox connection or demand an unproven router repair. Technical router controls
+stay under Connection details; explicit failures/conflicts remain actionable.
 
 ---
 

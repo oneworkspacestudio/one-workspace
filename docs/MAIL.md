@@ -200,3 +200,9 @@ domain also confirms useful incoming activity when the external checker is
 inconclusive. Only domain/time is retained, restored from bounded protected
 native metadata after restart and expired after two hours. Current explicit
 connection failures and another receiver's known route remain actionable.
+
+The final80 bundle includes Mail27. Inconclusive checks stay informational,
+including when recent-receipt evidence expires. Check again is available and
+router controls are under Connection details. Explicit failed probes/conflicting
+receivers retain their repair guidance. No status claims delivery from an open
+public port alone.
