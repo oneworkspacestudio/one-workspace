@@ -26,3 +26,16 @@ recheck normal backup preflight (newest recovery snapshot~4.415GB). Both owner
 installations and final delivery record follow promotion; do not bypass backup
 or touch owner libraries/private keys/recovery copies. Runtime helper clears
 publisher credentials and preserves manager, unselected apps, settings/identity.
+
+## Delivered
+
+Public channel20a878c promoted all20 verified assets; default raw URL and actual
+credential-free Music-only selection pass. Downloaded public executable matches
+native-testedb1831b5f. Both owner PCs completed Music1 ->2 normal backed-up updates,
+retaining Workspace80 and other apps. Main exact hash/config/credentials/services/
+served UI verification passes; secondary UI confirms only Music changed, all apps
+healthy and latest recovery retained. New Import from Spotify screen visible in
+both signed-in browsers. Music repo carries sanitized evidence and delivery history.
+Task-owned fixtures stopped and C scratch removed; protected owner state, recovery
+archives and global caches preserved. No delivery steps remain; preserve immutable
+Music tag atb27a0792 when recording these documentation-only results.
