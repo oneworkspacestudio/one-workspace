@@ -42,3 +42,16 @@ Inbox. Its24-only update reached retained-backup cleanup; observe completion,
 never replay. Additional78 manager updates will be needed after publication.
 Named C scratch for76 was removed and obsolete temporary75 controller logs cleared.
 Use I tooling for large artifacts and only named C NTFS scratch for full linking.
+
+
+## Public78 checkpoint
+Source34682f3ce99c48e92dcd30311365d81a7ce8d6a4 is tagged/published78.
+Committed-source portal/safe-return tests passed; manager and full Windows setup
+compiled, all147 payload size/hash contracts and seven icon frames verified.
+All26 apps retained. Baseline public77 catalog; unchanged bytes reused from the
+verified public76 bundle, with manager/Mail24/notices replaced. Every uploaded
+asset matched local size/SHA256. Actions disabled. Named C mail-signin78-build
+scratch was removed after exact-path/reparse/active-build checks. Source/assets
+stay on I. Raw-channel promotion and normal deployment are next. Another normal
+77 operation was observed on the secondary while78 built; never interrupt/replay.
+Main currently77 + Mail24; final78 browser verification still pending.

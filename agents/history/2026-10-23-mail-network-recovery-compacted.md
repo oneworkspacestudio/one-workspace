@@ -134,3 +134,16 @@ still fails despite successful delivery. Published verified Mail24 sourcea42e9df
 with accurate manual-router wording and matching Inbox guidance; no auth/delivery
 logic changed. Promote24 and deploy its wording fix next. Shared-mode persistence
 and client handoff after secondary76 update still need final observation.
+
+
+## Login failure reproduced and fixed in Workspace78
+Do not assume fresh sign-in alone resolved accounts-2. A real callback later
+showed Login state did not match with several app/admin tabs. The shared portal
+flow cookie could be overwritten by another tab. See the new October24 concurrent
+sign-in handoff. Published78 includes isolated per-request cookies, strict binding
+and safe expired/restart recovery, Mail24 and prior77 update reconnect fixes.
+Main24 completed healthy, deployed JS matched source, post-install Gmail arrived,
+and Advanced remained open through checking-to-responding status polling. Joining
+PC's saved main role persisted through76 and normal Mail entry automatically
+opened the main Inbox. Secondary then had another normal77 operation; preserve
+its lock and backups. Final78 deployment/concurrent-browser verification remains.

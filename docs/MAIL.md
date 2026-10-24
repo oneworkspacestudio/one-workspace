@@ -181,3 +181,8 @@ an Internet mail route. Router/ISP restrictions can require its owner's action.
 
 After an update, reopen Workspace or Mail from its normal address if an old
 sign-in request expired. Do not bookmark an OAuth authorization or callback URL.
+
+
+Workspace78 includes Mail24 in its offline bundle as well as the online channel.
+It also isolates parallel portal sign-ins and provides safe recovery for requests
+left open during updates. See [Sign in across Workspace](SIGN-IN.md).
