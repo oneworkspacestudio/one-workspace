@@ -93,7 +93,7 @@ func InstallPackageIDs(c Catalog, selected map[string]bool) map[string]bool {
 		}
 	}
 	for id, p := range c.Packages {
-		if strings.HasPrefix(filepath.ToSlash(p.File), "licenses/") || (selected["vault"] && strings.HasPrefix(id, "vault-")) {
+		if strings.HasPrefix(filepath.ToSlash(p.File), "licenses/") || (selected["vault"] && strings.HasPrefix(id, "vault-")) || (selected["cinema"] && strings.HasPrefix(id, "cinema-")) {
 			keep[id] = true
 		}
 	}

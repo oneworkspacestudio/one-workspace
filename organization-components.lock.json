@@ -160,5 +160,11 @@
     "tag": "v0.1.0-preview.2",
     "asset": "my-ai-0.1.0-preview.2-windows-amd64.zip",
     "sha256": "89798c63db7ffa670845d3b6ebd9230cd2691b3a341ef8d095f4ed1886bcfe57"
+  },
+  "myCinema": {
+    "repository": "oneworkspacestudio/my-cinema",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-cinema-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "97fea44ecca32a815b90c57fb9a037416d4ac1e65c3d745f4559cb286be985f7"
   }
 }
