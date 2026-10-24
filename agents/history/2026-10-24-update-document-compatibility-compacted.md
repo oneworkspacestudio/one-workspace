@@ -83,3 +83,20 @@ pass. Source Social2ce4a4a; verified release v0.1.0-preview.7. Public native ass
 match anonymous downloads; channel refresh retains other repository records and
 withheld builds. No Workspace runtime change or Actions. Owner Social-only update
 will wait for an existing unrelated app update to finish before taking its lock.
+
+
+Social7 delivered: public tag/source2ce4a4a, all assets and anonymous downloads
+verified, channel1f147be retains concurrent Cinema promotion and withheld builds.
+The concurrent owner Cinema update completed first at Workspace84. Our83-bundle
+preflight rejected regression before mutation; derived an exact current84 bundle
+with only public7 Social bytes changed, all166 payloads verified. Current84
+updater source matches083716e native code; preflight/final receipt preserve84,
+Cinema and every other contract/package/executable and owner identity/settings.
+Normal full-backup Social-only update exit0, latest recovery manifest verified,
+all27 services/direct local app health healthy. Social frontend matches tested
+bytes. Public runtime is healthy; private app routes require sign-in, Vault uses
+special routes. Idle83 helper retired normally and84 helper refreshed; fresh check
+shows Social7 current and available=false without review warning. Python POST
+may reset after acceptance; validate the fresh completed operation timestamp.
+Primary delivery proof is Social docs/instagram-import-progress-acceptance.json.
+Keep newest recovery; prior conservative cleanup warning remains.
