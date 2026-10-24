@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.81',
+ [string]$Version='0.3.0-preview.82',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261020.1',
  [string]$DriveVersion='photos-preview-local',
@@ -29,7 +29,7 @@ param(
  [string]$ChatVersion='0.1.0-preview.10',
  [string]$ChatNotices='',
  [string]$MyAI='',
- [string]$MyAIVersion='0.1.0-preview.1',
+ [string]$MyAIVersion='0.1.0-preview.2',
  [string]$MyAINotices='',
  [string]$My3D='',
  [string]$My3DVersion='0.1.0-preview.1',
@@ -130,7 +130,7 @@ try {
  if($MyVault){foreach($name in @("RECOVERY.md","CLIENTS.md","HOSTING.md","ADMIN.md","SECURITY-REVIEW.md","SIGN-IN.md","PRODUCTION-GATES.md","acceptance.json")){$inputs["vault-"+$name]=@{source=(Join-Path $MyVaultNotices ("docs/"+$name));file=("docs/MyVault/"+$name)}}}
  if($MyMaps){$inputs['maps']=@{source=$MyMaps;file='Maps.exe'};if(-not $MyMapsNotices){throw 'My Maps requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['maps-'+$name]=@{source=(Join-Path $MyMapsNotices $name);file='licenses/MyMaps-'+$name}};$inputs['maps-contract']=@{source=(Join-Path $MyMapsNotices 'compatibility.json');file='docs/MyMaps/compatibility.json'}}
  if($MyCreate){$inputs['create']=@{source=$MyCreate;file='MyCreate.exe'};if(-not $MyCreateNotices){throw 'My Create requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['create-'+$name]=@{source=(Join-Path $MyCreateNotices $name);file='licenses/MyCreate-'+$name}};$inputs['create-contract']=@{source=(Join-Path $MyCreateNotices 'compatibility.json');file='docs/MyCreate/compatibility.json'}}
- if($MyAI){$inputs['myai']=@{source=$MyAI;file='MyAI.exe'};if(-not $MyAINotices){throw 'My AI requires licence notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['myai-'+$name]=@{source=(Join-Path $MyAINotices $name);file='licenses/MyAI-'+$name}};$inputs['myai-contract']=@{source=(Join-Path $MyAINotices 'compatibility.json');file='docs/MyAI/compatibility.json'}}
+ if($MyAI){$inputs['myai']=@{source=$MyAI;file='MyAI.exe'};if(-not $MyAINotices){throw 'My AI requires licence notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['myai-'+$name]=@{source=(Join-Path $MyAINotices $name);file='licenses/MyAI-'+$name}};$inputs['myai-contract']=@{source=(Join-Path $MyAINotices 'compatibility.json');file='docs/MyAI/compatibility.json'};foreach($name in @('SETUP.md','SUPPORT.md','ADR-001-architecture.md','SECURITY-CHECKS.md')){$inputs['myai-doc-'+$name]=@{source=(Join-Path $MyAINotices ('docs/'+$name));file=('docs/MyAI/'+$name)}}}
  if($My3D){$inputs['my3d']=@{source=$My3D;file='My3D.exe'};if(-not $My3DNotices){throw 'My 3D requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['my3d-'+$name]=@{source=(Join-Path $My3DNotices $name);file='licenses/My3D-'+$name}};$inputs['my3d-contract']=@{source=(Join-Path $My3DNotices 'compatibility.json');file='docs/My3D/compatibility.json'}}
  if($MyMeet){$inputs['meet']=@{source=$MyMeet;file='Meet.exe'};if(-not $MyMeetNotices){throw 'My Meet requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['meet-'+$name]=@{source=(Join-Path $MyMeetNotices $name);file='licenses/MyMeet-'+$name}};$inputs['meet-contract']=@{source=(Join-Path $MyMeetNotices 'compatibility.json');file='docs/MyMeet/compatibility.json'}}
  if($MyClips){$inputs['clips']=@{source=$MyClips;file='MyClips.exe'};if(-not $MyClipsNotices){throw 'My Clips requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['clips-'+$name]=@{source=(Join-Path $MyClipsNotices $name);file='licenses/MyClips-'+$name}};$inputs['clips-contract']=@{source=(Join-Path $MyClipsNotices 'compatibility.json');file='docs/MyClips/compatibility.json'}}

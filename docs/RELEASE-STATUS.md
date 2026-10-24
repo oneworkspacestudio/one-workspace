@@ -962,3 +962,8 @@ No production, arbitrary-provider or clean-host/reboot acceptance is implied.
 Adds the original My AI application: streamed local/cloud provider adapters, per-session model controls, a Codex-style project/conversation/composer layout, Windows-protected per-user keys and isolated Codex app-server integration. MyAccounts and a dedicated My AI source reuse the existing native identity and Quantum private-source contract. All26 prior app contracts and binaries are retained from verified public80; only the manager, release notice and new MyAI-owned packages change.
 
 This is an evaluation preview. Local Ollama/native UI and a real Codex handshake are demonstrated; cloud keys and a full agent edit/test turn need further acceptance. Unverified local/DeepSeek Code configurations stay disabled. No Open WebUI code/assets are redistributed and no global Codex login/configuration is adopted. Unsupported advanced features and clean-host/service/reboot gates are explicit in the app support matrix.
+
+
+## My AI runtime patch / Workspace82
+
+Rebuilds Workspace and My AI with Go1.27.3 to resolve GO-2026-6809 (CVE-2026-111943), found in the final reachable-symbol scan of the Go1.27.2 candidates. My AI1 and Workspace81 are immutable historical builds withheld from promoted updates. They were not installed into the owner's environment by this task. New publication requires a clean reachable-symbol scan. My AI2 also resets reasoning effort when the selected model changes. Existing app contracts/payloads remain retained; the suite manager and MyAI-owned packages change. No full-suite/production certification is implied; prior Mail fixture failures and advanced feature limits remain documented.

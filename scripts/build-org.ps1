@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.81',
+ [string]$Version='0.3.0-preview.82',
  [string]$Cache='',
  [string]$SeedArchive=''
 )
