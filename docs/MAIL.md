@@ -186,3 +186,11 @@ sign-in request expired. Do not bookmark an OAuth authorization or callback URL.
 Workspace78 includes Mail24 in its offline bundle as well as the online channel.
 It also isolates parallel portal sign-ins and provides safe recovery for requests
 left open during updates. See [Sign in across Workspace](SIGN-IN.md).
+
+Workspace79 bundles Mail25. It automatically confirms that outside SMTP checks
+reach this specific Mail engine, accepting a working manually forwarded route
+without requiring router inspection. Verified connections clear stale router
+repair actions and errors; monitoring continues every five minutes. Public TCP
+response alone, old mail and local connection tests are not accepted as proof.
+This verifies connectivity, not message delivery or spam placement. No mailbox
+content or credentials are sent to the external checking service.

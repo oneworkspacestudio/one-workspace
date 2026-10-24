@@ -1,3 +1,27 @@
+# Preview 79: Mail verifies its actual incoming connection
+
+Includes Mail25 in the offline bundle and online distribution. The external
+SMTP check is matched against a fresh connection observed by this server, from
+the same successful checking node to the requested public address. A working
+manually forwarded route is accepted automatically even if an upstream router
+cannot be inspected. Verified connections clear stale repair/error guidance.
+Routine monitoring keeps healthy status while it checks again in the background.
+
+Shared clients continue to open the main Mail service, retain local messages and
+stop their separate engine/router checks. No routes, identities or mailbox data
+are moved. Router permissions and ISP restrictions can still require owner action
+when the connection truly fails; connectivity is distinct from message delivery.
+Only the public SMTP hostname is shared with the existing Check-Host service.
+
+Synthetic correlation/router checks and an isolated native engine metadata/reload
+check passed. Windows manager, Mail and full installer compile; all retained app
+payload sizes/hashes and icon frames are checked. Final real installation and
+mail delivery evidence is recorded in repository history. No clean-host, reboot,
+arbitrary router/provider or production acceptance is claimed. Builds, releases
+and channel promotion run locally without GitHub Actions.
+
+---
+
 # Preview 76: One main Mail service across PCs
 
 Mail22 offers an owner-reviewed main-service connection, discovers standard main

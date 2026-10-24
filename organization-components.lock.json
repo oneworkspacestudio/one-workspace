@@ -33,9 +33,9 @@
   },
   "mail": {
     "repository": "oneworkspacestudio/mail",
-    "tag": "workspace-mail-v0.1.0-preview.24",
+    "tag": "workspace-mail-v0.1.0-preview.25",
     "asset": "Mail.exe",
-    "sha256": "6ba16b40dec49a03c37d334d12a4101b21a5daad64db29c6e2baaa91707020d5"
+    "sha256": "1a2b0259d374b01540eb028007147703908b4791a259e5020123dfe5d21108e2"
   },
   "calendar": {
     "sha256": "da46245cb29c83c908aaab63e0b13c4f3e32f7ccd583acc49331b3d340bbd29a",

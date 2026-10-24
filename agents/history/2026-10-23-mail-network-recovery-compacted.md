@@ -164,3 +164,13 @@ this upstream hop;24 explains that distinction without asking users to change a
 working route. Main must stay online. No claim of all-router, clean-host/reboot
 or production acceptance. C named scratch/task logs cleared; user data, separate
 local messages/settings and newest usable rollback preserved.
+
+## October24 Mail25 integration checkpoint
+User reports Mail24 still displays router repair text through the shared main
+service. Main/client routing is already correct; Mail24 only changed wording.
+Mail25 adds fresh per-server external probe correlation with narrow native SMTP
+connection metadata. Working manual routes are verified automatically; stale
+router actions/errors clear. Synthetic negative cases and isolated native engine
+configuration/reload passed. Workspace79 pins and bundles25 for new installations;
+all other app contracts are retained from the verified78 suite. Publication,
+channel promotion and normal updates on both real PCs remain pending here.
