@@ -1076,6 +1076,6 @@ Bundles native My AI4: local-first expandable cloud models, persistent shared ba
 My AI exact native checks and scope/queue/provider tests pass; OpenAI/DeepSeek live turns and full Codex edit/test require entered keys and supported Windows sandbox setup. Legacy Windows unelevated sandbox refuses project-only profiles safely; no OS elevation/global Codex adoption. Builds remain unsigned previews, not clean-host/service/reboot certified.
 
 
-## Workspace89 preparation: native Social uploads
+## Workspace90 preparation: native Social uploads
 
-Adds a narrow proxy route for expiring, single-ZIP Social upload permissions, without browser cookies or general app access. Social9 installs its Windows file picker and encrypted transfer queue for the current Windows user. Transfers continue after the page closes; Social retains review and explicit publication. Existing MyAI5 managed projects and other app contracts remain unchanged. Native publication and installed delivery evidence follow verification.
+Adds a narrow proxy route for expiring, single-ZIP Social upload permissions, without browser cookies or general app access. Social10 installs its Windows file picker and encrypted transfer queue for the current Windows user. Transfers continue after the page closes; Social retains review and explicit publication. Retains managed projects and the latest public MyAI6 default, with all26 other app contracts unchanged. Native handoff verifies the receiving account before opening the Windows picker; an unpaired account requires explicit confirmation. Native publication and installed delivery evidence follow verification.
