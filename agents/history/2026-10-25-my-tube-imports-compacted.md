@@ -69,3 +69,10 @@ Tube4 WindowsZIP SHA2564c4a5d554772dd5a0d0492b877f01786bf0cdc45fae89640fdd339165
 Prepare pin/channel promotion, then normal Tube-only secondary update and retry
 the user-requested existing source. Preserve all other versions/withholding and
 newest verified rollback. No replacement Workspace90 installer/manager release.
+
+Preview4 publication complete: source948db4a, tagv0.1.0-preview.4; all13 asset
+sizes/digests verified. Anonymous public Windows ZIP hash/size match; public raw
+channel promotionad5dea0 and future suite pin pushed. Prior tags/withholding
+preserved. Secondary Tube-only normal update is next; no manager91/full installer
+replacement. Raw diagnostic signed-URL metadata and partial media removed from
+this task folder on I; no C scratch created.
