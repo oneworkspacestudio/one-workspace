@@ -80,3 +80,44 @@ then select Workspace86 + Cinema4 in one normal backed-up transaction. Close old
 idle controller first; preserve busy checks. Upgrade primary manager separately
 if needed, preserving its already installed Cinema4. Both final delivery receipts
 and public channel verification remain required. Never repeat an active update.
+
+## Public86 and primary completion
+
+Workspace86 source d6a78d1f5c6147ab695f2c5524027b2cf4b08497 is public, all28
+assets verified; all166 bundle payloads checked with27 other contracts retained
+from public85 and exact Cinema4 included. Manager SHA256
+514cc6d88ad96e40a05efc5897e9e026cb15dd6b65e7bd647fca75b22ce2dcdc; public bundle
+b2427f91ac2d58fe0a66fe235f5b10f49fb7099a9e3e2346db4961c77ec616c1. Promotion
+a187fd8 and unauthenticated channel/assets verified, all unrelated/withheld
+records retained. Targeted distribution/maintenance/catalog checks and vet pass;
+both actual public minimal/full Cinema catalog checks pass. Full86 installer was
+not run; no clean-host/reboot claim. No Actions or subagents.
+
+Primary now runs86/Cinema4. Normal manager-only online update safely failed its
+free-space preflight and restored85 health; the successful attempt used exact
+public86 bundle staged outside C, preserving normal backup/rollback guards.
+Independent final hashes, Cinema readiness, every other app/package/executable,
+owner/paths/ports/preferences, OIDC clients and recovery credentials verified.
+Latest verified rollback kept; unknown cleanup items preserved. Sanitized task
+receipt manager86-primary-delivery.json; preceding Cinema4 receipt unchanged.
+
+## Second PC completion
+
+One normal public transaction selected only Workspace86 and Cinema4, completing
+in23m59s with all apps healthy and the latest verified85 rollback retained.
+Remote86-before/after inventories and current86 public check confirm4/86 up to
+date. Social6 remains unchanged;7 remains a separate offer. Old My3D review stays.
+
+Independent read-only remote PowerShell audit (through the user-selected remote
+desktop) passed actual final manager/Cinema public hashes,25 other process EXE
+hashes, all other contracts/package pins, owner/paths/ports/preferences/app count,
+actual Cinema4 health and Jellyfin12.3 startup. Minimal four Cinema packages stay
+tracked. Unlike the prior2 delivery, this includes an independent remote hash
+audit. Its sanitized receipt remains in protected maintenance data; screenshots
+and remote86-after.txt stay in task tooling. Aggregate published in the Cinema
+repository docs/upload-delivery.json. No owner media/PIN/profile/library fixtures.
+
+Updater and task terminal closed; on-screen remote input restored. Existing
+services preserved. New Cinema tab remains at the normal profile PIN gate. Both
+requested installations are complete, no update/preview remains running. Final
+docs-only handoff pushes do not move immutable public source tags/assets.
