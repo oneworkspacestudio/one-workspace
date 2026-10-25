@@ -100,3 +100,18 @@ shows Social7 current and available=false without review warning. Python POST
 may reset after acceptance; validate the fresh completed operation timestamp.
 Primary delivery proof is Social docs/instagram-import-progress-acceptance.json.
 Keep newest recovery; prior conservative cleanup warning remains.
+
+
+## Social8 promoted (25 October)
+
+Native8 sourcebfcc8d4 provides checksum-verified resumable uploads and persistent
+server jobs; private schema3, five-row sample, no archive re-upload on Import.
+All6 exact-native browser flows and host restart pass; authorized private222MB
+ZIP integration imports99posts/0failures in isolated NTFS. All10 public assets/
+lengths/digests, anonymous native downloads/source tag verified. Exact current
+manifestChoice/SelectUpdates accepts tracked5 and legacy4 Social packages and
+retains manager/other apps. No Workspace code or Actions change. Channel refresh
+retains every other repository record including concurrent87/MyAI4, plus withheld
+releases. Both owner installs still pending; current primary87/Social7, remote
+86/Social6 before install. Select Social only and preserve new versions. Primary
+controller refreshed normally to current87; do not repeat another active update.
