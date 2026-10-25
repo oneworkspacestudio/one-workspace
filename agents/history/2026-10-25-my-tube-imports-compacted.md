@@ -21,3 +21,13 @@ Preserve withholding records/MyAI7/Social10 and unrelated updates.
 
 Artifacts tooling/tube-youtube-20261025, all large artifacts on I, no new C fixture.
 Public channel promotion and normal secondary install still pending here.
+
+Promotion c31b168 is pushed; unauthenticated raw main contains Tube3 and the public
+Windows ZIP was downloaded/hashed successfully. No old promoted tag was removed.
+Secondary independently requested MyAI7 operation is active, copying its8.6GB
+normal protected backup; leave the operation lock intact. Current90 controller
+was opened via the installed normal updates command for read-only progress.
+Do not use old closed71/75/77 browser tabs as current state. On-screen remote input
+is restored off. Need wait for existing transaction, check channel, select only
+Tube3, observe normal completion and open the new Imports page before claiming
+installation. Public Tube3 source/archives are already delivered; no manager91.
