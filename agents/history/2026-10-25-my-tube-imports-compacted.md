@@ -76,3 +76,13 @@ channel promotionad5dea0 and future suite pin pushed. Prior tags/withholding
 preserved. Secondary Tube-only normal update is next; no manager91/full installer
 replacement. Raw diagnostic signed-URL metadata and partial media removed from
 this task folder on I; no C scratch created.
+
+Preview5 quality follow-up published fromb0dacbf: actual source format listing
+shows480p only as AV1 while H264 is360/720. Selector now retains480p AV1 when
+normal processing is enabled, then prepares compatible H264/AAC HLS. Verified
+selection397+140-20 at480p; disabled processing retains H264 fallback. All13
+preview5 assets verified. WindowsZIP SHA256d23642d6f1361b078380bfec156f9e6b3463bd95cc41aa95e158aee2d5a99e10.
+Preview4 installation is already active; do not cancel/replay or alter immutable
+assets. Remote local updater confirms stage5 backup6.4/8.8GB at14m49; public
+progress disconnect is expected until restart. Finish4 then normal5 update and
+retry existing requested source; all other versions retained. No Actions/tests.
