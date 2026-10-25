@@ -706,6 +706,13 @@ func untrackedCompatibilityDocument(g updateGroup, current catalog.Catalog, id, 
 		// Default-app installation may omit these optional Cinema guides. Ignore
 		// only exact known document pairs when untracked. Tracked guides must
 		// still be supplied, and can never move into another app's files.
+		if installed && a.ID == "myai" && a.Kind == "process" && a.Executable == "MyAI.exe" {
+			for _, name := range []string{"SETUP.md", "SUPPORT.md", "ADR-001-architecture.md", "SECURITY-CHECKS.md"} {
+				if id == "myai-doc-"+name && file == "docs/MyAI/"+name {
+					return true
+				}
+			}
+		}
 		if installed && a.ID == "cinema" && a.Kind == "process" && a.Executable == "MyCinema.exe" {
 			for _, name := range []string{"SETUP.md", "SUPPORT.md", "ADR-001-architecture.md", "SECURITY-CHECKS.md"} {
 				if id == "cinema-doc-"+name && file == "docs/MyCinema/"+name {

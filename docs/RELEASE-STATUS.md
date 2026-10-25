@@ -1021,3 +1021,10 @@ and restore use Workspace's existing stop/checkpoint/verify workflow.
 Final review also includes Home videos in catalog/search/rows/My List and applies saved audio/subtitle language preferences at playback start. The unpublished84 installer candidate is superseded by85; public83 remains its baseline.
 
 Pins official FFmpeg8.1.2 after8.1.3 intermittently failed native process initialization on the reference Windows host. Native probes passed80 launches with and80 without inherited app-health context; the compatibility-layer workaround is removed. Cinema readiness now requires the private media engine; its versioned runtime folder supports safe pin changes.
+
+
+## Workspace87: My AI tools and managed document compatibility
+
+Bundles native My AI4: local-first expandable cloud models, persistent shared background downloads/progress/restart recovery, real time/calculator/public search/page tools and scoped private reads, plus native public-only stdio MCP. Standalone app4 has explicit managed metadata;87 accepts exact optional My AI document paths when older default installations did not track those documents, while requiring every already-tracked guide and retaining runtime/file ownership boundaries. New fresh My AI installs retain all its own documents. Both minimal/full layouts and negative foreign/runtime/path cases pass. All27 other public86 app contracts and package bytes are retained in this bundle; existing independently updated app versions are preserved by selecting only Workspace and My AI. Normal backups/recovery remain enforced.
+
+My AI exact native checks and scope/queue/provider tests pass; OpenAI/DeepSeek live turns and full Codex edit/test require entered keys and supported Windows sandbox setup. Legacy Windows unelevated sandbox refuses project-only profiles safely; no OS elevation/global Codex adoption. Builds remain unsigned previews, not clean-host/service/reboot certified.
