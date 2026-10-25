@@ -115,3 +115,19 @@ retains every other repository record including concurrent87/MyAI4, plus withhel
 releases. Both owner installs still pending; current primary87/Social7, remote
 86/Social6 before install. Select Social only and preserve new versions. Primary
 controller refreshed normally to current87; do not repeat another active update.
+
+
+Social8 installation follow-through completed on both PCs, separately from the
+prior Workspace/MyAI transaction. Both retain87; primary7→8 with independent
+public binary/frontend digests, every other app/contract/package/identity/secret
+invariant and all27 service health. Latest registered recovery manifest verified;
+pre-existing unknown partial kept. Second6→8 normal native public update finished
+all9 stages (19m2s), reports all apps healthy and latest verified recovery retained.
+Fresh release UI shows Social8 up to date, no Social review, all25 other displayed
+versions retained including87/MyAI4/Cinema5. Remote evidence is updater completion
+and displayed versions only; no independent remote filesystem/credential audit.
+The earlier MyAI handoff's pending second-PC transaction was observed complete
+before this Social-only update; do not repeat it based on the older pending note.
+Source bfcc8d4 / immutable8, channel b40fbc6; concurrent docs9ceb741 retained.
+Social docs/instagram-server-jobs-acceptance.json contains sanitized delivery proof.
+No Workspace runtime or Actions change, no owner fixture, normal backup guards kept.
