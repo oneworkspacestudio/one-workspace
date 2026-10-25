@@ -18,6 +18,7 @@ import (
 )
 
 type Runtime struct {
+	myaiProjectsMu     sync.Mutex
 	socialGuardMu      sync.Mutex
 	socialGuardToken   string
 	socialGuardTokenAt time.Time
@@ -197,7 +198,7 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 			cmd.Env = append(cmd.Env, "MYCLIPS_PHOTOS_ROOT="+clipsRoot(c), fmt.Sprintf("MYCLIPS_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/clips/storage", c.Port), "MYCLIPS_STORAGE_GUARD_TOKEN="+clipsCapability(client.Secret))
 		}
 		if app.ID == "myai" {
-			cmd.Env = append(cmd.Env, "MYAI_DRIVE_ROOT="+myaiRoot(c), fmt.Sprintf("MYAI_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/myai/storage", c.Port), "MYAI_STORAGE_GUARD_TOKEN="+myaiCapability(client.Secret))
+			cmd.Env = append(cmd.Env, "MYAI_DRIVE_ROOT="+myaiRoot(c), fmt.Sprintf("MYAI_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/myai/storage", c.Port), "MYAI_STORAGE_GUARD_TOKEN="+myaiCapability(client.Secret), "MYAI_PROJECTS_ROOT="+myaiProjectsRoot(c), fmt.Sprintf("MYAI_PROJECTS_URL=http://127.0.0.1:%d/_integration/myai/projects", c.Port))
 		}
 		if app.ID == "social" {
 			cmd.Env = append(cmd.Env, "MYSOCIAL_PHOTOS_ROOT="+socialRoot(c), fmt.Sprintf("MYSOCIAL_STORAGE_GUARD_URL=http://127.0.0.1:%d/_integration/social/storage", c.Port), "MYSOCIAL_STORAGE_GUARD_TOKEN="+socialCapability(client.Secret))

@@ -59,7 +59,7 @@ func ensureMyAIDriveSource(c Config) error {
 	if !ok {
 		return errors.New("Drive sources missing")
 	}
-	found := false
+	found, projectsFound := false, false
 	for _, raw := range sources {
 		src, ok := raw.(map[string]any)
 		if !ok {
@@ -67,6 +67,14 @@ func ensureMyAIDriveSource(c Config) error {
 		}
 		p, _ := src["path"].(string)
 		name, _ := src["name"].(string)
+		if name == myaiProjectsSource {
+			if !strings.EqualFold(filepath.Clean(p), filepath.Clean(myaiProjectsRoot(c))) {
+				return errors.New("Projects source path conflict")
+			}
+			src["config"] = myaiSourceConfig(c)["config"]
+			projectsFound = true
+			continue
+		}
 		if name == myaiSource {
 			if !strings.EqualFold(filepath.Clean(p), filepath.Clean(myaiRoot(c))) {
 				return errors.New("MyAI source path conflict")
@@ -75,12 +83,15 @@ func ensureMyAIDriveSource(c Config) error {
 			found = true
 			continue
 		}
-		if p == "" || containedPath(p, myaiRoot(c)) || containedPath(myaiRoot(c), p) {
+		if p == "" || containedPath(p, myaiRoot(c)) || containedPath(myaiRoot(c), p) || containedPath(p, myaiProjectsRoot(c)) || containedPath(myaiProjectsRoot(c), p) {
 			return errors.New("broad Drive source overlaps private MyAI storage")
 		}
 	}
 	if !found {
 		sources = append(sources, myaiSourceConfig(c))
+	}
+	if !projectsFound {
+		sources = append(sources, map[string]any{"name": myaiProjectsSource, "path": myaiProjectsRoot(c), "config": myaiSourceConfig(c)["config"]})
 	}
 	server["sources"] = sources
 	return platform.SaveJSON(file, cfg)
@@ -115,7 +126,7 @@ func (rt *Runtime) verifyMyAIStorage(ctx context.Context, repair bool) error {
 			return e
 		}
 	}
-	return nil
+	return rt.verifyMyAIProjectsStorage(repair)
 }
 func myaiScope(subject, issuer string) string {
 	sum := sha256.Sum256([]byte(issuer + "\x00" + subject))
@@ -144,34 +155,45 @@ func (rt *Runtime) bindMyAIAccount(ctx context.Context, subject string) error {
 		return errors.New("native identity does not match MyAI OIDC identity")
 	}
 	scopes, _ := user["scopes"].([]any)
+	initialScopes := append([]any(nil), scopes...)
 	want := myaiScope(subject, rt.Config.Issuer)
-	for _, v := range scopes {
-		scope, ok := v.(map[string]any)
-		if !ok {
-			continue
-		}
-		if scope["name"] == myaiSource {
+	changed := false
+	for _, area := range []struct{ name, root string }{{myaiSource, myaiRoot(rt.Config)}, {myaiProjectsSource, myaiProjectsRoot(rt.Config)}} {
+		found := false
+		for _, v := range scopes {
+			scope, ok := v.(map[string]any)
+			if !ok {
+				continue
+			}
+			if scope["name"] != area.name {
+				continue
+			}
+			found = true
 			perms, _ := scope["permissions"].(map[string]any)
 			if scope["scope"] != want || perms["view"] != true || perms["download"] != true || perms["modify"] == true || perms["create"] == true || perms["delete"] == true {
-				return errors.New("unsafe MyAI native scope")
+				return errors.New("unsafe private Projects/My AI scope")
 			}
-			return nil
 		}
+		if found {
+			continue
+		}
+		if e = os.MkdirAll(filepath.Join(area.root, filepath.FromSlash(strings.TrimPrefix(want, "/"))), 0700); e != nil {
+			return e
+		}
+		scopes = append(scopes, map[string]any{"name": area.name, "scope": want, "permissions": map[string]bool{"view": true, "download": true, "create": false, "modify": false, "delete": false}})
+		changed = true
 	}
-	if e = os.MkdirAll(filepath.Join(myaiRoot(rt.Config), filepath.FromSlash(strings.TrimPrefix(want, "/"))), 0700); e != nil {
-		return e
+	if !changed {
+		return nil
 	}
-	scopes = append(scopes, map[string]any{"name": myaiSource, "scope": want, "permissions": map[string]bool{"view": true, "download": true, "create": false, "modify": false, "delete": false}})
 	user["scopes"] = scopes
 	body := map[string]any{"data": user, "which": []string{"scopes"}}
 	if creating {
-		// Native CreateUser applies global defaults to incoming scope permissions.
-		// Create without the private scope, then apply its explicit read-only grant.
 		initial := map[string]any{}
-		for key, value := range user {
-			initial[key] = value
+		for k, v := range user {
+			initial[k] = v
 		}
-		initial["scopes"] = scopes[:len(scopes)-1]
+		initial["scopes"] = initialScopes
 		if _, e = rt.socialDrive(ctx, "POST", "users", map[string]any{"data": initial}, token); e != nil {
 			return e
 		}

@@ -1,3 +1,26 @@
+# Preview 88: Projects without folder setup
+
+My AI5 creates projects from a name, with private files in My Drive and a matching
+private repository in Git. Completed AI file changes are committed, pushed and
+checked automatically. Ordinary members get their own isolated projects; there
+is no host-folder picker, Git command or Codex requirement for basic editing.
+
+The manager supplies the private Projects source and a bounded loopback Git
+broker. Git metadata/credentials remain outside AI-editable files; native
+MyAccounts identity mapping is exact, with no email auto-linking or new admin
+rights. Temporary connections are revoked and recover after interruption. Safe
+incoming changes fast-forward; competing changes are retained without force push.
+
+Native tests use fresh synthetic Accounts/Drive/Git/MyAI services and real local
+LLM edits, actual Git commits/pushes, phone/desktop layouts, own Drive downloads,
+member/cross-user isolation, retry/idempotence, conflict preservation, credential
+exclusion and temporary connection recovery. No owner project is a fixture.
+No live cloud-provider, full shell/test-runner, clean-host or reboot claim.
+All unselected app versions, paths, accounts and newest verified recovery remain
+under the normal backed-up update flow. Go1.27.3; local build; Actions disabled.
+
+---
+
 # Preview 87: My AI background downloads and real tools
 
 Includes My AI4 with local-first expandable model groups, a shared server-owned
