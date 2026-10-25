@@ -51,3 +51,32 @@ with a new repository prepublication checker for all ZIP member hashes and the
 requirements header. Also regenerate/compare using the manager's exported
 MakeAppUpdateManifest + RequireManager before publication. Complete both normal
 app-only installs and final evidence. Keep source/withholdings/history honest.
+
+## Default-layout delivery finding and manager86
+
+Cinema4 source d8ff391 is public, all15 asset sizes/digests verified, schema2/
+integration3 and exact manager-generated contract validated, public channel
+promoted at91edee6 with3 withheld. Primary normal public app-only update to4
+completed, exact eb175cb610957b585c75467b9369397af47420319c57a4b5488a6888dbb44c37
+verified, actual media ready and all other app/package/identity/path/recovery
+invariants retained. Its manager remains85. Receipt upload4-primary-delivery.json.
+
+Remote85 normal default-app installation tracks only Cinema executable plus
+three licences. Full85 catalogs (including primary) additionally track six guides/
+contract/provenance packages. Thus native85 rejects the same valid4 manifest on
+remote for untracked guides. Remote PowerShell administrative inspection confirmed
+that minimal layout and exact public85 manager hash babb087a...55053. No owner
+data was used as functional fixtures. Do not alter published4 assets or bypass
+package/update guards.
+
+Manager86 extends the existing untracked compatibility-document rule to exact
+Cinema guide/provenance ID/path pairs only. Missing guides stay uninstalled;
+tracked guides remain required and cannot move. Regression tests cover both4-
+and10-package layouts and reject runtime, foreign and moved/disappearing files.
+Build86 from public85, retaining all other apps/payloads and including exact
+accepted Cinema4 bytes. Publish/promote86. Remote can refresh the idle controller
+with the public hash-verified86 manager at its normal protected maintenance path,
+then select Workspace86 + Cinema4 in one normal backed-up transaction. Close old
+idle controller first; preserve busy checks. Upgrade primary manager separately
+if needed, preserving its already installed Cinema4. Both final delivery receipts
+and public channel verification remain required. Never repeat an active update.

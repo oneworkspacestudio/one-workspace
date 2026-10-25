@@ -4,9 +4,12 @@ My Cinema is a private streaming library for your films and series. Open it from
 Workspace, select a viewing profile, then browse, search or resume a title. Adult
 profiles use a PIN. Kids have separate watch history, My List and rating limits.
 
-The Workspace owner connects Movies and TV Shows folders in Cinema Settings.
-Choose the same physical folders already used in My Drive: videos are indexed in
-place. Removing a library keeps every file. No media folder is chosen automatically.
+After unlocking an adult profile, the Workspace owner can choose **Add videos**
+in the header. Connect a destination folder on the Workspace PC, then upload from
+a computer or phone with progress and cancellation. A new folder can be created
+explicitly; originals are retained and existing videos are never overwritten.
+For videos already in My Drive, connect the same physical folders to index them
+in place. Removing a library keeps every file. No media folder is chosen automatically.
 
 The app includes a pinned Jellyfin portable engine and compatible FFmpeg. It runs
 on loopback at the Cinema port plus 100. No public engine port, Docker, Node or

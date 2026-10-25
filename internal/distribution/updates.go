@@ -703,6 +703,19 @@ func untrackedCompatibilityDocument(g updateGroup, current catalog.Catalog, id, 
 			id == a.ID+"-contract" && file == "docs/"+strings.TrimSuffix(a.Executable, ".exe")+"/compatibility.json" {
 			return true
 		}
+		// Default-app installation may omit these optional Cinema guides. Ignore
+		// only exact known document pairs when untracked. Tracked guides must
+		// still be supplied, and can never move into another app's files.
+		if installed && a.ID == "cinema" && a.Kind == "process" && a.Executable == "MyCinema.exe" {
+			for _, name := range []string{"SETUP.md", "SUPPORT.md", "ADR-001-architecture.md", "SECURITY-CHECKS.md"} {
+				if id == "cinema-doc-"+name && file == "docs/MyCinema/"+name {
+					return true
+				}
+			}
+			if id == "cinema-provenance" && file == "docs/MyCinema/SOURCE-PROVENANCE.json" {
+				return true
+			}
+		}
 	}
 	return false
 }

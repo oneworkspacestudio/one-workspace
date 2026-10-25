@@ -1,3 +1,23 @@
+# Preview 86: Add videos and compatible Cinema updates
+
+Includes Cinema4 with a visible Add videos entry, browser file uploads with
+progress/cancellation, existing-folder connection and explicit new destination
+creation. Uploads preserve originals, reject duplicate names and recover lost
+chunk/completion replies. Adult owner access remains required.
+
+Workspace now accepts the same Cinema release on both default installations
+(runtime/licence packages) and full bundles (which also track optional guides).
+Only the exact known untracked Cinema guide/provenance paths are skipped. Runtime,
+licence, foreign-package and tracked-document boundaries remain enforced.
+
+Cinema's six synthetic upload/browser checks and targeted Workspace distribution,
+maintenance and catalog checks cover these changes. The runtime pin is unchanged.
+This does not claim a new clean-host, reboot or arbitrary-hardware certification.
+Existing apps, locations, accounts and the newest verified recovery are preserved
+by the normal update transaction. Built and published locally; Actions disabled.
+
+---
+
 # Preview 80: independent incoming Mail evidence
 
 Bundles Mail27, retaining per-server probe matching and additionally recognising
