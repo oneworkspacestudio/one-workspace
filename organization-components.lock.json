@@ -157,9 +157,9 @@
   },
   "myAI": {
     "repository": "oneworkspacestudio/my-ai",
-    "tag": "v0.1.0-preview.5",
-    "asset": "my-ai-0.1.0-preview.5-windows-amd64.zip",
-    "sha256": "2950a0910dda7049c70e86091692f7b8098b524a4a39a201b5bf7e969842e9c7"
+    "tag": "v0.1.0-preview.6",
+    "asset": "my-ai-0.1.0-preview.6-windows-amd64.zip",
+    "sha256": "b9fbb762e0c2edcb436610a5a0f0defe7813bb45d6f74c6c93ea11b1f9ad5c94"
   },
   "myCinema": {
     "repository": "oneworkspacestudio/my-cinema",
