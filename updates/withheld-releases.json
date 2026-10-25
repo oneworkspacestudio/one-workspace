@@ -20,6 +20,16 @@
       "repository": "oneworkspacestudio/my-cinema",
       "tag": "v0.1.0-preview.3",
       "reason": "Managed app manifest used schema1 with a minimum manager requirement; rejected before installation. Superseded by preview.4 schema2/integration3."
+    },
+    {
+      "repository": "oneworkspacestudio/my-social",
+      "tag": "v0.1.0-preview.9",
+      "reason": "Superseded before owner installation: native handoff requires verified receiving-account consent. Use Social10 / Workspace90."
+    },
+    {
+      "repository": "oneworkspacestudio/one-workspace",
+      "tag": "v0.3.0-preview.89",
+      "reason": "Superseded before owner installation: native handoff requires verified receiving-account consent. Use Social10 / Workspace90."
     }
   ]
 }
