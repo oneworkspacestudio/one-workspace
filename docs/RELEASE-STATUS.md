@@ -1,3 +1,26 @@
+# Preview 87: My AI background downloads and real tools
+
+Includes My AI4 with local-first expandable model groups, a shared server-owned
+download queue, progress that survives leaving the page and restarting My AI,
+and real time, arithmetic, public search and page-reading tools. The protected
+queue and installed Ollama library are shared across authenticated users;
+installation, cancellation and removal remain owner actions.
+
+Workspace accepts the exact optional My AI guides on both minimal and full
+document layouts while retaining tracked-document and runtime ownership checks.
+Existing86 installations select Workspace and My AI together. Other installed
+app versions, locations, accounts and the newest verified recovery are preserved
+by the normal backed-up transaction.
+
+My AI's13 native checks include a real download while navigating away, member
+progress, restart recovery, local inference and real tools. Scoped private reads
+and the isolated public stdio MCP server have dedicated checks. Current Codex's
+legacy Windows sandbox cannot enforce project-only read profiles and refuses
+safely; full Code turns require explicit supported Windows sandbox setup and
+provider credentials. No live cloud-provider turn, clean-host or reboot
+certification is claimed. Built locally with Go1.27.3; Actions disabled.
+
+---
 # Preview 86: Add videos and compatible Cinema updates
 
 Includes Cinema4 with a visible Add videos entry, browser file uploads with
