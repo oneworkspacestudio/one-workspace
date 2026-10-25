@@ -1,0 +1,5 @@
+# My AI SearXNG search promotion
+
+User requested app-included SearXNG search in Chat and Codex, push/release/install both PCs. App preview7 source bf3348f adds private native SearXNG/Python3.13.18 inside MyAI.exe; no URL/Docker/Python configuration. Explicit composer Search web, same native project tools and app-owned Codex MCP. Source offer/patches/licences/provenance supplied. Real native search, access control, EXE MCP, official isolated Codex discovery, real synthetic Ollama Chat/persisted sources, Go tests/vet/frontend/security scans passed; no full Codex/cloud model turn claim.
+
+Pin/default MyAI7 and promote public index after public release. Keep Workspace90, Social10 and all withholding records, do not rebuild/downgrade manager or modify other apps/models. Both owners currently90/10/MyAI6. Deliver through exact public MyAI-only protected backup/update; primary SDK helper and secondary fresh90 /updates view. Never use owner account/Drive as functional fixtures or bypass backup/storage checks. Artifacts tooling/my-ai-searxng-20261025. Delivery still pending.
