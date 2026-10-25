@@ -56,3 +56,16 @@ temporary recovery card while busy. Public tunnel resumed after restart; a
 Cloudflare1033 page was reloaded once back online. Remote on-screen input is off,
 clipboard unchanged, no fixture processes/C scratch. Only normal installed idle
 updater remains. No required Tube3 publication/secondary-install work remains.
+
+## Preview4 repair follow-up
+
+Owner import exposed full metadata exceeding the downloader2MiB limit. Tube4
+source948db4a projects consumed fields, defaults480p, adds private channel pages
+and source sidebar navigation. Schema3 preserves existing owner/media ACLs. TLS
+reset diagnosis also led to bounded reconnects/fail-on-error and per-stream
+duration checks before publication. Windows/Linux x64 builds and unchanged90
+managed app contract/member checks passed; no automated tests or Actions used.
+Tube4 WindowsZIP SHA2564c4a5d554772dd5a0d0492b877f01786bf0cdc45fae89640fdd33916573af1be.
+Prepare pin/channel promotion, then normal Tube-only secondary update and retry
+the user-requested existing source. Preserve all other versions/withholding and
+newest verified rollback. No replacement Workspace90 installer/manager release.
