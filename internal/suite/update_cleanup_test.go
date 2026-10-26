@@ -63,6 +63,11 @@ func TestUpdateCleanupRetainsRecoverySnapshotsAndUnknownStages(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
+	// Recovery files may be hard-linked, so removing an older copy need not
+	// release any data blocks. Give the stale stage actual disposable bytes.
+	if e = os.WriteFile(filepath.Join(stale, "discardable-fixture.bin"), []byte("stale package download"), 0600); e != nil {
+		t.Fatal(e)
+	}
 	active, e := newUpdateStage(c)
 	if e != nil {
 		t.Fatal(e)
@@ -245,14 +250,18 @@ func TestUpdateCleanupTransactionRunsOnlyAfterHealthCheckedCommit(t *testing.T) 
 				if e != nil {
 					t.Fatal(e)
 				}
-				requireExists(t, old.Path, false)
+				// The previous full-data update copy covers user libraries which
+				// program/metadata recovery deliberately preserves in place.
+				requireExists(t, old.Path, true)
 				rs, _ := UpdateBackups(c)
-				if len(rs) != 1 || rs[0].Purpose != "update" {
+				if len(rs) != 2 || rs[0].Purpose != "update" {
 					t.Fatalf("%+v", rs)
 				}
 				if _, e = verifyUpdateBackup(c, rs[0]); e != nil {
 					t.Fatal(e)
 				}
+				cleanup,_:=LoadUpdateCleanup(c)
+				if cleanup==nil||!cleanup.RetainedVerified { t.Fatal("Health-checked cleanup was not recorded") }
 			}
 		})
 	}

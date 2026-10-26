@@ -142,7 +142,7 @@ func TestReinstallRejectsBadReplacementBeforeDowntime(t *testing.T) {
 func TestRepairCatalogRetainsIndependentAppsAndExclusions(t *testing.T) {
 	c, _ := updateFixture(t)
 	incoming := c.Catalog
-	incoming.Version = "0.3.0-preview.64"
+	incoming.Version = "0.3.0-preview.92"
 	incoming.Packages = map[string]catalog.Package{}
 	for id, p := range c.Catalog.Packages {
 		incoming.Packages[id] = p

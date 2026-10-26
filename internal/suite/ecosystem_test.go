@@ -95,6 +95,10 @@ func TestOwnerOnlyMonitorIsNotOfferedToMembers(t *testing.T) {
 
 func TestUnconfiguredMailExplainsSetupBeforeLogin(t *testing.T) {
 	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/status" {
+			w.Write([]byte(`{"mainMailURL":""}`))
+			return
+		}
 		if r.URL.Path != "/healthz" {
 			t.Error("should not start session probe")
 		}

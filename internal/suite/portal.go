@@ -31,6 +31,7 @@ type session struct {
 	Subject, Name, Email, IDToken string
 	HostingSession                string
 	AppSessions                   map[string]string
+	AIApps                        map[string]aiAppConnection
 	Expires                       time.Time
 }
 type Portal struct {
@@ -196,6 +197,7 @@ func (p *Portal) Handler(control string) http.Handler {
 	p.socialStorageRoutes(mux)
 	p.myaiStorageRoutes(mux)
 	p.myaiProjectsRoutes(mux)
+	p.myaiAppsRoutes(mux)
 	p.clipsStorageRoutes(mux)
 	p.chatCatalogRoute(mux)
 	mux.HandleFunc("GET /_workspace/open/{id}", p.appOpen)
@@ -376,6 +378,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		}
 		p.rememberHostingSession(r)
 		p.rememberFoundationSessions(r)
+		p.rememberAIAppSession(r)
 		if _, ok := p.user(r); !ok && publicDriveRoute(r.URL.Path) {
 			anonymousShareCookies(r)
 		}

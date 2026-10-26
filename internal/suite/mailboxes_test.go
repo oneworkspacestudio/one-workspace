@@ -35,6 +35,13 @@ func TestMailboxSyncBeforeFirstLogin(t *testing.T) {
 	defer idp.Close()
 	var provisioned []mailboxUser
 	mail := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/status" {
+			if r.Header.Get("Authorization") != "" {
+				t.Error("service role probe forwarded provision credentials")
+			}
+			w.Write([]byte(`{"mainMailURL":""}`))
+			return
+		}
 		if r.URL.Path != "/api/mailboxes/provision" || r.Header.Get("Authorization") != "Bearer fixture-only-token" || r.Header.Get("X-Forwarded-For") != "" {
 			t.Error("wrong provision authorization")
 			http.Error(w, "forbidden", 403)

@@ -14,6 +14,10 @@ import (
 func signInFixture(t *testing.T, app appSignIn, status int) *Portal {
 	t.Helper()
 	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if app.id == "mail" && r.URL.Path == "/api/status" {
+			w.Write([]byte(`{"mainMailURL":""}`))
+			return
+		}
 		if app.id == "mail" && r.URL.Path == "/healthz" {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"configured":true}`))

@@ -1,3 +1,20 @@
+# Preview 93: Native Workspace actions for My AI
+
+My AI14 can discover installed apps and use registered native operations with
+the signed-in person's existing app sessions and permissions. Changes are reviewed
+in the conversation. Drive text storage, managed Git history/save/status and
+immutable pushed-source deployment to My Hosting are included. Unknown deployment
+responses are reconciled through durable receipts before retrying.
+
+The gateway is loopback-only, validates the browser's issuer and subject and
+forwards only destination app cookies and CSRF proof. No generic HTTP proxy,
+credential access, new app sessions or physical printer operations are exposed.
+Apps without registered operations remain discoverable/openable. Mail is read-only.
+The native Chat/Code loop is covered; separate full Codex shell integration is not
+certified. Existing preview, service, reboot and clean-host limits remain.
+
+---
+
 # Preview 92: Download the matching app file
 
 The updater now uses a verified standalone component asset when its release tag

@@ -35,6 +35,16 @@
       "repository": "oneworkspacestudio/my-maps",
       "tag": "v0.1.0-preview.3",
       "reason": "Managed manifest required an optional unregistered Maps compatibility document and was rejected before installation. Superseded by preview.4 with registered package scope and Go1.27.3."
+    },
+    {
+      "repository": "oneworkspacestudio/my-ai",
+      "tag": "v0.1.0-preview.12",
+      "reason": "Superseded before installation by preview13: prevent a private Workspace request becoming public search context through a short follow-up."
+    },
+    {
+      "repository": "oneworkspacestudio/my-ai",
+      "tag": "v0.1.0-preview.13",
+      "reason": "Superseded before installation by preview14 with directly named app action schemas, improving local-model invocation reliability."
     }
   ]
 }
