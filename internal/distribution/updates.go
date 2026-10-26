@@ -404,6 +404,14 @@ func scopeUpdateChoice(current catalog.Catalog, ch UpdateChoice) UpdateChoice {
 			delete(ch.Downloads, id)
 		}
 	}
+	// Keep the full target contract, but advertise only downloads SelectUpdates
+	// will actually stage. A Photos-only change must not count an unchanged
+	// Drive/Office executable in the selected download size.
+	for id := range ch.Downloads {
+		if old, ok := current.Packages[id]; ok && old == ch.Packages[id] {
+			delete(ch.Downloads, id)
+		}
+	}
 	return ch
 }
 func choiceChanged(g updateGroup, current catalog.Catalog, ch UpdateChoice) bool {
