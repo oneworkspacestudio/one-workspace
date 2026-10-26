@@ -199,3 +199,49 @@ completion before92 applies and avoid channel/pin changes. Preserve actual dynam
 versions in92; do not assume8/9 after peer updates. No local/remote operation from
 this task is active while92 builds. Need publish/promote92, manager-only updates
 on both, then secondary Photos-only plan must show the standalone7.8MB file.
+
+### Workspace92 publication and primary installation
+
+Frozen release source b45a6d6a60913a82c735346a5ab0acf7a5f981bb is pushed/tagged
+v0.3.0-preview.92. Matching-pin download mappings are used only for changed
+package bytes, validated against exact original target path/size/hash; unchanged
+components do not fetch extra manifests. Windows manager/setup compile and all
+166 payload hashes pass. Public full installer1,093,956,608bytes; every published
+asset matches size/SHA256. Actions disabled, no tests/rollback fixtures run.
+Public release https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.92
+Channel promotion7653baf adds only92; every previous release and withholding is
+unchanged. Anonymous Photos/manifest/manager92/catalog/channel checks pass.
+Normal anonymous manager-only plan downloads16,646,073bytes in2 direct assets,
+never the suite ZIP.
+
+Secondary91 repair completed with27 services healthy. The independently
+human-authorized Ai task subsequently installed MyAI10 on BOTH PCs and confirmed
+normal completion before our92 applies. Earlier8/9 retained/pending notes above
+are historical. Its public exe hash is
+b0cad46690fcecc023ee7ef998f5833baf78a24bbd732525175bba2ba46a334b.
+
+Primary normal online manager-only92 apply completed. Independent protected
+before/after audit confirms owner, credentials (decrypted only in memory), paths,
+app selections, all app contracts/other package bytes preserved; Photos6/MyAI10
+retained. Schema3 recovery203,867,792bytes logical,47,561,183 reused; Files and
+registered preserved libraries excluded. Cleanup freed~52.4MB from1 older
+eligible update copy; latest recovery and full data snapshots preserved. All27
+services healthy locally and via Chrome public URL. Private Photos.log confirmed.
+Secondary manager-only92 apply is now running with16.6MB selected; Photos remains
+unchecked until idle92 controller produces its standalone7.8MB plan.
+
+### Both-PC rollout completed
+
+Secondary normal manager92 apply completed and refreshed controller4. Other
+installed versions retained, including MyAI10. Its Photos-only plan then selected
+exactly1 direct Photos.exe asset,7,780,352bytes (previously1.08GB suite ZIP).
+Normal Photos6 apply completed in3m17s. Recovery238.1MB checked,104.5MB reused,
+133.5MB newly copied; existing user libraries stayed in place. Cleanup freed~154MB
+from1 older eligible update copy, keeping newest recovery and old full snapshots.
+All27 services healthy via secondary public Chrome healthz after completion;
+primary all27 public/local health and independent protected snapshot audit pass.
+No second apply was sent during temporary progress loss/restart502s. Source92
+fix and public receipts are immutable; no further binary release needed for this
+handoff. Artifacts/receipts/proof on I:/Projects/tooling/update-efficiency-20261026.
+C scratch removed;~15.9GB free after completion. No automated tests, actual native
+rollback, Linux/clean-host/reboot or production acceptance is claimed.
