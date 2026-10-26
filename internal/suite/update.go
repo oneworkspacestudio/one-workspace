@@ -327,7 +327,7 @@ func installRecoveryGuard(c Config) error {
 }
 
 // ApplyUpdates stages and verifies every selected byte before downtime, then
-// snapshots the entire installation. Its durable journal blocks ordinary startup
+// saves replaced programs and metadata. Its durable journal blocks ordinary startup
 // until either health-checked commit or a verified rollback completes.
 func ApplyUpdates(ctx context.Context, data string, plan distribution.UpdatePlan, request UpdateRequest, report func(string)) error {
 	c, e := LoadUpdateConfig(data)
@@ -479,7 +479,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 			return e
 		}
 	}
-	if e := cacheUpdateController(c, target, stage, ops.repair); e != nil {
+	if e := cacheUpdateController(c, target, stage, ops.repair || !distribution.MetadataRecoverySupported(c.Version)); e != nil {
 		return e
 	}
 	before, _, e := fileDigest(filepath.Join(c.Data, "workspace.json"))

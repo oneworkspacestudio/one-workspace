@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/internal/distribution"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 )
 
@@ -69,6 +70,9 @@ func containsPreservedUpdateData(path string) bool {
 }
 
 func planUpdateMetadata(c Config, target catalog.Catalog, repair bool) (*UpdateMetadataPolicy, error) {
+	if !distribution.MetadataRecoverySupported(c.Version) && (!distribution.MetadataRecoverySupported(target.Version) || c.Catalog.Packages["manager"] == target.Packages["manager"]) {
+		return nil, errors.New("update One Workspace to preview91 or newer first, or select it together with the app updates, to enable program and metadata recovery")
+	}
 	if err := validateManagedStorageSettings(c, true); err != nil {
 		return nil, err
 	}

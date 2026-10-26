@@ -1,3 +1,25 @@
+# Preview 91: Smaller update recovery copies
+
+Update recovery saves replaced programs, databases and settings. Registered
+photo/video libraries, model and project folders stay in place during backup and
+rollback. Independent app updates save only affected metadata; Workspace/shared
+updates save broader metadata without copying bulk libraries. Databases can still
+contain user content and must be retained for schema rollback.
+
+The separate Backups app keeps full-data snapshots, with scheduling optional and
+off by default. Cleanup preserves older full-data backups because update metadata
+cannot replace their coverage. Checked unchanged backup files can be reused on
+the same NTFS volume without linking live data. Downloads and recovery copy sizes
+are shown separately. Storage guards keep known mutable paths outside Apps;
+Photos now writes managed logs under Private/photos.
+
+Windows x64 manager/setup and Photos compile locally with Go1.27.3. JavaScript
+syntax and package integrity are checked. No new automated tests, native rollback
+fixture, clean-host, reboot or Linux acceptance is claimed. Existing preview
+limitations remain. GitHub Actions is not used.
+
+---
+
 # Preview 88: Projects without folder setup
 
 My AI5 creates projects from a name, with private files in My Drive and a matching

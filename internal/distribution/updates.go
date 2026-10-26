@@ -225,6 +225,11 @@ func newerWorkspace(candidate, current string) bool {
 func UpdateControllerSupported(version string) bool {
 	return newerWorkspace(version, "0.3.0-preview.22")
 }
+
+// Schema3 recovery must never cache a legacy controller that cannot read it.
+func MetadataRecoverySupported(version string) bool {
+	return version == "0.3.0-preview.91" || newerWorkspace(version, "0.3.0-preview.91")
+}
 func groupPackages(g updateGroup, c catalog.Catalog) map[string]catalog.Package {
 	out := map[string]catalog.Package{}
 	fixedGroup := false
