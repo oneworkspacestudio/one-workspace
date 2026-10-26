@@ -468,6 +468,10 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if target.Packages["manager"].File != "Workspace.exe" {
 		return errors.New("manager update changes its executable location")
 	}
+	policy, e := planUpdateMetadata(c, target, ops.repair)
+	if e != nil {
+		return e
+	}
 	if ops.preflight != nil && !ops.repair {
 		operationprogress.Report(ctx, "preflight", "Checking files, storage and Windows restart permissions", 0, 0, "")
 		report("Checking Windows can restart Workspace before stopping your apps")
@@ -512,10 +516,16 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		return fmt.Errorf("new app ports are unavailable: %w", e)
 	}
 	purpose := "update"
+	scope := planAppUpdateScope(c, target)
 	if ops.repair {
 		purpose = "repair"
+		scope = nil
 	}
-	backup, e := makeBackupDetailed(ctx, c, backupRoot, report, nil, purpose)
+	// Settings may have changed while the apps were stopping.
+	if e = validateManagedStorageSettings(c, true); e != nil {
+		return e
+	}
+	backup, e := makeScopedBackupDetailed(ctx, c, backupRoot, report, nil, purpose, scope, policy)
 	if e != nil {
 		lock.Close()
 		lock = nil
@@ -690,8 +700,14 @@ func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report f
 	if report == nil {
 		report = func(string) {}
 	}
-	if _, e := verifyUpdateBackup(c, j.Backup); e != nil {
+	snapshot, e := verifyUpdateBackup(c, j.Backup)
+	if e != nil {
 		return e
+	}
+	if j.Phase == "rollback-requested" {
+		if e = checkScopedRollback(c, snapshot); e != nil {
+			return e
+		}
 	}
 	if e := ops.stop(ctx, c); e != nil {
 		return e
@@ -706,7 +722,17 @@ func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report f
 		}
 	}()
 	if j.Recovery == nil {
-		recovery, e := makeUpdateBackup(ctx, c, filepath.Dir(j.Backup.Path), report)
+		var archiveScope *AppUpdateScope
+		var archivePolicy *UpdateMetadataPolicy
+		if snapshot.Scope != nil {
+			archiveScope = &AppUpdateScope{Apps: snapshot.Scope.Apps, Packages: snapshot.Scope.Packages, After: snapshot.Config.Catalog}
+		}
+		if snapshot.Metadata != nil {
+			copy := *snapshot.Metadata
+			copy.After = snapshot.Config.Catalog
+			archivePolicy = &copy
+		}
+		recovery, e := makeScopedBackupDetailed(ctx, c, filepath.Dir(j.Backup.Path), report, nil, "snapshot", archiveScope, archivePolicy)
 		if e != nil {
 			return e
 		}
@@ -784,7 +810,11 @@ func RollbackUpdate(ctx context.Context, data, id string, report func(string)) e
 	if backup.RecoveryOnly {
 		return errors.New("this archive contains an interrupted state; choose a complete installation backup")
 	}
-	if _, e = verifyUpdateBackup(c, *backup); e != nil {
+	snapshot, e := verifyUpdateBackup(c, *backup)
+	if e != nil {
+		return e
+	}
+	if e = checkScopedRollback(c, snapshot); e != nil {
 		return e
 	}
 	j := UpdateJournal{Phase: "rollback-requested", Backup: *backup}

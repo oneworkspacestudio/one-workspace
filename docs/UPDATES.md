@@ -117,23 +117,73 @@ guidance instead of presenting a completed update.
 
 ## Backups and rollback
 
-The updater stops the selected installation's supervisor, apps and persistent
-shared service, then verifies that its ports are released. It creates a complete
-backup of program files, private databases/configuration/credentials/media and
-ordinary files. Empty directories, modification times, ordinary-file permissions,
-file attributes and regular-file NTFS alternate data streams are preserved.
-Backup contents and alternate streams are hashed and verified before replacement.
-Backups are protected on a local NTFS volume, including when programs/files use exFAT.
+The download and the recovery copy are different sizes. The update list shows
+the total of distinct release assets selected for download. A small app release
+can be only a few MB even when its local data is much larger.
 
-Allow space for **two full copies** of the backed-up installation plus working
-space. Downloads stage under Private/updates, so that volume also needs staging
-space. Existing backups, diagnostic logs and disposable runtime extraction caches
-are excluded from each new snapshot. After a healthy update, automatic cleanup
-keeps the latest verified update recovery copy and removes older identified
-automatic update backups. Scheduled/manual snapshots, recovery archives and
-unknown legacy copies remain. Backups are never purged before a new update to
-make room. A failed backup prevents any program replacement. See
-[automatic update cleanup](UPDATE-CLEANUP.md) for the retention and safety rules.
+Update recovery saves **replaced program packages, databases and settings**.
+Ordinary Drive files and registered media, model and project folders remain in
+place: the updater neither copies nor clears these libraries during rollback.
+Downloaded app engines, helper tools and caches also remain in place. Programs
+live in Apps, private state in Private, and ordinary files in Files. Startup and
+update planning reject overlapping roots and known mutable settings under Apps.
+Photos writes its managed log under Private/photos rather than beside Photos.exe.
+Existing unmanaged files in a new package destination prevent overwriting it.
+
+Compatible existing independent app updates save only their affected databases,
+settings and changed programs. Workspace upgrades, reinstalls, added apps and
+shared-engine updates save Workspace-wide databases/settings plus replaced
+packages, still excluding bulk libraries. The updater stops the suite for
+consistency and checks every app after restarting it. Rollback first archives
+the corresponding current programs and metadata. A stale recovery copy cannot
+overwrite a different, later installed catalog.
+
+Databases must be included because an app update can migrate their schema. Some
+databases themselves contain user content, including mail messages or chat
+history; these copies can still be large. A database rollback can rewind metadata
+that refers to newer files, but those files remain in place and the newer database
+is retained in the recovery archive. Unsupported/custom storage needs an explicit
+managed storage profile before updates proceed; it does not silently fall back to
+copying an unknown library. External data locations are not covered automatically.
+
+Use the separate **Backups** app for full data protection. Its manual/scheduled
+snapshots still include private data and ordinary files. Scheduling is optional
+and off by default: excluding files from update recovery does not enable a data
+backup or prove an external model library is covered.
+
+Update recovery copies can reuse large unchanged files from a recorded protected
+backup after checking both current and backed-up content hashes. Reuse creates
+another hard link **between backup copies on the same volume**, never to live app
+data. Removing an older name leaves the new recovery copy intact. Alternate
+streams and unavailable/corrupt/cross-volume candidates use ordinary copies.
+Every resulting recovery file is verified through its new path before install.
+Progress distinguishes bytes checked, reused and newly copied. Large databases
+can still take time to hash; preserved libraries are not traversed for recovery.
+
+Allow worst-case space for two copies of the **affected recovery data** plus
+working space, because a failed migration may change data that cannot be reused.
+Full data backups still need full-copy space. Downloads stage under Private/updates.
+Copies preserve modification times, file attributes and regular-file NTFS
+alternate streams; full snapshots also preserve ordinary-file permissions.
+Backups remain protected on a local NTFS volume.
+
+After a healthy update, cleanup keeps its latest verified update recovery copy.
+It preserves older full data snapshots because metadata recovery cannot replace
+their coverage. Older identified automatic metadata/app recovery copies can be
+retired. Scheduled/manual snapshots,
+recovery archives and unknown legacy copies remain. Cleanup reports approximate
+physical free-space change, so shared backup bytes are not counted as reclaimed
+merely because an old name was removed. No backup is purged before a new update to
+make room. See [automatic update cleanup](UPDATE-CLEANUP.md).
+
+Program/database/settings recovery uses backup schema3 with a versioned storage
+policy. Older controllers refuse it rather than mistaking it for a full data
+snapshot. Schema1 full backups and schema2 app snapshots remain readable with
+their original restoration behaviour. Restoring an old full/app-data snapshot
+can also rewind the data it contains; it is not converted to metadata recovery.
+This optimization requires the updated Workspace controller; it does
+not change the behavior of a controller already installed on another machine.
+
 Custom app storage outside Programs, Private and Files is not part of this
 snapshot; back up those external locations separately before maintenance. Current
 installed versions and source URLs are recorded in the protected installation
@@ -162,10 +212,10 @@ verified backup and recovery archives. If launch still fails, check the executab
 permissions and Windows Security's protection history; do not disable protection.
 
 To manually undo an update, choose a recorded backup and **Archive current state
-and restore backup**. This creates a verified snapshot of the current installation
-first. You can restore that newer snapshot again if you need post-update edits.
-The protected backup directory also contains the files and app databases for
-individual recovery. The newest automatic update rollback is retained; use the
+and restore backup**. This creates a verified archive of the corresponding current
+state first. A healthy archive can restore post-update databases/settings again
+when the installed catalog matches. Program recovery copies contain databases
+and settings, not the excluded libraries. The newest automatic update rollback is retained; use the
 separate Backups app for long-term snapshots that update cleanup does not retire.
 
 A durable transaction journal blocks normal startup during an unfinished update.

@@ -82,7 +82,19 @@ func withinCleanup(root, path string) bool {
 // Remove individual entries with fresh ancestor checks. Metadata is removed last
 // so a failed deletion can be retried without mistaking a partial backup for a
 // valid rollback candidate. Restricted backup/stage directories serialize writers.
-func removeCleanupTree(ctx context.Context, root string, allowed map[string]bool) (int64, error) {
+func removeCleanupTree(ctx context.Context, root string, allowed map[string]bool) (freed int64, result error) {
+	// Backup files may share immutable bytes with another retained snapshot.
+	// Unlinking their old names does not necessarily reclaim their logical size.
+	before, beforeErr := platform.FreeBytes(filepath.Dir(root))
+	touched := false
+	defer func() {
+		freed = 0
+		if touched && beforeErr == nil {
+			if after, err := platform.FreeBytes(filepath.Dir(root)); err == nil && after >= before {
+				freed = int64(after - before)
+			}
+		}
+	}()
 	if e := cleanupPath(root); e != nil {
 		return 0, e
 	}
@@ -136,7 +148,6 @@ func removeCleanupTree(ctx context.Context, root string, allowed map[string]bool
 		}
 		return rank(paths[i]) > rank(paths[j])
 	})
-	var freed int64
 	for _, path := range paths {
 		if e = ctx.Err(); e != nil {
 			return freed, e
@@ -151,6 +162,7 @@ func removeCleanupTree(ctx context.Context, root string, allowed map[string]bool
 		if e = os.Remove(path); e != nil {
 			return freed, e
 		}
+		touched = true
 		if !st.IsDir() {
 			freed += st.Size()
 		}
@@ -222,8 +234,11 @@ func backupCleanupFiles(c Config, r BackupReceipt, legacy bool) (map[string]bool
 		return nil, e
 	}
 	sum, _, e := fileDigest(filepath.Join(r.Path, "backup.json"))
-	if e != nil || sum != r.SHA256 || b.Schema != 1 || b.ID != r.ID || !b.Created.Equal(r.Created) || b.Config.Version != r.Version || (b.Purpose != "update" && !(legacy && b.Purpose == "")) || b.Purpose != r.Purpose || b.RecoveryOnly || b.Config.Data != c.Data || b.Config.Programs != c.Programs || b.Config.Files != c.Files || b.Config.Owner != c.Owner {
+	if e != nil || sum != r.SHA256 || (b.Schema != 1 && b.Schema != 2 && b.Schema != 3) || b.ID != r.ID || !b.Created.Equal(r.Created) || b.Config.Version != r.Version || (b.Purpose != "update" && !(legacy && b.Purpose == "")) || b.Purpose != r.Purpose || b.RecoveryOnly || b.Config.Data != c.Data || b.Config.Programs != c.Programs || b.Config.Files != c.Files || b.Config.Owner != c.Owner {
 		return nil, errors.New("backup ownership could not be verified")
+	}
+	if e := validateBackupScope(b, r); e != nil {
+		return nil, e
 	}
 	allowed := map[string]bool{".": true, "backup.json": true, cleanupMarker: true}
 	for _, f := range b.Files {
@@ -276,6 +291,11 @@ func cleanupSuccessfulUpdate(ctx context.Context, c Config, keep BackupReceipt, 
 		r.Warnings = append(r.Warnings, "Cleanup skipped: retained recovery copy could not be verified")
 		return finish()
 	}
+	var retainedManifest UpdateBackup
+	if e := platform.LoadJSON(filepath.Join(keep.Path, "backup.json"), &retainedManifest); e != nil {
+		r.Warnings = append(r.Warnings, "Cleanup skipped: recovery copy metadata could not be read")
+		return finish()
+	}
 	rs, e := UpdateBackups(c)
 	if e != nil {
 		r.Warnings = append(r.Warnings, "Could not read backup history")
@@ -297,6 +317,12 @@ func cleanupSuccessfulUpdate(ctx context.Context, c Config, keep BackupReceipt, 
 		v := rs[i]
 		legacy := v.Purpose == "" && (v.CleanupPending || (j.PreviousAutomaticBackup != nil && j.PreviousAutomaticBackup.ID == v.ID && j.PreviousAutomaticBackup.Path == v.Path && j.PreviousAutomaticBackup.SHA256 == v.SHA256))
 		if v.ID == keep.ID || (v.Purpose != "update" && !legacy) || v.RecoveryOnly || !v.Created.Before(keep.Created) || (j.Recovery != nil && v.ID == j.Recovery.ID) {
+			i++
+			continue
+		}
+		if (retainedManifest.Scope != nil || retainedManifest.Metadata != nil) && !v.CleanupPending && len(v.Apps) == 0 && !v.MetadataOnly {
+			// Program/metadata recovery cannot replace a full data snapshot.
+			// Keep older full copies; the separate Backups app manages data backups.
 			i++
 			continue
 		}

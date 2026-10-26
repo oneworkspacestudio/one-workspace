@@ -23,7 +23,7 @@ type updateWindow struct {
 
 // Refresh idle older controllers so the owner receives the current reconnect UI.
 // Active operations still use the existing busy check before any retirement.
-const RemoteUpdateProtocol = 2
+const RemoteUpdateProtocol = 3
 
 func (p *Portal) updateWindow() (updateWindow, *url.URL, error) {
 	var window updateWindow

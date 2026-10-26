@@ -57,7 +57,13 @@ func (rt *Runtime) Status() map[string]string {
 	return out
 }
 func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
+	if e := validateProgramDataSeparation(c); e != nil {
+		return e
+	}
 	if e := CheckUpdateRecovery(c); e != nil {
+		return e
+	}
+	if e := validateManagedStorageSettings(c, false); e != nil {
 		return e
 	}
 	lock, e := platform.Lock(filepath.Join(c.Data, "runtime.lock"))
@@ -175,7 +181,7 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	}
 	cmd := exec.Command(filepath.Join(c.Programs, filepath.FromSlash(app.Executable)), args...)
 	cmd.Dir = appWorkingDir(c, app.ID)
-	cmd.Env = append(os.Environ(), "TEMP="+runtimeTemp(c, app.ID), "TMP="+runtimeTemp(c, app.ID))
+	cmd.Env = append(os.Environ(), "TEMP="+runtimeTemp(c, app.ID), "TMP="+runtimeTemp(c, app.ID), "WORKSPACE_APP_DATA_DIR="+appWorkingDir(c, app.ID))
 	for k, v := range app.Env {
 		cmd.Env = append(cmd.Env, k+"="+vars.Replace(v))
 	}

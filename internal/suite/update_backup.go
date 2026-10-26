@@ -34,13 +34,15 @@ type BackupStream struct {
 	SHA256 string `json:"sha256"`
 }
 type UpdateBackup struct {
-	Schema       int          `json:"schema"`
-	ID           string       `json:"id"`
-	Created      time.Time    `json:"created"`
-	Config       Config       `json:"config"`
-	Files        []BackupFile `json:"files"`
-	RecoveryOnly bool         `json:"recoveryOnly,omitempty"`
-	Purpose      string       `json:"purpose,omitempty"`
+	Schema       int                   `json:"schema"`
+	ID           string                `json:"id"`
+	Created      time.Time             `json:"created"`
+	Config       Config                `json:"config"`
+	Files        []BackupFile          `json:"files"`
+	RecoveryOnly bool                  `json:"recoveryOnly,omitempty"`
+	Purpose      string                `json:"purpose,omitempty"`
+	Scope        *AppUpdateScope       `json:"scope,omitempty"`
+	Metadata     *UpdateMetadataPolicy `json:"metadata,omitempty"`
 }
 type BackupReceipt struct {
 	ID             string    `json:"id"`
@@ -51,6 +53,10 @@ type BackupReceipt struct {
 	RecoveryOnly   bool      `json:"recoveryOnly,omitempty"`
 	Purpose        string    `json:"purpose,omitempty"`
 	CleanupPending bool      `json:"cleanupPending,omitempty"`
+	Apps           []string  `json:"apps,omitempty"`
+	Bytes          int64     `json:"bytes,omitempty"`
+	ReusedBytes    int64     `json:"reusedBytes,omitempty"`
+	MetadataOnly   bool      `json:"metadataOnly,omitempty"`
 }
 
 var privateUpdateExclusions = map[string]bool{".owner-sid": true, "backups": true, "updates": true, "maintenance": true, "logs": true, "music-runtime-temp": true, "runtime": true, "runtime.lock": true, "install.lock": true, "running.json": true, "startup-progress.json": true, "control.dpapi": true}
@@ -84,7 +90,13 @@ func updateRoots(c Config) error {
 	return e
 }
 func walkBackup(c Config, visit func(area, root, path string, entry fs.DirEntry) error) error {
+	return walkBackupMetadata(c, nil, visit)
+}
+func walkBackupMetadata(c Config, policy *UpdateMetadataPolicy, visit func(area, root, path string, entry fs.DirEntry) error) error {
 	for _, area := range []struct{ name, root string }{{"private", c.Data}, {"programs", c.Programs}, {"files", c.Files}} {
+		if policy != nil && area.name == "files" {
+			continue
+		}
 		e := filepath.WalkDir(area.root, func(path string, d fs.DirEntry, e error) error {
 			if e != nil {
 				return e
@@ -96,7 +108,13 @@ func walkBackup(c Config, visit func(area, root, path string, entry fs.DirEntry)
 			if e != nil {
 				return e
 			}
-			first := strings.SplitN(filepath.ToSlash(rel), "/", 2)[0]
+			first := strings.ToLower(strings.SplitN(filepath.ToSlash(rel), "/", 2)[0])
+			if !metadataPathAllowed(policy, area.name, filepath.ToSlash(rel), d.IsDir()) {
+				if d.IsDir() {
+					return filepath.SkipDir
+				}
+				return nil
+			}
 			if area.name == "private" && (privateUpdateExclusions[first] || strings.HasPrefix(first, ".apps-stage-")) {
 				if d.IsDir() {
 					return filepath.SkipDir
@@ -128,8 +146,11 @@ func fileDigest(path string) (string, int64, error) {
 	return hex.EncodeToString(h.Sum(nil)), n, e
 }
 func snapshotSize(c Config) (int64, error) {
+	return scopedSnapshotSize(c, nil, nil)
+}
+func scopedSnapshotSize(c Config, scope *AppUpdateScope, policy *UpdateMetadataPolicy) (int64, error) {
 	var total int64
-	e := walkBackup(c, func(_, _, path string, d fs.DirEntry) error {
+	e := walkScopedBackup(c, scope, policy, func(_, _, path string, d fs.DirEntry) error {
 		if d.IsDir() {
 			return nil
 		}
@@ -186,6 +207,9 @@ func makeUpdateBackupDetailed(ctx context.Context, c Config, parent string, repo
 	return makeBackupDetailed(ctx, c, parent, report, copied, "snapshot")
 }
 func makeBackupDetailed(ctx context.Context, c Config, parent string, report func(string), copied func(int64, int64), purpose string) (BackupReceipt, error) {
+	return makeScopedBackupDetailed(ctx, c, parent, report, copied, purpose, nil, nil)
+}
+func makeScopedBackupDetailed(ctx context.Context, c Config, parent string, report func(string), copied func(int64, int64), purpose string, scope *AppUpdateScope, policy *UpdateMetadataPolicy) (BackupReceipt, error) {
 	if report == nil {
 		report = func(string) {}
 	}
@@ -203,6 +227,16 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 	}
 	if e := updateRoots(c); e != nil {
 		return receipt, e
+	}
+	if scope != nil {
+		if e := validateAppUpdateScope(c, scope); e != nil {
+			return receipt, e
+		}
+	}
+	if policy != nil {
+		if e := validateUpdateMetadata(c, policy); e != nil {
+			return receipt, e
+		}
 	}
 	if parent == "" {
 		parent = filepath.Join(c.Data, "backups")
@@ -247,7 +281,7 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 		return receipt, e
 	}
 	operationprogress.Report(ctx, "backup", "Calculating backup size and checking free space", 0, 0, "")
-	size, e := snapshotSize(c)
+	size, e := scopedSnapshotSize(c, scope, policy)
 	if e != nil {
 		return receipt, e
 	}
@@ -267,11 +301,28 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 		return receipt, e
 	}
 	backup := UpdateBackup{Schema: 1, ID: id, Created: time.Now().UTC(), Config: c, RecoveryOnly: partial, Purpose: purpose}
-	report("Copying accounts, app data, programs and ordinary files")
-	operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", 0, size, "bytes")
+	detail := "Copying and checking accounts, apps and ordinary files"
+	if scope != nil {
+		backup.Schema, backup.Scope = 2, scope
+		detail = "Checking and saving selected app recovery data"
+		report(fmt.Sprintf("App update recovery data for %s: %.1f MB to check; unchanged backup files can be reused. Unrelated apps and ordinary files are left in place", strings.Join(scope.Apps, ", "), float64(size)/1e6))
+	} else if policy == nil {
+		report(fmt.Sprintf("Full Workspace recovery copy: %.1f MB; this update changes shared setup or needs the full storage layout", float64(size)/1e6))
+	}
+	if policy != nil {
+		backup.Schema, backup.Metadata = 3, policy
+		detail = "Saving old programs, databases and settings; keeping libraries in place"
+		report(fmt.Sprintf("Update recovery: %.1f MB of program files, databases and settings. Documents, media, models and cached runtimes remain in place. Use the Backups app to protect your files separately", float64(size)/1e6))
+	}
+	operationprogress.Report(ctx, "backup", detail, 0, size, "bytes")
 	var bytesDone int64
+	var reusedBytes int64
+	var reuse backupReuser
+	if scope != nil || policy != nil {
+		reuse = reusableBackupFiles(c)
+	}
 	lastProgress := time.Time{}
-	e = walkBackup(c, func(area, root, src string, d fs.DirEntry) error {
+	e = walkScopedBackup(c, scope, policy, func(area, root, src string, d fs.DirEntry) error {
 		rel, e := filepath.Rel(root, src)
 		if e != nil {
 			return e
@@ -304,7 +355,15 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 				return err
 			}
 		} else {
-			file, e = safeCopy(ctx, src, dest)
+			if (scope != nil || policy != nil) && len(streams) == 0 {
+				var reused bool
+				file, reused, e = reuse.copy(ctx, area, filepath.ToSlash(rel), src, dest)
+				if reused {
+					reusedBytes += file.Size
+				}
+			} else {
+				file, e = safeCopy(ctx, src, dest)
+			}
 		}
 		if e != nil {
 			return e
@@ -337,7 +396,7 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 			if copied != nil {
 				copied(bytesDone, size)
 			}
-			operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", bytesDone, size, "bytes")
+			operationprogress.Report(ctx, "backup", detail, bytesDone, size, "bytes")
 			lastProgress = time.Now()
 		}
 		return nil
@@ -353,13 +412,21 @@ func makeBackupDetailed(ctx context.Context, c Config, parent string, report fun
 		return receipt, e
 	}
 	receipt = BackupReceipt{ID: id, Path: path, SHA256: sum, Version: c.Version, Created: backup.Created, RecoveryOnly: partial, Purpose: purpose}
+	receipt.Bytes, receipt.ReusedBytes = bytesDone, reusedBytes
+	receipt.MetadataOnly = policy != nil
+	if scope != nil {
+		receipt.Apps = append([]string{}, scope.Apps...)
+	}
 	if copied != nil {
 		copied(bytesDone, size)
 	}
-	operationprogress.Report(ctx, "backup", "Copying and checking accounts, apps and ordinary files", bytesDone, size, "bytes")
+	operationprogress.Report(ctx, "backup", detail, bytesDone, size, "bytes")
 	report("Verifying every copied file and its checksum")
 	if _, e = verifyUpdateBackupProgress(ctx, c, receipt); e != nil {
 		return receipt, e
+	}
+	if scope != nil || policy != nil {
+		report(fmt.Sprintf("Update recovery copy verified: %.1f MB checked; %.1f MB reused from checked backup files; %.1f MB newly copied. Live app data is never hard-linked", float64(bytesDone)/1e6, float64(reusedBytes)/1e6, float64(bytesDone-reusedBytes)/1e6))
 	}
 	return receipt, nil
 }
@@ -390,8 +457,14 @@ func verifyUpdateBackupProgress(ctx context.Context, c Config, r BackupReceipt) 
 	if e = platform.LoadJSON(filepath.Join(r.Path, "backup.json"), &b); e != nil {
 		return b, e
 	}
-	if b.Schema != 1 || b.ID != r.ID || b.Config.Data != c.Data || b.Config.Programs != c.Programs || b.Config.Files != c.Files {
+	if (b.Schema != 1 && b.Schema != 2 && b.Schema != 3) || b.ID != r.ID || b.Config.Data != c.Data || b.Config.Programs != c.Programs || b.Config.Files != c.Files {
 		return b, errors.New("backup belongs to a different installation")
+	}
+	if e := validateBackupScope(b, r); e != nil {
+		return b, e
+	}
+	if (b.Scope != nil || b.Metadata != nil) && b.Config.Owner != c.Owner {
+		return b, errors.New("app recovery copy belongs to a different Workspace owner")
 	}
 	if b.RecoveryOnly != r.RecoveryOnly {
 		return b, errors.New("backup recovery type mismatch")
@@ -407,6 +480,15 @@ func verifyUpdateBackupProgress(ctx context.Context, c Config, r BackupReceipt) 
 		operationprogress.Report(ctx, "verify", "Verifying the backup before changing programs", int64(i), int64(len(b.Files)), "files")
 		if f.Area != "private" && f.Area != "programs" && f.Area != "files" {
 			return b, errors.New("invalid backup area")
+		}
+		if !metadataPathAllowed(b.Metadata, f.Area, f.Path, f.Directory) {
+			return b, errors.New("update recovery contains preserved data outside its metadata policy")
+		}
+		if b.Scope != nil && !scopeContainsPath(b.Config, b.Scope, f.Area, f.Path) {
+			return b, errors.New("backup contains a file outside the app recovery scope")
+		}
+		if b.Scope != nil && f.Directory && !scopeDirectoryAllowed(b.Config, b.Scope, f.Area, f.Path) {
+			return b, errors.New("an app recovery program or settings file cannot be a directory")
 		}
 		key := strings.ToLower(f.Area + "/" + f.Path)
 		if seen[key] {
@@ -457,6 +539,38 @@ func verifyUpdateBackupProgress(ctx context.Context, c Config, r BackupReceipt) 
 		}
 		if !seen[strings.ToLower(required)] {
 			return b, errors.New("backup is missing required installation state")
+		}
+	}
+	if b.Scope != nil && b.Purpose == "update" && !b.RecoveryOnly {
+		for _, id := range b.Scope.Packages {
+			p := b.Config.Catalog.Packages[id]
+			matched := false
+			for _, f := range b.Files {
+				if f.Area == "programs" && strings.EqualFold(f.Path, p.File) && !f.Directory && f.SHA256 == p.SHA256 && f.Size == p.Size {
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				return b, errors.New("app recovery copy is missing an original program package")
+			}
+		}
+	}
+	if b.Metadata != nil && b.Purpose == "update" && !b.RecoveryOnly {
+		for _, pkg := range b.Config.Catalog.Packages {
+			if !metadataPathAllowed(b.Metadata, "programs", pkg.File, false) {
+				continue
+			}
+			matched := false
+			for _, f := range b.Files {
+				if f.Area == "programs" && f.Path == pkg.File && !f.Directory && f.SHA256 == pkg.SHA256 && f.Size == pkg.Size {
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				return b, errors.New("program recovery copy is missing verified original package bytes")
+			}
 		}
 	}
 	return b, nil
@@ -515,39 +629,62 @@ func restoreUpdateBackup(c Config, r BackupReceipt, recovery BackupReceipt, repo
 	if e != nil {
 		return e
 	}
-	if _, e = verifyUpdateBackup(c, recovery); e != nil {
-		return e
-	}
-	entries, e := os.ReadDir(c.Data)
+	currentBackup, e := verifyUpdateBackup(c, recovery)
 	if e != nil {
 		return e
 	}
-	for _, entry := range entries {
-		if privateUpdateExclusions[entry.Name()] || strings.EqualFold(entry.Name(), "Workspace.exe") {
-			continue
+	if b.Metadata != nil && !sameMetadataPolicy(b.Metadata, currentBackup.Metadata) {
+		return errors.New("current-state archive does not cover the same program and metadata policy")
+	}
+	if b.Scope != nil {
+		if !sameRecoveryScope(b.Scope, currentBackup.Scope) {
+			return errors.New("current-state archive does not cover the same app recovery scope")
 		}
-		src := filepath.Join(c.Data, entry.Name())
-		if e = platform.RejectReparse(src); e != nil {
+		if e = clearAppUpdateScope(b.Config, b.Scope, b.Metadata); e != nil {
 			return e
 		}
-		// Same-volume moves are ideal, but external protected backup drives are
-		// supported too. Current bytes are already in the verified recovery snapshot.
-		if e = filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
-			if err != nil {
-				return err
+	} else if b.Metadata != nil {
+		if e = clearRecoveryMetadata(c.Data, c.Data); e != nil {
+			return e
+		}
+	} else {
+		entries, e := os.ReadDir(c.Data)
+		if e != nil {
+			return e
+		}
+		for _, entry := range entries {
+			if privateUpdateExclusions[entry.Name()] || strings.EqualFold(entry.Name(), "Workspace.exe") {
+				continue
 			}
-			if err = platform.RejectReparse(path); err != nil {
-				return err
+			src := filepath.Join(c.Data, entry.Name())
+			if e = platform.RejectReparse(src); e != nil {
+				return e
 			}
-			return platform.ClearFileReadOnly(path)
-		}); e != nil {
-			return e
-		}
-		if e = os.RemoveAll(src); e != nil {
-			return e
+			// Same-volume moves are ideal, but external protected backup drives are
+			// supported too. Current bytes are already in the verified recovery snapshot.
+			if e = filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
+				if err != nil {
+					return err
+				}
+				if err = platform.RejectReparse(path); err != nil {
+					return err
+				}
+				return platform.ClearFileReadOnly(path)
+			}); e != nil {
+				return e
+			}
+			if e = os.RemoveAll(src); e != nil {
+				return e
+			}
 		}
 	}
-	report("Restoring the verified pre-update state; newer data remains in the recovery backup")
+	if b.Metadata != nil {
+		report("Restoring saved programs, databases and settings; documents, media, models and projects remain in place")
+	} else if b.Scope != nil {
+		report("Restoring only the affected apps and required settings; newer app state remains in the recovery archive")
+	} else {
+		report("Restoring the verified pre-update state; newer data remains in the recovery backup")
+	}
 	var managers []BackupFile
 	for _, f := range b.Files {
 		if (f.Area == "private" || f.Area == "programs") && strings.EqualFold(f.Path, "Workspace.exe") {
@@ -571,6 +708,9 @@ func restoreUpdateBackup(c Config, r BackupReceipt, recovery BackupReceipt, repo
 		if current, e := os.Lstat(dst); e == nil && current.IsDir() != f.Directory {
 			if e = platform.RejectReparse(dst); e != nil {
 				return e
+			}
+			if b.Metadata != nil && f.Area == "private" && current.IsDir() && containsPreservedUpdateData(f.Path) {
+				return errors.New("cannot replace a folder containing preserved user files during update recovery")
 			}
 			// A verified full recovery snapshot already preserves this conflicting
 			// file/directory before its original type is restored.
