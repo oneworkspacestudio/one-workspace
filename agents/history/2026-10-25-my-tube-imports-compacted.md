@@ -86,3 +86,12 @@ Preview4 installation is already active; do not cancel/replay or alter immutable
 assets. Remote local updater confirms stage5 backup6.4/8.8GB at14m49; public
 progress disconnect is expected until restart. Finish4 then normal5 update and
 retry existing requested source; all other versions retained. No Actions/tests.
+
+Preview5 published fromb0dacbf; all13 assets verified. Public raw refs/heads/main
+contains5; anonymousWindowsZIP matchesd23642d6f1361b078380bfec156f9e6b3463bd95cc41aa95e158aee2d5a99e10.
+Promotion6f64a0f rebased onto concurrent823aab1; regenerated index preserved all
+remote-main releases and MyAI8 future-suite pin. Bare main raw path temporarily
+serves cached4; wait for normal updater5 availability. Preview4 active operation
+reached stage8 restarting/health-checking at18m32. Do not interrupt it or apply
+MyAI8 on this task. Need finish4, normal Tube5-only update, then existing source
+retry and verify saved/playable480p plus channel page. No complete import yet.
