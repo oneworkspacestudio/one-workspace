@@ -24,3 +24,19 @@ Secondary uses its existing authenticated normal owner updater. Never replay an
 apply during temporary restart/outage or another busy operation. Keep newest
 verified recovery. Artifacts I:/Projects/tooling/maps-redesign-20261026. Only
 named C fixture is disposable, with tracked PIDs; do not use owner data as tests.
+
+## Registered-layout patch4
+
+Normal92 preflight of3 failed before owner changes: an optional legacy
+maps-contract docs/MyMaps path is not registered in selected installations. The
+pure released92 parser fixture reproduces3's rejection and accepts4's four actual
+registered packages, preserving synthetic custom port/unselected apps and enforcing
+minimum92. Maps4 source91440eb0a09fb145c95f630bbddd49b35e922063 uses Go1.27.3;
+accepted product JS/CSS/worker bytes are identical to3. Exact Windows4 native
+checks pass. Public4 has17 size/digest-verified assets and an anonymous exact
+executable download. Maps4 SHA256 b191ab5c84a34d324674d1ac20f72d9fdc197def614a884259d9270b750f8e96.
+
+Promote4 and future pin/default4; explicitly withhold3 with a reason while keeping
+its published tag/assets immutable. All other prior records/pins/withholdings are
+unchanged. Both owners still92/Maps2 before actual normal4 preflight/apply. Never
+weaken package boundaries or replay a failed check as an install.
