@@ -1,0 +1,48 @@
+{
+  "release": "v0.1.0-preview.4",
+  "sourceCommit": "71a822e6bb920fd0e27de1dd2b2e15d9cbed31d2",
+  "releaseURL": "https://github.com/oneworkspacestudio/my-tasks/releases/tag/v0.1.0-preview.4",
+  "everyPublishedAssetSizeAndSHA256Verified": true,
+  "executableSHA256": "dc82d585b0316dd4513f41bdd5e212fba0ea2f967c026de8cd98633fac1e5958",
+  "suiteChannelPromotion": "0926501",
+  "nativeChromeTaskAndAccountFlowsPassed": true,
+  "nativeChromeViewports": [
+    [
+      384,
+      776
+    ],
+    [
+      320,
+      640
+    ],
+    [
+      1440,
+      1000
+    ]
+  ],
+  "goTestsAndVetPassed": true,
+  "frontendBuildAndContractsPassed": true,
+  "primary": {
+    "version": "0.1.0-preview.4",
+    "exactTestedBinaryAndServedAssets": true,
+    "identityCredentialsPathsAndOtherAppBytesRetained": true,
+    "all27LocalAndPublicServicesRunning": true,
+    "cinemaRestartTimeoutRecoveredByNormalRetry": true
+  },
+  "secondary": {
+    "version": "0.1.0-preview.4",
+    "normalBackedUpUpdateComplete": true,
+    "other25DisplayedVersionsRetained": true,
+    "all27PublicServicesRunning": true,
+    "deployedTitleAndContentAddressedUIVerified": true,
+    "deployedVisualReview": "desktop"
+  },
+  "cleanup": {
+    "liveInstallationsOrRecoveryBackupsRemoved": false,
+    "taskCacheRemoved": true,
+    "fixtureListenerClosed": true
+  },
+  "githubActionsUsed": false,
+  "physicalPhoneOrCleanHostOrRebootCertification": false,
+  "googleSynchronizationOrGmailAttachmentsProvided": false
+}
