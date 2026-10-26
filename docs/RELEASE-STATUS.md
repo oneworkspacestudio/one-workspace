@@ -1,3 +1,18 @@
+# Preview 92: Download the matching app file
+
+The updater now uses a verified standalone component asset when its release tag
+matches the Workspace bundle's pin. Previously that case could download the full
+offline bundle for a small Photos update. The suite target is retained; only
+download locations with identical package path, size and checksum are accepted.
+Legacy components without matching metadata retain the verified bundle fallback.
+
+Retains91's program/database/settings recovery and library preservation. Idle
+older controllers refresh automatically; active operations are never interrupted.
+Windows x64 local compilation and release integrity checks; no Actions, new test
+suite, rollback fixture, clean-host/reboot/Linux acceptance or production claim.
+
+---
+
 # Preview 91: Smaller update recovery copies
 
 Update recovery saves replaced programs, databases and settings. Registered

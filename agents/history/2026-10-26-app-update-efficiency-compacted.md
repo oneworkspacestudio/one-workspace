@@ -126,3 +126,76 @@ native recovery/compatibility acceptance is still required before release. No
 commits, push, tag, release, channel change, Actions or live backup cleanup.
 Preserve concurrent public channel work described above when publication is
 later authorized. All three new updater Go files remain untracked and required.
+
+## Authorized release and installation follow-up
+
+User now explicitly requested release and install. Source committed/rebased onto
+org main74a42be, preserving MyAI9 promotion. Final code sourcea4de985 includes a
+preview91 floor for schema3 recovery controllers, caching the staged compatible
+manager during90->91, and actual changed-asset download previews (JSON d.asset,
+unchanged coupled downloads removed). All source pushed; no Actions/tests used.
+Earlier local/untracked/nonpublication statements above are historical.
+
+Public immutable releases:
+- Workspace91, tagv0.3.0-preview.91, sourcea4de985cf1f1564a7fa75756b1e1419a46e55d44.
+  Full Windows installer1,093,954,048bytes, bundle1,080,601,520bytes, manager16.6MB.
+  All28 apps/166 payload hashes checked. Offline defaults overlay public90 with
+  Drive5/Photos6, Tube5 and MyAI9; normal updates retain independent app choices.
+- Drive/Photos6, sourceee090cbd389191975ffc8f24c6dbb364c923f9e3. Drive executable
+  unchanged from5; Photos/frontend rebuilt with Go1.27.3/Vite. Photos EXE SHA256
+  9ffc67cd8d133658c7866a727b9c9750aec62c0aee22f5474754bc548bb0e759.
+
+Every published asset size/digest matches local. Promotionsa1e9f83/38176a1 add
+Photos6 then Workspace91 and concurrently public MyAI10; old releases and
+withholdings unchanged. Anonymous binaries/catalog/manifest/raw channel checks
+pass. Anonymous normal updater offers Workspace91 as16,652,166bytes in3 direct
+assets, without downloading the full suite bundle. MyAI10 is available but not
+selected in this rollout; Ai chat is holding installs under human-authorized
+coordination until both PCs finish.
+
+Main PC normal verified offline --apps workspace,drive apply completed91 and
+Photos6. Snapshot schema3:782,648,768bytes logical,643,203,551bytes reused,
+139,445,217bytes newly copied. Recorded Files and all registered preserved paths
+are excluded. Independently audited original protected backup vs current config,
+credentials in memory, app selections/locations/identities and all other app
+contracts/packages; unchanged. MyAI8 retained. Private Photos.log exists. All27
+services run locally and through public Chrome healthz. Initial receipt helper's
+anonymous urllib public health request returned403 after the successful update;
+Chrome public health was OK. Completion receipt was reconstructed with the full
+before/after audit from the verified protected backup, not by rerunning apply.
+
+Secondary currently downloading/verifying the public91 installer via its normal
+remote Reinstall flow. This bootstraps the new updater without old90's8GB data
+copy; repair retains its installed app versions. MyAI10/Drive checkboxes were
+unchecked for this manager-only step. After91, apply only Drive/Photos6, retain
+MyAI9 and every other row. Still pending; do not claim both-PC completion yet.
+
+Artifacts/logs/receipts on I:/Projects/tooling/update-efficiency-20261026. Build
+retries removed their own embedded old payload before manager compilation; final
+build/cache/scratch on I:. Owned empty C build scratch removed after process/path
+checks; no live/backup folders deleted. Full old data snapshots remain protected.
+No native rollback, clean-host/reboot/Linux or production acceptance claimed.
+
+### Patch92 required by installed selection
+
+Secondary manager91 repair completed;27 public services running, MyAI9/other
+versions retained. Reloaded updater shows new metadata-only descriptions. Before
+applying Photos6, its real plan exposed a download regression: a component equal
+to the suite pin skipped its matching standalone manifest, so Photos selected the
+1.08GB suite ZIP instead of7.8MB Photos.exe. No such apply was submitted; all
+checkboxes cleared. Both PCs remain healthy91, main Photos6/secondary Photos4.
+
+Preparing92: resolve matching pinned-tag managed manifests too, replacing only
+download mappings whose package path/size/SHA256 equal the original suite target.
+Do not replace the suite app contract for that case. Legacy/no-match fallback is
+still the verified bundle. Protocol4 refreshes idle91 controllers so the resolver
+change reaches remote owners. Metadata policy remains v1/floor91, preserving
+91 recovery compatibility.91 public assets/tags remain immutable;92 must be a
+new full release. Still no tests/rollback fixture authorized/run.
+
+Ai peer may carry out its independently human-authorized MyAI10-only operations
+during this build window using installed91 controllers. Asked it to report both
+completion before92 applies and avoid channel/pin changes. Preserve actual dynamic
+versions in92; do not assume8/9 after peer updates. No local/remote operation from
+this task is active while92 builds. Need publish/promote92, manager-only updates
+on both, then secondary Photos-only plan must show the standalone7.8MB file.

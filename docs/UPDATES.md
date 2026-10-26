@@ -121,6 +121,11 @@ The download and the recovery copy are different sizes. The update list shows
 the total of distinct release assets selected for download. A small app release
 can be only a few MB even when its local data is much larger.
 
+Matching standalone component contracts are used for download locations even
+when their version is already the suite's default pin. The target remains the
+suite's recorded package; path, size and checksum must match. A Photos-only
+change can therefore download Photos.exe without downloading the offline bundle.
+
 Update recovery saves **replaced program packages, databases and settings**.
 Ordinary Drive files and registered media, model and project folders remain in
 place: the updater neither copies nor clears these libraries during rollback.

@@ -553,8 +553,9 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 			}
 			ch.Downloads[id] = d
 		}
-		// A newer standalone release can supersede the suite pin only with an
-		// explicit managed-update contract scoped to this repository/app group.
+		// An explicit component contract also supplies smaller download assets
+		// when its tag equals the suite pin. In that case retain the suite target
+		// and bind only assets with identical package path, size and checksum.
 		for _, r := range appReleases {
 			if len(ch.NewApps) > 0 {
 				break
@@ -562,12 +563,17 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 			if r.Draft || r.Published.IsZero() {
 				continue
 			}
-			baseline := releaseTime(appReleases, sourceTag(ch.Source, repo))
-			if baseline.IsZero() || !r.Published.After(baseline) {
+			pin := sourceTag(ch.Source, repo)
+			baseline := releaseTime(appReleases, pin)
+			samePin := r.Tag == pin
+			if baseline.IsZero() || (!r.Published.After(baseline) && !samePin) {
 				break
 			}
 			marker, ok := releaseAsset(r, "workspace-update.json")
 			if !ok {
+				if samePin {
+					break // Legacy suite components may have no standalone contract.
+				}
 				ch.Reason = "Newer release " + r.Tag + " has no managed-update compatibility metadata. It will be available automatically when included in a compatible Workspace bundle."
 				ch.ReviewURL = "https://github.com/" + repo + "/releases/tag/" + r.Tag
 				break
@@ -580,6 +586,14 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 			independent, err := manifestChoice(g, current, repo, r, data)
 			if err != nil {
 				ch.Reason = err.Error()
+				break
+			}
+			if samePin {
+				for id, download := range independent.Downloads {
+					if expected, ok := ch.Packages[id]; ok && expected == independent.Packages[id] {
+						ch.Downloads[id] = download
+					}
+				}
 				break
 			}
 			independent.Current = ch.Current
