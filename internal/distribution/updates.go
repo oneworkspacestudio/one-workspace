@@ -569,6 +569,15 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 			if baseline.IsZero() || (!r.Published.After(baseline) && !samePin) {
 				break
 			}
+			if samePin {
+				changed := false
+				for id, pkg := range ch.Packages {
+					changed = changed || current.Packages[id] != pkg
+				}
+				if !changed {
+					break // No component bytes need a download location.
+				}
+			}
 			marker, ok := releaseAsset(r, "workspace-update.json")
 			if !ok {
 				if samePin {
