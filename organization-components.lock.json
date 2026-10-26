@@ -133,9 +133,9 @@
   },
   "myMaps": {
     "repository": "oneworkspacestudio/my-maps",
-    "tag": "v0.1.0-preview.2",
-    "asset": "my-maps-0.1.0-preview.2-windows-amd64.zip",
-    "sha256": "4144fdd12e519f41cb204810fab11f180149edf435c2d1287f6aeff23711918e"
+    "tag": "v0.1.0-preview.3",
+    "asset": "my-maps-0.1.0-preview.3-windows-amd64.zip",
+    "sha256": "841d1743fab106931fd83f332e5d7063ffdc061eb79f9f19732c7d684e79ce32"
   },
   "myMeet": {
     "repository": "oneworkspacestudio/my-meet",
