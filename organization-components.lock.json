@@ -90,10 +90,10 @@
     "sha256": "392273b43dc97c468e395ab0010276864b6ac70a719dcb2c18d7b09b81ebd129"
   },
   "myTasks": {
-    "sha256": "847578a4487a5e7d4c3613becc490944414090aac6e92d30bded0f7240486c36",
-    "asset": "my-tasks-0.1.0-preview.3-windows-amd64.zip",
+    "sha256": "e33b0b0de0ec9d22eae6521826f2069bdb74adaac36cf5a7ee937ff6fbbd46f2",
+    "asset": "my-tasks-0.1.0-preview.4-windows-amd64.zip",
     "repository": "oneworkspacestudio/my-tasks",
-    "tag": "v0.1.0-preview.3"
+    "tag": "v0.1.0-preview.4"
   },
   "myPDF": {
     "repository": "oneworkspacestudio/my-pdf",

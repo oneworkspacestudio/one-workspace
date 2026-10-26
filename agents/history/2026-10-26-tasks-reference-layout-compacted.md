@@ -18,3 +18,13 @@ using normal protected backup/update on both owners. Never use owners as task
 fixtures. Retain independent Maps/MyAI/other concurrent versions. Tooling and
 receipts at I:/Projects/tooling/tasks-google-20261026; NTFS fixture under named
 C cache must be stopped and removed after final proof capture.
+
+## Final browser-title patch
+
+Both normal Tasks3 updates completed and all services/other versions were verified.
+Live inspection caught an introduced double-encoded separator in the browser title.
+Immutable Tasks4 source71a822e replaces it with plain Tasks. The accepted app JS,
+CSS and Roboto font bytes are identical to3; Windows package/version/HTML change.
+Fresh clean build/tests/vet and exact-package native Chrome checks pass. All4
+public assets/digests verified and promoted; old3 remains immutable in the channel.
+Next: normal3-to4 app-only updates on both owners and final receipts/cleanup.

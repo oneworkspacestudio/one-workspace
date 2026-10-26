@@ -56,7 +56,7 @@ param(
  [string]$MySlicerVersion='0.1.0-preview.4',
  [string]$MySlicerNotices='',
  [string]$MyTasks='',
- [string]$MyTasksVersion='0.1.0-preview.3',
+ [string]$MyTasksVersion='0.1.0-preview.4',
  [string]$MyTasksNotices='',
  [string]$MyPDF='',
  [string]$MyPDFVersion='0.1.0-preview.1',
