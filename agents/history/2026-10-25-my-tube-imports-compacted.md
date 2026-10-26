@@ -129,3 +129,35 @@ artwork, description and all queued titles. First video saved successfully;
 compatible streaming rendition is still processing. Batch/playback verification
 remains in progress; do not claim all selected videos succeeded yet. No new
 fixture source/account or test suite was created or run.
+
+Tube5 installed verification: existing source retry saved its first3 videos;
+channel artwork/about/handle, channel video list and matching private playlist
+render correctly. First saved video processed360p/480p renditions and played at
+selected480p, visibly advancing0:00->0:16, then paused. Remaining2 are still in
+that owner-requested background batch. No new source/account, primary Tube
+installation, test suite or Actions execution. Await final batch count before
+claiming every selected item succeeded.
+
+Original installed retry completed at00:53:34 on2026-10-26: normal UI reports
+Finished5saved,0already,0needattention. All latest5 selected items saved. The
+historical sixth Grok failure remained outside that newest5 window. Temporarily
+expanded this existing source from5 to6 (end/manual unchanged) and started one
+normal check to repair that original failed item too; it skipped the5 saved items
+and is downloading only Grok. Must restore recent-video count5 after completion.
+
+## Final installed import verification (2026-10-26)
+
+The latest5 batch completed:5saved,0failed. The one historical sixth failure
+also saved on the follow-up check:1saved,5already-in-library,0needattention.
+Source now has6saved and0failures; all6 render on its private imported channel.
+Restored the original recent-video count5; playlist window end and manual schedule
+unchanged. Channel name/handle/about/avatar/banner and saved video/playlist links
+verified in the normal installed browser. First video480p playback visibly advanced
+0:00->0:16 after normal H264/AAC adaptive processing. No duplicate source/account
+or saved-video copies were created. No source import remains pending.
+
+Final private receipts/screenshots are on the task tooling drive, outside Git.
+The updater and RDP intermediate tabs were closed; the completed Tube channel is
+left open as the deliverable. Preview5 public assets/tags remain immutable. These
+are live owner-requested repair checks, not a clean-host/Linux-runtime/reboot test
+or production acceptance claim. No automated tests or GitHub Actions ran.
