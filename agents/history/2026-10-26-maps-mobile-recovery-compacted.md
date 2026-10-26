@@ -21,3 +21,22 @@ historical channel entries and withheld3. Earlier tags/assets remain immutable.
 Artifacts I:/Projects/tooling/maps-redesign-20261026. Normal protected Maps-only
 5->6 applies on both manager92 installations and final live proofs are pending.
 Revalidate mutable versions, preserve all owner data/settings/other applications.
+
+## Both installations verified
+
+Official promotion64e1eba is anonymously visible with all17 exact6 assets.
+Both normal protected5->6 Maps-only updates completed; manager92 retained and
+all27services healthy on each. Primary exact binary, served JS/CSS/worker/title,
+owner configuration/decrypted identities and all other app contracts/packages/
+executable bytes audited and retained. Secondary owner updater all9stages/2m20,
+verified newest recovery and only Maps visible version changed. Independent
+Maps6 public health, live title/content-addressed JS/CSS and visible map checked.
+No secondary disk/credential audit claimed. User should refresh an old phone tab.
+
+Final exact binary repeated all12 synthetic rendering/fault/interaction checks.
+Only the named syntheticC fixture/PID/port19315 were removed, with exact-path and
+no-reparse guards; owner installations/recovery retained. Actual owner captures
+stay outside Git; live secondary Maps tab left open. Summary evidence:
+docs/evidence/maps-mobile-recovery-20261026.json. No required publication,
+promotion or two-PC installation work remains for this fix. Physical Android,
+GPS/mic/reboot and full Google feature/data parity remain unclaimed.
