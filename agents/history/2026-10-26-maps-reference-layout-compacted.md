@@ -40,3 +40,18 @@ Promote4 and future pin/default4; explicitly withhold3 with a reason while keepi
 its published tag/assets immutable. All other prior records/pins/withholdings are
 unchanged. Both owners still92/Maps2 before actual normal4 preflight/apply. Never
 weaken package boundaries or replay a failed check as an install.
+
+## Final browser-title patch5
+
+Both normal2->4 applies completed: primary independent exact-byte/config/secret/
+other-app audit and27health pass; secondary2m20 normal completion/verified recovery
+and onlyMaps row changed. Read-only live inspection found the inherited My Tasks
+HTML tab title. Maps5 changes it to ASCII My Maps; source c655dbeaf9e9e8df790c351e59c29a0c1be7ed38.
+Accepted product JS/CSS/worker bytes remain identical, Go1.27.3 and four-package
+min92 scope retained. Exact5 native title/layers/assets and released92 parser
+fixture pass. Public5 all17 assets/digests/anonymous executable verified. Exact5
+EXE 58fb09cd2795c5fe7ced76b2d96f9cc9aad858c458628fcd48d001414fc577f8.
+Promote future pin/default5, retaining all previous records and withheld3. Final
+4->5 normal applies and live title proofs still pending; no further product
+changes are intended. Synthetic preview/PID/port19315 and namedC fixture are
+already removed with guarded cleanup; owner installations retained.
