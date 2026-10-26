@@ -32,7 +32,7 @@ param(
  [string]$MyCinemaVersion='0.1.0-preview.2',
  [string]$MyCinemaNotices='',
  [string]$MyAI='',
- [string]$MyAIVersion='0.1.0-preview.8',
+ [string]$MyAIVersion='0.1.0-preview.9',
  [string]$MyAINotices='',
  [string]$My3D='',
  [string]$My3DVersion='0.1.0-preview.1',
