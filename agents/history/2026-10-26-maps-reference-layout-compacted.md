@@ -55,3 +55,21 @@ Promote future pin/default5, retaining all previous records and withheld3. Final
 4->5 normal applies and live title proofs still pending; no further product
 changes are intended. Synthetic preview/PID/port19315 and namedC fixture are
 already removed with guarded cleanup; owner installations retained.
+
+## Final5 installed on both PCs
+
+Both normal protected4->5 Maps-only applies completed; manager92/other app versions
+retained and27services healthy on each. Primary independent byte/config/secret/
+other-app audit, served JS/CSS/worker/HTML title and newest recovery manifest pass.
+Secondary normal owner UI all9stages/2m20, only Maps version changed, newest verified
+recovery retained; public27health/Maps5 and live titleMyMaps/content-addressed
+JS/CSS names independently checked. No remote disk/credential audit claimed.
+
+Anonymous promoted5 and all17 asset digests verified; future pin/default5 retained,
+all other records/pins/withholdings untouched. Source tag c655dbe remains immutable;
+app final evidence commit5a0fd85. User-facing secondary Maps tab left open, actual
+owner screenshots kept outside Git. Named syntheticC fixture/process/port removed.
+No Actions/paid services/physicalGPS-mic/reboot claim. Full Google data/feature
+parity remains open and explicitly documented; no fake Google data is shown.
+Sanitized final delivery: docs/evidence/maps-reference-layout-20261026.json.
+No required push/release/installation work remains for Maps5.
