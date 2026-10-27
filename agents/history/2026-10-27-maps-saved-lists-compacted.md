@@ -28,3 +28,20 @@ sign-in; do not bypass auth or implicitly apply other updates. Source/release/
 receipts under I:/Projects/tooling/maps-redesign-20261026. Owned C maps-save fixture,
 app/provider PIDs and ports19315/19316 stopped/removed with guarded identity/path
 checks. No Actions. App history is agents/history/2026-10-27-saved-lists-compacted.md.
+
+## Confirmed primary delivery; secondary blocked by sign-in
+
+Promotion3699323 and Maps10 assets anonymously verified. Primary normal Maps-only
+9->10 update completed; exact accepted EXE/served JS/CSS/title/version10 and all
+28services checked. Manager94, other apps' contracts/packages/EXE bytes, owner
+configuration and decrypted identity settings retained (comparisons in memory).
+Newest verified recovery update-20261027T195656-d8d8f547eb4a kept. App2241689 records
+sanitized evidence; immutable release source remains5ed357b. No repeat primary
+installation, implicit other-app update or automatic map dataset download needed.
+
+Secondary still shows MyAccounts sign-in in Chrome3/tab585734409, marked handoff;
+user asked asynchronously, no reply/apply submitted. Fresh sign-in and updater
+state are required before selecting only Maps10 and applying normally. Never
+bypass authentication or claim both installed. Last secondary versions are only
+historical. Owned synthetic C fixture and app/provider processes/ports19315/19316
+were guardedly removed. No owner data as test fixture, no Actions/Android rebuild.
