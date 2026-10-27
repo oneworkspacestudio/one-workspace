@@ -63,3 +63,19 @@ permanent signing key and source ZIP/notices/checksums. This Android-only tag is
 excluded by the desktop updater's version-tag selector; no desktop bundle rebuild
 or owner installation is needed. README now links directly to Android3. Regenerate
 and anonymously verify the public channel after publication; Actions remain off.
+
+## Published Android3
+
+Release source c21001d0fdc688141da0dee3dcaec765a7f70e9d is pushed to main.
+Signed release assembly succeeded locally; package version3/minSDK28/target35 and
+the existing RSA4096/v2 signing certificate were checked. APK13277736 bytes,
+SHA256 `d3c7c348dd8d6da5961f2b492fa3f19923fea8aac4611642de58e4e82a814e9a`.
+All8 draft assets matched GitHub digest/size before publication, including Android
+source ZIP, notices, getting-started guide, build metadata and checksums.
+Public release425493539:
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.3
+No published older files replaced. No phone installation/testing in this task.
+Public index regenerated and contains Android3/eight assets plus Workspace94;
+anonymous promoted-index/download and desktop-selection checks follow this commit.
+Artifacts and private publisher scripts stay under the named I tooling folder;
+no task cache or installation was created on C. Signing key stays private.
