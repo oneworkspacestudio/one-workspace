@@ -32,6 +32,12 @@ final class SecureStore {
   }
 
   static synchronized void put(Context c, String name, JSONObject value) throws Exception {
+    String payload = encrypt(name, value);
+    if (!c.getSharedPreferences("secure", 0).edit().putString(name, payload).commit())
+      throw new java.io.IOException("Device storage unavailable");
+  }
+
+  private static String encrypt(String name, JSONObject value) throws Exception {
     Cipher x = Cipher.getInstance("AES/GCM/NoPadding");
     x.init(Cipher.ENCRYPT_MODE, key());
     x.updateAAD(name.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -41,7 +47,13 @@ final class SecureStore {
             + Base64.encodeToString(
                 x.doFinal(value.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8)),
                 Base64.NO_WRAP);
-    if (!c.getSharedPreferences("secure", 0).edit().putString(name, payload).commit())
+    return payload;
+  }
+
+  /** Atomically replace configuration and discard every old account's cached data/reply. */
+  static synchronized void replaceServers(Context c, JSONObject servers) throws Exception {
+    String payload = encrypt("servers", servers);
+    if (!c.getSharedPreferences("secure", 0).edit().clear().putString("servers", payload).commit())
       throw new java.io.IOException("Device storage unavailable");
   }
 

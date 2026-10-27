@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     body.setOrientation(1);
     root.addView(body, new LinearLayout.LayoutParams(-1, 0, 1));
     catalog = SecureStore.get(this, "catalog");
-    discovery = SecureStore.get(this, "discovery");
+    discovery = WorkspaceApi.savedDiscovery(this);
     restoreTrust();
     if (WorkspaceApi.home(this).isEmpty()) setup();
     else {
@@ -167,7 +167,33 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void setup() {
-    clear("One Workspace", false);
+    setup(WorkspaceApi.home(this), WorkspaceApi.chatOverride(this), "");
+  }
+
+  private EditText serverField(LinearLayout panel, String label, String hint, String value) {
+    com.google.android.material.textfield.TextInputLayout field =
+        new com.google.android.material.textfield.TextInputLayout(this);
+    field.setHint(label);
+    field.setBoxBackgroundMode(
+        com.google.android.material.textfield.TextInputLayout.BOX_BACKGROUND_OUTLINE);
+    com.google.android.material.textfield.TextInputEditText input =
+        new com.google.android.material.textfield.TextInputEditText(field.getContext());
+    input.setSingleLine();
+    input.setInputType(
+        android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_URI);
+    input.setHint(hint);
+    input.setText(value);
+    input.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
+    field.addView(input, new LinearLayout.LayoutParams(-1, -2));
+    LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(-1, -2);
+    layout.setMargins(0, dp(12), 0, dp(8));
+    panel.addView(field, layout);
+    return input;
+  }
+
+  private void setup(String savedHome, String savedChat, String error) {
+    boolean configured = !WorkspaceApi.home(this).isEmpty();
+    clear(configured ? "Servers" : "One Workspace", configured);
     LinearLayout panel = formPage();
     panel.setPadding(dp(20), dp(20), dp(20), dp(20));
     ImageView logo = new ImageView(this);
@@ -175,64 +201,165 @@ public class MainActivity extends AppCompatActivity {
     panel.addView(logo, new LinearLayout.LayoutParams(dp(72), dp(72)));
     panel.addView(text("Your Workspace, wherever you are", 27));
     panel.addView(
-        text("Connect to your Workspace address to open your apps and keep up with Chat.", 16));
-    EditText address = new EditText(this);
-    address.setSingleLine();
-    address.setHint("https://workspace.example.com");
-    address.setInputType(
-        android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_URI);
-    address.setText(WorkspaceApi.home(this));
-    panel.addView(address, new LinearLayout.LayoutParams(-1, dp(64)));
+        text(
+            "Connect to your own remote servers once. We’ll remember them next time you open the"
+                + " app.",
+            16));
+    EditText address =
+        serverField(panel, "Workspace address", "https://workspace.example.com", savedHome);
+    Switch automatic = new Switch(this);
+    automatic.setText("Use Chat from this Workspace");
+    automatic.setChecked(savedChat.isEmpty());
+    automatic.setMinHeight(dp(48));
+    panel.addView(automatic);
+    LinearLayout chatPanel = new LinearLayout(this);
+    chatPanel.setOrientation(LinearLayout.VERTICAL);
+    EditText chatAddress =
+        serverField(chatPanel, "Chat address", "https://chat.example.com/chat", savedChat);
+    chatPanel.addView(
+        text(
+            "Paste the address you normally use to open your Chat server, including /chat if"
+                + " shown.",
+            14));
+    chatPanel.setVisibility(automatic.isChecked() ? View.GONE : View.VISIBLE);
+    panel.addView(chatPanel);
+    automatic.setOnCheckedChangeListener(
+        (b, on) -> chatPanel.setVisibility(on ? View.GONE : View.VISIBLE));
+    if (!error.isEmpty()) panel.addView(text(error, 16));
     MaterialButton connect =
         button(
-            "Connect to Workspace",
+            configured ? "Save servers" : "Connect to Workspace",
             () -> {
+              String h;
               try {
-                String h = WorkspaceApi.origin(address.getText().toString().trim());
-                connect(h);
+                h = WorkspaceApi.serverAddress(address.getText().toString(), true);
               } catch (Exception e) {
-                address.setError("Enter a valid https:// Workspace address");
+                address.setError("Enter your https:// Workspace address without a page path");
+                return;
               }
+              String selectedChat = "";
+              if (!automatic.isChecked()) {
+                try {
+                  selectedChat =
+                      WorkspaceApi.serverAddress(chatAddress.getText().toString(), false);
+                } catch (Exception e) {
+                  chatAddress.setError("Enter your https:// Chat address");
+                  return;
+                }
+              }
+              connect(h, selectedChat);
             });
     panel.addView(connect);
     panel.addView(
-        text("Use your normal MyAccounts sign-in. Your password stays with your Workspace.", 14));
+        text(
+            "Sign in with MyAccounts when asked. We keep your session while it’s valid. Change"
+                + " these addresses later in Settings → Servers.",
+            14));
+    if (configured) panel.addView(button("Cancel", this::settings));
   }
 
-  private void connect(String h) {
-    final long operation;
-    synchronized (SecureStore.class) {
-      operation = ++generation;
-      getSharedPreferences("workspace", 0).edit().putString("home", h).apply();
-    }
-    trusted.clear();
-    trusted.add(h);
-    status("Connecting securely…");
+  private void connect(String h, String selectedChat) {
+    final long operation = ++generation;
+    status("Checking your servers securely…");
+    body.addView(
+        button(
+            "Cancel",
+            () -> {
+              generation++;
+              setup(h, selectedChat, "");
+            }));
     io.execute(
         () -> {
+          String stage = "Workspace";
           try {
             JSONObject d = WorkspaceApi.discovery(h);
-            synchronized (SecureStore.class) {
-              if (generation != operation) return;
-              SecureStore.put(this, "discovery", d);
-            }
+            WorkspaceApi.validateDiscovery(h, d);
+            stage = "Chat";
+            String override =
+                selectedChat.isEmpty() ? "" : WorkspaceApi.resolveChat(selectedChat, d);
             runOnUiThread(
                 () -> {
                   if (generation != operation) return;
-                  discovery = d;
-                  restoreTrust();
-                  open(h + "/auth/login", "Sign in");
+                  String effectiveChat = override.isEmpty() ? d.optString("chat", "") : override;
+                  boolean changed =
+                      !h.equals(WorkspaceApi.home(this)) || !effectiveChat.equals(chat);
+                  if (changed && !WorkspaceApi.home(this).isEmpty()) {
+                    new AlertDialog.Builder(this)
+                        .setTitle("Switch servers?")
+                        .setMessage(
+                            "Connect to "
+                                + h
+                                + (effectiveChat.isEmpty() ? "" : "\nChat: " + effectiveChat)
+                                + "\n\n"
+                                + "This phone’s old sign-in, saved app list and notification access"
+                                + " will be removed. Your server data stays where it is.")
+                        .setPositiveButton(
+                            "Switch servers",
+                            (dialog, which) -> saveConnection(h, override, d, true))
+                        .setNegativeButton("Cancel", (dialog, which) -> setup(h, selectedChat, ""))
+                        .setOnCancelListener(dialog -> setup(h, selectedChat, ""))
+                        .show();
+                  } else saveConnection(h, override, d, changed);
                 });
           } catch (Exception e) {
+            String failed = stage;
             runOnUiThread(
                 () -> {
-                  status(
-                      "This Workspace needs the Android connection update before it can connect."
-                          + " Check the address, update Workspace, then try again.");
-                  body.addView(button("Try another address", this::setup));
+                  if (generation != operation) return;
+                  setup(
+                      h,
+                      selectedChat,
+                      "Couldn’t connect to "
+                          + failed
+                          + ". Check the address, Internet connection and server HTTPS certificate,"
+                          + " then try again. Your saved servers haven’t changed.");
                 });
           }
         });
+  }
+
+  private void saveConnection(String h, String override, JSONObject d, boolean changed) {
+    status("Saving your servers…");
+    Runnable save =
+        () -> {
+          if (isFinishing() || isDestroyed()) return;
+          try {
+            JSONObject servers =
+                new JSONObject()
+                    .put("workspace", h)
+                    .put("chatOverride", override)
+                    .put("discovery", d);
+            synchronized (SecureStore.class) {
+              if (changed) SecureStore.replaceServers(this, servers);
+              else SecureStore.put(this, "servers", servers);
+              generation++;
+            }
+            getSharedPreferences("workspace", 0).edit().remove("home").apply();
+            if (changed) catalog = null;
+            discovery = d;
+            pendingTopic = "";
+            restoreTrust();
+            if (catalog == null) open(h + "/auth/login", "Sign in");
+            else {
+              home();
+              refresh();
+            }
+          } catch (Exception e) {
+            setup(
+                h, override, "Couldn’t save the server settings on this phone. Please try again.");
+          }
+        };
+    if (changed) {
+      disconnectDevice();
+      // These stores belong to this Android app, never the user's external browser.
+      WebStorage.getInstance().deleteAllData();
+      CookieManager.getInstance()
+          .removeAllCookies(
+              removed -> {
+                CookieManager.getInstance().flush();
+                save.run();
+              });
+    } else save.run();
   }
 
   private void restoreTrust() {
@@ -244,7 +371,11 @@ public class MainActivity extends AppCompatActivity {
     try {
       if (!WorkspaceApi.origin(discovery.getString("workspace")).equals(h)) return;
       trusted.add(WorkspaceApi.origin(discovery.getString("issuer")));
-      chat = discovery.optString("chat", "");
+      String override = WorkspaceApi.chatOverride(this);
+      chat = override.isEmpty() ? discovery.optString("chat", "") : override;
+      if (!chat.isEmpty()) chat = WorkspaceApi.serverAddress(chat, false);
+      String chatIssuer = discovery.optString("chatIssuer", "");
+      if (!chatIssuer.isEmpty()) trusted.add(WorkspaceApi.origin(chatIssuer));
       JSONArray a = discovery.optJSONArray("origins");
       if (a != null)
         for (int i = 0; i < a.length(); i++) trusted.add(WorkspaceApi.origin(a.getString(i)));
@@ -330,6 +461,10 @@ public class MainActivity extends AppCompatActivity {
               grid.addView(tile, lp);
               tile.setOnClickListener(
                   v -> {
+                    if ("chat".equals(id)) {
+                      openChat();
+                      return;
+                    }
                     String u = app.optString("URL", "");
                     try {
                       open(
@@ -439,19 +574,50 @@ public class MainActivity extends AppCompatActivity {
       openChatPage();
       return;
     }
+    final long operation = generation;
+    final String target = chat;
+    final JSONObject device = SecureStore.get(this, "device");
     io.execute(
         () -> {
           try {
             WorkspaceApi.restoreChatSession(this);
           } catch (WorkspaceApi.SignInRequired e) {
-            SecureStore.remove(this, "device");
+            synchronized (SecureStore.class) {
+              if (device != null && SecureStore.isDevice(this, device.optString("id")))
+                SecureStore.remove(this, "device");
+            }
           } catch (Exception ignored) {
           }
-          runOnUiThread(this::openChatPage);
+          runOnUiThread(
+              () -> {
+                if (generation == operation && target.equals(WorkspaceApi.chat(this)))
+                  openChatPage();
+              });
         });
   }
 
+  private boolean selectedChatLink(String url) {
+    if (WorkspaceApi.chatOverride(this).isEmpty() || isChat(url)) return false;
+    try {
+      Uri uri = Uri.parse(url);
+      String original = discovery == null ? "" : discovery.optString("chat", "");
+      String destination =
+          uri.buildUpon().clearQuery().fragment(null).build().toString().replaceAll("/+$", "");
+      if (!original.isEmpty() && destination.equals(WorkspaceApi.serverAddress(original, false)))
+        return true;
+      String path = uri.getPath();
+      return WorkspaceApi.origin(url).equals(WorkspaceApi.home(this))
+          && ("/chat".equals(path) || "/chat/".equals(path));
+    } catch (Exception ignored) {
+      return false;
+    }
+  }
+
   private void open(String url, String label) {
+    if (selectedChatLink(url)) {
+      openChat();
+      return;
+    }
     if (!allowed(url)) {
       external(url);
       return;
@@ -516,6 +682,10 @@ public class MainActivity extends AppCompatActivity {
           public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {
             if (!r.isForMainFrame()) return false;
             String u = r.getUrl().toString();
+            if (selectedChatLink(u)) {
+              openChat();
+              return true;
+            }
             if (allowed(u)) return false;
             external(u);
             return true;
@@ -677,7 +847,9 @@ public class MainActivity extends AppCompatActivity {
         () -> {
           try {
             JSONObject me = WorkspaceApi.json(target + "/api/me", "GET", null, null, true);
-            if (generation != operation || !target.equals(chat)) return;
+            if (generation != operation
+                || !target.equals(chat)
+                || !target.equals(WorkspaceApi.chat(this))) return;
             JSONObject old = SecureStore.get(this, "device");
             if (old != null
                 && old.optString("accountKey").equals(me.getString("accountKey"))
@@ -685,10 +857,15 @@ public class MainActivity extends AppCompatActivity {
               try {
                 WorkspaceApi.bootstrap(this);
               } catch (WorkspaceApi.SignInRequired expired) {
-                SecureStore.remove(this, "device");
+                synchronized (SecureStore.class) {
+                  if (generation != operation || !SecureStore.isDevice(this, old.optString("id")))
+                    return;
+                  SecureStore.remove(this, "device");
+                }
                 old = null;
               }
             }
+            if (generation != operation || !target.equals(WorkspaceApi.chat(this))) return;
             if (old == null
                 || !old.optString("accountKey").equals(me.getString("accountKey"))
                 || !old.optString("chat").equals(target)) {
@@ -700,7 +877,10 @@ public class MainActivity extends AppCompatActivity {
               d.put("accountKey", me.getString("accountKey"));
               boolean accept;
               synchronized (SecureStore.class) {
-                accept = generation == next && target.equals(chat);
+                accept =
+                    generation == next
+                        && target.equals(chat)
+                        && target.equals(WorkspaceApi.chat(this));
                 if (accept) SecureStore.put(this, "device", d);
               }
               if (!accept) {
@@ -776,7 +956,15 @@ public class MainActivity extends AppCompatActivity {
   private void settings() {
     clear("Settings", true);
     LinearLayout panel = formPage();
-    panel.addView(text(WorkspaceApi.home(this), 17));
+    panel.addView(text("Your servers", 23));
+    panel.addView(
+        text(
+            "Workspace: "
+                + WorkspaceApi.home(this)
+                + "\nChat: "
+                + (chat.isEmpty() ? "Not configured" : chat),
+            16));
+    panel.addView(button("Servers", this::setup));
     panel.addView(text("Chat notifications", 23));
     panel.addView(
         text(
@@ -850,8 +1038,12 @@ public class MainActivity extends AppCompatActivity {
                         (d, w) -> {
                           disconnectDevice();
                           CookieManager.getInstance().removeAllCookies(null);
+                          WebStorage.getInstance().deleteAllData();
+                          SecureStore.clear(this);
                           catalog = null;
                           discovery = null;
+                          chat = "";
+                          trusted.clear();
                           getSharedPreferences("workspace", 0).edit().clear().apply();
                           setup();
                         })
@@ -949,6 +1141,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onDestroy() {
+    generation++;
     if (web != null) web.destroy();
     if (chooser != null) chooser.onReceiveValue(null);
     io.shutdown();

@@ -200,7 +200,9 @@ Keep the Windows computer switched on while you use its apps. You can use Worksp
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
 same MyAccounts sign-in. Download the signed APK from the
-[latest Workspace release](https://github.com/oneworkspacestudio/one-workspace/releases).
+[Android release](https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.3).
+Enter your remote Workspace address once; Chat is found automatically, or you can
+choose a separate Chat server. Your addresses and valid sign-in are remembered.
 It includes a saved app launcher and native Chat notification/background integration. Alerts require the
 matching Chat server update and the self hosted My Push app. No Firebase account
 is needed for this route. [Phone support and current limits](android/README.md).

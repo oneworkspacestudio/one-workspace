@@ -1,3 +1,20 @@
+# Android preview 3: Saved remote server setup
+
+Android-only release `android-v0.1.0-preview.3`; desktop Workspace remains preview
+94. First run accepts a remote Workspace address and optionally a separate Chat
+address, validates them before saving and remembers them across launches.
+Settings → Servers can change either address. Same-server saves keep the session;
+confirmed switching removes the old phone session, cached account data and
+notification access without touching server data. Chat launch links and native
+notifications follow the selected server. Existing Android2 settings remain readable.
+
+Built and signed locally with the existing Android release key; no Actions.
+Android compilation and APK signature/package checks are the release checks.
+No new phone/UI/end-to-end/Doze/reboot tests ran for this change. Prior physical
+acceptance remains pending; the limitations below continue to apply.
+
+---
+
 # Preview 94: Android companion and My Push
 
 Includes the signed Android launcher APK, Chat11 linked-phone integration and

@@ -1,9 +1,37 @@
 # One Workspace for Android
 
 An Android launcher for the apps installed on your own One Workspace server.
-Enter the **HTTPS Workspace address**, sign in with MyAccounts, and open an app.
+On first launch, enter your **remote HTTPS Workspace address**. Leave
+**Use Chat from this Workspace** enabled to find Chat automatically, or turn it
+off and enter your own **HTTPS Chat address**. Sign in with MyAccounts and open
+an app. Your server choices and valid sign-in sessions are remembered when you
+close and reopen Android; you do not need to configure the addresses again.
 The launcher caches the app list; each app retains its existing server and data.
 Chat uses the existing mobile conversation UI and its emoji/sticker features.
+
+## Choose or change servers
+
+- Workspace example: `https://workspace.example.com` (the server address, without
+  a sign-in page or callback).
+- Chat example: `https://chat.example.com/chat`. Include the path shown when you
+  open Chat in your browser. A bare Chat hostname is also checked for `/chat`.
+- Open **Settings → Servers** to change either address later. Addresses are checked
+  before they are saved; a failed check keeps the previous configuration.
+- Switching servers asks for confirmation and removes this phone's previous
+  sign-in, saved launcher, queued replies and notification access. Server data
+  stays on the original server. Saving the same servers keeps the valid session.
+- Chat in the Apps launcher, the Chat tab and background notifications all use
+  the selected Chat server. Push is discovered from that server after sign-in;
+  users do not need to enter a separate push address or key.
+
+Use reachable servers with valid HTTPS certificates. For seamless single sign-in,
+configure Workspace and Chat with the same MyAccounts service. A Chat server
+using another MyAccounts service can ask you to sign in to that account once.
+The saved launcher remains available offline; connecting or signing in for the
+first time needs access to the selected servers.
+
+The separate Chat address and Servers editor require Android preview 3 or newer.
+[Download Android preview 3](https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.3).
 
 ## Android integration
 
@@ -32,7 +60,9 @@ permission, offline servers and manufacturer battery restrictions can prevent
 or delay alerts. The app does not bypass those controls or guarantee delivery
 while Android suspends network access.
 
-The signed preview APK is attached to Workspace preview 94 and newer releases.
+The signed preview APK is attached to the separate Android releases. Workspace
+preview 94 includes the older Android preview 2 APK; use the Android download
+above for saved server selection.
 Use Chat preview 11 and My Push preview 2 or newer. This is an evaluation
 implementation; full WhatsApp feature parity is not claimed. Existing
 Chat E2EE/calling limitations remain. Native Telecom/CallStyle incoming calls,

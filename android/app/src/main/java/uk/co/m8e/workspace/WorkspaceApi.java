@@ -1,7 +1,6 @@
 package uk.co.m8e.workspace;
 
 import android.content.Context;
-import android.net.Uri;
 import android.webkit.CookieManager;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -18,14 +17,96 @@ final class WorkspaceApi {
           .build();
 
   static String origin(String raw) {
-    Uri u = Uri.parse(raw);
-    if (!"https".equals(u.getScheme()) || u.getHost() == null || u.getUserInfo() != null)
+    HttpUrl u = HttpUrl.parse(raw);
+    if (u == null || !u.isHttps() || !u.username().isEmpty() || !u.password().isEmpty())
       throw new IllegalArgumentException("Use a secure https:// Workspace address");
-    return "https://" + u.getEncodedAuthority();
+    return u.newBuilder()
+        .encodedPath("/")
+        .query(null)
+        .fragment(null)
+        .build()
+        .toString()
+        .replaceAll("/+$", "");
   }
 
   static String home(Context c) {
+    JSONObject servers = SecureStore.get(c, "servers");
+    if (servers != null) return servers.optString("workspace", "");
     return c.getSharedPreferences("workspace", 0).getString("home", "");
+  }
+
+  static String chatOverride(Context c) {
+    JSONObject servers = SecureStore.get(c, "servers");
+    return servers == null ? "" : servers.optString("chatOverride", "");
+  }
+
+  static JSONObject savedDiscovery(Context c) {
+    JSONObject servers = SecureStore.get(c, "servers");
+    return servers == null ? SecureStore.get(c, "discovery") : servers.optJSONObject("discovery");
+  }
+
+  static String chat(Context c) {
+    String override = chatOverride(c);
+    JSONObject d = savedDiscovery(c);
+    String selected = override.isEmpty() ? (d == null ? "" : d.optString("chat", "")) : override;
+    return selected.isEmpty() ? "" : serverAddress(selected, false);
+  }
+
+  /** A server base, never a sign-in callback, token-bearing URL or embedded credential. */
+  static String serverAddress(String raw, boolean workspace) {
+    HttpUrl u = HttpUrl.parse(raw.trim());
+    if (u == null
+        || !u.isHttps()
+        || !u.username().isEmpty()
+        || !u.password().isEmpty()
+        || u.query() != null
+        || u.fragment() != null
+        || (workspace && !u.encodedPath().equals("/")))
+      throw new IllegalArgumentException("Enter an HTTPS server address");
+    return u.toString().replaceAll("/+$", "");
+  }
+
+  static void validateDiscovery(String home, JSONObject d) throws Exception {
+    if (!serverAddress(d.getString("workspace"), true).equals(home))
+      throw new IOException("Workspace returned a different server address");
+    d.put("workspace", home);
+    origin(d.getString("issuer"));
+    String chat = d.optString("chat", "");
+    if (!chat.isEmpty()) d.put("chat", serverAddress(chat, false));
+    JSONArray origins = d.optJSONArray("origins");
+    if (origins != null) for (int i = 0; i < origins.length(); i++) origin(origins.getString(i));
+  }
+
+  static String resolveChat(String requested, JSONObject d) throws Exception {
+    String base = serverAddress(requested, false);
+    String discovered = d.optString("chat", "");
+    // Accept a hostname pasted from the address bar even when Chat lives at /chat.
+    if (base.equals(origin(base)) && !discovered.isEmpty() && origin(discovered).equals(base))
+      base = serverAddress(discovered, false);
+    String[] candidates =
+        base.equals(origin(base)) ? new String[] {base, base + "/chat"} : new String[] {base};
+    for (String candidate : candidates) {
+      try (Response r =
+          HTTP.newCall(new Request.Builder().url(candidate + "/api/me").build()).execute()) {
+        // This marker belongs to the Workspace Chat gateway, including signed-out responses.
+        if ((r.code() == 200 || r.code() == 401) && r.header("X-Chat-Instance") != null) {
+          // A gateway can answer API routes at / while its UI and cookies live at /chat.
+          // Follow only its same-origin sign-in redirect to recover that canonical base.
+          HttpUrl login = HttpUrl.get(redirect(candidate + "/"));
+          String path = login.encodedPath();
+          if (!origin(login.toString()).equals(origin(candidate)) || !path.endsWith("/auth/login"))
+            throw new IOException("Chat returned an unexpected sign-in address");
+          String canonical =
+              origin(candidate) + path.substring(0, path.length() - "/auth/login".length());
+          String issuer = origin(redirect(canonical + "/auth/login"));
+          d.put("chatIssuer", issuer);
+          return canonical;
+        }
+      } catch (IOException ignored) {
+        // A hostname may serve a different page at / and mount Chat under /chat.
+      }
+    }
+    throw new IOException("No Workspace Chat server at that address");
   }
 
   static JSONObject discovery(String home) throws Exception {
