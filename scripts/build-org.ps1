@@ -124,7 +124,9 @@ Expand-Archive -LiteralPath $mapsZip -DestinationPath $mapsStage
 $mapsRoot=(Get-ChildItem -LiteralPath $mapsStage -Filter Maps.exe -File -Recurse | Select-Object -First 1).DirectoryName
 if(-not $mapsRoot){throw 'MyMaps executable missing'}
 $mapsContract=Get-Content -LiteralPath (Join-Path $mapsRoot 'compatibility.json') -Raw|ConvertFrom-Json
-if($mapsContract.schema -ne 1 -or $mapsContract.workspaceInstallerIntegration -ne 2 -or $mapsContract.route -cne '/maps' -or $mapsContract.version -cne ($lock.myMaps.tag -replace '^v','') -or $mapsContract.minimumWorkspaceVersion -cne '0.3.0-preview.54'){throw 'Unsupported MyMaps integration contract'}
+$mapsMinimum=[regex]::Match($mapsContract.minimumWorkspaceVersion,'^0\.3\.0-preview\.(\d+)$')
+$suitePreview=[regex]::Match($Version,'^0\.3\.0-preview\.(\d+)$')
+if($mapsContract.schema -ne 1 -or $mapsContract.workspaceInstallerIntegration -ne 2 -or $mapsContract.route -cne '/maps' -or $mapsContract.version -cne ($lock.myMaps.tag -replace '^v','') -or -not $mapsMinimum.Success -or -not $suitePreview.Success -or [int]$mapsMinimum.Groups[1].Value -gt [int]$suitePreview.Groups[1].Value){throw 'Unsupported MyMaps integration contract or newer Workspace required'}
 $meetZip=Get-OrgAsset $lock.myMeet
 $meetStage=Join-Path $Cache ('my-meet-stage-'+[guid]::NewGuid().ToString('N'))
 Expand-Archive -LiteralPath $meetZip -DestinationPath $meetStage
