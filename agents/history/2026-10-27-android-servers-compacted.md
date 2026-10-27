@@ -136,3 +136,26 @@ desktop assets and matching catalog. Actions must be disabled. Repository AGENTS
 and docs/RELEASING.md require this entry point for future releases. GitHub itself
 cannot enforce a local script against manual maintainer bypass; documented
 policy is scoped to this repository. Current release will exercise this flow.
+
+The new local publisher completed successfully end to end. Release source86783fa
+is pushed; Android4 assembled in1m44s with embedded commit/tree proof, the existing
+approved certificate and versionCode4. All8 assets verified against GitHub before
+publication. Public release425604558:
+https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.4
+APK13277851 bytes, SHA256
+`17249cbeb8e1a1b8cf82f8f388fb78e77dd7d8c030933fa2710042b410bb78d3`.
+Publisher verified the exact public APK download and raw-main promoted index,
+automatically committed/pushed promotion999563e. Actions remains disabled. Source
+and release metadata identify source86783fa/tree513f3b7d; no older release files
+were changed. Staging/signing scripts and artifacts are on the named I tooling
+folder; signing key remains private. No phone/install/functional tests ran.
+Fresh anonymous desktop installer check is running without installation, with
+temporary downloads on I, to confirm the Android tag does not replace Workspace94.
+
+Final anonymous installer check passed: verified Workspace94/current org Mail,
+without installing, and normal completion removed its temporary I downloads.
+No C build/test tree was created. Every intended source/publisher/policy change
+and the public channel are pushed; only this final delivery handoff follows the
+release/promotion commits. No reply to the optional broader-org scope question;
+the implemented guard covers every release of this One Workspace repository,
+not unrelated org server-app release pipelines.
