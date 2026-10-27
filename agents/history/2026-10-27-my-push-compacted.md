@@ -57,3 +57,39 @@ Android preview2 package/version and v2 APK signature verified with permanent
 release certificate. Physical UI remains blocked by locked phone, secondary update
 by expired owner browser session. Preparing full Workspace94 with actual org pins;
 no owner update started at this point. No Actions.
+
+## Delivered previews and remaining human steps
+
+Public Workspace94 source73055a0 contains Chat11 (15996b0d), My Push2 (23161db)
+and signed Android2. All24 Workspace assets match GitHub size/SHA256; the public
+channel promotion1efc1e9 was verified anonymously. No Actions. My Push1 was
+superseded/withheld before owner installation: its default port collided with
+My AI. Push now uses9021 (managed base+31); cmd/catalogcheck validates the complete
+catalogue before packaging. Fixed stale Maps floor, MSVC runtime argument/seed,
+and optional publisher metadata authentication in the organisation build script.
+
+Distribution/apphost/suite tests and scoped push tests pass. Final binaries pass
+16 HTTPS/native protocol checks, including a real server publish acknowledgement,
+opaque WebSocket wake, queue/ACK, native sync/reply/session restoration/revocation.
+An optimistic direct-fallback send is not a server commit: the test now waits for
+the actual publish ACK. The normal protected93→94 fixture upgrade automatically
+added Push and preserved26 excluded apps. Live console SSO/branding/navigation
+and390px no-overflow checks pass. See docs/ANDROID-DELIVERY.json.
+
+Primary owner installation completed through protected manager then Chat updates;
+all28 services running, old credentials/settings and unselected executable bytes
+retained (MyAI14/Maps8/Tasks4). Newest verified recovery kept; normal cleanup only.
+The phone has the exact published release-signed APK. Appium session deleted and
+app force-stopped/absence verified. Physical notification/reply/Doze/reboot tests
+remain unperformed because the phone stayed locked. Secondary installation NOT
+performed: its MyAccounts browser session requires the user to sign in. Resume
+from a fresh secondary Workspace root URL, not a stale OAuth callback/state URL.
+No owner account/data was used as a development fixture.
+
+All synthetic services/three Quick Tunnels stopped. Named C test/build tree
+removed (905422159 logical bytes); source/release/evidence stays on I and the
+permanent Android signing key remains outside Git in protected user storage.
+The synthetic credentials/data were removed; recreate a fresh isolated fixture
+for physical acceptance after the user unlocks. Do not rerun primary install.
+Full-suite Linux/gateway support remains separate; only My Push Linux x64 cross-
+build is certified here. Original unrelated Linux worktrees remain untouched.

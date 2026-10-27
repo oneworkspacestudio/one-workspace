@@ -1,0 +1,46 @@
+{
+  "releases": {
+    "workspace": "0.3.0-preview.94",
+    "chat": "0.1.0-preview.11",
+    "myPush": "0.1.0-preview.2",
+    "android": "0.1.0-preview.2"
+  },
+  "allPublicAssetsVerified": true,
+  "githubActionsUsed": false,
+  "primary": {
+    "unselectedAppVersionsAndExecutableBytesRetained": true,
+    "activeUpdate": false,
+    "ownerSettingsAndExistingCredentialsRetained": true,
+    "allServicesRunning": 28,
+    "chat": "0.1.0-preview.11",
+    "normalProtectedUpdates": true,
+    "physicalPhoneAcceptance": false,
+    "push": "0.1.0-preview.2",
+    "manager": "0.3.0-preview.94"
+  },
+  "android": {
+    "phoneLocked": true,
+    "physicalNotificationAcceptance": false,
+    "version": "0.1.0-preview.2",
+    "signedAPKMatchesPublishedRelease": true,
+    "appClosedAtEnd": true,
+    "appiumSessionDeleted": true,
+    "package": "uk.co.m8e.workspace"
+  },
+  "acceptance": {
+    "nativeServerProtocolChecks": 16,
+    "consoleSSOAndResponsiveChecks": 6,
+    "fullBundlePackagesVerified": 162,
+    "automaticNewAppUpgradeAndExclusionsVerified": true,
+    "onlySyntheticAccountsUsed": true
+  },
+  "secondary": {
+    "installed": false,
+    "reason": "awaiting owner MyAccounts sign-in"
+  },
+  "cleanup": {
+    "logicalTemporaryBytesRemoved": 905422159,
+    "previewsAndTaskTunnelsStopped": true,
+    "ownerDataAndLatestRecoveryPreserved": true
+  }
+}
