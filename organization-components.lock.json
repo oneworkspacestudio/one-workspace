@@ -2,9 +2,9 @@
   "schema": 1,
   "suiteSeed": {
     "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.16",
+    "tag": "v0.3.0-preview.93",
     "asset": "workspace-bundle.zip",
-    "sha256": "7ca90638fa1be194ffe2382756f17568f727f345248ea9e95fcf4e5b7a0af906"
+    "sha256": "2dfed5e8df098c3314f175a5df1be96a937cc203f3324f2b43b5c7d9352ae571"
   },
   "accounts": {
     "repository": "oneworkspacestudio/myaccounts",
