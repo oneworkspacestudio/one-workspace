@@ -1,7 +1,7 @@
 # Preview 94: Android companion and My Push
 
 Includes the signed Android launcher APK, Chat11 linked-phone integration and
-My Push1 self-hosted notification service. My Push is an optional selectable app
+My Push2 self-hosted notification service. My Push is an optional selectable app
 installed by default on new complete installations. Existing default installations
 discover it through the normal new-app update reconciliation. User exclusions
 remain respected. The manager publishes trusted public app origins for the phone

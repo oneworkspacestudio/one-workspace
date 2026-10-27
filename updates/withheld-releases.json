@@ -50,6 +50,11 @@
       "repository": "oneworkspacestudio/my-maps",
       "tag": "v0.1.0-preview.7",
       "reason": "Superseded before installation by preview.8: sparse category pins could fall outside the visible map. Keep the immutable release assets; promote the corrected build."
+    },
+    {
+      "tag": "v0.1.0-preview.1",
+      "repository": "oneworkspacestudio/my-push",
+      "reason": "Superseded before owner server installation: default catalogue port conflicts with My AI and initial metadata used a legacy filename. Use preview.2 / Workspace94."
     }
   ]
 }

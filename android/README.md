@@ -33,7 +33,7 @@ or delay alerts. The app does not bypass those controls or guarantee delivery
 while Android suspends network access.
 
 The signed preview APK is attached to Workspace preview 94 and newer releases.
-Use Chat preview 11 and My Push preview 1 or newer. This is an evaluation
+Use Chat preview 11 and My Push preview 2 or newer. This is an evaluation
 implementation; full WhatsApp feature parity is not claimed. Existing
 Chat E2EE/calling limitations remain. Native Telecom/CallStyle incoming calls,
 background camera/microphone calls, Play distribution and physical-device/Doze

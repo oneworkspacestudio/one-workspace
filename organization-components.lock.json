@@ -168,9 +168,9 @@
     "sha256": "148f0ca04d8bf20511d586e69d85348e00f5607798b47207d34be1f6ef1427ff"
   },
   "myPush": {
-    "sha256": "6cd5131c7d3e6ed76e6648f2f2039dfe545e6cbed34840084967f0b681e68ad3",
+    "sha256": "583fabae4246649fc030cf80f763050872837e103fc4d20bc40e54d6737950b5",
     "repository": "oneworkspacestudio/my-push",
     "asset": "MyPush-windows-amd64.zip",
-    "tag": "v0.1.0-preview.1"
+    "tag": "v0.1.0-preview.2"
   }
 }
