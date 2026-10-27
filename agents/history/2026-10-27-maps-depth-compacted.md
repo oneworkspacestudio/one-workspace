@@ -28,3 +28,24 @@ hash validated for primary. Keep other app versions, owner identities/settings,
 models and latest recovery. Secondary requires normal owner MyAccounts sign-in;
 open fresh handoff tab, user asked asynchronously. Do not claim secondary installed
 until fresh evidence. No bypass or owner tests.
+
+## Primary delivered; secondary requires sign-in
+
+Promotionefca08a/main public channel and all17 Maps9 assets anonymously verified.
+Primary normal8->9 Maps-only protected update finished with exact accepted EXE;
+manager94 retained,29catalog apps/28healthy services. All unselected app contracts,
+packages/executable bytes and owner configuration/decrypted identity settings
+matched after update. Served JS/CSS/title/version9 and native EXE verified.
+Newest usable recovery is update-20261027T164148-425bd09170cb; normal cleanup kept
+it. App history/evidence pushed in My Maps31fcdbb, source release stays35cca4a.
+No geographic pack was automatically downloaded into owner installation; owner
+chooses coverage/depth from the installed UI. Optional local router graph absent.
+
+Secondary still at normal MyAccounts sign-in in handoff tab585734409/Chrome3.
+User was asked asynchronously to sign in; no reply or apply submitted. Last known
+manager93/Maps8/MyAI14 remains historical, not a fresh read. After authorized
+normal sign-in, inspect fresh updater state and install only Maps9 through the
+normal backed-up workflow, preserving manager/other pending app updates. Never
+bypass auth, reuse OAuth callbacks, repeat primary update or claim both complete.
+Named C synthetic fixture and exact PID/port19315 removed with guarded checks;
+all task source/release/receipts retained on I. No Actions or owner-data fixtures.
