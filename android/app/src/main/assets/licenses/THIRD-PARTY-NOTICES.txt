@@ -1,0 +1,25 @@
+One Workspace Android
+
+One Workspace source: https://github.com/oneworkspacestudio/one-workspace
+Licensed under Apache License 2.0; see APACHE-2.0.txt in this directory.
+
+AndroidX AppCompat/Core/WebKit/WorkManager and their transitive AndroidX libraries
+https://android.googlesource.com/platform/frameworks/support/
+Copyright The Android Open Source Project. Apache License 2.0.
+
+Material Components for Android
+https://github.com/material-components/material-components-android
+Copyright Google LLC. Apache License 2.0.
+
+OkHttp / Okio
+https://github.com/square/okhttp | https://github.com/square/okio
+Copyright Square, Inc. Apache License 2.0.
+
+Kotlin standard library and annotations
+https://github.com/JetBrains/kotlin
+Copyright JetBrains s.r.o. and Kotlin Programming Language contributors.
+Apache License 2.0.
+
+This wrapper loads the user's separately installed applications from their own
+Workspace server. Their licences, including Chat's Tinode GPL-3.0 and web client
+Apache-2.0 notices, remain available in those applications.

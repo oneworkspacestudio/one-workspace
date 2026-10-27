@@ -67,6 +67,9 @@ param(
  [string]$MySearch='',
  [string]$MySearchVersion='0.1.0-preview.1',
  [string]$MySearchNotices='',
+ [string]$MyPush='',
+ [string]$MyPushVersion='0.1.0-dev',
+ [string]$MyPushNotices='',
  [string]$MyHosting='',
  [string]$MyHostingVersion='0.1.0-preview.1',
  [string]$MyHostingNotices='',
@@ -151,6 +154,7 @@ try {
  if($MyPDF){$inputs['pdf']=@{source=$MyPDF;file='MyPDF.exe'};if(-not $MyPDFNotices){throw 'My PDF requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['pdf-'+$name]=@{source=(Join-Path $MyPDFNotices $name);file='licenses/MyPDF-'+$name}}}
  if($MyMonitor){$inputs['monitor']=@{source=$MyMonitor;file='MyMonitor.exe'};if(-not $MyMonitorNotices){throw 'My Monitor requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['monitor-'+$name]=@{source=(Join-Path $MyMonitorNotices $name);file='licenses/MyMonitor-'+$name}}}
  if($MySearch){$inputs['search']=@{source=$MySearch;file='MySearch.exe'};if(-not $MySearchNotices){throw 'My Search requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['search-'+$name]=@{source=(Join-Path $MySearchNotices $name);file='licenses/MySearch-'+$name}}}
+ if($MyPush){$inputs['push']=@{source=$MyPush;file='MyPush.exe'};if(-not $MyPushNotices){throw 'My Push requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['push-'+$name]=@{source=(Join-Path $MyPushNotices $name);file='licenses/MyPush-'+$name}}}
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/oneworkspacestudio/myaccounts/releases/tag/'+$AccountsVersion},
@@ -185,6 +189,7 @@ try {
  if($MyTasks){$apps+=@{id='tasks';name='My Tasks';description='Private and shared tasks, recurrence and reminders';version=$MyTasksVersion;kind='process';package='tasks';executable='MyTasks.exe';port=9008;route='/tasks';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/tasks/auth/callback';args=@('--data','${DATA}/tasks','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/tasks','--no-browser');source='https://github.com/oneworkspacestudio/my-tasks/releases/tag/v'+$MyTasksVersion}}
  if($MyPDF){$apps+=@{id='pdf';name='My PDF';description='PDF viewing, annotations and copy-oriented tools';version=$MyPDFVersion;kind='process';package='pdf';executable='MyPDF.exe';port=9009;route='/pdf';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/pdf/auth/callback';args=@('--data','${DATA}/pdf','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/pdf','--no-browser');source='https://github.com/oneworkspacestudio/my-pdf/releases/tag/v'+$MyPDFVersion}}
  if($MyMonitor){$apps+=@{id='monitor';name='My Monitor';description='Private uptime monitoring and opt-in public status';version=$MyMonitorVersion;kind='process';package='monitor';executable='MyMonitor.exe';port=9010;route='/monitor';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/monitor/auth/callback';args=@('--data','${DATA}/monitor','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/monitor','--no-browser');source='https://github.com/oneworkspacestudio/my-monitor/releases/tag/v'+$MyMonitorVersion}}
+ if($MyPush){$apps+=@{id='push';name='My Push';description='Private notification delivery for your Workspace apps';version=$MyPushVersion;kind='process';package='push';executable='MyPush.exe';port=9019;route='/push';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/push/auth/callback';args=@('--data','${DATA}/push','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/push','--no-browser');source='https://github.com/oneworkspacestudio/my-push/releases/tag/v'+$MyPushVersion}}
  if($MySearch){$apps+=@{id='search';name='My Search';description='Search connected apps with your own permissions';version=$MySearchVersion;kind='process';package='search';executable='MySearch.exe';port=9011;route='/search';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/search/auth/callback';args=@('--data','${DATA}/search','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/search','--no-browser');source='https://github.com/oneworkspacestudio/my-search/releases/tag/v'+$MySearchVersion}}
  foreach($app in $apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/'){throw ('App source must be an organization repository: '+$app.id)}}
  $catalog=@{schema=1;installerIntegration=3;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15

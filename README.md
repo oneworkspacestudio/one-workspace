@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-a5486bd0.png)
+![The complete One Workspace app collection](docs/branding/app-suite-2d846fef.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -176,6 +176,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td><a href="https://github.com/oneworkspacestudio/my-cinema"><strong>My Cinema</strong></a></td>
       <td>Watch your movies and series with private family profiles.</td>
     </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_push.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-push"><strong>My Push</strong></a></td>
+      <td>Deliver private notifications to your linked phones.</td>
+    </tr>
   </tbody>
 </table>
 <!-- app-directory:end -->
@@ -190,6 +195,14 @@ You need a 64-bit Windows PC and room for your apps and files. [Check computer a
 4. **Open Workspace.** Finish setup, sign in and choose an app.
 
 Keep the Windows computer switched on while you use its apps. You can use Workspace on that computer or set up your own web address to reach it from other devices. [Setup and online access](docs/TECHNICAL.md).
+
+## Android companion
+
+The [Android app](android/README.md) opens the apps on your Workspace with the
+same MyAccounts sign-in. Its development source includes a saved app launcher
+and native Chat notification/background integration. Instant alerts require the
+matching Chat server update and the self hosted My Push app. No Firebase account
+is needed for this route; phone acceptance is still pending.
 
 ## Keep your workspace up to date
 

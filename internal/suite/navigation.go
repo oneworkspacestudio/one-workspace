@@ -12,6 +12,7 @@ import (
 var navigationAssets embed.FS
 
 func (p *Portal) navigationRoutes(mux *http.ServeMux) {
+	p.mobileRoutes(mux)
 	mux.HandleFunc("GET /_workspace/apps", func(w http.ResponseWriter, r *http.Request) {
 		user, ok := p.user(r)
 		if !ok {
@@ -98,7 +99,7 @@ func clearAppCookies(w http.ResponseWriter, r *http.Request, secure bool) {
 		"access_token_cookie": {"/", "/music/"}, "csrf_access_token": {"/", "/music/"}, "swingmusic_oidc": {"/", "/music/"},
 		"workspace_gitea": {"/", "/git", "/git/"},
 	}
-	for _, id := range []string{"cinema", "myai", "my3d", "create", "maps", "meet", "clips", "social", "slicer", "tasks", "pdf", "monitor", "search"} {
+	for _, id := range []string{"push", "cinema", "myai", "my3d", "create", "maps", "meet", "clips", "social", "slicer", "tasks", "pdf", "monitor", "search"} {
 		names[id+"_session"] = []string{"/", "/" + id + "/"}
 		names[id+"_login"] = []string{"/", "/" + id + "/"}
 	}

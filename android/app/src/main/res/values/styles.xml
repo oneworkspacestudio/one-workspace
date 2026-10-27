@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.OneWorkspace" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#345DE5</item><item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#29D5BE</item><item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item><item name="android:statusBarColor">#F5F7FC</item>
+        <item name="android:navigationBarColor">#F5F7FC</item><item name="android:windowActionModeOverlay">true</item>
+    </style>
+</resources>

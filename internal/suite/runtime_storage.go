@@ -12,6 +12,8 @@ func appWorkingDir(c Config, app string) string {
 	switch app {
 	case "cinema", "myai", "my3d", "create", "maps", "meet", "clips", "social", "slicer", "tasks", "pdf", "monitor", "search", "accounts", "drive", "photos", "gitea", "music", "mail", "calendar", "contacts", "notes", "my-tube", "chat":
 		return filepath.Join(c.Data, app)
+	case "push":
+		return filepath.Join(c.Data, "push")
 	case "hosting":
 		return filepath.Join(c.Data, "my-hosting")
 	case "vault":

@@ -208,5 +208,12 @@
     "name": "My Cinema",
     "description": "Watch your movies and series with private family profiles.",
     "url": "https://github.com/oneworkspacestudio/my-cinema"
+  },
+  {
+    "url": "https://github.com/oneworkspacestudio/my-push",
+    "id": "push",
+    "icon": "my_push",
+    "name": "My Push",
+    "description": "Deliver private notifications to your linked phones."
   }
 ]

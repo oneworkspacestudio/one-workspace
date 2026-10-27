@@ -63,7 +63,7 @@ func SaveSecret(path string, v any) error {
 	if e != nil {
 		return e
 	}
-	b, e = Protect(b)
+	b, e = protectSecret(path, b)
 	if e != nil {
 		return e
 	}
@@ -74,7 +74,7 @@ func LoadSecret(path string, v any) error {
 	if e != nil {
 		return e
 	}
-	b, e = Unprotect(b)
+	b, e = unprotectSecret(path, b)
 	if e != nil {
 		return e
 	}

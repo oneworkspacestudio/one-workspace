@@ -1,0 +1,985 @@
+package uk.co.m8e.workspace;
+
+import android.Manifest;
+import android.app.*;
+import android.content.*;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.*;
+import android.view.*;
+import android.webkit.*;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.webkit.*;
+import androidx.work.WorkManager;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import java.util.*;
+import java.util.concurrent.*;
+import org.json.*;
+
+/** A local launcher remains usable when the Workspace server is restarting. */
+public class MainActivity extends AppCompatActivity {
+  static volatile boolean foreground;
+  static volatile String visibleTopic = "";
+
+  static boolean viewing(String topic) {
+    return foreground && topic != null && !topic.isEmpty() && topic.equals(visibleTopic);
+  }
+
+  private final ExecutorService io = Executors.newSingleThreadExecutor();
+  private LinearLayout root, body;
+  private WebView web;
+  private MaterialToolbar toolbar;
+  private JSONObject catalog, discovery;
+  private final Set<String> trusted = new HashSet<>();
+  private volatile long generation;
+  private String chat = "", title = "", pendingTopic = "";
+  private ValueCallback<Uri[]> chooser;
+  private PermissionRequest media;
+  private String[] mediaAllowed = new String[0];
+  private GeolocationPermissions.Callback locationCallback;
+  private String locationOrigin;
+  private int BLUE = Color.rgb(52, 93, 229),
+      BG = Color.rgb(245, 247, 252),
+      INK = Color.rgb(23, 35, 59);
+
+  private int dp(float v) {
+    return Math.round(v * getResources().getDisplayMetrics().density);
+  }
+
+  @Override
+  public void onCreate(Bundle state) {
+    super.onCreate(state);
+    boolean dark =
+        (getResources().getConfiguration().uiMode
+                & android.content.res.Configuration.UI_MODE_NIGHT_MASK)
+            == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+    if (dark) {
+      BG = 0xff12161f;
+      INK = 0xffe6eaf5;
+    }
+    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    ChatNotifications.channels(this);
+    root = new LinearLayout(this);
+    root.setOrientation(1);
+    root.setBackgroundColor(BG);
+    setContentView(root);
+    androidx.core.view.WindowInsetsControllerCompat systemBars =
+        new androidx.core.view.WindowInsetsControllerCompat(getWindow(), root);
+    systemBars.setAppearanceLightStatusBars(!dark);
+    systemBars.setAppearanceLightNavigationBars(!dark);
+    getWindow().setStatusBarColor(BG);
+    getWindow().setNavigationBarColor(BG);
+    ViewCompat.setOnApplyWindowInsetsListener(
+        root,
+        (v, insets) -> {
+          androidx.core.graphics.Insets bars =
+              insets.getInsets(
+                  WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+          v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+          return insets;
+        });
+    toolbar = new MaterialToolbar(this);
+    toolbar.setTitleTextColor(INK);
+    toolbar.setNavigationIconTint(INK);
+    toolbar.setBackgroundColor(BG);
+    root.addView(toolbar, new LinearLayout.LayoutParams(-1, dp(64)));
+    body = new LinearLayout(this);
+    body.setOrientation(1);
+    root.addView(body, new LinearLayout.LayoutParams(-1, 0, 1));
+    catalog = SecureStore.get(this, "catalog");
+    discovery = SecureStore.get(this, "discovery");
+    restoreTrust();
+    if (WorkspaceApi.home(this).isEmpty()) setup();
+    else {
+      home();
+      refresh();
+    }
+    if (this instanceof DocumentActivity) {
+      String target = getIntent().getStringExtra("documentUrl");
+      if (target != null && allowed(target)) open(target, "Document");
+      else finish();
+      return;
+    }
+    getOnBackPressedDispatcher()
+        .addCallback(
+            this,
+            new androidx.activity.OnBackPressedCallback(true) {
+              @Override
+              public void handleOnBackPressed() {
+                navigateBack();
+              }
+            });
+    handleIntent(getIntent());
+  }
+
+  private TextView text(String value, int size) {
+    TextView t = new TextView(this);
+    t.setText(value);
+    t.setTextSize(size);
+    t.setTextColor(INK);
+    t.setPadding(dp(20), dp(12), dp(20), dp(12));
+    return t;
+  }
+
+  private MaterialButton button(String label, Runnable action) {
+    MaterialButton b = new MaterialButton(this);
+    b.setText(label);
+    b.setAllCaps(false);
+    b.setMinHeight(dp(48));
+    b.setOnClickListener(v -> action.run());
+    return b;
+  }
+
+  private void clear(String label, boolean back) {
+    visibleTopic = "";
+    if (web != null) {
+      web.stopLoading();
+      web.destroy();
+      web = null;
+    }
+    body.removeAllViews();
+    toolbar.setVisibility(View.VISIBLE);
+    toolbar.setTitle(label);
+    toolbar.getMenu().clear();
+    if (back) toolbar.setNavigationIcon(R.drawable.ic_back);
+    else toolbar.setNavigationIcon((android.graphics.drawable.Drawable) null);
+    toolbar.setNavigationOnClickListener(
+        v -> {
+          if (this instanceof DocumentActivity) finish();
+          else home();
+        });
+  }
+
+  private LinearLayout formPage() {
+    ScrollView scroll = new ScrollView(this);
+    scroll.setFillViewport(true);
+    LinearLayout panel = new LinearLayout(this);
+    panel.setOrientation(LinearLayout.VERTICAL);
+    panel.setPadding(dp(20), dp(12), dp(20), dp(20));
+    scroll.addView(panel);
+    body.addView(scroll, new LinearLayout.LayoutParams(-1, -1));
+    return panel;
+  }
+
+  private void setup() {
+    clear("One Workspace", false);
+    LinearLayout panel = formPage();
+    panel.setPadding(dp(20), dp(20), dp(20), dp(20));
+    ImageView logo = new ImageView(this);
+    logo.setImageResource(R.drawable.workspace_brand);
+    panel.addView(logo, new LinearLayout.LayoutParams(dp(72), dp(72)));
+    panel.addView(text("Your Workspace, wherever you are", 27));
+    panel.addView(
+        text("Connect to your Workspace address to open your apps and keep up with Chat.", 16));
+    EditText address = new EditText(this);
+    address.setSingleLine();
+    address.setHint("https://workspace.example.com");
+    address.setInputType(
+        android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_URI);
+    address.setText(WorkspaceApi.home(this));
+    panel.addView(address, new LinearLayout.LayoutParams(-1, dp(64)));
+    MaterialButton connect =
+        button(
+            "Connect to Workspace",
+            () -> {
+              try {
+                String h = WorkspaceApi.origin(address.getText().toString().trim());
+                connect(h);
+              } catch (Exception e) {
+                address.setError("Enter a valid https:// Workspace address");
+              }
+            });
+    panel.addView(connect);
+    panel.addView(
+        text("Use your normal MyAccounts sign-in. Your password stays with your Workspace.", 14));
+  }
+
+  private void connect(String h) {
+    final long operation;
+    synchronized (SecureStore.class) {
+      operation = ++generation;
+      getSharedPreferences("workspace", 0).edit().putString("home", h).apply();
+    }
+    trusted.clear();
+    trusted.add(h);
+    status("Connecting securely…");
+    io.execute(
+        () -> {
+          try {
+            JSONObject d = WorkspaceApi.discovery(h);
+            synchronized (SecureStore.class) {
+              if (generation != operation) return;
+              SecureStore.put(this, "discovery", d);
+            }
+            runOnUiThread(
+                () -> {
+                  if (generation != operation) return;
+                  discovery = d;
+                  restoreTrust();
+                  open(h + "/auth/login", "Sign in");
+                });
+          } catch (Exception e) {
+            runOnUiThread(
+                () -> {
+                  status(
+                      "This Workspace needs the Android connection update before it can connect."
+                          + " Check the address, update Workspace, then try again.");
+                  body.addView(button("Try another address", this::setup));
+                });
+          }
+        });
+  }
+
+  private void restoreTrust() {
+    trusted.clear();
+    String h = WorkspaceApi.home(this);
+    if (!h.isEmpty()) trusted.add(h);
+    chat = "";
+    if (discovery == null) return;
+    try {
+      if (!WorkspaceApi.origin(discovery.getString("workspace")).equals(h)) return;
+      trusted.add(WorkspaceApi.origin(discovery.getString("issuer")));
+      chat = discovery.optString("chat", "");
+      JSONArray a = discovery.optJSONArray("origins");
+      if (a != null)
+        for (int i = 0; i < a.length(); i++) trusted.add(WorkspaceApi.origin(a.getString(i)));
+      if (!chat.isEmpty()) trusted.add(WorkspaceApi.origin(chat));
+    } catch (Exception e) {
+      chat = "";
+    }
+  }
+
+  private void status(String msg) {
+    clear("One Workspace", false);
+    body.addView(text(msg, 17));
+  }
+
+  private void home() {
+    clear("One Workspace", false);
+    body.setPadding(0, 0, 0, 0);
+    toolbar.getMenu().add("Refresh").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    toolbar.setOnMenuItemClickListener(
+        i -> {
+          refresh();
+          return true;
+        });
+    if (catalog == null) {
+      body.addView(
+          text("Connect once to load your apps. Your launcher will remain available offline.", 17));
+      body.addView(
+          button("Sign in", () -> open(WorkspaceApi.home(this) + "/auth/login", "Sign in")));
+    } else {
+      body.addView(text("Hello, " + catalog.optString("name", "there"), 24));
+      EditText search = new EditText(this);
+      search.setSingleLine();
+      search.setHint("Search your apps");
+      search.setPadding(dp(20), 0, dp(20), 0);
+      body.addView(search, new LinearLayout.LayoutParams(-1, dp(56)));
+      ScrollView scroll = new ScrollView(this);
+      GridLayout grid = new GridLayout(this);
+      grid.setColumnCount(3);
+      grid.setPadding(dp(10), dp(14), dp(10), dp(14));
+      scroll.addView(grid);
+      body.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
+      Runnable render =
+          () -> {
+            grid.removeAllViews();
+            JSONArray apps = catalog.optJSONArray("apps");
+            if (apps == null) return;
+            String q = search.getText().toString().toLowerCase(Locale.ROOT);
+            for (int n = 0; n < apps.length(); n++) {
+              JSONObject app = apps.optJSONObject(n);
+              if (app == null || !app.optString("Name").toLowerCase(Locale.ROOT).contains(q))
+                continue;
+              LinearLayout tile = new LinearLayout(this);
+              tile.setOrientation(1);
+              tile.setGravity(Gravity.CENTER);
+              tile.setPadding(dp(4), dp(12), dp(4), dp(12));
+              tile.setBackgroundResource(android.R.drawable.list_selector_background);
+              tile.setMinimumHeight(dp(112));
+              tile.setContentDescription("Open " + app.optString("Name"));
+              ImageView icon = new ImageView(this);
+              String id = app.optString("ID", "");
+              String iconName =
+                  app.optString("Icon", "")
+                      .replaceAll("^.*/", "")
+                      .replaceAll("-[a-f0-9]{16}\\.svg$", "")
+                      .replaceAll("\\.svg$", "");
+              int resource =
+                  getResources().getIdentifier("brand_" + iconName, "drawable", getPackageName());
+              if (resource == 0)
+                resource =
+                    getResources()
+                        .getIdentifier("app_" + id.replace('-', '_'), "drawable", getPackageName());
+              icon.setImageResource(resource == 0 ? R.drawable.workspace_brand : resource);
+              tile.addView(icon, new LinearLayout.LayoutParams(dp(46), dp(46)));
+              TextView name = text(app.optString("Name"), 13);
+              name.setGravity(Gravity.CENTER);
+              name.setMaxLines(2);
+              name.setPadding(0, dp(8), 0, 0);
+              tile.addView(name);
+              GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
+              lp.width = 0;
+              lp.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+              lp.setMargins(dp(4), dp(4), dp(4), dp(4));
+              grid.addView(tile, lp);
+              tile.setOnClickListener(
+                  v -> {
+                    String u = app.optString("URL", "");
+                    try {
+                      open(
+                          new java.net.URI(WorkspaceApi.home(this) + "/").resolve(u).toString(),
+                          app.optString("Name"));
+                    } catch (Exception ignored) {
+                      toast("This app link is unavailable");
+                    }
+                  });
+            }
+          };
+      render.run();
+      search.addTextChangedListener(
+          new android.text.TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int st, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int st, int before, int count) {
+              render.run();
+            }
+
+            public void afterTextChanged(android.text.Editable e) {}
+          });
+    }
+    if (catalog == null) body.addView(new View(this), new LinearLayout.LayoutParams(1, 0, 1));
+    com.google.android.material.bottomnavigation.BottomNavigationView nav =
+        new com.google.android.material.bottomnavigation.BottomNavigationView(this);
+    nav.setBackgroundColor(BG);
+    nav.getMenu().add(0, 1, 1, "Apps").setIcon(R.drawable.ic_apps);
+    nav.getMenu().add(0, 2, 2, "Chat").setIcon(R.drawable.ic_chat);
+    nav.getMenu().add(0, 3, 3, "Settings").setIcon(R.drawable.ic_settings);
+    nav.setSelectedItemId(1);
+    nav.setOnItemSelectedListener(
+        item -> {
+          if (item.getItemId() == 1) home();
+          else if (item.getItemId() == 2) openChat();
+          else settings();
+          return true;
+        });
+    body.addView(nav, new LinearLayout.LayoutParams(-1, dp(80)));
+  }
+
+  private void refresh() {
+    final String target = WorkspaceApi.home(this);
+    final long operation = generation;
+    if (target.isEmpty()) return;
+    io.execute(
+        () -> {
+          try {
+            JSONObject c = WorkspaceApi.json(target + "/_workspace/apps", "GET", null, null, true);
+            synchronized (SecureStore.class) {
+              if (generation != operation || !target.equals(WorkspaceApi.home(this))) return;
+              SecureStore.put(this, "catalog", c);
+            }
+            runOnUiThread(
+                () -> {
+                  if (generation != operation) return;
+                  catalog = c;
+                  if (web == null
+                      || ("Sign in".equals(title)
+                          && web.getUrl() != null
+                          && web.getUrl().equals(target + "/"))) home();
+                });
+          } catch (WorkspaceApi.SignInRequired e) {
+            runOnUiThread(
+                () -> {
+                  if (generation == operation) toast("Sign in to refresh your apps");
+                });
+          } catch (Exception e) {
+            runOnUiThread(
+                () -> {
+                  if (generation == operation) toast("Offline — showing your saved apps");
+                });
+          }
+        });
+  }
+
+  private boolean allowed(String url) {
+    try {
+      return trusted.contains(WorkspaceApi.origin(url));
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private boolean isChat(String url) {
+    return !chat.isEmpty() && url != null && url.startsWith(chat + "/");
+  }
+
+  private boolean isChatUI(String url) {
+    if (!isChat(url)) return false;
+    String path = Uri.parse(url).getPath(), base = Uri.parse(chat).getPath();
+    return path.equals(base + "/") || path.equals(base + "/index.html");
+  }
+
+  private void openChatPage() {
+    String target = chat + "/" + (pendingTopic.isEmpty() ? "" : "#" + pendingTopic);
+    pendingTopic = "";
+    open(target, "Chat");
+  }
+
+  private void openChat() {
+    if (chat.isEmpty()) {
+      toast("Chat is not installed on this Workspace");
+      return;
+    }
+    if (SecureStore.get(this, "device") == null) {
+      openChatPage();
+      return;
+    }
+    io.execute(
+        () -> {
+          try {
+            WorkspaceApi.restoreChatSession(this);
+          } catch (WorkspaceApi.SignInRequired e) {
+            SecureStore.remove(this, "device");
+          } catch (Exception ignored) {
+          }
+          runOnUiThread(this::openChatPage);
+        });
+  }
+
+  private void open(String url, String label) {
+    if (!allowed(url)) {
+      external(url);
+      return;
+    }
+    clear(label, true);
+    title = label;
+    web = new WebView(this);
+    WebView w = web;
+    WebSettings s = w.getSettings();
+    s.setJavaScriptEnabled(true);
+    s.setDomStorageEnabled(true);
+    s.setAllowFileAccess(false);
+    s.setAllowContentAccess(false);
+    s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+    s.setMediaPlaybackRequiresUserGesture(true);
+    s.setSupportMultipleWindows(true);
+    s.setJavaScriptCanOpenWindowsAutomatically(false);
+    s.setSafeBrowsingEnabled(true);
+    CookieManager.getInstance().setAcceptCookie(true);
+    CookieManager.getInstance().setAcceptThirdPartyCookies(w, false);
+    if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER))
+      WebViewCompat.addWebMessageListener(
+          w,
+          "WorkspaceNative",
+          chat.isEmpty()
+              ? Collections.singleton(WorkspaceApi.home(this))
+              : Collections.singleton(WorkspaceApi.origin(chat)),
+          (view, message, source, main, reply) -> {
+            if (!main || !isChat(view.getUrl())) return;
+            try {
+              JSONObject m = new JSONObject(message.getData());
+              if ("signedOut".equals(m.optString("type"))) disconnectDevice();
+            } catch (Exception ignored) {
+            }
+          });
+    w.setWebViewClient(
+        new WebViewClient() {
+          boolean chatReady;
+
+          @Override
+          public void onPageStarted(WebView v, String u, android.graphics.Bitmap icon) {
+            if (allowed(u)) {
+              Uri uri = Uri.parse(u);
+              if ("1".equals(uri.getQueryParameter("signedOut"))
+                  || uri.getPath().endsWith("/auth/logout")) disconnectDevice();
+            }
+          }
+
+          @Override
+          public void doUpdateVisitedHistory(WebView v, String u, boolean reload) {
+            visibleTopic = "";
+            if (isChat(u)) {
+              String hash = Uri.parse(u).getFragment();
+              if (hash != null) {
+                String candidate = hash.replaceFirst("^/", "").split("/", 2)[0];
+                if (ChatConnection.validTopic(candidate)) visibleTopic = candidate;
+              }
+            }
+          }
+
+          @Override
+          public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {
+            if (!r.isForMainFrame()) return false;
+            String u = r.getUrl().toString();
+            if (allowed(u)) return false;
+            external(u);
+            return true;
+          }
+
+          @Override
+          public void onPageFinished(WebView v, String u) {
+            CookieManager.getInstance().flush();
+            if (allowed(u)) refresh();
+            if (isChatUI(u)) {
+              toolbar.setVisibility(View.GONE);
+              if (!chatReady) {
+                v.clearHistory();
+                chatReady = true;
+              }
+              linkDevice(u);
+            } else toolbar.setVisibility(View.VISIBLE);
+          }
+
+          @Override
+          public void onReceivedSslError(
+              WebView v, android.webkit.SslErrorHandler handler, android.net.http.SslError e) {
+            handler.cancel();
+            toast("Secure connection failed. Check your Workspace certificate.");
+          }
+
+          @Override
+          public void onReceivedError(WebView v, WebResourceRequest r, WebResourceError e) {
+            if (r.isForMainFrame())
+              toast("Workspace is reconnecting. Your saved apps are available from Back to apps.");
+          }
+        });
+    w.setWebChromeClient(
+        new WebChromeClient() {
+          @Override
+          public boolean onCreateWindow(
+              WebView parent, boolean dialog, boolean gesture, Message result) {
+            if (!gesture) return false;
+            WebView pending = new WebView(MainActivity.this);
+            pending.getSettings().setAllowFileAccess(false);
+            pending.getSettings().setAllowContentAccess(false);
+            pending.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+            pending.setWebViewClient(
+                new WebViewClient() {
+                  boolean done;
+
+                  @Override
+                  public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest r) {
+                    String target = r.getUrl().toString();
+                    if (target.equals("about:blank")) return false;
+                    if (done) return true;
+                    done = true;
+                    if (allowed(target))
+                      startActivity(
+                          new Intent(MainActivity.this, DocumentActivity.class)
+                              .putExtra("documentUrl", target));
+                    else external(target);
+                    v.stopLoading();
+                    v.destroy();
+                    return true;
+                  }
+                });
+            ((WebView.WebViewTransport) result.obj).setWebView(pending);
+            result.sendToTarget();
+            new Handler(Looper.getMainLooper())
+                .postDelayed(
+                    () -> {
+                      try {
+                        pending.destroy();
+                      } catch (Exception ignored) {
+                      }
+                    },
+                    60000);
+            return true;
+          }
+
+          @Override
+          public boolean onShowFileChooser(
+              WebView v, ValueCallback<Uri[]> callback, FileChooserParams p) {
+            if (chooser != null) chooser.onReceiveValue(null);
+            chooser = callback;
+            try {
+              startActivityForResult(p.createIntent(), 100);
+              return true;
+            } catch (Exception e) {
+              chooser = null;
+              return false;
+            }
+          }
+
+          @Override
+          public void onGeolocationPermissionsShowPrompt(
+              String origin, GeolocationPermissions.Callback callback) {
+            if (!allowed(origin) || locationCallback != null) {
+              callback.invoke(origin, false, false);
+              return;
+            }
+            locationCallback = callback;
+            locationOrigin = origin;
+            new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Allow location?")
+                .setMessage(
+                    "Allow "
+                        + Uri.parse(origin).getHost()
+                        + " to use your location while this app is open?")
+                .setPositiveButton(
+                    "Continue",
+                    (d, which) ->
+                        requestPermissions(
+                            new String[] {
+                              Manifest.permission.ACCESS_COARSE_LOCATION,
+                              Manifest.permission.ACCESS_FINE_LOCATION
+                            },
+                            103))
+                .setNegativeButton(
+                    "Cancel",
+                    (d, which) -> {
+                      callback.invoke(origin, false, false);
+                      locationCallback = null;
+                    })
+                .setOnCancelListener(
+                    d -> {
+                      callback.invoke(origin, false, false);
+                      locationCallback = null;
+                    })
+                .show();
+          }
+
+          @Override
+          public void onPermissionRequest(PermissionRequest p) {
+            runOnUiThread(() -> requestMedia(p));
+          }
+        });
+    w.setDownloadListener((u, agent, cd, mime, size) -> external(u));
+    body.addView(w, new LinearLayout.LayoutParams(-1, -1));
+    toolbar
+        .getMenu()
+        .add("Reload")
+        .setOnMenuItemClickListener(
+            i -> {
+              w.reload();
+              return true;
+            });
+    toolbar
+        .getMenu()
+        .add("Open in browser")
+        .setOnMenuItemClickListener(
+            i -> {
+              external(w.getUrl());
+              return true;
+            });
+    w.loadUrl(url);
+  }
+
+  private void linkDevice(String url) {
+    final String target = chat;
+    final long operation = generation;
+    io.execute(
+        () -> {
+          try {
+            JSONObject me = WorkspaceApi.json(target + "/api/me", "GET", null, null, true);
+            if (generation != operation || !target.equals(chat)) return;
+            JSONObject old = SecureStore.get(this, "device");
+            if (old != null
+                && old.optString("accountKey").equals(me.getString("accountKey"))
+                && old.optString("chat").equals(target)) {
+              try {
+                WorkspaceApi.bootstrap(this);
+              } catch (WorkspaceApi.SignInRequired expired) {
+                SecureStore.remove(this, "device");
+                old = null;
+              }
+            }
+            if (old == null
+                || !old.optString("accountKey").equals(me.getString("accountKey"))
+                || !old.optString("chat").equals(target)) {
+              if (old != null) disconnectDevice();
+              long next = generation;
+              JSONObject d =
+                  WorkspaceApi.json(target + "/api/native/link", "POST", "{}", null, true);
+              d.put("chat", target);
+              d.put("accountKey", me.getString("accountKey"));
+              boolean accept;
+              synchronized (SecureStore.class) {
+                accept = generation == next && target.equals(chat);
+                if (accept) SecureStore.put(this, "device", d);
+              }
+              if (!accept) {
+                try {
+                  WorkspaceApi.json(
+                      target + "/api/native/revoke", "POST", "{}", d.getString("token"), false);
+                } catch (Exception ignored) {
+                }
+                return;
+              }
+            }
+            ChatSyncWorker.schedule(this);
+            PushConfig.initialize(this, WorkspaceApi.bootstrap(this).optJSONObject("push"));
+            runOnUiThread(
+                () -> {
+                  WorkspacePushService.start(this);
+                  if (Build.VERSION.SDK_INT >= 33
+                      && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                          != PackageManager.PERMISSION_GRANTED)
+                    requestPermissions(new String[] {Manifest.permission.POST_NOTIFICATIONS}, 101);
+                });
+          } catch (Exception e) {
+            runOnUiThread(
+                () ->
+                    toast(
+                        "Chat is open. Background notifications need the matching Chat server"
+                            + " update."));
+          }
+        });
+  }
+
+  private void requestMedia(PermissionRequest p) {
+    if (!allowed(p.getOrigin().toString()) || media != null) {
+      p.deny();
+      return;
+    }
+    ArrayList<String> permissions = new ArrayList<>(), resources = new ArrayList<>();
+    for (String resource : p.getResources()) {
+      if (resource.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
+        permissions.add(Manifest.permission.RECORD_AUDIO);
+        resources.add(resource);
+      } else if (resource.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
+        permissions.add(Manifest.permission.CAMERA);
+        resources.add(resource);
+      }
+    }
+    if (permissions.isEmpty()) {
+      p.deny();
+      return;
+    }
+    media = p;
+    mediaAllowed = resources.toArray(new String[0]);
+    new AlertDialog.Builder(this)
+        .setTitle("Allow camera or microphone?")
+        .setMessage(
+            "Allow " + p.getOrigin().getHost() + " to use the requested camera/microphone access?")
+        .setPositiveButton(
+            "Continue", (d, which) -> requestPermissions(permissions.toArray(new String[0]), 102))
+        .setNegativeButton(
+            "Cancel",
+            (d, which) -> {
+              p.deny();
+              media = null;
+            })
+        .setOnCancelListener(
+            d -> {
+              p.deny();
+              media = null;
+            })
+        .show();
+  }
+
+  private void settings() {
+    clear("Settings", true);
+    LinearLayout panel = formPage();
+    panel.addView(text(WorkspaceApi.home(this), 17));
+    panel.addView(text("Chat notifications", 23));
+    panel.addView(
+        text(
+            SecureStore.get(this, "device") == null
+                ? "Open Chat and sign in once to link this device."
+                : (PushConfig.ready(this)
+                    ? "My Push and background sync configured"
+                    : "Background sync enabled. Instant notifications need push configured on your"
+                        + " Workspace."),
+            16));
+    panel.addView(
+        button(
+            "Notification settings",
+            () -> {
+              if (Build.VERSION.SDK_INT >= 33
+                  && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                      != PackageManager.PERMISSION_GRANTED)
+                requestPermissions(new String[] {Manifest.permission.POST_NOTIFICATIONS}, 101);
+              else
+                startActivity(
+                    new Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, getPackageName()));
+            }));
+    if (!chat.isEmpty() && SecureStore.get(this, "device") != null)
+      panel.addView(button("Manage linked phones", () -> open(chat + "/devices", "Linked phones")));
+    Switch preview = new Switch(this);
+    preview.setText("Show message previews");
+    preview.setPadding(dp(20), dp(12), dp(20), dp(12));
+    preview.setChecked(getSharedPreferences("workspace", 0).getBoolean("previews", false));
+    preview.setOnCheckedChangeListener(
+        (b, on) -> getSharedPreferences("workspace", 0).edit().putBoolean("previews", on).apply());
+    panel.addView(preview);
+    Switch background = new Switch(this);
+    background.setText("Keep private Chat connection running");
+    background.setPadding(dp(20), dp(12), dp(20), dp(12));
+    background.setChecked(getSharedPreferences("workspace", 0).getBoolean("backgroundPush", true));
+    background.setOnCheckedChangeListener(
+        (b, on) -> {
+          getSharedPreferences("workspace", 0).edit().putBoolean("backgroundPush", on).apply();
+          if (on) WorkspacePushService.start(this);
+          else stopService(new Intent(this, WorkspacePushService.class));
+        });
+    panel.addView(background);
+    panel.addView(
+        text(
+            "My Push uses your own server. Android shows a quiet ongoing connection notification;"
+                + " no Firebase account is needed.",
+            14));
+    panel.addView(
+        button(
+            "Android battery settings",
+            () ->
+                startActivity(
+                    new Intent(
+                        android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))));
+    panel.addView(
+        text(
+            "Android may delay periodic sync. Force-stopping the app pauses notifications until you"
+                + " open it again.",
+            14));
+    panel.addView(
+        button(
+            "Disconnect this device",
+            () ->
+                new AlertDialog.Builder(this)
+                    .setMessage(
+                        "Disconnect this phone and remove its Chat notification access? Server data"
+                            + " stays in your Workspace.")
+                    .setPositiveButton(
+                        "Disconnect",
+                        (d, w) -> {
+                          disconnectDevice();
+                          CookieManager.getInstance().removeAllCookies(null);
+                          catalog = null;
+                          discovery = null;
+                          getSharedPreferences("workspace", 0).edit().clear().apply();
+                          setup();
+                        })
+                    .setNegativeButton("Cancel", null)
+                    .show()));
+  }
+
+  private void disconnectDevice() {
+    stopService(new Intent(this, WorkspacePushService.class));
+    JSONObject d;
+    synchronized (SecureStore.class) {
+      generation++;
+      d = SecureStore.get(this, "device");
+      SecureStore.remove(this, "device");
+      SecureStore.remove(this, "notification-history");
+      SecureStore.remove(this, "push-config");
+      SecureStore.remove(this, "push-seen");
+      ChatNotifications.clear(this);
+    }
+    if (d != null)
+      io.execute(
+          () -> {
+            try {
+              WorkspaceApi.json(
+                  d.getString("chat") + "/api/native/revoke",
+                  "POST",
+                  "{}",
+                  d.getString("token"),
+                  false);
+            } catch (Exception ignored) {
+            }
+          });
+    WorkManager.getInstance(this).cancelAllWorkByTag("workspace-chat");
+  }
+
+  private void external(String u) {
+    try {
+      Uri uri = Uri.parse(u);
+      if (!Arrays.asList("https", "mailto", "tel").contains(uri.getScheme())) return;
+      startActivity(new Intent(Intent.ACTION_VIEW, uri));
+    } catch (Exception e) {
+      toast("No app can open this link");
+    }
+  }
+
+  private void toast(String s) {
+    Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+  }
+
+  @Override
+  public void onBackPressed() {
+    navigateBack();
+  }
+
+  private void navigateBack() {
+    if (web != null && web.canGoBack()) web.goBack();
+    else if (this instanceof DocumentActivity) finish();
+    else if (web != null || !toolbar.getTitle().equals("One Workspace")) home();
+    else finish();
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    setIntent(intent);
+    handleIntent(intent);
+  }
+
+  private void handleIntent(Intent intent) {
+    if (intent != null && intent.getBooleanExtra("openChat", false)) {
+      String topic = intent.getStringExtra("topic");
+      pendingTopic =
+          SecureStore.isDevice(this, intent.getStringExtra("device"))
+                  && ChatConnection.validTopic(topic)
+              ? topic
+              : "";
+      openChat();
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    foreground = true;
+    WorkspacePushService.start(this);
+    if (SecureStore.get(this, "device") != null) ChatSyncWorker.enqueue(this, null, null, false);
+  }
+
+  @Override
+  protected void onPause() {
+    foreground = false;
+    CookieManager.getInstance().flush();
+    super.onPause();
+  }
+
+  @Override
+  protected void onDestroy() {
+    if (web != null) web.destroy();
+    if (chooser != null) chooser.onReceiveValue(null);
+    io.shutdown();
+    super.onDestroy();
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int code, String[] p, int[] grants) {
+    super.onRequestPermissionsResult(code, p, grants);
+    if (code == 101) WorkspacePushService.start(this);
+    if (code == 103 && locationCallback != null) {
+      boolean allowed = false;
+      for (int grant : grants) allowed |= grant == PackageManager.PERMISSION_GRANTED;
+      locationCallback.invoke(locationOrigin, allowed, false);
+      locationCallback = null;
+    }
+    if (code == 102 && media != null) {
+      boolean all = true;
+      for (int g : grants) all &= g == PackageManager.PERMISSION_GRANTED;
+      if (all) media.grant(mediaAllowed);
+      else media.deny();
+      media = null;
+    }
+  }
+
+  @Override
+  protected void onActivityResult(int code, int result, Intent data) {
+    super.onActivityResult(code, result, data);
+    if (code == 100 && chooser != null) {
+      chooser.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(result, data));
+      chooser = null;
+    }
+  }
+}
