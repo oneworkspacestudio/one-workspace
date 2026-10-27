@@ -72,7 +72,7 @@ Distribution/apphost/suite tests and scoped push tests pass. Final binaries pass
 16 HTTPS/native protocol checks, including a real server publish acknowledgement,
 opaque WebSocket wake, queue/ACK, native sync/reply/session restoration/revocation.
 An optimistic direct-fallback send is not a server commit: the test now waits for
-the actual publish ACK. The normal protected93→94 fixture upgrade automatically
+the actual publish ACK. The normal protected93â†’94 fixture upgrade automatically
 added Push and preserved26 excluded apps. Live console SSO/branding/navigation
 and390px no-overflow checks pass. See docs/ANDROID-DELIVERY.json.
 
@@ -91,5 +91,4 @@ removed (905422159 logical bytes); source/release/evidence stays on I and the
 permanent Android signing key remains outside Git in protected user storage.
 The synthetic credentials/data were removed; recreate a fresh isolated fixture
 for physical acceptance after the user unlocks. Do not rerun primary install.
-Full-suite Linux/gateway support remains separate; only My Push Linux x64 cross-
-build is certified here. Original unrelated Linux worktrees remain untouched.
+Full-suite Linux/gateway support remains separate; My Push was cross-built for Linux x64; no Linux host/service tests ran. Original unrelated Linux worktrees remain untouched.
