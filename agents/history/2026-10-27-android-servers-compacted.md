@@ -79,3 +79,12 @@ Public index regenerated and contains Android3/eight assets plus Workspace94;
 anonymous promoted-index/download and desktop-selection checks follow this commit.
 Artifacts and private publisher scripts stay under the named I tooling folder;
 no task cache or installation was created on C. Signing key stays private.
+
+Promotion d7f8ee7 is pushed. Exact raw-main channel was read anonymously and
+contains Android3/all8 assets. Anonymous public APK and Android source downloads
+match their promoted SHA256 and lengths. The actual Workspace94 installer ran
+`--check-updates --no-browser` without GitHub tokens: it downloaded/verified
+Workspace94 and current Mail from the org, then exited successfully without
+installing. Android-only tag was ignored correctly. Its disposable I download
+folder was removed by normal completion. Actions remain disabled. No source
+changes after c21001d entered the release; subsequent commits are channel/history.
