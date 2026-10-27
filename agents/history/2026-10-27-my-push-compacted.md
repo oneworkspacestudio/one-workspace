@@ -29,3 +29,21 @@ Current baseb6f88cc remains older than now-public main93; before release reconci
 latest main and all newer app pins. Preview94 in local My Push manifest is only
 provisional minimum; no version reservation or external promotion. Need explicit
 publish/install task, real-phone acceptance and permanent Android signing key.
+
+## Authorized release continuation, 27 October
+
+User now authorizes physical-phone testing, push, release and installation. Local
+integration rebased onto public a96102b (Maps8), preserving MyAI14/Tasks4 and all
+newer pins. Source commit before actual releases contains the apphost contract;
+new My Push module will pin it publicly before reproducible Windows/Linux builds.
+Linux helpers now live in internal/portablesecure with Apache notices, replacing
+the unpublished sibling calendar dependency. Full suite Linux support is separate.
+
+Automated distribution/apphost/suite tests pass on a fresh protected NTFS root.
+Cleanup test no longer assumes physical free-space delta is positive for small
+resident files; actual removal and newest verified recovery remain asserted.
+My Push synthetic isolation/ACK/revocation tests pass. Android debug2 installed
+on the explicitly authorized attached phone (no previous package); device UI
+acceptance pending unlock. New permanent release key held outside Git in protected
+user storage. Synthetic HTTPS fixture uses isolated Quick Tunnel config; never
+load owner named-tunnel config. No public release or owner update yet.
