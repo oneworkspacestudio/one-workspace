@@ -16,7 +16,10 @@ $records=[Collections.Generic.List[object]]::new()
 function Get-OrgAsset($pin){
  if($pin.repository -notmatch '^oneworkspacestudio/[A-Za-z0-9_.-]+$'){throw 'Component must come from oneworkspacestudio'}
  $uri='https://api.github.com/repos/'+$pin.repository+'/releases/tags/'+$pin.tag
- $release=Invoke-RestMethod -Uri $uri -Headers @{'User-Agent'='OneWorkspaceBuild';Accept='application/vnd.github+json'}
+ $headers=@{'User-Agent'='OneWorkspaceBuild';Accept='application/vnd.github+json'}
+ $publisherToken=if($env:GH_TOKEN){$env:GH_TOKEN}else{$env:GITHUB_TOKEN}
+ if($publisherToken){$headers.Authorization='Bearer '+$publisherToken}
+ $release=Invoke-RestMethod -Uri $uri -Headers $headers -TimeoutSec 45
  if($release.draft -or -not $release.published_at){throw 'Component release is not published'}
  $matches=@($release.assets|Where-Object name -CEQ $pin.asset)
  if($matches.Count -ne 1){throw ('Missing/duplicate asset: '+$pin.asset)}
