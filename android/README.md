@@ -32,10 +32,15 @@ permission, offline servers and manufacturer battery restrictions can prevent
 or delay alerts. The app does not bypass those controls or guarantee delivery
 while Android suspends network access.
 
-This is a development implementation, not full WhatsApp feature parity. Existing
+The signed preview APK is attached to Workspace preview 94 and newer releases.
+Use Chat preview 11 and My Push preview 1 or newer. This is an evaluation
+implementation; full WhatsApp feature parity is not claimed. Existing
 Chat E2EE/calling limitations remain. Native Telecom/CallStyle incoming calls,
 background camera/microphone calls, Play distribution and physical-device/Doze
-acceptance are not claimed. No automated or device tests were requested/run.
+acceptance are not claimed. Automated server authorization/queue tests and an
+isolated HTTPS two-user Chat-to-WebSocket/queue/ACK/revocation flow pass. Physical
+notification/reply, Doze and reboot acceptance remain pending; installation alone
+does not demonstrate these behaviours.
 
 ## Build locally
 

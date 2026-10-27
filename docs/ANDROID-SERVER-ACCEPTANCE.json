@@ -1,0 +1,18 @@
+{
+  "isolatedFixture": true,
+  "passed": [
+    "Alice browser MyAccounts/Chat SSO",
+    "Bob browser MyAccounts/Chat SSO",
+    "Anonymous native bootstrap rejected",
+    "Signed-in native device linking",
+    "Chat provisions a scoped self-hosted push grant",
+    "Bearer-only phone transport through public Workspace tunnel",
+    "Public Centrifuge WebSocket authentication",
+    "Bob sends an authorized Chat message to Alice",
+    "Chat recipient notification reaches the public self-hosted WebSocket without message content",
+    "Wake retained until phone acknowledgement",
+    "Acknowledgement clears only the queued wake",
+    "Chat device revocation immediately denies the push credential"
+  ],
+  "physicalPhone": false
+}

@@ -1,3 +1,27 @@
+# Preview 94: Android companion and My Push
+
+Includes the signed Android launcher APK, Chat11 linked-phone integration and
+My Push1 self-hosted notification service. My Push is an optional selectable app
+installed by default on new complete installations. Existing default installations
+discover it through the normal new-app update reconciliation. User exclusions
+remain respected. The manager publishes trusted public app origins for the phone
+and connects Chat to the local broker automatically. No Firebase account needed.
+
+My Push Windows/Linux x64 binaries build from pinned public dependencies; this
+does not certify the whole suite on Linux. Windows installer/runtime and Android
+APK are built locally without Actions. Existing Maps8/MyAI14/Tasks4 pins retained.
+
+Automated distribution/apphost/suite and My Push queue/security checks pass.
+Final Chat11/MyPush1 binaries pass fresh isolated HTTPS MyAccounts sign-in,
+native device linking/bootstrap, public WebSocket wake delivery after a real
+authorized Chat message, durable queue/ack and immediate revocation. Physical
+phone notification/reply/Doze/reboot acceptance remains pending. Android keeps a
+visible foreground connection; OS restrictions, force-stop and outages can delay
+notifications. Native incoming calls and full WhatsApp/Firebase parity are outside
+this release. Existing preview/clean-host/service/reboot limits remain.
+
+---
+
 # Preview 93: Native Workspace actions for My AI
 
 My AI14 can discover installed apps and use registered native operations with

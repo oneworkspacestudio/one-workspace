@@ -79,9 +79,9 @@
   },
   "chat": {
     "repository": "oneworkspacestudio/chat",
-    "tag": "v0.1.0-preview.10",
-    "asset": "chat-0.1.0-preview.10-windows-amd64.zip",
-    "sha256": "2d7b345aacc3d78dec45bf761c62f92b19d027394969108e99b9ec6e438c2c3e"
+    "tag": "v0.1.0-preview.11",
+    "asset": "chat-0.1.0-preview.11-windows-amd64.zip",
+    "sha256": "e773d5d243bfa0735db30e62ed4241a60c9bd9ccc9bba2a4629040fe59e9eab7"
   },
   "myHosting": {
     "repository": "oneworkspacestudio/my-hosting",
@@ -166,5 +166,11 @@
     "tag": "v0.1.0-preview.2",
     "asset": "my-cinema-0.1.0-preview.2-windows-amd64.zip",
     "sha256": "148f0ca04d8bf20511d586e69d85348e00f5607798b47207d34be1f6ef1427ff"
+  },
+  "myPush": {
+    "sha256": "6cd5131c7d3e6ed76e6648f2f2039dfe545e6cbed34840084967f0b681e68ad3",
+    "repository": "oneworkspacestudio/my-push",
+    "asset": "MyPush-windows-amd64.zip",
+    "tag": "v0.1.0-preview.1"
   }
 }

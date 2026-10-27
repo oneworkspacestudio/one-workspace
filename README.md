@@ -199,10 +199,11 @@ Keep the Windows computer switched on while you use its apps. You can use Worksp
 ## Android companion
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
-same MyAccounts sign-in. Its development source includes a saved app launcher
-and native Chat notification/background integration. Instant alerts require the
+same MyAccounts sign-in. Download the signed APK from the
+[latest Workspace release](https://github.com/oneworkspacestudio/one-workspace/releases).
+It includes a saved app launcher and native Chat notification/background integration. Alerts require the
 matching Chat server update and the self hosted My Push app. No Firebase account
-is needed for this route; phone acceptance is still pending.
+is needed for this route. [Phone support and current limits](android/README.md).
 
 ## Keep your workspace up to date
 

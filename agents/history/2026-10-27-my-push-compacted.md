@@ -47,3 +47,13 @@ on the explicitly authorized attached phone (no previous package); device UI
 acceptance pending unlock. New permanent release key held outside Git in protected
 user storage. Synthetic HTTPS fixture uses isolated Quick Tunnel config; never
 load owner named-tunnel config. No public release or owner update yet.
+
+My Push1 and Chat11 are now publicly released with all uploaded asset SHA256/size
+checks matching local builds, then individually promoted to the public channel.
+Chat source15996b0d fixes release mirror text checks to normalize Windows CRLF;
+all substantive text and binary-artwork checks remain. Final MyPush1/Chat11
+binaries reran the synthetic HTTPS/native/WebSocket/ACK/revoke acceptance. Signed
+Android preview2 package/version and v2 APK signature verified with permanent
+release certificate. Physical UI remains blocked by locked phone, secondary update
+by expired owner browser session. Preparing full Workspace94 with actual org pins;
+no owner update started at this point. No Actions.
