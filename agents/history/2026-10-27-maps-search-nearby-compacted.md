@@ -48,3 +48,22 @@ EXE5056ca701df24401d5b6eb38da31fb75eb8bb2944d27cb19dce24bcbc9941fda.
 Released92 and93 parsers accept its four registered packages/min92/custom-port
 fixture. Official generated8 channel excludes7 and retains prior entries/other
 pins/withholdings. Protected6->8 applies and final deployed proofs remain pending.
+
+## Final8 two-PC delivery complete
+
+Promotion6af46a5 is anonymously verified, exact8 assets and withheld7 confirmed.
+Both normal protected Maps-only6->8 updates completed with manager93/MyAI14 and
+other apps retained;27services healthy on each. Primary exact Maps/manager bytes,
+served JS/CSS/worker/title, config/decrypted identities and all unselected app
+contracts/packages/executable bytes audited. Secondary normal updater9stages/
+2m20, verified newest recovery and only Maps visible version changed; independent
+root health27running. Secondary browser sign-in expired, preventing an additional
+live owner Maps UI or /maps/healthz version reread; do not claim that check or a
+remote disk/credential audit. Exact-package18-group protected browser QA passed.
+
+Named synthetic C fixture/PID/port19315 removed with guarded checks; owner data
+and newest recovery kept. Login/health tabs closed; updated owner updater left
+open. Actual owner captures remain outside Git. Summary:
+docs/evidence/maps-search-nearby-20261027.json. No required publication/promotion/
+two-PC install work remains. Physical device permissions, GPS/mic/share/reboot,
+and Google-only data/services remain unclaimed.
