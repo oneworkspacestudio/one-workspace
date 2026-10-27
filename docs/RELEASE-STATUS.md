@@ -1,3 +1,19 @@
+# Android preview 4: One launcher for every web app
+
+Chat is a regular app tile without a separate bottom tab. Settings moves into the
+header. No individual Android app installs are needed: apps open their web UI
+from the selected remote Workspace/Chat servers. Chat session restoration,
+notifications and replies remain supported. A separately configured Chat server
+appears in the list even if absent from the Workspace catalogue.
+
+Every future release in this repository uses the local publisher that requires
+a signed Android APK with source provenance, corresponding source, notices and
+checksums. Missing or wrong-key APKs stop publication. Actions stays disabled.
+This is an Android-only release; the desktop manager remains Workspace94.
+APK/build checks are performed; no new phone/UI/notification/Doze tests ran.
+
+---
+
 # Android preview 3: Saved remote server setup
 
 Android-only release `android-v0.1.0-preview.3`; desktop Workspace remains preview

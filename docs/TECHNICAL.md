@@ -208,9 +208,11 @@ failure requires retry. `--offline` explicitly selects embedded versions. The
 monitors the installed suite and does not fetch/upgrade it. Existing installations
 keep their pinned files and catalog until explicitly upgraded.
 
-Publish from a local build: upload installer, manager, catalog, SHA256SUMS and
-workspace-bundle.zip to a draft GitHub release; publish only after all assets are
-uploaded. `scripts/build.ps1` emits the bundle and supports `-ReleaseRepo` for an
+Publish from a local build with `scripts/publish-release.ps1`, which requires and
+builds the signed Android APK for every release before uploading/verifying the
+draft. See [Publishing releases](RELEASING.md). Desktop releases also include
+installer, manager, catalog, SHA256SUMS and workspace-bundle.zip.
+`scripts/build.ps1` emits the bundle and supports `-ReleaseRepo` for an
 explicit alternate repository. Never embed tokens or select a partially uploaded
 release. Keep component license notices and corresponding source links/archives.
 

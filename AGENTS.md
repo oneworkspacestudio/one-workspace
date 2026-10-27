@@ -12,6 +12,15 @@ update channel with scripts/publish-update-index.py and follow updates/README.md
 Verify the promoted tag with an unauthenticated check before reporting delivery.
 Keep GitHub Actions disabled; publication, channel promotion and builds run locally.
 
+Every release in this repository, including desktop Workspace releases, must
+include the signed Android companion APK, Android source archive, licence notices,
+source provenance and checksums. Publish through scripts/publish-release.ps1;
+it builds Android and refuses missing/unsigned/stale APKs before publication,
+verifies uploaded assets and promotes the public channel. Keep the permanent
+signing key outside Git. Never bypass this guard with a manual source-only release.
+See docs/RELEASING.md. This policy applies to new releases; published assets remain
+immutable.
+
 ## README and app branding
 
 Keep the main README friendly to people without technical knowledge. Explain

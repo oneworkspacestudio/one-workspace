@@ -88,3 +88,51 @@ Workspace94 and current Mail from the org, then exited successfully without
 installing. Android-only tag was ignored correctly. Its disposable I download
 folder was removed by normal completion. Actions remain disabled. No source
 changes after c21001d entered the release; subsequent commits are channel/history.
+
+## Follow-up: web apps in one launcher
+
+User clarified that only One Workspace should be needed on the phone; all apps
+open their web versions, and Chat must be a regular app tile without its own tab.
+Base6ccd3cf was clean before this change. Existing launcher already used HTTPS
+WebViews/links, with no per-app Android package installation flow.
+
+Current source removes bottom navigation, puts Settings in the header and keeps
+Refresh apps in its overflow. Setup/launcher copy explains that no other phone
+apps are required. All app tile URLs are validated as HTTPS web addresses. Chat
+uses its ordinary launcher tile while retaining native session restoration,
+notification tap/reply and background sync. If a separate configured Chat server
+is absent from the remote Workspace catalogue, append one Chat tile without
+mutating the cached catalogue or duplicating an existing Chat entry.
+
+android/README.md reflects this layout and explicitly says the published Android3
+APK still has the older bottom tabs. No version bump, commit, push, release or
+phone installation authorized/performed for this follow-up. No tests added/run.
+Compilation is the only build check; no UI/phone or live-owner fixture used.
+Final compileDebugJavaWithJavac passed in1m15s. Worktree intentionally retains
+the three source/docs/history changes uncommitted; APK publication still pending.
+
+## Android4 and required APK publication
+
+User now requests the APK publication and an APK on every repository release.
+An optional scope question asks whether this means this Workspace repository or
+all org app repositories; proceed with every release in this repository by
+default unless the user selects the broader scope. No per-app Android installs
+are introduced. Android versionCode4/versionName0.1.0-preview.4 includes the
+web-app-grid changes above. No owner/phone installation requested here.
+
+Added scripts/publish-release.ps1 as the supported local entry point. It requires
+clean committed source and always builds a signed APK before invoking the
+Python publisher. Android Gradle embeds source commit/tree provenance; release
+builds require this plus permanent signing env values. The build helper supplies
+them from committed source, supports reusing Gradle/cache paths, and outputs the
+versioned APK. Public release-policy.json pins the existing certificate.
+
+Publisher verifies certificate/package/version/provenance/embedded notices and
+pushed commit, rejects wrong tags/stale APKs/published asset replacement, prepares
+Android source/notices/manifest/checksums, uploads/resumes a matching draft,
+verifies every GitHub digest/length, publishes, verifies anonymous APK download
+and promotes/pushes/checks the public index. Desktop tags also require the normal
+desktop assets and matching catalog. Actions must be disabled. Repository AGENTS
+and docs/RELEASING.md require this entry point for future releases. GitHub itself
+cannot enforce a local script against manual maintainer bypass; documented
+policy is scoped to this repository. Current release will exercise this flow.

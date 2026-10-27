@@ -1,6 +1,8 @@
 # One Workspace for Android
 
-An Android launcher for the apps installed on your own One Workspace server.
+One Android app opens the web versions of the apps on your remote One Workspace
+server. You do not need to install individual Android apps for Drive, Mail, Chat
+or the other Workspace apps. The server continues to host the apps and their data.
 On first launch, enter your **remote HTTPS Workspace address**. Leave
 **Use Chat from this Workspace** enabled to find Chat automatically, or turn it
 off and enter your own **HTTPS Chat address**. Sign in with MyAccounts and open
@@ -8,6 +10,10 @@ an app. Your server choices and valid sign-in sessions are remembered when you
 close and reopen Android; you do not need to configure the addresses again.
 The launcher caches the app list; each app retains its existing server and data.
 Chat uses the existing mobile conversation UI and its emoji/sticker features.
+Chat appears alongside the other apps in the launcher, with no dedicated Chat
+tab. Settings are available from the launcher header. Android Back returns from
+an app to the launcher; native Chat notifications and replies remain supported.
+This simpler launcher layout requires Android preview 4 or newer.
 
 ## Choose or change servers
 
@@ -20,7 +26,7 @@ Chat uses the existing mobile conversation UI and its emoji/sticker features.
 - Switching servers asks for confirmation and removes this phone's previous
   sign-in, saved launcher, queued replies and notification access. Server data
   stays on the original server. Saving the same servers keeps the valid session.
-- Chat in the Apps launcher, the Chat tab and background notifications all use
+- Chat in the Apps launcher and background notifications both use
   the selected Chat server. Push is discovered from that server after sign-in;
   users do not need to enter a separate push address or key.
 
@@ -31,7 +37,7 @@ The saved launcher remains available offline; connecting or signing in for the
 first time needs access to the selected servers.
 
 The separate Chat address and Servers editor require Android preview 3 or newer.
-[Download Android preview 3](https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.3).
+[Download Android preview 4](https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.4).
 
 ## Android integration
 
@@ -91,6 +97,9 @@ Release builds fail unless all four environment values are supplied:
 `WORKSPACE_ANDROID_KEYSTORE`, `WORKSPACE_ANDROID_STORE_PASSWORD`,
 `WORKSPACE_ANDROID_KEY_ALIAS`, `WORKSPACE_ANDROID_KEY_PASSWORD`.
 Keep that permanent signing key outside Git and reuse it for app updates.
+Every One Workspace release must include this signed APK. Maintainers use the
+[local release publisher](../docs/RELEASING.md), which builds and checks Android
+before publishing; no GitHub Actions are used.
 
 ## Chat server setup
 

@@ -205,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             "Connect to your own remote servers once. We’ll remember them next time you open the"
                 + " app.",
             16));
+    panel.addView(
+        text("All your apps open as web apps here. No separate phone apps to install.", 14));
     EditText address =
         serverField(panel, "Workspace address", "https://workspace.example.com", savedHome);
     Switch automatic = new Switch(this);
@@ -393,10 +395,20 @@ public class MainActivity extends AppCompatActivity {
   private void home() {
     clear("One Workspace", false);
     body.setPadding(0, 0, 0, 0);
-    toolbar.getMenu().add("Refresh").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    toolbar.getMenu().add(0, 1, 1, "Refresh apps").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    android.graphics.drawable.Drawable settingsIcon =
+        androidx.core.content.ContextCompat.getDrawable(this, R.drawable.ic_settings).mutate();
+    androidx.core.graphics.drawable.DrawableCompat.setTint(settingsIcon, INK);
+    toolbar
+        .getMenu()
+        .add(0, 2, 0, "Settings")
+        .setIcon(settingsIcon)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     toolbar.setOnMenuItemClickListener(
         i -> {
-          refresh();
+          if (i.getItemId() == 2) settings();
+          else if (i.getItemId() == 1) refresh();
+          else return false;
           return true;
         });
     if (catalog == null) {
@@ -406,6 +418,7 @@ public class MainActivity extends AppCompatActivity {
           button("Sign in", () -> open(WorkspaceApi.home(this) + "/auth/login", "Sign in")));
     } else {
       body.addView(text("Hello, " + catalog.optString("name", "there"), 24));
+      body.addView(text("Your web apps — no extra phone apps needed", 14));
       EditText search = new EditText(this);
       search.setSingleLine();
       search.setHint("Search your apps");
@@ -420,8 +433,7 @@ public class MainActivity extends AppCompatActivity {
       Runnable render =
           () -> {
             grid.removeAllViews();
-            JSONArray apps = catalog.optJSONArray("apps");
-            if (apps == null) return;
+            JSONArray apps = launcherApps();
             String q = search.getText().toString().toLowerCase(Locale.ROOT);
             for (int n = 0; n < apps.length(); n++) {
               JSONObject app = apps.optJSONObject(n);
@@ -467,9 +479,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String u = app.optString("URL", "");
                     try {
-                      open(
-                          new java.net.URI(WorkspaceApi.home(this) + "/").resolve(u).toString(),
-                          app.optString("Name"));
+                      String target =
+                          new java.net.URI(WorkspaceApi.home(this) + "/").resolve(u).toString();
+                      WorkspaceApi.origin(target);
+                      open(target, app.optString("Name"));
                     } catch (Exception ignored) {
                       toast("This app link is unavailable");
                     }
@@ -488,22 +501,33 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(android.text.Editable e) {}
           });
     }
-    if (catalog == null) body.addView(new View(this), new LinearLayout.LayoutParams(1, 0, 1));
-    com.google.android.material.bottomnavigation.BottomNavigationView nav =
-        new com.google.android.material.bottomnavigation.BottomNavigationView(this);
-    nav.setBackgroundColor(BG);
-    nav.getMenu().add(0, 1, 1, "Apps").setIcon(R.drawable.ic_apps);
-    nav.getMenu().add(0, 2, 2, "Chat").setIcon(R.drawable.ic_chat);
-    nav.getMenu().add(0, 3, 3, "Settings").setIcon(R.drawable.ic_settings);
-    nav.setSelectedItemId(1);
-    nav.setOnItemSelectedListener(
-        item -> {
-          if (item.getItemId() == 1) home();
-          else if (item.getItemId() == 2) openChat();
-          else settings();
-          return true;
-        });
-    body.addView(nav, new LinearLayout.LayoutParams(-1, dp(80)));
+  }
+
+  private JSONArray launcherApps() {
+    JSONArray apps = new JSONArray();
+    JSONArray saved = catalog == null ? null : catalog.optJSONArray("apps");
+    boolean hasChat = false;
+    if (saved != null) {
+      for (int i = 0; i < saved.length(); i++) {
+        JSONObject app = saved.optJSONObject(i);
+        if (app == null) continue;
+        hasChat |= "chat".equals(app.optString("ID"));
+        apps.put(app);
+      }
+    }
+    // A separate Chat server need not be installed on the chosen Workspace host.
+    if (!hasChat && !chat.isEmpty()) {
+      try {
+        apps.put(
+            new JSONObject()
+                .put("ID", "chat")
+                .put("Name", "Chat")
+                .put("Icon", "my_chat.svg")
+                .put("URL", chat + "/"));
+      } catch (JSONException ignored) {
+      }
+    }
+    return apps;
   }
 
   private void refresh() {

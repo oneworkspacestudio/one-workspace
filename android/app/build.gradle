@@ -1,6 +1,19 @@
 plugins { id 'com.android.application' }
 dependencyLocking { lockAllConfigurations() }
 def signingValues=['WORKSPACE_ANDROID_KEYSTORE','WORKSPACE_ANDROID_STORE_PASSWORD','WORKSPACE_ANDROID_KEY_ALIAS','WORKSPACE_ANDROID_KEY_PASSWORD'].collect { System.getenv(it) }
+def releaseCommit=System.getenv('WORKSPACE_ANDROID_SOURCE_COMMIT') ?: 'development'
+def releaseTree=System.getenv('WORKSPACE_ANDROID_SOURCE_TREE') ?: 'development'
+def provenanceAssets=layout.buildDirectory.dir('generated/workspaceProvenance')
+def writeProvenance=tasks.register('writeWorkspaceProvenance') {
+    inputs.property('sourceCommit',releaseCommit)
+    inputs.property('androidTree',releaseTree)
+    outputs.dir(provenanceAssets)
+    doLast {
+        def folder=provenanceAssets.get().asFile
+        folder.mkdirs()
+        new File(folder,'workspace-release.json').setText(groovy.json.JsonOutput.toJson([schema:1,sourceCommit:releaseCommit,androidTree:releaseTree]),'UTF-8')
+    }
+}
 android {
     namespace 'uk.co.m8e.workspace'
     compileSdk 35
@@ -8,16 +21,23 @@ android {
         applicationId 'uk.co.m8e.workspace'
         minSdk 28
         targetSdk 35
-        versionCode 3
-        versionName '0.1.0-preview.3'
+        versionCode 4
+        versionName '0.1.0-preview.4'
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    sourceSets.main.assets.srcDir(provenanceAssets)
     signingConfigs { release { if(signingValues.every{it}) { storeFile file(signingValues[0]);storePassword signingValues[1];keyAlias signingValues[2];keyPassword signingValues[3] } } }
     buildTypes {
         release { minifyEnabled false; signingConfig signingConfigs.release }
     }
 }
-gradle.taskGraph.whenReady { graph -> if(graph.allTasks.any { it.name.toLowerCase().contains('release') }&&!signingValues.every{it})throw new GradleException('Release signing requires all four WORKSPACE_ANDROID signing environment values; debug keys are never used for release builds.') }
+tasks.named('preBuild').configure { dependsOn(writeProvenance) }
+gradle.taskGraph.whenReady { graph ->
+    if(graph.allTasks.any { it.name.toLowerCase().contains('release') }) {
+        if(!signingValues.every{it})throw new GradleException('Release signing requires all four WORKSPACE_ANDROID signing environment values; debug keys are never used for release builds.')
+        if(!(releaseCommit ==~ /[a-f0-9]{40}/) || !(releaseTree ==~ /[a-f0-9]{40}/))throw new GradleException('Signed releases require source provenance; build with scripts/build-android.ps1 -Release.')
+    }
+}
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.webkit:webkit:1.12.1'
