@@ -28,3 +28,19 @@ Task artifacts I:/Projects/tooling/my-ai-message-deployment-20261027. Exact owne
 synthetic p15 runtime tree stopped/removed after acceptance; inactive t15 build
 temp removed after release packaging. Live installation, source, artifact/recovery
 files and model library preserved. MyAI source handoff has full investigation.
+
+## Confirmed delivery
+
+Public channel promotion6d13aee pushed and anonymously checked. Primary normal
+app-only update completed: manager94 retained, MyAI15 exact accepted SHA installed,
+all28 services running, all19 models and protected provider files retained;
+all unselected app contracts/packages/executable bytes unchanged. Owner config
+and decrypted identity settings compared only in memory and matched, including
+the verified schema3 recovery backup. Transaction complete, no active update.
+Sanitized primary15-delivery.json is in task artifacts. Primary maintenance
+reservation released to authorized coordination thread.
+
+Secondary remains at the fresh MyAccounts sign-in page; no owner reply to the
+pending sign-in handoff and no secondary update submitted. Do not claim both
+machines installed. Continue only after normal owner sign-in, inspect fresh
+versions/update state, select only MyAI15 and preserve all other pins.
