@@ -65,8 +65,8 @@ verify health, complete transaction and latest usable recovery. Current native
 primary95 deployment reference script Deploy-ManagedShield95.ps1 can inform a new
 96 preservation audit, but its old hashes/version checks must not be rerun.
 
-Task is in progress. No new release, live update, source commit or preview server
-has been started for this task yet.
+Task is in progress. No release96 or live update has been completed yet; source
+commits c0d1043 and 0b2b16a were pushed to public main.
 
 ## Build and visual review in progress
 
@@ -79,3 +79,22 @@ links to avoid long scrolling on phones. Preview PID83236 must be stopped.
 Secondary maintenance UI opens authenticated; refreshed plan shows its actual
 MyAI14/Chat10 selections, so preserve installed contracts per machine rather than
 assuming identical pins. No installation or public release96 yet.
+
+## Build storage fallback
+
+I: reads stalled during the org build and headless preview. Task-owned build
+PID37428 and preview83120 stopped; the unfinished build must not be published.
+Clean checkout of pushed source now C:/Projects/.cache/workspace-categories-20261028/repo.
+C had20GB free before full staging. Remove this named scratch after delivery.
+Rebuild manager/setup locally with official Go1.27.3 checksum verified from go.dev.
+Reuse only the immutable published95 bundle after its GitHub SHA256, every embedded
+package size/SHA256, catalog and exact unchanged organization lock are verified.
+Replace manager, suite version and current release-status notice; all app programs
+and other notices stay byte-identical. Required signed publisher remains mandatory.
+Desktop synthetic grouped layout reviewed. Phone fallback screenshot was clipped
+and not conclusive; added explicit narrow-viewport styles. Additional preview was
+blocked by automatic approval review with no detailed reason. Browser control is
+now disabled in Work settings; user asked to enable while independent work proceeds.
+Secondary requires owner browser update when access resumes. Primary95 transaction
+is complete but Workspace is currently stopped (localhost8990 refused), so verify
+startup after normal protected installation. No production data fixtures used.
