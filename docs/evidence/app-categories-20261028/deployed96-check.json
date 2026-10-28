@@ -1,0 +1,10 @@
+{
+  "primary": {
+    "categoryNavigationMatchesRelease96": true,
+    "status": 200
+  },
+  "secondary": {
+    "categoryNavigationMatchesRelease96": false,
+    "status": 200
+  }
+}

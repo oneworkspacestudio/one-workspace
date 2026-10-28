@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "tag": "v0.3.0-preview.96",
+  "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.96",
+  "sourceCommit": "6950425e329aa0aec026bb9e34ff2a0c885146bf",
+  "assetsVerified": 26,
+  "everyPublishedAssetMatchesLocal": true,
+  "anonymousAPKVerified": true,
+  "publicChannelVerified": true,
+  "managerSHA256": "bc11fb6bb68b93844ce0b47a627816f42f30f472a91719ef8769829e7661a10a",
+  "apkSHA256": "b475f48edee8bf488bbbfcde4365ca3390c4e80028d2d6125c8e2d5ed194d254",
+  "githubActionsUsed": false
+}

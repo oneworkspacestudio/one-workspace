@@ -110,3 +110,46 @@ Maps delivery is separately in progress; check the update lock before applying.
 Installer compile caught two legacy single-byte middle dots in the new selection
 legend. Converted only those invalid bytes to UTF-8; other changed text sources
 pass UTF-8 decoding. No release from the failed build was published.
+
+## Release96 published; primary delivered; secondary access blocked
+
+Immutable Workspace v0.3.0-preview.96 source6950425e329aa0aec026bb9e34ff2a0c885146bf.
+Required scripts/publish-release.ps1 built signed Android6 and verified all26
+uploaded assets plus anonymous APK. Source, notices, provenance/checksums included.
+No Actions. APK SHA b475f48edee8bf488bbbfcde4365ca3390c4e80028d2d6125c8e2d5ed194d254;
+manager SHA bc11fb6bb68b93844ce0b47a627816f42f30f472a91719ef8769829e7661a10a.
+Public channel promotion initially conflicted with Maps delivery handoff cb29f96;
+rebased only the generated-index commit and pushed685cb12, retaining both. Exact
+anonymous raw-main channel contains96/all26 matching assets. Published assets/tag
+remain immutable. Evidence under docs/evidence/app-categories-20261028/.
+
+Normal protected primary Workspace-only95→96 update completed.30 existing app
+contracts and process executable hashes, owner settings, decrypted credentials/
+clients and selection retained (comparison only in memory).29 services healthy,
+transaction complete. Maps11 retained. Deployed public navigation.js bytes match
+release96 source. No new owner UI/SSO, phone, fresh installation or reboot tests.
+The no-proxy loopback path is needed for operational HTTP checks in this host.
+
+SECONDARY NOT INSTALLED. Public health has29 running services; its navigation.js
+still differs from96. Last confirmed manager95/Maps11 (Maps deliverycb29f96).
+Browser control became disabled in Work settings; requested user enable via async
+question, no answer yet. Do not claim both delivered. No remote apply/reinstall for
+this task has been submitted. Need user enable browser control, then create/use a
+dedicated authenticated https://workspace-2.m8e.co.uk/updates tab. Do not take over
+the Maps task's deliverable tab. Refresh/check current controller, uncheck EVERY
+unrelated update (MyAI14/Chat10 etc), select ONLY Workspace96, submit once, follow
+reconnect/progress through verified backup/startup/complete. Preserve installed
+app versions/settings. Close idle old updater after success so next launch uses96.
+Verify manager96,29 running services, category navigation and completed recovery.
+If normal owner session expired, ask user to sign in privately while preserving
+all authorization already given to install on both. No full bundle rebuild needed.
+
+I: read stalls forced an isolated named C build scratch; only task-owned duplicate
+build archives were removed during publication.16 residual task headless browser
+processes were identified by their exact preview profile prefix and stopped;
+loopback19180 verified closed. Final C scratch cleanup is recorded below after
+preserving source/evidence and confirming no active process references. User's
+installations, latest verified recovery, other projects/caches and signing keys
+must remain intact. Desktop grouping reviewed with synthetic public metadata;
+phone capture inconclusive and additional preview blocked by automatic approval
+review (no detailed reason), so physical/mobile visual acceptance is not claimed.
