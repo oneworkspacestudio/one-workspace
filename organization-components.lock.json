@@ -178,5 +178,11 @@
     "tag": "v0.1.0-preview.4",
     "sha256": "50b1d6b8f63f81cdbf4dffc6abd1ea2f03825d499cef7caf894420d1ee134d50",
     "asset": "my-shield-0.1.0-preview.4-windows-amd64.zip"
+  },
+  "myForms": {
+    "repository": "oneworkspacestudio/my-forms",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-forms-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "13ac3f785e39021d6b96624d9e1488f93283118f10ccd634dde7771ced16dbc9"
   }
 }

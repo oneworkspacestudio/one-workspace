@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.97',
+ [string]$Version='0.3.0-preview.98',
  [string]$Cache='',
  [string]$SeedArchive='',
  [string]$MyPushPackage='',
@@ -236,7 +236,7 @@ if($lock.myForms -or $MyFormsPackage){
  $formsRoot=(Get-ChildItem -LiteralPath $formsStage -Filter MyForms.exe -File -Recurse | Select-Object -First 1).DirectoryName
  if(-not $formsRoot){throw 'My Forms executable missing'}
  $formsContract=Get-Content -LiteralPath (Join-Path $formsRoot 'compatibility.json') -Raw|ConvertFrom-Json
- if($formsContract.schema -ne 1 -or $formsContract.workspaceInstallerIntegration -ne 2 -or $formsContract.route -cne '/forms' -or $formsContract.minimumWorkspaceVersion -cne '0.3.0-preview.97'){throw 'Unsupported My Forms integration contract'}
+ if($formsContract.schema -ne 1 -or $formsContract.workspaceInstallerIntegration -ne 2 -or $formsContract.route -cne '/forms' -or $formsContract.minimumWorkspaceVersion -cne '0.3.0-preview.98'){throw 'Unsupported My Forms integration contract'}
  if($lock.myForms -and $formsContract.version -cne ($lock.myForms.tag -replace '^v','')){throw 'My Forms version differs from organization pin'}
  $componentArgs.MyForms=Join-Path $formsRoot 'MyForms.exe'
  $componentArgs.MyFormsVersion=$formsContract.version

@@ -36,3 +36,13 @@ At this checkpoint publication and live installation are pending. Fixture manage
 and temporary test-only session bridge19399 must be stopped after acceptance.
 Keep latest verified live rollback and all user data. Do not start Umbrel/media
 services or change their startup configuration.
+
+## App release and version allocation
+
+Concurrent official Workspace97/Shield4 publication was retained by rebase before
+Forms integration push6d601da. Forms now requires Workspace98 plus the explicit
+scoped-forms-storage-v1 capability; do not label its integration as official97.
+My Forms v0.1.0-preview.1 is published, source8c55e3e, eight assets each size/SHA256
+verified. Anonymous workspace-update.json download passed. Source/binary/licenses/
+provenance included. Actions disabled. Public Workspace98 release remains pending
+permanent Android signing setup; local integration98 installation is next.
