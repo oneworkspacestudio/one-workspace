@@ -285,11 +285,15 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
-	if id=="finance"||strings.HasPrefix(id,"finance-"){return "finance"}
+	if id == "finance" || strings.HasPrefix(id, "finance-") {
+		return "finance"
+	}
 	if id == "shield" || strings.HasPrefix(id, "shield-") {
 		return "shield"
 	}
-	if id == "forms" || strings.HasPrefix(id, "forms-") { return "forms" }
+	if id == "forms" || strings.HasPrefix(id, "forms-") {
+		return "forms"
+	}
 	if id == "push" || strings.HasPrefix(id, "push-") {
 		return "push"
 	}
@@ -524,6 +528,15 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 			ch.Version, ch.Source = ch.Apps[0].Version, ch.Apps[0].Source
 		} else if g.id != "workspace" {
 			ch.Current = oldApps[0].Version
+			// A locally integrated app can be newer than the public suite catalog.
+			// Its absence from that catalog is not an update or an uninstall.
+			// Keep its installed pin as the baseline for independent releases.
+			if len(ch.Apps) == 0 {
+				ch.Apps = oldApps
+				ch.Packages = groupPackages(g, current)
+				ch.Version = ch.Current
+				ch.Source = oldApps[0].Source
+			}
 			appReleases, e = releasesFor(ctx, h, token, repo)
 			if e != nil {
 				ch.Reason = e.Error()

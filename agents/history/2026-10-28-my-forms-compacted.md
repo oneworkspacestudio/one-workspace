@@ -68,3 +68,13 @@ API, observed HTTP403, then restarted the corrected manager: readiness recovered
 without manual permission changes. Real OneAccount login and native form creation
 pass after migration. Corrected source pushed as b59c8a8. Applying the corrected
 manager through the normal backed-up updater; final live verification pending.
+## Installed app absent from the older public suite
+
+The final native update check exposed another edge case: the public Workspace97
+catalog predates Forms, so its empty Forms group was incorrectly offered as an
+available update with the suite version. Keep installed app contracts/packages and
+their source pin as the independent-release baseline when the public suite omits
+the app. Regression tests cover both unchanged installed releases and newer valid
+independent updates. Distribution and suite/catalog/apphost tests pass. The fixed
+native controller reports published Forms preview1 up to date on this PC.
+

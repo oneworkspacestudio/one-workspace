@@ -134,6 +134,62 @@ func TestDiscoverSelectAndStageIndependentAppAndWorkspace(t *testing.T) {
 		t.Fatal(sum, e)
 	}
 }
+
+func TestInstalledAppAbsentFromPublishedSuiteKeepsIndependentBaseline(t *testing.T) {
+	for _, newer := range []bool{false, true} {
+		t.Run(fmt.Sprintf("newerRelease=%v", newer), func(t *testing.T) {
+			current, tr, _ := setupUpdateTransport(t, true)
+			endpoint := "https://api.github.com/repos/" + Repository + "/releases?per_page=100"
+			var releases []Release
+			if err := json.Unmarshal(tr[endpoint], &releases); err != nil {
+				t.Fatal(err)
+			}
+			var published catalog.Catalog
+			asset, _ := releaseAsset(releases[0], "catalog.json")
+			if err := json.Unmarshal(tr[asset.APIURL], &published); err != nil {
+				t.Fatal(err)
+			}
+			published.Apps = nil
+			delete(published.Packages, "notes")
+			delete(published.Packages, "notes-LICENSE")
+			raw, _ := json.Marshal(published)
+			tr[asset.APIURL] = raw
+			for i, a := range releases[0].Assets {
+				if a.Name == "catalog.json" {
+					releases[0].Assets[i] = fixtureAsset(Repository, releases[0].Tag, "catalog.json", "1", raw)
+				}
+			}
+			tr[endpoint], _ = json.Marshal(releases)
+			if !newer {
+				tr["https://api.github.com/repos/oneworkspacestudio/notes/releases?per_page=100"], _ = json.Marshal([]Release{{Tag: "v0.1.0-preview.4", Published: time.Unix(5, 0)}})
+			}
+			plan, err := CheckUpdates(context.Background(), current)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, choice := range plan.Choices {
+				if choice.ID != "notes" {
+					continue
+				}
+				want := "0.1.0-preview.4"
+				if newer {
+					want = "0.1.0-preview.5"
+				}
+				if choice.Version != want || choice.Available != newer || choice.Reason != "" || len(choice.Apps) != 1 || len(choice.Packages) != 2 {
+					t.Fatalf("unexpected update choice: %+v", choice)
+				}
+				if newer {
+					target, _, err := SelectUpdates(current, plan, []string{"notes"})
+					if err != nil || len(target.Apps) != 1 || target.Apps[0].Version != want {
+						t.Fatalf("independent update lost app: %+v, %v", target, err)
+					}
+				}
+				return
+			}
+			t.Fatal("installed app missing from update plan")
+		})
+	}
+}
 func digestFixture(path string) (string, int64, error) {
 	f, e := os.Open(path)
 	if e != nil {
