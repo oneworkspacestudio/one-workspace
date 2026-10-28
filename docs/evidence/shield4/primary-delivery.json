@@ -1,0 +1,22 @@
+{
+  "shieldSHA256": "864392306c2f366082479bfac406b1bf40b7d0f44290a5fe0ed84b0c1126dd9f",
+  "packagesCompared": 143,
+  "servicesRunning": 29,
+  "shield": "0.1.0-preview.4",
+  "appsCompared": 30,
+  "unselectedAppContractsAndBytesRetained": true,
+  "unselectedPackagesRetained": true,
+  "recoveryManifestVerified": true,
+  "finished": "2026-10-28T21:40:01.0846623Z",
+  "monitorOnly": true,
+  "separateSetup": false,
+  "rebootAcceptance": false,
+  "aiEnabled": false,
+  "ownerConfigurationAndAllSecretValuesRetained": true,
+  "browserSettingsAcceptance": "recorded separately",
+  "status": "PASS",
+  "schema": 1,
+  "normalProtectedAppOnlyUpdate": true,
+  "managedOneAccount": true,
+  "manager": "0.3.0-preview.96"
+}

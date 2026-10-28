@@ -1,0 +1,12 @@
+{
+  "bytesFreed": 3356142624,
+  "ownerDataAndRecoveryUntouched": true,
+  "publishedTag": "v0.3.0-preview.97",
+  "files": [
+    "dist/WorkspaceSetup-windows-amd64.exe",
+    "dist/workspace-bundle.zip",
+    "internal/payload/bundle/payload.zip"
+  ],
+  "schema": 1,
+  "removedOnlyVerifiedDuplicateBuildFiles": true
+}

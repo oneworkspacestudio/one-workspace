@@ -1,0 +1,8 @@
+{
+  "sha256": "fbc8d0ca04ff2c525909435055ced61500cc8936ed3d47ea904b19bb01e272ae",
+  "schema": 1,
+  "syntheticNativeSettingsBackupAcceptance": "docs/settings-backup-regression.md",
+  "deployedJavaScriptMatchesReleaseBuild": true,
+  "version": "0.1.0-preview.4",
+  "actualOwnerBrowserSessionChecked": false
+}
