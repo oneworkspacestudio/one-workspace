@@ -1235,3 +1235,7 @@ My AI exact native checks and scope/queue/provider tests pass; OpenAI/DeepSeek l
 ## Workspace90 preparation: native Social uploads
 
 Adds a narrow proxy route for expiring, single-ZIP Social upload permissions, without browser cookies or general app access. Social10 installs its Windows file picker and encrypted transfer queue for the current Windows user. Transfers continue after the page closes; Social retains review and explicit publication. Retains managed projects and the latest public MyAI6 default, with all26 other app contracts unchanged. Native handoff verifies the receiving account before opening the Windows picker; an unpaired account requires explicit confirmation. Native publication and installed delivery evidence follow verification.
+
+## Workspace100 preparation: My Finance
+
+Adds Actual-backed household budgeting, OneAccount owner/member budget sharing, exact-pence manual import, optional UK bank setup and encrypted export/server snapshot recovery. Bundles Finance1 and its hash-pinned Windows runtime. Preserves the published Forms integration on base+33; Finance uses base+34. Native/real local OneAccount/backup tests pass; official provider sandbox/live, headless bank sync, complete keyboard-only editing and clean-host/reboot qualification remain outstanding. Signed Android publication and both owner installations are still pending. See [My Finance](MY_FINANCE.md).
