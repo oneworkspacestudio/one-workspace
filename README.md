@@ -204,7 +204,7 @@ Keep the Windows computer switched on while you use its apps. You can use Worksp
 ## Android companion
 
 Apps are organised into **General**, **Administration** and **Development**.
-New installations select General and Administration by default. Git and Hosting
+New installations select General and Administration by default. Git, Hosting and My AI
 are optional Development apps; choose them in **Advanced: choose your apps**.
 Updates keep the apps you already selected.
 

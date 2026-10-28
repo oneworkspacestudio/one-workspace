@@ -4,16 +4,15 @@ User requests General/Administration/Development sections, fresh installs select
 General+Administration and other apps optional, then push/release/install on both
 owner PCs. No Actions or subagents. Work in I:/Projects/one-workspace-android,
 codex/android-workspace. Clean initial884a67b fast-forwarded to public51aa2f3;
-read 2026-10-28-my-shield-integration-compacted.md. Both PCs now Workspace95 with
+read 2026-10-28-my-shield-integration-compacted.md. Both PCs began on Workspace95 with
 29 healthy services; primary C:/tmp/workspace/Private, remote I:/Workspace/Private
 at workspace-2.m8e.co.uk. Shield3, MyAI15, Maps10 and all other pins must be retained.
-Remote95 has current updater support; no old93 controller workaround is needed.
+Remote has Workspace95; its previously open maintenance child appears stale. Close/reopen the idle updater before applying96; preserve safety checks.
 
-## Current source implementation (uncommitted)
+## Source implementation
 
 - internal/catalog/categories.go centralizes 3 category names/policy. Admin IDs:
-  accounts/backups/monitor/shield/push/updates/app-status. Development: gitea and
-  hosting. Remaining apps General. DefaultInstall true for General+Admin.
+  accounts/backups/monitor/shield/push/updates/app-status. Development: gitea, hosting and myai. Remaining apps General. DefaultInstall true for General+Admin.
 - Categories are derived, NOT added to strict serialized App/catalog contracts,
   preserving older-manager update compatibility. API adds Category/CategoryID.
 - Portal groups tiles into category sections; owner administration controls stay
@@ -68,3 +67,15 @@ primary95 deployment reference script Deploy-ManagedShield95.ps1 can inform a ne
 
 Task is in progress. No new release, live update, source commit or preview server
 has been started for this task yet.
+
+## Build and visual review in progress
+
+First source implementation committed c0d1043. Candidate manager compiles/starts.
+Full org build caught My AI depending on optional Git; My AI now Development,
+keeping its real dependency contract and default selection coherent. Default
+dependency guard retained. Desktop/phone synthetic previews use only public
+metadata at loopback19180, all assets/task artifacts on I. Added category jump
+links to avoid long scrolling on phones. Preview PID83236 must be stopped.
+Secondary maintenance UI opens authenticated; refreshed plan shows its actual
+MyAI14/Chat10 selections, so preserve installed contracts per machine rather than
+assuming identical pins. No installation or public release96 yet.

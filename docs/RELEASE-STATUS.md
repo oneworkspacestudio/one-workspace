@@ -4,7 +4,7 @@
 
 Workspace home, the shared Apps menu, Android launcher and setup group apps into
 General, Administration and Development. Accounts, Backups, monitoring, Shield
-and Push are Administration. Git and Hosting are optional Development apps.
+and Push are Administration. Git, Hosting and My AI are optional Development apps.
 General and Administration are selected on fresh installs. Existing installations
 retain their selections; future optional apps are not silently installed.
 

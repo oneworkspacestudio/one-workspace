@@ -13,7 +13,7 @@ func Categories() []Category {
 	return []Category{
 		{"general", "General", "Everyday work, communication and creativity", true},
 		{"administration", "Administration", "Accounts, protection and running your Workspace", true},
-		{"development", "Development", "Source code and website hosting", false},
+		{"development", "Development", "Source code, AI development and website hosting", false},
 	}
 }
 
@@ -22,7 +22,7 @@ func CategoryFor(id string) Category {
 	switch id {
 	case "accounts", "backups", "monitor", "shield", "push", "updates", "app-status":
 		index = 1
-	case "gitea", "hosting":
+	case "gitea", "hosting", "myai":
 		index = 2
 	}
 	return Categories()[index]
