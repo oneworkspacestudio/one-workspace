@@ -5,7 +5,8 @@ param(
  [string]$SeedArchive='',
  [string]$MyPushPackage='',
  [string]$MyFormsPackage='',
- [string]$MyShieldPackage=''
+ [string]$MyShieldPackage='',
+ [string]$MyFinancePackage=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -216,6 +217,19 @@ if($lock.myPush -or $MyPushPackage){
  $componentArgs.MyPushVersion=$pushContract.version
  $componentArgs.MyPushNotices=$pushRoot
 }else{throw 'Publish and pin My Push in organization-components.lock.json, or supply -MyPushPackage for a local development bundle.'}
+if($lock.myFinance -or $MyFinancePackage){
+ $financeZip=if($MyFinancePackage){(Resolve-Path -LiteralPath $MyFinancePackage).Path}else{Get-OrgAsset $lock.myFinance}
+ $financeStage=Join-Path $Cache ('my-finance-stage-'+[guid]::NewGuid().ToString('N'))
+ Expand-Archive -LiteralPath $financeZip -DestinationPath $financeStage
+ $financeRoot=(Get-ChildItem -LiteralPath $financeStage -Filter MyFinance.exe -File -Recurse|Select-Object -First 1).DirectoryName
+ if(-not $financeRoot){throw 'My Finance executable missing'}
+ $financeContract=Get-Content -LiteralPath (Join-Path $financeRoot 'compatibility.json') -Raw|ConvertFrom-Json
+ if($financeContract.schema -ne 1 -or $financeContract.workspaceInstallerIntegration -ne 2 -or $financeContract.route -cne '/finance'){throw 'Unsupported My Finance integration contract'}
+ if($lock.myFinance -and $financeContract.version -cne ($lock.myFinance.tag -replace '^v','')){throw 'My Finance differs from organisation pin'}
+ $componentArgs.MyFinance=Join-Path $financeRoot 'MyFinance.exe'
+ $componentArgs.MyFinanceVersion=$financeContract.version
+ $componentArgs.MyFinanceNotices=$financeRoot
+}else{throw 'Publish and pin My Finance or supply its explicit development package'}
 if($lock.myShield -or $MyShieldPackage){
  $shieldZip=if($MyShieldPackage){(Resolve-Path -LiteralPath $MyShieldPackage).Path}else{Get-OrgAsset $lock.myShield}
  $shieldStage=Join-Path $Cache ('my-shield-stage-'+[guid]::NewGuid().ToString('N'))

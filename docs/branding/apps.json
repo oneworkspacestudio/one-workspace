@@ -229,5 +229,12 @@
     "name": "My Forms",
     "description": "Create forms and quizzes, collect responses and keep them in My Drive.",
     "url": "https://github.com/oneworkspacestudio/my-forms"
+  },
+  {
+    "id": "finance",
+    "icon": "my_finance",
+    "name": "My Finance",
+    "description": "Plan household budgets, track spending and import bank statements.",
+    "url": "https://github.com/oneworkspacestudio/my-finance"
   }
 ]

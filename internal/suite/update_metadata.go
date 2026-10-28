@@ -155,6 +155,9 @@ func validateUpdateMetadata(c Config, p *UpdateMetadataPolicy) error {
 }
 
 func knownUpdateStorageProfile(id string) bool {
+	if id == "finance" {
+		return true
+	}
 	switch id {
 	case "accounts", "drive", "docs", "photos", "studio", "gitea", "music", "mail", "calendar", "contacts", "notes", "my-tube", "chat", "hosting", "vault", "slicer", "tasks", "pdf", "monitor", "search", "maps", "meet", "create", "my3d", "cinema", "myai", "clips", "social", "push", "shield", "forms":
 		return true

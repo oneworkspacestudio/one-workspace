@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-5707a05a.png)
+![The complete One Workspace app collection](docs/branding/app-suite-40be17a3.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -190,6 +190,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_forms.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-forms"><strong>My Forms</strong></a></td>
       <td>Create forms and quizzes, collect responses and keep them in My Drive.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_finance.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-finance"><strong>My Finance</strong></a></td>
+      <td>Plan household budgets, track spending and import bank statements.</td>
     </tr>
   </tbody>
 </table>
