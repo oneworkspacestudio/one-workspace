@@ -41,7 +41,7 @@
     "sha256": "da46245cb29c83c908aaab63e0b13c4f3e32f7ccd583acc49331b3d340bbd29a",
     "asset": "calendar-v0.1.0-preview.3-windows-amd64.zip",
     "repository": "oneworkspacestudio/calendar",
-    "tag": "v0.1.0-preview.4"
+    "tag": "v0.1.0-preview.3"
   },
   "notes": {
     "sha256": "6fe9039639133b89ea12a29b5d775a504aed0cafbc5dbab0d2bf2facee6221df",
@@ -97,7 +97,7 @@
   },
   "myPDF": {
     "repository": "oneworkspacestudio/my-pdf",
-    "tag": "v0.1.0-preview.4",
+    "tag": "v0.1.0-preview.3",
     "asset": "my-pdf-0.1.0-preview.3-windows-amd64.zip",
     "sha256": "4afe27f0cc0e741d05f7e56b8bec577dab2dbef54205f1bb44e623da5ac952b6"
   },
@@ -105,7 +105,7 @@
     "sha256": "8a9c644106a4ebbb5726beeb4f01b67baa3f8f3cd6d8fc12bcd8e6c0ec8d9a47",
     "asset": "my-monitor-0.1.0-preview.3-windows-amd64.zip",
     "repository": "oneworkspacestudio/my-monitor",
-    "tag": "v0.1.0-preview.4"
+    "tag": "v0.1.0-preview.3"
   },
   "mySearch": {
     "sha256": "4e0fc1b825e506e184f01c38705766a88ea5a676d4d8f96446688e71cbb1c75d",
@@ -139,7 +139,7 @@
   },
   "myMeet": {
     "repository": "oneworkspacestudio/my-meet",
-    "tag": "v0.1.0-preview.4",
+    "tag": "v0.1.0-preview.3",
     "asset": "my-meet-0.1.0-preview.3-windows-amd64.zip",
     "sha256": "72068550813042c56b1ef5fff862107c2f218d45f31e840c8fa7a14f5a44515a"
   },
