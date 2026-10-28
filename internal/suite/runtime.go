@@ -304,6 +304,11 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 			return e
 		}
 	}
+	if app.ID == "forms" {
+		if e := rt.ensureFormsRecoveryAccess(ctx); e != nil {
+			return fmt.Errorf("My Forms could not connect its private Drive source: %w", e)
+		}
+	}
 	if app.ID == "notes" {
 		if e := ensureNotesConfig(rt.Config); e != nil {
 			return e
@@ -319,7 +324,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 		if e := ensureSocialDriveSource(rt.Config); e != nil {
 			return e
 		}
-		if e := ensureFormsDriveSource(rt.Config); e != nil { return e }
+		if e := ensureFormsDriveSource(rt.Config); e != nil {
+			return e
+		}
 	}
 	if app.ID == "my-tube" {
 		if e := ensureMyTubeConfig(rt.Config); e != nil {

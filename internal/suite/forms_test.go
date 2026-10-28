@@ -1,11 +1,40 @@
 package suite
 
 import (
+	"encoding/json"
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"net/http/httptest"
 	"strings"
 	"testing"
 )
+
+func TestFormsUpgradeAddsOnlyRecoverySource(t *testing.T) {
+	var user map[string]any
+	_ = json.Unmarshal([]byte(`{"username":"workspace-recovery","loginMethod":"password","permissions":{"admin":true},"scopes":[{"name":"My Drive","scope":"/original","permissions":{"view":true,"delete":false}}]}`), &user)
+	scopes := user["scopes"].([]any)
+	original, _ := json.Marshal(scopes[0])
+	changed, e := formsRecoveryScope(user)
+	if e != nil || !changed {
+		t.Fatal(changed, e)
+	}
+	scopes = user["scopes"].([]any)
+	preserved, _ := json.Marshal(scopes[0])
+	if len(scopes) != 2 || string(original) != string(preserved) {
+		t.Fatal("Existing scope changed")
+	}
+	added := scopes[1].(map[string]any)
+	p := added["permissions"].(map[string]any)
+	if added["name"] != formsSource || added["scope"] != "/" || p["view"] != true || p["create"] != true || p["delete"] != false || p["modify"] != false {
+		t.Fatal("Unexpected service grant")
+	}
+	if changed, e = formsRecoveryScope(user); e != nil || changed {
+		t.Fatal("Migration not idempotent")
+	}
+	user["username"] = "ordinary-user"
+	if _, e = formsRecoveryScope(user); e == nil {
+		t.Fatal("Granted an ordinary account")
+	}
+}
 
 func TestFormsPublicGatewayBoundaries(t *testing.T) {
 	id := strings.Repeat("a", 48)
