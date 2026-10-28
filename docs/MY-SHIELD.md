@@ -40,3 +40,9 @@ and completes verified recovery and startup checks in a separate fresh fixture.
 The [two-PC delivery receipt](evidence/shield/DELIVERY.md) records the actual
 managed installations, account/app preservation, remote owner SSO, legacy data
 retention and the remaining current-PC browser sign-in check.
+
+Preview4 repairs Settings navigation and encrypted-backup access. The Models page
+shows actual threat recall, benign false-alert and uncertainty denominators.
+Its downloadable report includes80 clean cases and100 injection variants per
+model, raw evidence and reviewed limitations. The generated corpus remains
+provisional; neither model is qualified for production activation.

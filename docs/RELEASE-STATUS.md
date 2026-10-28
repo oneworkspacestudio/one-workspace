@@ -1,5 +1,17 @@
 # One Workspace release status
 
+## Preview 97: My Shield Settings and backup repair
+
+Updates My Shield to preview4, fixing the Settings navigation crash and restoring
+access to encrypted backup. Expanded native/API, mounted UI and model-harness
+regressions accompany the fix. The bundled report records80 clean validation
+cases and100 injection variants per model, with explicit reviewed findings.
+Neither model qualifies; AI stays disabled and protection remains Monitor-only.
+
+Existing Workspace categories, Maps11 and signed Android6 are retained. Use the
+normal protected update and select My Shield to preserve other installed versions.
+Owner-machine delivery is recorded separately after publication.
+
 ## Preview 96: App categories and installation defaults
 
 Workspace home, the shared Apps menu, Android launcher and setup group apps into
