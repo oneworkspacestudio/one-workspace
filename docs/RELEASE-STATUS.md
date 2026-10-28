@@ -1,4 +1,4 @@
-# Android preview 4: One launcher for every web app
+# One Workspace release status
 
 ## Preview 95: My Shield in One Workspace
 
@@ -10,10 +10,14 @@ boundaries, disabled separate owner setup, logout revocation and phone layout.
 See MY-SHIELD.md and evidence/shield/ for scope and receipts.
 
 Monitor-only and AI disabled remain in force; neither model qualified. Standalone
-preview data must be retained separately during transition. Both owner-machine
-managed updates and their live sign-in checks remain pending until delivery.
+preview data remains retained separately. Both owner-machine managed updates
+are complete and healthy; the remote owner tile/OneAccount flow passes. The
+current PC's final browser check awaits normal owner sign-in after session expiry.
+See evidence/shield/DELIVERY.md for preservation, recovery and exact acceptance scope.
 The signed Android companion is rebuilt for this desktop release, using the
 existing permanent signing certificate. No phone/reboot qualification is claimed.
+
+## Android preview 4: One launcher for every web app
 
 Chat is a regular app tile without a separate bottom tab. Settings moves into the
 header. No individual Android app installs are needed: apps open their web UI

@@ -36,3 +36,7 @@ The [protected upgrade receipt](evidence/shield/protected-upgrade-acceptance.jso
 confirms a normal Workspace-only update from preview 94 adds Shield automatically,
 preserves the existing owner and Accounts executable, respects other app exclusions
 and completes verified recovery and startup checks in a separate fresh fixture.
+
+The [two-PC delivery receipt](evidence/shield/DELIVERY.md) records the actual
+managed installations, account/app preservation, remote owner SSO, legacy data
+retention and the remaining current-PC browser sign-in check.

@@ -1,0 +1,31 @@
+{
+  "allServicesRunning": 29,
+  "ownerSettingsAndExistingCredentialsRetained": true,
+  "ai": "disabled; neither model qualified",
+  "shield": "0.1.0-preview.3",
+  "existingAppsCompared": 29,
+  "rebootAcceptance": false,
+  "previous": "0.3.0-preview.94",
+  "monitorOnly": true,
+  "ownerBrowserSSOVerified": false,
+  "legacyStandaloneData": "retained separately; not imported",
+  "manager": "0.3.0-preview.95",
+  "shieldSHA256": "21286cb47074409b5bbc5dfc791cd4f151a93ed404423e383fd894b75bfdd43b",
+  "schema": 1,
+  "activeUpdate": false,
+  "unselectedAppVersionsAndExecutableBytesRetained": true,
+  "normalProtectedWorkspaceOnlyUpdate": true,
+  "allExistingAppContractsRetained": true,
+  "allExistingNonWorkspacePackageRecordsRetained": true,
+  "verifiedRecoveryManifestHashMatches": true,
+  "managedOIDCEnabled": true,
+  "separateSetupDisabled": true,
+  "existingPackageRecordsCompared": 139,
+  "changedWorkspaceOwnedPackageRecords": [
+    "manager",
+    "notice-Workspace-release-status.md",
+    "notice-organization-components.json"
+  ],
+  "deployedIconBytesMatchSource": true,
+  "deployedIconSHA256": "5577129194c2d5e0f87b7eccbd5442822e859199767192a537147afa057e6c96"
+}

@@ -1,0 +1,50 @@
+{
+  "legacy": {
+    "legacyProcessStopped": true,
+    "schema": 1,
+    "legacyVersion": "0.1.0-preview.2",
+    "legacyRecoveryRetained": true,
+    "managedVersion": "0.1.0-preview.3",
+    "legacyStartShortcutArchived": true,
+    "legacyPrivateDataRetained": true,
+    "managedShieldRunning": true,
+    "historyImported": false,
+    "defaultEntry": "One Workspace /shield/",
+    "olderStandaloneSnapshotClaimed": false,
+    "recoveryRetentionMeaning": "No existing legacy recovery material removed; the original remote standalone installation had no older snapshot. Managed suite recovery is verified separately."
+  },
+  "managed": {
+    "unselectedAppVersionsAndExecutableBytesRetained": true,
+    "shieldSHA256": "21286cb47074409b5bbc5dfc791cd4f151a93ed404423e383fd894b75bfdd43b",
+    "activeUpdate": false,
+    "legacyStandaloneData": "retained separately; not imported",
+    "rebootAcceptance": false,
+    "shield": "0.1.0-preview.3",
+    "ai": "disabled; neither model qualified",
+    "allServicesRunning": 29,
+    "previous": "0.3.0-preview.93",
+    "ownerSettingsAndExistingCredentialsRetained": true,
+    "ownerBrowserSSOVerified": true,
+    "monitorOnly": true,
+    "manager": "0.3.0-preview.95",
+    "existingAppsCompared": 28,
+    "schema": 1,
+    "normalProtectedWorkspaceOnlyUpdate": true,
+    "allExistingAppContractsRetained": true,
+    "allExistingNonWorkspacePackageRecordsRetained": true,
+    "verifiedRecoveryManifestHashMatches": true,
+    "managedOIDCEnabled": true,
+    "separateSetupDisabled": true,
+    "existingPackageRecordsCompared": 129,
+    "changedWorkspaceOwnedPackageRecords": [
+      "manager",
+      "msvc-notice",
+      "notice-Workspace-release-status.md",
+      "notice-organization-components.json"
+    ],
+    "ownerWorkspaceTileObserved": true,
+    "sharedAppsMenuVerified": true,
+    "deployedIconBytesMatchSource": true,
+    "deployedIconSHA256": "5577129194c2d5e0f87b7eccbd5442822e859199767192a537147afa057e6c96"
+  }
+}
