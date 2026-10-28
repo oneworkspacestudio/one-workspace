@@ -107,3 +107,9 @@ instead of repeating Forms OIDC. Shared author sign-in creates both sessions;
 existing OneAccount login can be reused. Retains destination and bounds retries.
 Regression tests reproduce the reported response, prevent redirect loops and keep
 ordinary authorization failures out of reconnect. App tests/vet/build pass.
+
+Forms preview2 installed through the promoted anonymous public update channel.
+Verified backup retained; existing accounts, other app contracts and executables
+preserved. All services and Forms Drive readiness pass. Public served JavaScript
+matches corrected source; installed update-page backend reports preview2 current.
+The phone browser session itself was not controlled or inspected.
