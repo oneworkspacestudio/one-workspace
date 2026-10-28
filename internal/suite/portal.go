@@ -491,7 +491,7 @@ var appUnavailable = template.Must(template.New("app-unavailable").Parse(`<!doct
 func (p *Portal) tiles(owner ...bool) []catalogTile {
 	tiles := []catalogTile{}
 	for _, a := range p.rt.Config.Catalog.Apps {
-		if a.ID == "monitor" && (len(owner) == 0 || !owner[0]) {
+		if (a.ID == "monitor" || a.ID == "shield") && (len(owner) == 0 || !owner[0]) {
 			continue // Infrastructure controls are only available to the owner.
 		}
 		link := "/_workspace/open/" + a.ID

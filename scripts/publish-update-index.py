@@ -44,6 +44,17 @@ def main():
     withheld = withheld_releases()
     for name in repos:
         repo = ORG + '/' + name
+        # A private app may be distributed in a public Workspace bundle without
+        # publishing its private release metadata or unusable download links.
+        metadata_req = urllib.request.Request('https://api.github.com/repos/' + repo,
+            headers={'Authorization': 'Bearer ' + token, 'User-Agent': 'OneWorkspaceChannelPublisher',
+                'Accept': 'application/vnd.github+json'})
+        with urllib.request.urlopen(metadata_req, timeout=60) as response:
+            metadata = json.load(response)
+        if metadata.get('private', True):
+            repositories[repo] = []
+            print(repo, 'private source; distributed through Workspace bundles', flush=True)
+            continue
         req = urllib.request.Request('https://api.github.com/repos/' + repo + '/releases?per_page=100',
             headers={'Authorization': 'Bearer ' + token, 'User-Agent': 'OneWorkspaceChannelPublisher',
                 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})

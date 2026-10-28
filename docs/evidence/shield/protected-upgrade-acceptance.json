@@ -1,0 +1,14 @@
+{
+  "freshProtectedFixture": true,
+  "otherAppsRemainExcluded": true,
+  "existingAccountsBytesPreserved": true,
+  "previous": "0.3.0-preview.94",
+  "status": "PASS",
+  "ownerPreserved": true,
+  "selectedUpdate": "workspace",
+  "schema": 1,
+  "shippingShieldSHA256": "21286cb47074409b5bbc5dfc791cd4f151a93ed404423e383fd894b75bfdd43b",
+  "newShieldInstalledAutomatically": true,
+  "current": "0.3.0-preview.95",
+  "transactionComplete": true
+}

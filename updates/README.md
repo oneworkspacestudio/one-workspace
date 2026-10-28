@@ -13,6 +13,11 @@ stops the check with an error; it does not claim everything is up to date.
 Explicitly authenticated/private or custom-repository installations retain the
 API path and display rate-limit retry guidance if GitHub refuses a request.
 
+Private-source applications distributed inside a public Workspace bundle have
+an empty repository entry in this public index. Their private release metadata
+and private asset URLs are omitted; the verified Workspace bundle remains the
+normal public installation and update path for those applications.
+
 ## Required release promotion
 
 After **every** public Workspace or managed app release:

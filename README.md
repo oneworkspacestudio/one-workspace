@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-2d846fef.png)
+![The complete One Workspace app collection](docs/branding/app-suite-7ec160d3.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -181,6 +181,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td><a href="https://github.com/oneworkspacestudio/my-push"><strong>My Push</strong></a></td>
       <td>Deliver private notifications to your linked phones.</td>
     </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_shield.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-shield"><strong>My Shield</strong></a></td>
+      <td>Review security signals and coverage for this Workspace.</td>
+    </tr>
   </tbody>
 </table>
 <!-- app-directory:end -->
@@ -200,7 +205,7 @@ Keep the Windows computer switched on while you use its apps. You can use Worksp
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
 same MyAccounts sign-in. Download the signed APK from the
-[Android release](https://github.com/oneworkspacestudio/one-workspace/releases/tag/android-v0.1.0-preview.4).
+[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.95/OneWorkspace-Android-0.1.0-preview.5.apk).
 Enter your remote Workspace address once; Chat is found automatically, or you can
 choose a separate Chat server. Your addresses and valid sign-in are remembered.
 It includes a saved app launcher and native Chat notification/background integration. Alerts require the

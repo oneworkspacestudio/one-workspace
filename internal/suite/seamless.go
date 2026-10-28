@@ -22,6 +22,7 @@ type appSignIn struct {
 
 var suiteSignIns = []appSignIn{
 	{"push", "My Push", "/push", "/api/me", "/push/auth/login", "/push/auth/logout", []string{"push_session"}},
+	{"shield", "My Shield", "/shield", "/api/me", "/shield/auth/login", "/shield/auth/logout", []string{"shield_session"}},
 	{"cinema", "My Cinema", "/cinema", "/api/me", "/cinema/auth/login", "/cinema/auth/logout", []string{"cinema_session"}},
 	{"myai", "My AI", "/myai", "/api/me", "/myai/auth/login", "/myai/auth/logout", []string{"myai_session"}},
 	{"my3d", "My 3D", "/my3d", "/api/me", "/my3d/auth/login", "/my3d/auth/logout", []string{"my3d_session"}},

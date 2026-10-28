@@ -3,7 +3,8 @@ param(
  [string]$Version='0.3.0-preview.92',
  [string]$Cache='',
  [string]$SeedArchive='',
- [string]$MyPushPackage=''
+ [string]$MyPushPackage='',
+ [string]$MyShieldPackage=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -31,7 +32,7 @@ function Get-OrgAsset($pin){
  $path=Join-Path $Cache ($sha+'-'+$pin.asset)
  if(!(Test-Path -LiteralPath $path)){
   if($pin.asset -eq 'workspace-bundle.zip' -and $SeedArchive -and (Test-Path -LiteralPath $SeedArchive)){Copy-Item -LiteralPath $SeedArchive -Destination $path}
-  else {Write-Host ('Downloading '+$pin.repository+' / '+$pin.asset);Invoke-WebRequest -Uri $expected -OutFile $path}
+  else {Write-Host ('Downloading '+$pin.repository+' / '+$pin.asset);if($publisherToken){$assetHeaders=@{'User-Agent'='OneWorkspaceBuild';Accept='application/octet-stream';Authorization=('Bearer '+$publisherToken)};Invoke-WebRequest -Uri $asset.url -Headers $assetHeaders -OutFile $path}else{Invoke-WebRequest -Uri $expected -OutFile $path}}
  }
  if((Get-Item -LiteralPath $path).Length -ne $asset.size -or (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $sha){throw ('Component size/SHA256 mismatch: '+$pin.asset)}
  $records.Add(@{repository=$pin.repository;tag=$pin.tag;asset=$pin.asset;url=$expected;sha256=$sha;size=$asset.size})
@@ -214,6 +215,19 @@ if($lock.myPush -or $MyPushPackage){
  $componentArgs.MyPushVersion=$pushContract.version
  $componentArgs.MyPushNotices=$pushRoot
 }else{throw 'Publish and pin My Push in organization-components.lock.json, or supply -MyPushPackage for a local development bundle.'}
+if($lock.myShield -or $MyShieldPackage){
+ $shieldZip=if($MyShieldPackage){(Resolve-Path -LiteralPath $MyShieldPackage).Path}else{Get-OrgAsset $lock.myShield}
+ $shieldStage=Join-Path $Cache ('my-shield-stage-'+[guid]::NewGuid().ToString('N'))
+ Expand-Archive -LiteralPath $shieldZip -DestinationPath $shieldStage
+ $shieldRoot=(Get-ChildItem -LiteralPath $shieldStage -Filter MyShield.exe -File -Recurse | Select-Object -First 1).DirectoryName
+ if(-not $shieldRoot){throw 'My Shield executable missing'}
+ $shieldContract=Get-Content -LiteralPath (Join-Path $shieldRoot 'compatibility.json') -Raw|ConvertFrom-Json
+ if($shieldContract.schema -ne 1 -or $shieldContract.workspaceInstallerIntegration -ne 2 -or $shieldContract.route -cne '/shield' -or $shieldContract.minimumWorkspaceVersion -cne '0.3.0-preview.95'){throw 'Unsupported My Shield integration contract'}
+ if($lock.myShield -and $shieldContract.version -cne ($lock.myShield.tag -replace '^v','')){throw 'My Shield version differs from organization pin'}
+ $componentArgs.MyShield=Join-Path $shieldRoot 'MyShield.exe'
+ $componentArgs.MyShieldVersion=$shieldContract.version
+ $componentArgs.MyShieldNotices=$shieldRoot
+}else{throw 'Publish and pin My Shield or supply its explicit development package'}
 [IO.File]::WriteAllText((Join-Path $notices 'organization-components.json'),($records|ConvertTo-Json -Depth 6),[Text.UTF8Encoding]::new($false))
 & (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -Chat (Join-Path $chatRoot 'Chat.exe') -ChatVersion ($lock.chat.tag -replace '^v','') -ChatNotices $chatRoot -MyVault (Join-Path $myVaultRoot 'MyVault.exe') -MyVaultVersion ($lock.myVault.tag -replace '^v','') -MyVaultNotices $myVaultRoot -MyHosting (Join-Path $hostingRoot 'MyHosting.exe') -MyHostingVersion ($lock.myHosting.tag -replace '^v','') -MyHostingNotices $hostingRoot -MySocial (Join-Path $socialRoot 'MySocial.exe') -MySocialVersion ($lock.mySocial.tag -replace '^v','') -MySocialNotices $socialRoot -MyCreate (Join-Path $createRoot 'MyCreate.exe') -MyCreateVersion ($lock.myCreate.tag -replace '^v','') -MyCreateNotices $createRoot -MyMaps (Join-Path $mapsRoot 'Maps.exe') -MyMapsVersion ($lock.myMaps.tag -replace '^v','') -MyMapsNotices $mapsRoot -MyMeet (Join-Path $meetRoot 'Meet.exe') -MyMeetVersion ($lock.myMeet.tag -replace '^v','') -MyMeetNotices $meetRoot -MyClips (Join-Path $clipsRoot 'MyClips.exe') -MyClipsVersion ($lock.myClips.tag -replace '^v','') -MyClipsNotices $clipsRoot -MyCinema (Join-Path $cinemaRoot 'MyCinema.exe') -MyCinemaVersion ($lock.myCinema.tag -replace '^v','') -MyCinemaNotices $cinemaRoot -MyAI (Join-Path $myaiRoot 'MyAI.exe') -MyAIVersion ($lock.myAI.tag -replace '^v','') -MyAINotices $myaiRoot -My3D (Join-Path $my3dRoot 'My3D.exe') -My3DVersion ($lock.my3D.tag -replace '^v','') -My3DNotices $my3dRoot -MySlicer (Join-Path $slicerRoot 'MySlicer.exe') -MySlicerVersion ($lock.mySlicer.tag -replace '^v','') -MySlicerNotices $slicerRoot -MyTasks (Join-Path $tasksRoot 'MyTasks.exe') -MyTasksVersion ($lock.myTasks.tag -replace '^v','') -MyTasksNotices $tasksRoot -MyPDF (Join-Path $pdfRoot 'MyPDF.exe') -MyPDFVersion ($lock.myPDF.tag -replace '^v','') -MyPDFNotices $pdfRoot -MyMonitor (Join-Path $monitorRoot 'MyMonitor.exe') -MyMonitorVersion ($lock.myMonitor.tag -replace '^v','') -MyMonitorNotices $monitorRoot -MySearch (Join-Path $searchRoot 'MySearch.exe') -MySearchVersion ($lock.mySearch.tag -replace '^v','') -MySearchNotices $searchRoot -ComponentNotices $notices @componentArgs
 if($LASTEXITCODE -ne 0){throw 'Organization suite build failed'}

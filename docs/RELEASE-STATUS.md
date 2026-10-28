@@ -1,5 +1,20 @@
 # Android preview 4: One launcher for every web app
 
+## Preview 95: My Shield in One Workspace
+
+Adds the My Shield owner tile, automatic managed launch, existing OneAccount
+sign-in, shared Apps navigation/logout and protected update/backup ownership.
+The app uses /shield/ and a collision-free base-port offset of 32. Native synthetic
+Accounts/Shield acceptance verifies the exact app3 release binary, owner/member
+boundaries, disabled separate owner setup, logout revocation and phone layout.
+See MY-SHIELD.md and evidence/shield/ for scope and receipts.
+
+Monitor-only and AI disabled remain in force; neither model qualified. Standalone
+preview data must be retained separately during transition. Both owner-machine
+managed updates and their live sign-in checks remain pending until delivery.
+The signed Android companion is rebuilt for this desktop release, using the
+existing permanent signing certificate. No phone/reboot qualification is claimed.
+
 Chat is a regular app tile without a separate bottom tab. Settings moves into the
 header. No individual Android app installs are needed: apps open their web UI
 from the selected remote Workspace/Chat servers. Chat session restoration,

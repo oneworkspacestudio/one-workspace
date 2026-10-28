@@ -58,17 +58,17 @@ func TestFoundationSignOutRevokesEachCapturedBrowserSession(t *testing.T) {
 	defer server.Close()
 	_, port, _ := net.SplitHostPort(strings.TrimPrefix(server.URL, "http://"))
 	n, _ := strconv.Atoi(port)
-	rt := &Runtime{Config: Config{Origin: "http://localhost:29000", Catalog: catalog.Catalog{Apps: []catalog.App{{ID: "tasks", Port: n}, {ID: "pdf", Port: n}}}}}
-	p := &Portal{rt: rt, sessions: map[string]session{"fixture-portal": {Subject: "owner", Expires: time.Now().Add(time.Hour), AppSessions: map[string]string{"tasks": strings.Repeat("a", 96), "pdf": strings.Repeat("b", 96)}}}}
+	rt := &Runtime{Config: Config{Origin: "http://localhost:29000", Catalog: catalog.Catalog{Apps: []catalog.App{{ID: "tasks", Port: n}, {ID: "pdf", Port: n}, {ID: "shield", Port: n}}}}}
+	p := &Portal{rt: rt, sessions: map[string]session{"fixture-portal": {Subject: "owner", Expires: time.Now().Add(time.Hour), AppSessions: map[string]string{"tasks": strings.Repeat("a", 96), "pdf": strings.Repeat("b", 96), "shield": strings.Repeat("c", 96)}}}}
 	r := httptest.NewRequest("POST", "http://localhost:29000/auth/logout", nil)
 	r.AddCookie(&http.Cookie{Name: "workspace_session", Value: "fixture-portal"})
 	p.closeFoundationSessions(r)
-	if count != 2 {
+	if count != 3 {
 		t.Fatal("sessions not revoked", count)
 	}
 	w := httptest.NewRecorder()
 	clearAppCookies(w, r, false)
-	for _, id := range []string{"tasks", "pdf", "monitor", "search"} {
+	for _, id := range []string{"tasks", "pdf", "monitor", "search", "shield"} {
 		found := false
 		for _, cookie := range w.Result().Cookies() {
 			if cookie.Name == id+"_session" && cookie.Path == "/"+id+"/" && cookie.MaxAge < 0 {

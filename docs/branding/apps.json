@@ -215,5 +215,12 @@
     "icon": "my_push",
     "name": "My Push",
     "description": "Deliver private notifications to your linked phones."
+  },
+  {
+    "id": "shield",
+    "icon": "my_shield",
+    "name": "My Shield",
+    "description": "Review security signals and coverage for this Workspace.",
+    "url": "https://github.com/oneworkspacestudio/my-shield"
   }
 ]

@@ -194,9 +194,14 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 			cmd.Env = append(cmd.Env, "WORKSPACE_MUSIC_DIR="+filepath.Join(c.Files, "Music"), "WORKSPACE_BASE_PATH="+strings.TrimRight(app.Route, "/"), "WORKSPACE_OWNER_SUBJECT="+c.Owner)
 			cmd.Env = append(cmd.Env, "TEMP="+musicRuntimeTemp(c), "TMP="+musicRuntimeTemp(c))
 		}
+		if app.ID == "shield" {
+			cmd.Env = append(cmd.Env, "MYSHIELD_LAB=0")
+		}
 		if foundationApp(app.ID) {
 			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner, "WORKSPACE_HOME_URL="+c.Origin)
-			if app.ID == "push" { cmd.Env = append(cmd.Env, pushEnvironment(c,s)... ) }
+			if app.ID == "push" {
+				cmd.Env = append(cmd.Env, pushEnvironment(c, s)...)
+			}
 			if app.ID == "monitor" {
 				cmd.Env = append(cmd.Env, fmt.Sprintf("WORKSPACE_REGISTRY_URL=http://127.0.0.1:%d/_integration/monitor", c.Port), "WORKSPACE_REGISTRY_TOKEN="+monitorCapability(client.Secret))
 			}
@@ -217,7 +222,7 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 			}
 		}
 		if app.ID == "chat" {
-			cmd.Env = append(cmd.Env, pushEnvironment(c,s)... )
+			cmd.Env = append(cmd.Env, pushEnvironment(c, s)...)
 			cmd.Env = append(cmd.Env, "WORKSPACE_CHAT_DIRECTORY_TOKEN="+rt.chatDirectoryToken)
 			cmd.Env = append(cmd.Env, "WORKSPACE_HOME_URL="+c.Origin, fmt.Sprintf("WORKSPACE_CHAT_CATALOG_URL=http://127.0.0.1:%d/_integration/chat/catalog", c.Port))
 			cmd.Env = append(cmd.Env, "WORKSPACE_OIDC_REDIRECT_URI="+chatOrigin(c)+"/auth/callback")

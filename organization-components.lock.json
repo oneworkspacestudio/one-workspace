@@ -172,5 +172,11 @@
     "repository": "oneworkspacestudio/my-push",
     "asset": "MyPush-windows-amd64.zip",
     "tag": "v0.1.0-preview.2"
+  },
+  "myShield": {
+    "repository": "oneworkspacestudio/my-shield",
+    "tag": "v0.1.0-preview.3",
+    "sha256": "a6dda5a4a5a109d515562b395461fb4273c0d7d5e1ca126f88aed95130cc5dbd",
+    "asset": "my-shield-0.1.0-preview.3-windows-amd64.zip"
   }
 }
