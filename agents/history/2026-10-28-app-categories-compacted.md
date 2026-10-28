@@ -153,3 +153,22 @@ installations, latest verified recovery, other projects/caches and signing keys
 must remain intact. Desktop grouping reviewed with synthetic public metadata;
 phone capture inconclusive and additional preview blocked by automatic approval
 review (no detailed reason), so physical/mobile visual acceptance is not claimed.
+
+### Cleanup and final resume point
+
+Primary success is final; do not repeat that update. Full named C scratch deletion
+was rejected by automatic approval review with no detailed reason. It was not
+retried through another delete mechanism. A narrower cleanup verified the two
+published installer/bundle copies against GitHub digests and removed only those
+files; together with earlier intermediates, about6.28GiB of owned duplicate build
+files were removed. C had11.8GiB free afterward. The named scratch still contains
+about2.43GiB of public source/build caches and small receipts; preserve/report it
+until manual cleanup or an approved policy change. Permanent signing keys and
+owner data/recovery were untouched. No task preview still listens on19180.
+
+Permanent I source checkout fast-forwarded to5759958 (release/channel/delivery
+records). This follow-up records cleanup only. Remaining delivery requires user
+enable browser control in Work settings; the async request has no response. All
+other authorized independent work is complete. Secondary has not received96 and
+its old navigation bytes were verified. APK6 is published, not phone-installed.
+Public release remains https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.96.
