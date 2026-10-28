@@ -7,12 +7,12 @@ import (
 )
 
 // SelectInstallApps removes omitted executables as well as launcher entries.
-// A nil selection retains the legacy Photos switch for older setup clients.
+// A nil selection installs General and Administration; optional apps require opt-in.
 func SelectInstallApps(c catalog.Catalog, r Request) (catalog.Catalog, error) {
 	selected := map[string]bool{}
 	if r.SelectedApps == nil {
 		for _, a := range c.Apps {
-			selected[a.ID] = a.ID != "photos" || r.Photos
+			selected[a.ID] = catalog.DefaultInstall(a.ID)
 		}
 	} else {
 		for _, id := range r.SelectedApps {

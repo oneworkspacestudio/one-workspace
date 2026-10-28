@@ -1,5 +1,18 @@
 # One Workspace release status
 
+## Preview 96: App categories and installation defaults
+
+Workspace home, the shared Apps menu, Android launcher and setup group apps into
+General, Administration and Development. Accounts, Backups, monitoring, Shield
+and Push are Administration. Git and Hosting are optional Development apps.
+General and Administration are selected on fresh installs. Existing installations
+retain their selections; future optional apps are not silently installed.
+
+Category policy is derived from app IDs, preserving strict catalog compatibility
+with the previous manager. App launch contracts, ports, identities, storage and
+component versions are unchanged. Includes signed Android6. Built locally without
+Actions. Existing preview, My Shield and phone acceptance limitations remain.
+
 ## Preview 95: My Shield in One Workspace
 
 Adds the My Shield owner tile, automatic managed launch, existing OneAccount

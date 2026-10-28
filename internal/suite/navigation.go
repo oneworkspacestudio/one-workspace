@@ -3,6 +3,7 @@ package suite
 import (
 	"embed"
 	"encoding/json"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"net"
 	"net/http"
 	"strings"
@@ -36,6 +37,8 @@ func (p *Portal) navigationRoutes(mux *http.ServeMux) {
 				entry["Route"] = strings.TrimRight(a.Route, "/") + "/"
 				entry["Version"] = a.Version
 			}
+			category := catalog.CategoryFor(p.tileID(tile))
+			entry["Category"], entry["CategoryID"] = category.Name, category.ID
 			apps = append(apps, entry)
 		}
 		json.NewEncoder(w).Encode(map[string]any{"apps": apps, "name": user.Name, "email": user.Email, "subject": user.Subject, "issuer": p.rt.Config.Issuer, "home": "/", "capabilities": map[string]bool{"appConnections": true, "sharedNavigation": true}})

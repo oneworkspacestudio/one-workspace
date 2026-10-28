@@ -37,7 +37,7 @@ The saved launcher remains available offline; connecting or signing in for the
 first time needs access to the selected servers.
 
 The separate Chat address and Servers editor require Android preview 3 or newer.
-[Download Android preview 5](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.95/OneWorkspace-Android-0.1.0-preview.5.apk).
+[Download Android preview 6](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.96/OneWorkspace-Android-0.1.0-preview.6.apk).
 
 ## Android integration
 
@@ -67,7 +67,7 @@ or delay alerts. The app does not bypass those controls or guarantee delivery
 while Android suspends network access.
 
 The signed preview APK accompanies every new Workspace release. Workspace
-preview 95 includes Android preview 5, rebuilt with the existing signing key
+preview 96 includes Android preview 6, rebuilt with the existing signing key
 and the same launcher behaviour as preview 4. Use the Android download above.
 Use Chat preview 11 and My Push preview 2 or newer. This is an evaluation
 implementation; full WhatsApp feature parity is not claimed. Existing

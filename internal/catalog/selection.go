@@ -6,8 +6,8 @@ import (
 )
 
 // EffectiveSelection migrates installations which predate recorded opt-outs.
-// Preserve missing apps from the pre-Hosting catalog; Hosting and future app IDs
-// are new defaults. Old managers discarded this distinction on every update.
+// Preserve missing apps from the pre-Hosting catalog. WantedApps applies current
+// category defaults to new IDs without discarding explicit previous opt-ins.
 func (c Catalog) EffectiveSelection() *AppSelection {
 	s := &AppSelection{}
 	if c.Selection != nil {

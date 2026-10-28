@@ -435,58 +435,80 @@ public class MainActivity extends AppCompatActivity {
             grid.removeAllViews();
             JSONArray apps = launcherApps();
             String q = search.getText().toString().toLowerCase(Locale.ROOT);
-            for (int n = 0; n < apps.length(); n++) {
-              JSONObject app = apps.optJSONObject(n);
-              if (app == null || !app.optString("Name").toLowerCase(Locale.ROOT).contains(q))
-                continue;
-              LinearLayout tile = new LinearLayout(this);
-              tile.setOrientation(1);
-              tile.setGravity(Gravity.CENTER);
-              tile.setPadding(dp(4), dp(12), dp(4), dp(12));
-              tile.setBackgroundResource(android.R.drawable.list_selector_background);
-              tile.setMinimumHeight(dp(112));
-              tile.setContentDescription("Open " + app.optString("Name"));
-              ImageView icon = new ImageView(this);
-              String id = app.optString("ID", "");
-              String iconName =
-                  app.optString("Icon", "")
-                      .replaceAll("^.*/", "")
-                      .replaceAll("-[a-f0-9]{16}\\.svg$", "")
-                      .replaceAll("\\.svg$", "");
-              int resource =
-                  getResources().getIdentifier("brand_" + iconName, "drawable", getPackageName());
-              if (resource == 0)
-                resource =
-                    getResources()
-                        .getIdentifier("app_" + id.replace('-', '_'), "drawable", getPackageName());
-              icon.setImageResource(resource == 0 ? R.drawable.workspace_brand : resource);
-              tile.addView(icon, new LinearLayout.LayoutParams(dp(46), dp(46)));
-              TextView name = text(app.optString("Name"), 13);
-              name.setGravity(Gravity.CENTER);
-              name.setMaxLines(2);
-              name.setPadding(0, dp(8), 0, 0);
-              tile.addView(name);
-              GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
-              lp.width = 0;
-              lp.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-              lp.setMargins(dp(4), dp(4), dp(4), dp(4));
-              grid.addView(tile, lp);
-              tile.setOnClickListener(
-                  v -> {
-                    if ("chat".equals(id)) {
-                      openChat();
-                      return;
-                    }
-                    String u = app.optString("URL", "");
-                    try {
-                      String target =
-                          new java.net.URI(WorkspaceApi.home(this) + "/").resolve(u).toString();
-                      WorkspaceApi.origin(target);
-                      open(target, app.optString("Name"));
-                    } catch (Exception ignored) {
-                      toast("This app link is unavailable");
-                    }
-                  });
+            for (String category : new String[] {"general", "administration", "development"}) {
+              boolean headingAdded = false;
+              for (int n = 0; n < apps.length(); n++) {
+                JSONObject app = apps.optJSONObject(n);
+                if (app == null || !app.optString("Name").toLowerCase(Locale.ROOT).contains(q))
+                  continue;
+                if (!category.equals(app.optString("CategoryID", appCategory(app.optString("ID")))))
+                  continue;
+                if (!headingAdded) {
+                  TextView heading =
+                      text(
+                          category.equals("general")
+                              ? "General"
+                              : category.equals("administration")
+                                  ? "Administration"
+                                  : "Development",
+                          21);
+                  heading.setAccessibilityHeading(true);
+                  GridLayout.LayoutParams sectionLayout = new GridLayout.LayoutParams();
+                  sectionLayout.columnSpec = GridLayout.spec(0, 3);
+                  sectionLayout.width = GridLayout.LayoutParams.MATCH_PARENT;
+                  grid.addView(heading, sectionLayout);
+                  headingAdded = true;
+                }
+                LinearLayout tile = new LinearLayout(this);
+                tile.setOrientation(1);
+                tile.setGravity(Gravity.CENTER);
+                tile.setPadding(dp(4), dp(12), dp(4), dp(12));
+                tile.setBackgroundResource(android.R.drawable.list_selector_background);
+                tile.setMinimumHeight(dp(112));
+                tile.setContentDescription("Open " + app.optString("Name"));
+                ImageView icon = new ImageView(this);
+                String id = app.optString("ID", "");
+                String iconName =
+                    app.optString("Icon", "")
+                        .replaceAll("^.*/", "")
+                        .replaceAll("-[a-f0-9]{16}\\.svg$", "")
+                        .replaceAll("\\.svg$", "");
+                int resource =
+                    getResources().getIdentifier("brand_" + iconName, "drawable", getPackageName());
+                if (resource == 0)
+                  resource =
+                      getResources()
+                          .getIdentifier(
+                              "app_" + id.replace('-', '_'), "drawable", getPackageName());
+                icon.setImageResource(resource == 0 ? R.drawable.workspace_brand : resource);
+                tile.addView(icon, new LinearLayout.LayoutParams(dp(46), dp(46)));
+                TextView name = text(app.optString("Name"), 13);
+                name.setGravity(Gravity.CENTER);
+                name.setMaxLines(2);
+                name.setPadding(0, dp(8), 0, 0);
+                tile.addView(name);
+                GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
+                lp.width = 0;
+                lp.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+                lp.setMargins(dp(4), dp(4), dp(4), dp(4));
+                grid.addView(tile, lp);
+                tile.setOnClickListener(
+                    v -> {
+                      if ("chat".equals(id)) {
+                        openChat();
+                        return;
+                      }
+                      String u = app.optString("URL", "");
+                      try {
+                        String target =
+                            new java.net.URI(WorkspaceApi.home(this) + "/").resolve(u).toString();
+                        WorkspaceApi.origin(target);
+                        open(target, app.optString("Name"));
+                      } catch (Exception ignored) {
+                        toast("This app link is unavailable");
+                      }
+                    });
+              }
             }
           };
       render.run();
@@ -528,6 +550,12 @@ public class MainActivity extends AppCompatActivity {
       }
     }
     return apps;
+  }
+
+  private static String appCategory(String id) {
+    if (Arrays.asList("accounts", "backups", "monitor", "shield", "push", "updates", "app-status")
+        .contains(id)) return "administration";
+    return Arrays.asList("gitea", "hosting").contains(id) ? "development" : "general";
   }
 
   private void refresh() {

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/oneworkspacestudio/one-workspace/internal/branding"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"golang.org/x/oauth2"
 	"html/template"
@@ -340,7 +341,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		}
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_ = home.Execute(w, map[string]any{"SearchInstalled": searchInstalled(p.rt.Config), "LoggedIn": ok, "User": user, "Tiles": p.tiles(ok && user.Subject == p.rt.Config.Owner), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
+		_ = home.Execute(w, map[string]any{"SearchInstalled": searchInstalled(p.rt.Config), "LoggedIn": ok, "User": user, "Tiles": p.tiles(ok && user.Subject == p.rt.Config.Owner), "Groups": p.tileGroups(ok && user.Subject == p.rt.Config.Owner), "Owner": ok && user.Subject == p.rt.Config.Owner, "Issuer": p.rt.Config.Issuer, "Version": p.rt.Config.Version, "LoginURL": "/auth/login?returnTo=" + url.QueryEscape(safeReturnPath(r.URL.Query().Get("returnTo")))})
 	})
 	origin, _ := url.Parse(p.rt.Config.Origin)
 	local := fmt.Sprintf("localhost:%d", p.rt.Config.Port)
@@ -486,6 +487,38 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 
 type catalogTile struct{ Name, Description, URL, Icon string }
 
+type catalogGroup struct {
+	ID, Name, Description string
+	Tiles                 []catalogTile
+}
+
+func (p *Portal) tileID(tile catalogTile) string {
+	if tile.URL == p.rt.Config.Issuer {
+		return "accounts"
+	}
+	if tile.URL == "/backups" {
+		return "backups"
+	}
+	return strings.TrimPrefix(tile.URL, "/_workspace/open/")
+}
+
+func (p *Portal) tileGroups(owner bool) []catalogGroup {
+	var groups []catalogGroup
+	tiles := p.tiles(owner)
+	for _, category := range catalog.Categories() {
+		group := catalogGroup{ID: category.ID, Name: category.Name, Description: category.Description}
+		for _, tile := range tiles {
+			if catalog.CategoryFor(p.tileID(tile)).ID == category.ID {
+				group.Tiles = append(group.Tiles, tile)
+			}
+		}
+		if len(group.Tiles) > 0 {
+			groups = append(groups, group)
+		}
+	}
+	return groups
+}
+
 var appUnavailable = template.Must(template.New("app-unavailable").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>App unavailable · One Workspace</title><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px/1.65 "Segoe UI",system-ui,sans-serif}main{max-width:560px;margin:12vh auto;padding:32px;border:1px solid #e3e8f4;border-radius:20px;background:#fff}img{width:48px;height:48px}h1{line-height:1.2}p{color:#5e6c84}a{color:#345de5}nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap}.button{padding:12px 22px;background:#345de5;color:#fff;border-radius:12px;text-decoration:none}a:focus-visible{outline:3px solid #345de5;outline-offset:4px}@media(max-width:640px){main{margin:32px 16px;padding:24px}}</style><main><img src="/branding/icons/one_workspace.svg" alt="One Workspace"><h1>This app isn’t ready yet</h1><p>It may be starting, restarting after an update, or temporarily stopped. Wait a moment, then try opening it again.</p><nav><a class="button" href="{{.Retry}}">Try opening the app again</a><a href="/">Back to Workspace</a></nav><p>If it still won’t open, ask your Workspace owner to check <a href="/_workspace/startup">App status and retry</a>. This page does not mean your files have been deleted.</p></main><script defer src="/_workspace/navigation.js"></script></html>`))
 
 func (p *Portal) tiles(owner ...bool) []catalogTile {
@@ -508,6 +541,6 @@ func (p *Portal) tiles(owner ...bool) []catalogTile {
 	return tiles
 }
 
-var home = template.Must(template.New("home").Parse(branding.VersionHTML(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One Workspace</title><link rel="icon" type="image/svg+xml" href="/branding/icons/one_workspace.svg"><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px system-ui,sans-serif}header,main{max-width:1040px;margin:auto;padding:32px}header{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;flex:none}.app-logo{display:block;width:56px;height:56px;margin-bottom:18px}h1{font-size:44px;letter-spacing:-1.5px;margin-bottom:12px}.muted,p{color:#5e6c84;line-height:1.65}a{color:#345de5;text-decoration:none}button,.button{display:inline-block;background:#345de5;color:white;border:0;padding:13px 22px;border-radius:12px;font:inherit;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:32px 0}.tile{background:white;border:1px solid #e3e8f4;border-radius:20px;padding:26px;box-shadow:0 5px 24px #23397605}.tile h2{color:#18233b;margin-top:0;font-size:23px}.tile:hover{border-color:#345de5}.right{margin-left:auto}footer{margin-top:40px;font-size:13px;color:#6e7890}.admin{background:#eaf0ff;padding:22px;border-radius:16px}</style><header><img class="logo" src="/branding/icons/one_workspace.svg" alt="" width="48" height="48"><b>One Workspace</b><span class="right muted">Your apps, together</span></header><main>{{if .LoggedIn}}<h1>Your workspace.</h1>{{if .SearchInstalled}}<form action="/search/" method="get" role="search"><label for="workspace-global-search">Search your Workspace</label><input id="workspace-global-search" name="q" type="search" maxlength="200" placeholder="Files, notes, events and tasks" style="font:inherit;padding:13px;border:1px solid #e3e8f4;border-radius:12px;margin:12px"><button>Search</button></form>{{end}}<p>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}{{.User.Email}}{{end}}. Open an app to continue.</p><div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if .Owner}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{.Issuer}}/organizations/myaccounts/users">Manage accounts →</a> · <a href="/updates">Updates and backups →</a> · <a href="/_workspace/startup">App status and retry →</a></div>{{end}}<form action="/auth/logout" method="post" style="margin-top:24px"><button>Sign out of Workspace</button></form>{{else}}<h1>One account.<br>Your whole workspace.</h1><p>Files, documents and photos in one place.<br>Sign in with your MyAccounts account to get started.</p><a class="button" href="{{.LoginURL}}">Sign in with MyAccounts →</a>{{end}}<footer>One Workspace {{.Version}} · Self-hosted evaluation build. Signing out closes Workspace app access and opens MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately. App access tokens and public sharing links are managed separately.</footer></main><script defer src="/_workspace/navigation.js"></script></html>`)))
+var home = template.Must(template.New("home").Parse(branding.VersionHTML(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One Workspace</title><link rel="icon" type="image/svg+xml" href="/branding/icons/one_workspace.svg"><style>body{margin:0;background:#f5f7fc;color:#18233b;font:16px system-ui,sans-serif}header,main{max-width:1040px;margin:auto;padding:32px}header{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;flex:none}.app-logo{display:block;width:56px;height:56px;margin-bottom:18px}h1{font-size:44px;letter-spacing:-1.5px;margin-bottom:12px}.muted,p{color:#5e6c84;line-height:1.65}a{color:#345de5;text-decoration:none}button,.button{display:inline-block;background:#345de5;color:white;border:0;padding:13px 22px;border-radius:12px;font:inherit;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:32px 0}.tile{background:white;border:1px solid #e3e8f4;border-radius:20px;padding:26px;box-shadow:0 5px 24px #23397605}.category-title{font-size:26px;margin:30px 0 6px}.category-description{margin:0}.app-category .grid{margin:18px 0 28px}.tile h2{color:#18233b;margin-top:0;font-size:23px}.tile:hover{border-color:#345de5}.right{margin-left:auto}footer{margin-top:40px;font-size:13px;color:#6e7890}.admin{background:#eaf0ff;padding:22px;border-radius:16px}</style><header><img class="logo" src="/branding/icons/one_workspace.svg" alt="" width="48" height="48"><b>One Workspace</b><span class="right muted">Your apps, together</span></header><main>{{if .LoggedIn}}<h1>Your workspace.</h1>{{if .SearchInstalled}}<form action="/search/" method="get" role="search"><label for="workspace-global-search">Search your Workspace</label><input id="workspace-global-search" name="q" type="search" maxlength="200" placeholder="Files, notes, events and tasks" style="font:inherit;padding:13px;border:1px solid #e3e8f4;border-radius:12px;margin:12px"><button>Search</button></form>{{end}}<p>Welcome, {{if .User.Name}}{{.User.Name}}{{else}}{{.User.Email}}{{end}}. Open an app to continue.</p>{{range .Groups}}<section class="app-category" aria-labelledby="category-{{.ID}}"><h2 id="category-{{.ID}}" class="category-title">{{.Name}}</h2><p class="category-description">{{.Description}}</p><div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if and $.Owner (eq .ID "administration")}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{$.Issuer}}/organizations/myaccounts/users">Manage accounts →</a> · <a href="/updates">Updates and backups →</a> · <a href="/_workspace/startup">App status and retry →</a></div>{{end}}</section>{{else}}<div class="grid">{{range .Tiles}}<a class="tile" href="{{.URL}}">{{if .Icon}}<img class="app-logo" src="{{.Icon}}" alt="" width="56" height="56">{{end}}<h2>{{.Name}} ↗</h2><p>{{.Description}}</p></a>{{end}}</div>{{if .Owner}}<div class="admin"><b>Workspace administration</b><p>Add people, reset passwords and manage access in MyAccounts.</p><a href="{{$.Issuer}}/organizations/myaccounts/users">Manage accounts →</a> · <a href="/updates">Updates and backups →</a> · <a href="/_workspace/startup">App status and retry →</a></div>{{end}}{{end}}<form action="/auth/logout" method="post" style="margin-top:24px"><button>Sign out of Workspace</button></form>{{else}}<h1>One account.<br>Your whole workspace.</h1><p>Files, documents and photos in one place.<br>Sign in with your MyAccounts account to get started.</p><a class="button" href="{{.LoginURL}}">Sign in with MyAccounts →</a>{{end}}<footer>One Workspace {{.Version}} · Self-hosted evaluation build. Signing out closes Workspace app access and opens MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately. App access tokens and public sharing links are managed separately.</footer></main><script defer src="/_workspace/navigation.js"></script></html>`)))
 
 var logoutPage = template.Must(template.New("logout").Parse(`<!doctype html><html lang="en"><meta charset="utf-8"><title>Signing out of One Workspace</title><h1>Signing out</h1><p>Workspace app access is closed. Opening MyAccounts to end its browser session. If your browser blocks that step, sign out of MyAccounts separately.</p><form id="workspace-provider-logout" method="get" action="{{.Endpoint}}"><input type="hidden" name="id_token_hint" value="{{.Hint}}"><input type="hidden" name="client_id" value="{{.Client}}"><input type="hidden" name="post_logout_redirect_uri" value="{{.Return}}"><button>Continue sign-out</button></form><script src="/_workspace/logout.js" defer></script></html>`))

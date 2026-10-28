@@ -125,7 +125,8 @@ func (s *Server) Handler() http.Handler {
 		s.recoveredState(state)
 		available := []map[string]any{}
 		for _, a := range s.cat.Apps {
-			available = append(available, map[string]any{"id": a.ID, "name": a.Name, "description": a.Description, "depends": a.Depends})
+			category := catalog.CategoryFor(a.ID)
+			available = append(available, map[string]any{"id": a.ID, "name": a.Name, "description": a.Description, "depends": a.Depends, "category": category.ID, "categoryName": category.Name, "defaultInstall": category.DefaultInstall})
 		}
 		state["availableApps"] = available
 		state["offline"] = s.offline

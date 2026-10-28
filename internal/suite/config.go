@@ -146,9 +146,6 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 2
 		case "photos":
 			app.Port = r.Port + 3
-			if r.SelectedApps == nil && !r.Photos {
-				continue
-			}
 		case "gitea":
 			app.Port = r.Port + 4
 		case "music":

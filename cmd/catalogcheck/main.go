@@ -17,6 +17,17 @@ func main() {
 		var c catalog.Catalog
 		c, err = catalog.Read(b)
 		if err == nil {
+			for _, app := range c.Apps {
+				if !catalog.DefaultInstall(app.ID) {
+					continue
+				}
+				for _, dep := range app.Depends {
+					if !catalog.DefaultInstall(dep) {
+						fmt.Fprintf(os.Stderr, "default app %s depends on optional app %s\n", app.ID, dep)
+						os.Exit(1)
+					}
+				}
+			}
 			fmt.Printf("Validated complete catalogue: %d apps\n", len(c.Apps))
 			return
 		}

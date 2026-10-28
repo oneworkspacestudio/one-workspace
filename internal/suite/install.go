@@ -132,7 +132,7 @@ func installFreshFrom(ctx context.Context, r Request, z *zip.Reader, cat catalog
 			progress("Using this installer’s bundled versions (offline mode)")
 		}
 		r.SelectedApps = []string{}
-		for _, app := range cat.DefaultApps(offered.Selection) {
+		for _, app := range cat.WantedApps(offered) {
 			r.SelectedApps = append(r.SelectedApps, app.ID)
 		}
 		selected, selectionErr := SelectInstallApps(cat, r)

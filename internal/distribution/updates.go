@@ -363,7 +363,7 @@ func normalizedApps(apps []catalog.App) []catalog.App {
 // manifests remain limited to their existing managed package contract.
 func newDefaultIDs(current, latest catalog.Catalog) map[string]bool {
 	out := map[string]bool{}
-	for _, a := range latest.DefaultApps(current.EffectiveSelection()) {
+	for _, a := range latest.WantedApps(current) {
 		if _, installed := current.Find(a.ID); !installed {
 			out[a.ID] = true
 		}
