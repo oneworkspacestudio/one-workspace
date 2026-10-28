@@ -32,3 +32,24 @@ Minimum planned suite100 avoids public97/concurrent next tags. Public Forms1
 portable digest13ac3f785e39021d6b96624d9e1488f93283118f10ccd634dde7771ced16dbc9
 pinned because build-org now requires the Forms component. Existing app selections
 and all unselected installed versions must remain unchanged during Finance delivery.
+
+Finance1 is public at my-finance/v0.1.0-preview.1, source f85eeab; portable
+SHAff42aa929855eaf0422a4f1ba55857b10ae54edb8b5e84c325d719b7ac3b9004,
+runtimeSHAf3c4675bf401042356310325a35de736de3c7b2f53aab2e74b611839f98da3ca.
+App public index and anonymous download verified. Actual/HyperFormula preferred
+sources/full GPL notices included. Native ledger/ACL/restart/snapshot/real local
+OneAccount and Drive download integrity pass with strictly fictional fixtures.
+
+Workspace100 candidate from7efafaf passed full175-package bundle verification and
+signed Android6 checks, but remained an UNPUBLISHED draft427302813. Before delivery,
+fetched newer main2252e9b: it includes Forms2 plus critical protected-update startup
+reconciliation and older-suite app-preservation fixes. Stopped only task-owned
+publisher/uploads and fast-forwarded to retain these fixes. Rebuild100 from the
+new clean/pushed source; retarget/reconcile only the unpublished draft, re-sign
+Android provenance and verify every final byte before supported publication.
+Never replace a published release. All owner installations remain untouched by
+this Finance task. Primary96/30apps; secondary is Forms98 local integration with
+Forms2 per its history. Inspect each actual state before protected installation.
+Remote Chrome DESKTOP-Workstation still waits for the user's PIN entry.
+Stopped synthetic Workspace4 and shipping Finance services; removed only stopped
+extracted engines and verified duplicate release cache. Evidence remains on I/source.

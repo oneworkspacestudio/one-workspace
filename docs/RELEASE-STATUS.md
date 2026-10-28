@@ -1,5 +1,28 @@
 # One Workspace release status
 
+## Preview 100: My Finance and protected update compatibility
+
+Adds My Finance1 with bundled Actual26.10/Node runtime, native GBP budgeting and
+statement imports, OneAccount household budget sharing, owner-managed UK banking
+setup, encrypted native exports and optional credential-free daily server
+snapshots with verified My Drive copies and clean recovery. Finance uses base+34;
+Forms retains base+33. Includes Forms2 and its protected-update reconciliation fix.
+All existing selections and unselected app contracts/payloads remain preserved by
+the normal backed-up updater; new default General apps are added automatically.
+
+Acceptance uses fictional users and ledger data: exact pence, repeated imports,
+linked repayment, real local MyAccounts sharing/revocation/signout, keyboard entry,
+360/768px layouts, browser-closed snapshots, clean restore and real Drive download
+integrity. Official banking sandbox/live consent and public bank callbacks remain
+unverified. Unattended bank sync is deferred under OneAccount/E2EE; open-budget
+native Sync remains available. No clean-host, physical reboot, power-loss or full
+accessibility qualification is claimed. Separate trusted browser profiles remain
+necessary for native local budget copies. See MY_FINANCE.md and the app matrix.
+
+Release source, preferred Actual/HyperFormula sources, full licence notices and
+signed Android6 companion provenance accompany the locally built preview. Owner
+delivery receipts are recorded separately after the protected installations.
+
 ## Preview 97: My Shield Settings and backup repair
 
 Updates My Shield to preview4, fixing the Settings navigation crash and restoring
