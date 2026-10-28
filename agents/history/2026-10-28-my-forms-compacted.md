@@ -99,3 +99,11 @@ Live app: https://workspace-2.m8e.co.uk/forms/
 Workspace98 integration is a local build, not a public suite release. Permanent
 Android signing configuration remains unavailable on this PC. Do not bypass the
 required publisher; a separate public Workspace installer release is still pending.
+
+## Forms split-session login fix
+
+Published Forms preview2 redirects portal-specific 401s through Workspace login
+instead of repeating Forms OIDC. Shared author sign-in creates both sessions;
+existing OneAccount login can be reused. Retains destination and bounds retries.
+Regression tests reproduce the reported response, prevent redirect loops and keep
+ordinary authorization failures out of reconnect. App tests/vet/build pass.

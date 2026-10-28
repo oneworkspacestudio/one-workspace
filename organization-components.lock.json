@@ -181,9 +181,9 @@
   },
   "myForms": {
     "repository": "oneworkspacestudio/my-forms",
-    "tag": "v0.1.0-preview.1",
-    "asset": "my-forms-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "13ac3f785e39021d6b96624d9e1488f93283118f10ccd634dde7771ced16dbc9"
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-forms-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "27984b73c55abd90ae606bad7b491620e1aa6b829284d8b0b68be73490276ad9"
   },
   "myFinance": {
     "repository": "oneworkspacestudio/my-finance",
