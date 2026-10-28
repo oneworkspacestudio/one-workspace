@@ -25,3 +25,10 @@ Next: finish shipping-byte Finance/real synthetic MyAccounts OIDC acceptance, pi
 its actual release digest; rebuild suite, validate contracts, publish signed suite
 and use normal backed-up installs on primary and workspace-2. No owner installation
 was modified by this Finance task yet. Protect all existing apps/data/recovery.
+
+Rebased current public main6d601da (Forms integration) and retained all changes.
+Forms owns base+33/default9023; Finance moved to base+34/default9024. Tests pass.
+Minimum planned suite100 avoids public97/concurrent next tags. Public Forms1
+portable digest13ac3f785e39021d6b96624d9e1488f93283118f10ccd634dde7771ced16dbc9
+pinned because build-org now requires the Forms component. Existing app selections
+and all unselected installed versions must remain unchanged during Finance delivery.
