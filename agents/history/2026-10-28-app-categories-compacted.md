@@ -98,3 +98,11 @@ now disabled in Work settings; user asked to enable while independent work proce
 Secondary requires owner browser update when access resumes. Primary95 transaction
 is complete but Workspace is currently stopped (localhost8990 refused), so verify
 startup after normal protected installation. No production data fixtures used.
+
+Concurrent Maps promotion df63e4e was retained by rebase. Its Maps11 pin is the
+only baseline95 lock difference: separately verify immutable public Maps11 ZIP
+SHA681d1c46cb12432016b9afcb794b8117648772c039b00d4f6f3e0b1ffbdd6e29, compatibility,
+program/notices/contract, and update that package group in the installer catalog.
+All other lock entries and95 app packages must match. Existing-PC category updates
+remain Workspace-only, preserving each installation's actual current app versions.
+Maps delivery is separately in progress; check the update lock before applying.
