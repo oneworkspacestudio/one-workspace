@@ -106,3 +106,7 @@ program/notices/contract, and update that package group in the installer catalog
 All other lock entries and95 app packages must match. Existing-PC category updates
 remain Workspace-only, preserving each installation's actual current app versions.
 Maps delivery is separately in progress; check the update lock before applying.
+
+Installer compile caught two legacy single-byte middle dots in the new selection
+legend. Converted only those invalid bytes to UTF-8; other changed text sources
+pass UTF-8 decoding. No release from the failed build was published.
