@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-7ec160d3.png)
+![The complete One Workspace app collection](docs/branding/app-suite-5707a05a.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -185,6 +185,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_shield.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-shield"><strong>My Shield</strong></a></td>
       <td>Review security signals and coverage for this Workspace.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_forms.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-forms"><strong>My Forms</strong></a></td>
+      <td>Create forms and quizzes, collect responses and keep them in My Drive.</td>
     </tr>
   </tbody>
 </table>

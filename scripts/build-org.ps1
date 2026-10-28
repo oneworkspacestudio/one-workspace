@@ -4,6 +4,7 @@ param(
  [string]$Cache='',
  [string]$SeedArchive='',
  [string]$MyPushPackage='',
+ [string]$MyFormsPackage='',
  [string]$MyShieldPackage=''
 )
 $ErrorActionPreference='Stop'
@@ -227,6 +228,19 @@ if($lock.myShield -or $MyShieldPackage){
  $componentArgs.MyShield=Join-Path $shieldRoot 'MyShield.exe'
  $componentArgs.MyShieldVersion=$shieldContract.version
  $componentArgs.MyShieldNotices=$shieldRoot
+}
+if($lock.myForms -or $MyFormsPackage){
+ $formsZip=if($MyFormsPackage){(Resolve-Path -LiteralPath $MyFormsPackage).Path}else{Get-OrgAsset $lock.myForms}
+ $formsStage=Join-Path $Cache ('my-forms-stage-'+[guid]::NewGuid().ToString('N'))
+ Expand-Archive -LiteralPath $formsZip -DestinationPath $formsStage
+ $formsRoot=(Get-ChildItem -LiteralPath $formsStage -Filter MyForms.exe -File -Recurse | Select-Object -First 1).DirectoryName
+ if(-not $formsRoot){throw 'My Forms executable missing'}
+ $formsContract=Get-Content -LiteralPath (Join-Path $formsRoot 'compatibility.json') -Raw|ConvertFrom-Json
+ if($formsContract.schema -ne 1 -or $formsContract.workspaceInstallerIntegration -ne 2 -or $formsContract.route -cne '/forms' -or $formsContract.minimumWorkspaceVersion -cne '0.3.0-preview.97'){throw 'Unsupported My Forms integration contract'}
+ if($lock.myForms -and $formsContract.version -cne ($lock.myForms.tag -replace '^v','')){throw 'My Forms version differs from organization pin'}
+ $componentArgs.MyForms=Join-Path $formsRoot 'MyForms.exe'
+ $componentArgs.MyFormsVersion=$formsContract.version
+ $componentArgs.MyFormsNotices=$formsRoot
 }else{throw 'Publish and pin My Shield or supply its explicit development package'}
 [IO.File]::WriteAllText((Join-Path $notices 'organization-components.json'),($records|ConvertTo-Json -Depth 6),[Text.UTF8Encoding]::new($false))
 & (Join-Path $PSScriptRoot 'build.ps1') -Go $Go -Version $Version -Accounts $accounts -AccountsVersion $lock.accounts.tag -Drive $driveExe -DriveVersion $lock.drive.tag -DriveSource $driveSource -Photos $photosExe -PhotosVersion $lock.photos.tag -PhotosSource $photosSource -Cloudflared (Join-Path $seedDir 'cloudflared.exe') -Gitea $gitea -GiteaTag $lock.gitea.tag -Music $music -MusicTag $lock.music.tag -MusicVersion $lock.music.version -Mail $mail -MailVersion ($lock.mail.tag -replace '^workspace-mail-v','') -PrivateMail -Studio $studio -StudioVersion $lock.studio.tag -Calendar (Join-Path $calendarRoot 'Calendar.exe') -Contacts (Join-Path $calendarRoot 'Contacts.exe') -Services (Join-Path $calendarRoot 'WorkspaceServices.exe') -Stalwart (Join-Path $calendarRoot 'stalwart.exe') -CalendarVersion ($lock.calendar.tag -replace '^v','') -Notes (Join-Path $notesRoot 'MyNotes.exe') -NotesVersion ($lock.notes.tag -replace '^v','') -NotesNotices $notesRoot -MyTube (Join-Path $myTubeRoot 'MyTube.exe') -MyTubeVersion ($lock.myTube.tag -replace '^v','') -MyTubeNotices $myTubeRoot -Chat (Join-Path $chatRoot 'Chat.exe') -ChatVersion ($lock.chat.tag -replace '^v','') -ChatNotices $chatRoot -MyVault (Join-Path $myVaultRoot 'MyVault.exe') -MyVaultVersion ($lock.myVault.tag -replace '^v','') -MyVaultNotices $myVaultRoot -MyHosting (Join-Path $hostingRoot 'MyHosting.exe') -MyHostingVersion ($lock.myHosting.tag -replace '^v','') -MyHostingNotices $hostingRoot -MySocial (Join-Path $socialRoot 'MySocial.exe') -MySocialVersion ($lock.mySocial.tag -replace '^v','') -MySocialNotices $socialRoot -MyCreate (Join-Path $createRoot 'MyCreate.exe') -MyCreateVersion ($lock.myCreate.tag -replace '^v','') -MyCreateNotices $createRoot -MyMaps (Join-Path $mapsRoot 'Maps.exe') -MyMapsVersion ($lock.myMaps.tag -replace '^v','') -MyMapsNotices $mapsRoot -MyMeet (Join-Path $meetRoot 'Meet.exe') -MyMeetVersion ($lock.myMeet.tag -replace '^v','') -MyMeetNotices $meetRoot -MyClips (Join-Path $clipsRoot 'MyClips.exe') -MyClipsVersion ($lock.myClips.tag -replace '^v','') -MyClipsNotices $clipsRoot -MyCinema (Join-Path $cinemaRoot 'MyCinema.exe') -MyCinemaVersion ($lock.myCinema.tag -replace '^v','') -MyCinemaNotices $cinemaRoot -MyAI (Join-Path $myaiRoot 'MyAI.exe') -MyAIVersion ($lock.myAI.tag -replace '^v','') -MyAINotices $myaiRoot -My3D (Join-Path $my3dRoot 'My3D.exe') -My3DVersion ($lock.my3D.tag -replace '^v','') -My3DNotices $my3dRoot -MySlicer (Join-Path $slicerRoot 'MySlicer.exe') -MySlicerVersion ($lock.mySlicer.tag -replace '^v','') -MySlicerNotices $slicerRoot -MyTasks (Join-Path $tasksRoot 'MyTasks.exe') -MyTasksVersion ($lock.myTasks.tag -replace '^v','') -MyTasksNotices $tasksRoot -MyPDF (Join-Path $pdfRoot 'MyPDF.exe') -MyPDFVersion ($lock.myPDF.tag -replace '^v','') -MyPDFNotices $pdfRoot -MyMonitor (Join-Path $monitorRoot 'MyMonitor.exe') -MyMonitorVersion ($lock.myMonitor.tag -replace '^v','') -MyMonitorNotices $monitorRoot -MySearch (Join-Path $searchRoot 'MySearch.exe') -MySearchVersion ($lock.mySearch.tag -replace '^v','') -MySearchNotices $searchRoot -ComponentNotices $notices @componentArgs

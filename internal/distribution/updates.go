@@ -90,6 +90,7 @@ type updateGroup struct {
 
 var updateGroups = []updateGroup{
 	{"shield", "My Shield", "my-shield", []string{"shield"}},
+	{"forms", "My Forms", "my-forms", []string{"forms"}},
 	{"push", "My Push", "my-push", []string{"push"}},
 	{"maps", "My Maps", "my-maps", []string{"maps"}},
 	{"cinema", "My Cinema", "my-cinema", []string{"cinema"}},
@@ -286,6 +287,7 @@ func updatePackageOwner(id string) string {
 	if id == "shield" || strings.HasPrefix(id, "shield-") {
 		return "shield"
 	}
+	if id == "forms" || strings.HasPrefix(id, "forms-") { return "forms" }
 	if id == "push" || strings.HasPrefix(id, "push-") {
 		return "push"
 	}

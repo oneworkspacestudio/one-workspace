@@ -16,7 +16,7 @@ import (
 )
 
 func foundationApp(id string) bool {
-	if id == "push" || id == "shield" {
+	if id == "push" || id == "shield" || id == "forms" {
 		return true
 	}
 	return id == "cinema" || id == "myai" || id == "my3d" || id == "create" || id == "maps" || id == "meet" || id == "clips" || id == "social" || id == "slicer" || id == "tasks" || id == "pdf" || id == "monitor" || id == "search"

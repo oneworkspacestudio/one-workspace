@@ -35,6 +35,8 @@ func appUpdatePrivatePaths(id string) []string {
 		return []string{id}
 	case "shield":
 		return []string{"shield"}
+	case "forms":
+		return []string{"forms", "forms-drive"}
 	case "hosting":
 		return []string{"my-hosting"}
 	case "vault":

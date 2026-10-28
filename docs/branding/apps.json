@@ -222,5 +222,12 @@
     "name": "My Shield",
     "description": "Review security signals and coverage for this Workspace.",
     "url": "https://github.com/oneworkspacestudio/my-shield"
+  },
+  {
+    "id": "forms",
+    "icon": "my_forms",
+    "name": "My Forms",
+    "description": "Create forms and quizzes, collect responses and keep them in My Drive.",
+    "url": "https://github.com/oneworkspacestudio/my-forms"
   }
 ]

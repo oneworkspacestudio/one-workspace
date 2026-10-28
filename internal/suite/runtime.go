@@ -197,6 +197,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "shield" {
 			cmd.Env = append(cmd.Env, "MYSHIELD_LAB=0")
 		}
+		if app.ID == "forms" {
+			cmd.Env = append(cmd.Env, fmt.Sprintf("MYFORMS_DRIVE_URL=http://127.0.0.1:%d/_integration/forms/drive", c.Port), "MYFORMS_DRIVE_TOKEN="+formsCapability(client.Secret))
+		}
 		if foundationApp(app.ID) {
 			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner, "WORKSPACE_HOME_URL="+c.Origin)
 			if app.ID == "push" {
@@ -316,6 +319,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 		if e := ensureSocialDriveSource(rt.Config); e != nil {
 			return e
 		}
+		if e := ensureFormsDriveSource(rt.Config); e != nil { return e }
 	}
 	if app.ID == "my-tube" {
 		if e := ensureMyTubeConfig(rt.Config); e != nil {
