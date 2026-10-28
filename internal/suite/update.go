@@ -216,6 +216,13 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 	for time.Now().Before(deadline) {
 		var progress Progress
 		if platform.LoadJSON(filepath.Join(c.Data, "startup-progress.json"), &progress) == nil && progress.PID == cmd.Process.Pid && progress.State == "ready" {
+			if forms, installed := c.Catalog.Find("forms"); installed {
+				if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d/readyz", forms.Port), 90*time.Second, done, func(detail string) {
+					operationprogress.Report(ctx, "restart", "Checking My Forms Drive storage: "+detail, 0, 0, "")
+				}); e != nil {
+					return fmt.Errorf("My Forms Drive storage did not become ready: %w", e)
+				}
+			}
 			return nil
 		}
 		time.Sleep(100 * time.Millisecond)

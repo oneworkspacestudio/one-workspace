@@ -129,6 +129,66 @@ func (rt *Runtime) formsRequest(ctx context.Context, method, endpoint string, bo
 	b, e := io.ReadAll(io.LimitReader(resp.Body, 24<<20))
 	return b, resp.StatusCode, e
 }
+
+// Existing Drive installations do not automatically add new disabled-by-default
+// sources to the recovery service account. Grant only this managed source, through
+// Drive's user API, while preserving every other account and source permission.
+func formsRecoveryScope(user map[string]any) (bool, error) {
+	permissions, _ := user["permissions"].(map[string]any)
+	if user["username"] != "workspace-recovery" || user["loginMethod"] != "password" || permissions["admin"] != true {
+		return false, errors.New("Drive recovery identity does not match the managed service account")
+	}
+	want := map[string]any{"name": formsSource, "scope": "/", "permissions": map[string]any{"view": true, "download": true, "create": true, "modify": false, "delete": false}}
+	scopes, _ := user["scopes"].([]any)
+	for i, v := range scopes {
+		scope, _ := v.(map[string]any)
+		if scope["name"] != formsSource {
+			continue
+		}
+		if scope["scope"] != "/" {
+			return false, errors.New("Unexpected Forms recovery scope; review its Drive policy")
+		}
+		old, _ := json.Marshal(scope)
+		expected, _ := json.Marshal(want)
+		if bytes.Equal(old, expected) {
+			return false, nil
+		}
+		scopes[i] = want
+		user["scopes"] = scopes
+		return true, nil
+	}
+	user["scopes"] = append(scopes, want)
+	return true, nil
+}
+
+func (rt *Runtime) ensureFormsRecoveryAccess(ctx context.Context) error {
+	token, e := rt.socialToken(ctx)
+	if e != nil {
+		return e
+	}
+	rt.socialGuardMu.Lock()
+	defer rt.socialGuardMu.Unlock()
+	endpoint := "users?username=workspace-recovery"
+	b, e := rt.socialDrive(ctx, "GET", endpoint, nil, token)
+	if e != nil {
+		return e
+	}
+	var user map[string]any
+	if json.Unmarshal(b, &user) != nil {
+		return errors.New("Invalid Drive recovery profile")
+	}
+	changed, e := formsRecoveryScope(user)
+	if e != nil {
+		return e
+	}
+	if changed {
+		if _, e = rt.socialDrive(ctx, "PATCH", endpoint, map[string]any{"data": user, "which": []string{"scopes"}}, token); e != nil {
+			return e
+		}
+		rt.socialGuardToken = ""
+	}
+	return nil
+}
 func (rt *Runtime) bindFormsAccount(ctx context.Context, subject string) error {
 	if subject == "" || len(subject) > 256 || strings.ContainsAny(subject, "\x00\r\n") {
 		return errors.New("Invalid identity")
