@@ -41,7 +41,7 @@ param(
  [string]$MyCreateVersion='0.1.0-preview.1',
  [string]$MyCreateNotices='',
  [string]$MyMaps='',
- [string]$MyMapsVersion='0.1.0-preview.10',
+ [string]$MyMapsVersion='0.1.0-preview.11',
  [string]$MyMapsNotices='',
  [string]$MyMeet='',
  [string]$MyMeetVersion='0.1.0-preview.3',
