@@ -184,5 +184,11 @@
     "tag": "v0.1.0-preview.1",
     "asset": "my-forms-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "13ac3f785e39021d6b96624d9e1488f93283118f10ccd634dde7771ced16dbc9"
+  },
+  "myFinance": {
+    "repository": "oneworkspacestudio/my-finance",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-finance-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "ff42aa929855eaf0422a4f1ba55857b10ae54edb8b5e84c325d719b7ac3b9004"
   }
 }

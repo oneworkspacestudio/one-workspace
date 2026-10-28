@@ -224,7 +224,7 @@ if($lock.myFinance -or $MyFinancePackage){
  $financeRoot=(Get-ChildItem -LiteralPath $financeStage -Filter MyFinance.exe -File -Recurse|Select-Object -First 1).DirectoryName
  if(-not $financeRoot){throw 'My Finance executable missing'}
  $financeContract=Get-Content -LiteralPath (Join-Path $financeRoot 'compatibility.json') -Raw|ConvertFrom-Json
- if($financeContract.schema -ne 1 -or $financeContract.workspaceInstallerIntegration -ne 2 -or $financeContract.route -cne '/finance'){throw 'Unsupported My Finance integration contract'}
+ if($financeContract.schema -ne 1 -or $financeContract.workspaceInstallerIntegration -ne 2 -or $financeContract.route -cne '/finance' -or $financeContract.minimumWorkspaceVersion -cne '0.3.0-preview.100'){throw 'Unsupported My Finance integration contract'}
  if($lock.myFinance -and $financeContract.version -cne ($lock.myFinance.tag -replace '^v','')){throw 'My Finance differs from organisation pin'}
  $componentArgs.MyFinance=Join-Path $financeRoot 'MyFinance.exe'
  $componentArgs.MyFinanceVersion=$financeContract.version
