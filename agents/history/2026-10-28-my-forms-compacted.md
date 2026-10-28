@@ -46,3 +46,25 @@ My Forms v0.1.0-preview.1 is published, source8c55e3e, eight assets each size/SH
 verified. Anonymous workspace-update.json download passed. Source/binary/licenses/
 provenance included. Actions disabled. Public Workspace98 release remains pending
 permanent Android signing setup; local integration98 installation is next.
+
+## Upgrade permission migration
+
+First protected live update completed and preserved 30 existing app contracts,
+executables and existing DPAPI credentials, but the additional Forms readiness
+check found HTTP403 from Drive. An existing recovery service account does not
+automatically receive a newly added disabled-by-default source. Fresh installation
+acceptance alone did not catch this upgrade case. No form data was created in the
+live installation for testing. All existing services remained healthy.
+
+Fixed startup to use native Drive GET/PATCH user APIs to add only My Forms root
+view/download/create permissions to the validated workspace-recovery password
+admin account. Existing scopes are preserved; modify/delete remain disabled.
+The update completion gate now also requires Forms /readyz after portal startup,
+so a storage failure cannot be reported as successful installation.
+
+Regression unit and full suite/distribution/catalog/apphost tests pass. Recreated
+the generated native fixture, removed its recovery Forms grant through Drive's
+API, observed HTTP403, then restarted the corrected manager: readiness recovered
+without manual permission changes. Real OneAccount login and native form creation
+pass after migration. Corrected source pushed as b59c8a8. Applying the corrected
+manager through the normal backed-up updater; final live verification pending.

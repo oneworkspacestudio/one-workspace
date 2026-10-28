@@ -98,6 +98,38 @@ type formsDriveCall struct {
 	Subject   string `json:"subject,omitempty"`
 }
 
+// Startup reconciliation needs read access before the update barrier opens.
+// Keep every mutation blocked; only the capability-authenticated local process
+// may list/read its own strictly bounded source while verification is pending.
+func (p *Portal) formsReconcileRequest(r *http.Request) bool {
+	if r.Method != http.MethodPost || r.URL.Path != "/_integration/forms/drive" {
+		return false
+	}
+	host, _, e := net.SplitHostPort(r.RemoteAddr)
+	ip := net.ParseIP(host)
+	want := formsCapability(p.rt.Secrets.Clients["forms"].Secret)
+	if e != nil || ip == nil || !ip.IsLoopback() || want == "" || !platformSecretEqual(want, strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")) {
+		return false
+	}
+	b, e := io.ReadAll(io.LimitReader(r.Body, 4097))
+	r.Body.Close()
+	r.Body = io.NopCloser(bytes.NewReader(b))
+	if e != nil || len(b) > 4096 {
+		return false
+	}
+	var in formsDriveCall
+	d := json.NewDecoder(bytes.NewReader(b))
+	d.DisallowUnknownFields()
+	if d.Decode(&in) != nil {
+		return false
+	}
+	var trailing any
+	if d.Decode(&trailing) != io.EOF {
+		return false
+	}
+	return (in.Operation == "list" || in.Operation == "read") && len(in.Data) == 0 && in.Subject == "" && formsPath.MatchString(in.Path) && !strings.Contains(in.Path, "..")
+}
+
 func (rt *Runtime) formsRequest(ctx context.Context, method, endpoint string, body []byte, content bool) ([]byte, int, error) {
 	a, ok := rt.Config.Catalog.Find("drive")
 	if !ok {

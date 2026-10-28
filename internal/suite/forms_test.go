@@ -36,6 +36,29 @@ func TestFormsUpgradeAddsOnlyRecoverySource(t *testing.T) {
 	}
 }
 
+func TestFormsUpdateBarrierAllowsOnlyAuthenticatedReconciliation(t *testing.T) {
+	p := &Portal{rt: &Runtime{Secrets: Secrets{Clients: map[string]Client{"forms": {Secret: "fixture-only"}}}}}
+	for _, tt := range []struct {
+		body, remote, token string
+		want                bool
+	}{
+		{`{"operation":"list","path":"/"}`, "127.0.0.1:1234", "fixture-only", true},
+		{`{"operation":"read","path":"/` + strings.Repeat("a", 64) + `/` + strings.Repeat("b", 48) + `/events/000000001.json"}`, "127.0.0.1:1234", "fixture-only", true},
+		{`{"operation":"write","path":"/"}`, "127.0.0.1:1234", "fixture-only", false},
+		{`{"operation":"bind","path":"/"}`, "127.0.0.1:1234", "fixture-only", false},
+		{`{"operation":"list","path":"/"}`, "192.0.2.1:1234", "fixture-only", false},
+		{`{"operation":"list","path":"/"}`, "127.0.0.1:1234", "wrong", false},
+		{`{"operation":"list","path":"/../private"}`, "127.0.0.1:1234", "fixture-only", false},
+	} {
+		r := httptest.NewRequest("POST", "/_integration/forms/drive", strings.NewReader(tt.body))
+		r.RemoteAddr = tt.remote
+		r.Header.Set("Authorization", "Bearer "+formsCapability(tt.token))
+		if got := p.formsReconcileRequest(r); got != tt.want {
+			t.Fatalf("%s: got %v", tt.body, got)
+		}
+	}
+}
+
 func TestFormsPublicGatewayBoundaries(t *testing.T) {
 	id := strings.Repeat("a", 48)
 	for _, tt := range []struct {

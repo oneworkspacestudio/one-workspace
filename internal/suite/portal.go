@@ -347,7 +347,7 @@ func (p *Portal) Handler(control string) http.Handler {
 	origin, _ := url.Parse(p.rt.Config.Origin)
 	local := fmt.Sprintf("localhost:%d", p.rt.Config.Port)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/healthz" && r.URL.Path != "/_control/stop" && r.URL.Path != "/_integration/monitor" && !strings.HasPrefix(r.URL.Path, "/updates") && !strings.HasPrefix(r.URL.Path, "/auth/") && !strings.HasPrefix(r.URL.Path, "/branding/") && UpdatePending(p.rt.Config) {
+		if r.URL.Path != "/healthz" && r.URL.Path != "/_control/stop" && r.URL.Path != "/_integration/monitor" && !strings.HasPrefix(r.URL.Path, "/updates") && !strings.HasPrefix(r.URL.Path, "/auth/") && !strings.HasPrefix(r.URL.Path, "/branding/") && UpdatePending(p.rt.Config) && !p.formsReconcileRequest(r) {
 			http.Error(w, "Workspace is completing an update. Your data is protected; please wait.", http.StatusServiceUnavailable)
 			return
 		}
