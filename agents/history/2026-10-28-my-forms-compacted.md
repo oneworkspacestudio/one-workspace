@@ -78,3 +78,24 @@ the app. Regression tests cover both unchanged installed releases and newer vali
 independent updates. Distribution and suite/catalog/apphost tests pass. The fixed
 native controller reports published Forms preview1 up to date on this PC.
 
+
+## Final local delivery
+
+Corrected normal protected update completed. All services are running and Forms
+Drive readiness passes. All 31 installed app contracts, existing executable hashes,
+identity credentials, app selections and connection settings are preserved during
+the manager repair. Published MyForms.exe SHA256 matches installed bytes. Latest
+verified recovery retained. Public Forms HTML/bootstrap/JS and normal update check
+pass; Forms is up to date. Managed autostart verified. Exact receipts are under
+docs/evidence/forms-20261028. No live owner browser login/reboot is claimed.
+
+JellyfinServer, Radarr and Prowlarr remain stopped and disabled. Generated fixture
+was stopped, all five test ports closed, and its exact marked root removed only
+after process/reparse/path checks. Published source/assets and final local bundle
+are retained on I. No user data or unrelated caches were removed.
+
+App public release: https://github.com/oneworkspacestudio/my-forms/releases/tag/v0.1.0-preview.1
+Live app: https://workspace-2.m8e.co.uk/forms/
+Workspace98 integration is a local build, not a public suite release. Permanent
+Android signing configuration remains unavailable on this PC. Do not bypass the
+required publisher; a separate public Workspace installer release is still pending.

@@ -1,0 +1,11 @@
+{
+  "publicFormsHTTP200": true,
+  "oneAccountConfigured": true,
+  "localSignupUnavailable": true,
+  "deployedJavaScriptMatchesReleaseSource": true,
+  "normalUpdateCheckPassed": true,
+  "formsUpToDate": true,
+  "formsURL": "https://workspace-2.m8e.co.uk/forms/",
+  "managedAutostartVerified": true,
+  "installedManagerAndUpdatePageVerified": true
+}
