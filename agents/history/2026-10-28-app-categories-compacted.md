@@ -172,3 +172,6 @@ enable browser control in Work settings; the async request has no response. All
 other authorized independent work is complete. Secondary has not received96 and
 its old navigation bytes were verified. APK6 is published, not phone-installed.
 Public release remains https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.96.
+
+### 2026-10-29 category refinement
+Renamed Development display label to Creative & Development, preserving stable development ID. Added my3d, studio (Photo Editor), create, slicer and push; moved Push out of Administration. Existing Git/Hosting/MyAI retained. Updated Go category policy, web picker fallback, installer labels, Android grouping and README consistently. This group remains optional on fresh installs; existing selected apps are preserved. Source diff checked; no build, release or installation performed for this follow-up.

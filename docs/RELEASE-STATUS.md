@@ -1,5 +1,10 @@
 # One Workspace release status
 
+## Preview 101: Creative & Development
+
+Groups My 3D, Photo Editor, My Create, My Slicer and My Push with Git, Hosting and My AI. Updates the desktop picker, installer and Android launcher. General and Administration remain selected by default; Creative & Development is optional. Existing app selections are retained.
+
+
 ## Preview 100: My Finance and protected update compatibility
 
 Adds My Finance1 with bundled Actual26.10/Node runtime, native GBP budgeting and

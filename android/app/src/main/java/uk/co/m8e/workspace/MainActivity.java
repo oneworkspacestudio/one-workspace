@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
                               ? "General"
                               : category.equals("administration")
                                   ? "Administration"
-                                  : "Development",
+                                  : "Creative & Development",
                           21);
                   heading.setAccessibilityHeading(true);
                   GridLayout.LayoutParams sectionLayout = new GridLayout.LayoutParams();
@@ -553,9 +553,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private static String appCategory(String id) {
-    if (Arrays.asList("accounts", "backups", "monitor", "shield", "push", "updates", "app-status")
+    if (Arrays.asList("accounts", "backups", "monitor", "shield", "updates", "app-status")
         .contains(id)) return "administration";
-    return Arrays.asList("gitea", "hosting", "myai").contains(id) ? "development" : "general";
+    return Arrays.asList("gitea", "hosting", "myai", "my3d", "studio", "create", "slicer", "push").contains(id) ? "development" : "general";
   }
 
   private void refresh() {

@@ -11,18 +11,18 @@ type Category struct {
 
 func Categories() []Category {
 	return []Category{
-		{"general", "General", "Everyday work, communication and creativity", true},
+		{"general", "General", "Everyday work and communication", true},
 		{"administration", "Administration", "Accounts, protection and running your Workspace", true},
-		{"development", "Development", "Source code, AI development and website hosting", false},
+		{"development", "Creative & Development", "Creative tools, source code, AI and website hosting", false},
 	}
 }
 
 func CategoryFor(id string) Category {
 	index := 0
 	switch id {
-	case "accounts", "backups", "monitor", "shield", "push", "updates", "app-status":
+	case "accounts", "backups", "monitor", "shield", "updates", "app-status":
 		index = 1
-	case "gitea", "hosting", "myai":
+	case "gitea", "hosting", "myai", "my3d", "studio", "create", "slicer", "push":
 		index = 2
 	}
 	return Categories()[index]

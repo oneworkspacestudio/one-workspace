@@ -213,14 +213,14 @@ Keep the Windows computer switched on while you use its apps. You can use Worksp
 
 ## Android companion
 
-Apps are organised into **General**, **Administration** and **Development**.
-New installations select General and Administration by default. Git, Hosting and My AI
-are optional Development apps; choose them in **Advanced: choose your apps**.
+Apps are organised into **General**, **Administration** and **Creative & Development**.
+New installations select General and Administration by default. Git, Hosting, My AI, My 3D, Photo Editor, My Create, My Slicer and My Push
+are optional Creative & Development apps; choose them in **Advanced: choose your apps**.
 Updates keep the apps you already selected.
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
 same MyAccounts sign-in. Download the signed APK from the
-[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.96/OneWorkspace-Android-0.1.0-preview.6.apk).
+[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.101/OneWorkspace-Android-0.1.0-preview.7.apk).
 Enter your remote Workspace address once; Chat is found automatically, or you can
 choose a separate Chat server. Your addresses and valid sign-in are remembered.
 It includes a saved app launcher and native Chat notification/background integration. Alerts require the
