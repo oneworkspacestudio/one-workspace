@@ -1,0 +1,159 @@
+{
+  "tag": "v0.3.0-preview.102",
+  "draft": false,
+  "sourceCommit": "a816cecbf6f733152bdff4890429fb00b7af1bd2",
+  "everyPublishedAssetMatchesLocal": true,
+  "anonymousPublicChannelVerified": true,
+  "assets": [
+    {
+      "name": "Actual-26.10.0-source.zip",
+      "sha256": "aeefc682921f89f49a8ce2f848e3556d4cec72b19be7148e26daadf0bdb062b0",
+      "size": 59799533
+    },
+    {
+      "name": "ANDROID-BUILD.json",
+      "sha256": "094eaa438dfde398e2dbbbf62c111df81c921a7680cfd2b214b6c19b18a1f214",
+      "size": 656
+    },
+    {
+      "name": "ANDROID-LICENSE.txt",
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+      "size": 11558
+    },
+    {
+      "name": "ANDROID-NOTICES.txt",
+      "sha256": "93d92561cf2a83fb1fea6d020486abf695091e6616e3a3cb588520fe084bbed4",
+      "size": 1061
+    },
+    {
+      "name": "ANDROID-SIGNATURE.txt",
+      "sha256": "0af5e3bcad7d74c11ff3ac9bf765e7b61222a9d32d23089c5f90980e4f3cb9bf",
+      "size": 985
+    },
+    {
+      "name": "ANDROID.md",
+      "sha256": "a92189c682e7b8882e314eafcc40f8dabc0c1b275286c58041806c17ec398894",
+      "size": 7793
+    },
+    {
+      "name": "BACKUPS.md",
+      "sha256": "70689385e63b69ff6b2b7ec7ba061c1e18f3c4f39fd64aa3242a4796137975a4",
+      "size": 8195
+    },
+    {
+      "name": "build-info.json",
+      "sha256": "fbc08bb6365648ea68fcf2841ed2a2e1c0fdf8b7687adc19ca9e7e865cad94ad",
+      "size": 417
+    },
+    {
+      "name": "bundle-verification.json",
+      "sha256": "65659d63a42fb9366b7c41bbb8258b92d0f5eef92e08615d18fe94550f16cf71",
+      "size": 153
+    },
+    {
+      "name": "catalog.json",
+      "sha256": "519f236cac59a56b16aac851d2532ce778420988108b6421967a1d68d1c2bcf5",
+      "size": 55594
+    },
+    {
+      "name": "HyperFormula-3.5.0-source.zip",
+      "sha256": "b06652e52b6594c3c160bffced73063e62e1df81e2ac5432baaebf93d7a91352",
+      "size": 2921182
+    },
+    {
+      "name": "KNOWN-LIMITATIONS.md",
+      "sha256": "0b2b5a99d14f4d45086f401dc7055a935d2dd566056eb0856c4b0201ba720d34",
+      "size": 80848
+    },
+    {
+      "name": "LICENSE.txt",
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+      "size": 11558
+    },
+    {
+      "name": "my-finance-source.zip",
+      "sha256": "facfb69fea4dd3837c9021ce1835b98603262e551403d21722d46857a1821d04",
+      "size": 486016
+    },
+    {
+      "name": "MY-SHIELD.md",
+      "sha256": "4a6c35871a8fe2df840deb7d0251cb08996932afd0b55fd1f0d8d9a918c85d8c",
+      "size": 3085
+    },
+    {
+      "name": "MY_FINANCE.md",
+      "sha256": "9696b2c7029473796e6ab883378c7b479467bed9b2c074d4974d03ac1b991171",
+      "size": 2583
+    },
+    {
+      "name": "NOTICE.txt",
+      "sha256": "ba5d1ffddbef7cfd9ff5aabab279657194dbb1deab201ca981a546237f8977bc",
+      "size": 664
+    },
+    {
+      "name": "one-workspace-source.zip",
+      "sha256": "a2b3fa6ecfa910246edd00ea2ebe1c2773dd8be7818454cd1304f4739058a66e",
+      "size": 16309974
+    },
+    {
+      "name": "OneWorkspace-Android-0.1.0-preview.8.apk",
+      "sha256": "7495e4e25b4898f5761f32c1cdf503d2d20920d7e4bcdf22cffec6bf6c4fa794",
+      "size": 13278803
+    },
+    {
+      "name": "OneWorkspace-Android-source.zip",
+      "sha256": "d4208099d12b3088d08c9be5510da0e92a2607d002193f2b52e32ab888780fe2",
+      "size": 755209
+    },
+    {
+      "name": "organization-components.json",
+      "sha256": "1ea3f8395f48325bd5c4e6ca6cb94b42ec9c6a981542d2f0205dbc8bcc5c0e17",
+      "size": 11864
+    },
+    {
+      "name": "RELEASE-STATUS.md",
+      "sha256": "0b2b5a99d14f4d45086f401dc7055a935d2dd566056eb0856c4b0201ba720d34",
+      "size": 80848
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "sha256": "76d58334561b0cf8a08f9f96c185dce0252fa23a73b627afd004896860438bd5",
+      "size": 2523
+    },
+    {
+      "name": "SIGN-IN.md",
+      "sha256": "0ebe62291defaa1d727d6615a0b40bac413f8815a6a6904e239998c437e2123b",
+      "size": 7224
+    },
+    {
+      "name": "SOURCE-MANIFEST.json",
+      "sha256": "332ea04cbf40203ba6231f5f0b9f769581b4c3ea8700a196a4228684fb6ee6a9",
+      "size": 5779
+    },
+    {
+      "name": "UPDATE-CLEANUP.md",
+      "sha256": "491742295ecdcaebf0865188152834901369cf6fb70b1a8bdb029ae2b1b4cf64",
+      "size": 4119
+    },
+    {
+      "name": "UPDATES.md",
+      "sha256": "657d73060d97d74566733465ea7e44599722696f790928b539825c60917bf68c",
+      "size": 19732
+    },
+    {
+      "name": "workspace-bundle.zip",
+      "sha256": "705b1977ea8258949b91a5a9ae3d2a7b032238a12e18f3a603e50cef50cc2c5f",
+      "size": 1215056563
+    },
+    {
+      "name": "Workspace.exe",
+      "sha256": "d6b1dda1454bde6befcadd264b01335213fc6a864be06ce4fecca4bfc0a28820",
+      "size": 17481728
+    },
+    {
+      "name": "WorkspaceSetup-windows-amd64.exe",
+      "sha256": "37d32515c9baaa1c93ecc0df89068dd29bda37b8d49fe0d43430f377aacbfaf9",
+      "size": 1228924416
+    }
+  ]
+}
