@@ -1,0 +1,15 @@
+{
+  "manager": "0.3.0-preview.101",
+  "servicesRunning": 31,
+  "navigationMatchesReleaseSource": true,
+  "creativeLabelServed": true,
+  "movedApps": [
+    "my3d",
+    "studio",
+    "create",
+    "slicer",
+    "push"
+  ],
+  "browserUITested": false,
+  "secondaryInstalled": false
+}
