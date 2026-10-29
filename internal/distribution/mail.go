@@ -205,7 +205,10 @@ func downloadMailAsset(ctx context.Context, client *http.Client, token string, a
 			resp.Body.Close()
 			return err
 		}
-		meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, expected)
+		meterCtx := operationprogress.Observe(ctx, func(e operationprogress.Event) {
+			operationprogress.Report(ctx, e.Stage, e.Detail, offset+e.Done, asset.Size, e.Unit)
+		})
+		meter := operationprogress.Bytes(meterCtx, "download", "Downloading "+asset.Name, expected)
 		n, copyErr := io.Copy(io.MultiWriter(out, meter), io.LimitReader(resp.Body, expected+1))
 		resp.Body.Close()
 		meter.Finish()
