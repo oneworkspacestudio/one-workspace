@@ -1,16 +1,25 @@
 package maintenance
 
 const progressScript = `
-let operation=null,receivedAt=0,disconnected=true;
+let operation=null,receivedAt=0,disconnected=true,lastApplyBody=null;
 const panel=document.createElement('section');panel.id='operation';panel.hidden=true;panel.setAttribute('aria-labelledby','operation-title');
 panel.innerHTML='<div class="progress-head"><h2 id="operation-title">Updating Workspace</h2><span id="step-count" class="muted"></span></div><progress id="overall" aria-label="Update stages completed"></progress><p id="current-detail" role="status" aria-live="polite"></p><progress id="meter" aria-label="Current stage progress"></progress><p id="transfer"></p><p id="timing" class="muted"></p><p id="heartbeat" role="status"></p><ol id="steps"></ol><details><summary>Activity details</summary><ol id="activity"></ol></details>';
 $('error').after(panel);
+const downloadHelp=document.createElement('section');downloadHelp.hidden=true;downloadHelp.setAttribute('aria-label','Resolve update download');
+downloadHelp.innerHTML='<h3>Let us finish downloading your update</h3><p>The download was interrupted or could not be verified. Workspace will retry automatically up to three times. If it still stops, check that the server PC has an internet connection, then retry. Your installed apps have not been replaced at this stage.</p><div class="actions"><button id="retry-download">Review updates and retry</button><button id="check-download-access" class="secondary">Check GitHub access</button></div><p class="muted">If GitHub access fails, reconnect the server PC to the internet and try again. If verification keeps failing, wait a few minutes and check for updates again. Never turn off file verification.</p>';
+panel.after(downloadHelp);
+$('retry-download').onclick=()=>{if(busy||requesting||disconnected||pending||newController)return;if(lastApplyBody){action('apply',lastApplyBody);return;}const button=$('apply');button.scrollIntoView({block:'center'});button.focus();};
+$('check-download-access').onclick=()=>action('check');
 function duration(seconds){seconds=Math.max(0,Math.round(seconds));if(seconds<60)return seconds+'s';if(seconds<3600)return Math.floor(seconds/60)+'m '+seconds%60+'s';return Math.floor(seconds/3600)+'h '+Math.floor(seconds%3600/60)+'m'}
 function bytes(n){const units=['B','KB','MB','GB','TB'];let i=0;while(n>=1024&&i<units.length-1){n/=1024;i++}return n.toFixed(i?1:0)+' '+units[i]}
 function updateProgress(p){operation=p;receivedAt=Date.now();disconnected=false;renderProgress()}
 function renderProgress(){
- const p=operation;panel.hidden=!p;$('phase').hidden=!!p;if(!p)return;
+ const p=operation;panel.hidden=!p;$('phase').hidden=!!p;if(!p){downloadHelp.hidden=true;return;}
  const running=p.status==='running',complete=p.status==='complete',failed=p.status==='failed';
+ downloadHelp.hidden=!(failed&&p.kind==='apply'&&/download|sha256/i.test(($('error').textContent||'')+' '+(p.detail||'')));
+ $('retry-download').textContent=lastApplyBody?'Retry download':'Review updates and retry';
+ $('retry-download').disabled=busy||requesting||disconnected||pending||newController;
+ $('check-download-access').disabled=busy||requesting||disconnected||pending||newController;
  const titles={check:'Checking app releases',apply:'Updating Workspace',rollback:'Restoring your backup',recover:'Recovering Workspace'};
  $('operation-title').textContent=complete?(p.kind==='check'?'Release check complete':p.kind==='apply'?'Update complete':'Installation restored'):failed?'Operation needs attention':p.recovering?'Restoring the previous installation':titles[p.kind]||'Working';
  $('operation-title').className=complete?'complete':failed?'failed':'';

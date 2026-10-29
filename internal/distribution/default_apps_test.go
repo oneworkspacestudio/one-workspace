@@ -43,7 +43,7 @@ func TestManagerUpdateAutomaticallyAddsNewDefaultsAndPreservesOptOuts(t *testing
 		}
 		for i, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social", "clips"} {
 			app, installed := target.Find(id)
-			want := !(id == "pdf" || id == "search") || excluded == nil
+			want := id != "slicer" && (!(id == "pdf" || id == "search") || excluded == nil)
 			if installed != want {
 				t.Fatalf("%s installed=%t wanted=%t", id, installed, want)
 			}
@@ -87,7 +87,7 @@ func TestOnlinePlanDiscoversSameFourNewApplications(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	for _, id := range []string{"tasks", "pdf", "monitor", "search", "slicer", "social", "clips"} {
+	for _, id := range []string{"tasks", "pdf", "monitor", "search", "social", "clips"} {
 		if _, ok := target.Find(id); !ok {
 			t.Fatal("new app missing", id)
 		}
@@ -95,7 +95,7 @@ func TestOnlinePlanDiscoversSameFourNewApplications(t *testing.T) {
 			t.Fatal("new executable not downloaded", id)
 		}
 	}
-	if len(downloads) < 29 {
-		t.Fatal(fmt.Sprintf("expected manager plus executable/notices for seven apps; got %d", len(downloads)))
+	if _, ok := target.Find("slicer"); ok { t.Fatal("optional creative app unexpectedly installed") }; if _, ok := downloads["slicer"]; ok { t.Fatal("optional creative app unexpectedly downloaded") }; if len(downloads) < 25 {
+		t.Fatal(fmt.Sprintf("expected manager plus executable/notices for six default apps; got %d", len(downloads)))
 	}
 }

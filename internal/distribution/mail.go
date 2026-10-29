@@ -127,30 +127,98 @@ func readMailManifest(data []byte, tag string) (mailManifest, error) {
 }
 
 func downloadMailAsset(ctx context.Context, client *http.Client, token string, asset Asset, path string) error {
-	meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, asset.Size)
-	req, err := request(ctx, assetEndpoint(asset, token), token)
+	out, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0600)
 	if err != nil {
 		return err
 	}
-	req.Header.Set("Accept", "application/octet-stream")
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
+	defer out.Close()
+	var last error
+	for attempt := 0; attempt < 3; attempt++ {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if attempt > 0 {
+			operationprogress.Report(ctx, "download", fmt.Sprintf("Download needs another attempt; automatically retrying %s (attempt %d of 3)", asset.Name, attempt+1), 0, asset.Size, "bytes")
+			timer := time.NewTimer(time.Duration(attempt) * time.Second)
+			select {
+			case <-ctx.Done():
+				timer.Stop()
+				return ctx.Err()
+			case <-timer.C:
+			}
+		}
+		info, err := out.Stat()
+		if err != nil {
+			return err
+		}
+		offset := info.Size()
+		if offset >= asset.Size {
+			if err := out.Truncate(0); err != nil {
+				return err
+			}
+			offset = 0
+		}
+		req, err := request(ctx, assetEndpoint(asset, token), token)
+		if err != nil {
+			return err
+		}
+		req.Header.Set("Accept", "application/octet-stream")
+		req.Header.Set("Accept-Encoding", "identity")
+		if offset > 0 {
+			req.Header.Set("Range", fmt.Sprintf("bytes=%d-", offset))
+		}
+		resp, err := client.Do(req)
+		if err != nil {
+			last = fmt.Errorf("download connection interrupted: %w", err)
+			continue
+		}
+		if resp.StatusCode == http.StatusPartialContent && offset > 0 {
+			wanted := fmt.Sprintf("bytes %d-%d/%d", offset, asset.Size-1, asset.Size)
+			if resp.Header.Get("Content-Range") != wanted {
+				resp.Body.Close()
+				return errors.New("Release server returned an invalid download range")
+			}
+		} else if resp.StatusCode == http.StatusOK {
+			if err := out.Truncate(0); err != nil {
+				resp.Body.Close()
+				return err
+			}
+			offset = 0
+		} else {
+			resp.Body.Close()
+			last = fmt.Errorf("Release download failed (HTTP %d)", resp.StatusCode)
+			if resp.StatusCode != 408 && resp.StatusCode != 429 && resp.StatusCode < 500 {
+				return last
+			}
+			continue
+		}
+		if _, err := out.Seek(offset, io.SeekStart); err != nil {
+			resp.Body.Close()
+			return err
+		}
+		meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, asset.Size-offset)
+		n, copyErr := io.Copy(io.MultiWriter(out, meter), io.LimitReader(resp.Body, asset.Size-offset+1))
+		resp.Body.Close()
+		meter.Finish()
+		if copyErr != nil || n+offset != asset.Size {
+			last = errors.New("Release download interrupted or incomplete; automatic retries exhausted")
+			continue
+		}
+		if _, err := out.Seek(0, io.SeekStart); err != nil {
+			return err
+		}
+		hash := sha256.New()
+		if _, err := io.Copy(hash, out); err != nil {
+			return err
+		}
+		if "sha256:"+hex.EncodeToString(hash.Sum(nil)) != asset.Digest {
+			last = errors.New("Release SHA256 verification failed after automatic retries; no unverified update was installed")
+			if err := out.Truncate(0); err != nil {
+				return err
+			}
+			continue
+		}
+		return out.Sync()
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("Release download failed (HTTP %d)", resp.StatusCode)
-	}
-	out, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
-	if err != nil {
-		return err
-	}
-	hash := sha256.New()
-	n, copyErr := io.Copy(io.MultiWriter(out, hash, meter), io.LimitReader(resp.Body, asset.Size+1))
-	meter.Finish()
-	closeErr := out.Close()
-	if copyErr != nil || closeErr != nil || n != asset.Size || "sha256:"+hex.EncodeToString(hash.Sum(nil)) != asset.Digest {
-		return errors.New("Release download incomplete or SHA256 verification failed")
-	}
-	return nil
+	return last
 }
