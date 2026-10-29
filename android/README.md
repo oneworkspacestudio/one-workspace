@@ -37,7 +37,7 @@ The saved launcher remains available offline; connecting or signing in for the
 first time needs access to the selected servers.
 
 The separate Chat address and Servers editor require Android preview 3 or newer.
-[Download Android preview 6](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.102/OneWorkspace-Android-0.1.0-preview.8.apk).
+[Download Android preview 6](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.103/OneWorkspace-Android-0.1.0-preview.9.apk).
 
 ## Android integration
 

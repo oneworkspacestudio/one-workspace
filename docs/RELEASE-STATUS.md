@@ -1,5 +1,10 @@
 # One Workspace release status
 
+## Preview 103: Bounded downloads across installation and repair
+
+Uses bounded 8 MB range requests for large assets with final whole-file SHA256 verification, retries and resumable transfer. Initial installation, reinstall and staged updates share this downloader. Releases include verified independent package assets so new apps and notices do not require the entire suite bundle on supporting managers. Older managers must first receive this version; this cannot retroactively change an updater already running version98. Includes signed Android9.
+
+
 ## Preview 102: Automatic download recovery
 
 Staged app updates retry interrupted transfers up to three times and resume partial downloads when supported. Corrupt files are downloaded again and SHA256 verification remains mandatory. Failed-download screens explain what to try and offer retry/review and GitHub-access check buttons. Same-tab retries preserve selections; reopened pages ask users to review first. Includes signed Android8.

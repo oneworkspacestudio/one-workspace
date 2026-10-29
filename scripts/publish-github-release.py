@@ -66,6 +66,18 @@ def public_apk(url, expected):
         raise RuntimeError('Anonymous APK download did not match the signed local APK')
 
 
+def prepare_package_assets(out):
+    catalog = json.loads((out / 'catalog.json').read_text(encoding='utf-8'))
+    with zipfile.ZipFile(out / 'workspace-bundle.zip') as bundle:
+        for key, package in catalog['packages'].items():
+            if not re.fullmatch(r'[A-Za-z0-9_.-]{1,180}', key):
+                raise RuntimeError('Unsafe package asset identifier')
+            dest = out / ('workspace-package-' + key + '.bin')
+            with bundle.open(package['file']) as src, dest.open('wb') as target:
+                shutil.copyfileobj(src, target)
+            if dest.stat().st_size != package['size'] or sha(dest) != 'sha256:' + package['sha256']:
+                raise RuntimeError('Independent package checksum mismatch: ' + key)
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tag', required=True)
@@ -134,6 +146,8 @@ def main():
     (out / 'ANDROID-SIGNATURE.txt').write_text(signature + '\n', encoding='utf-8')
     manifest = {'schema': 1, 'applicationId': policy['applicationId'], 'versionName': version, 'versionCode': code, 'sourceCommit': source, 'androidTree': tree, 'apk': apk.name, 'apkSHA256': sha(apk)[7:], 'certificateSHA256': certs[0], 'builtLocally': True, 'githubActionsUsed': False, 'checks': ['signature', 'package/version', 'embedded-source-provenance', 'embedded-licenses']}
     (out / 'ANDROID-BUILD.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+    if not args.tag.startswith('android-'):
+        prepare_package_assets(out)
     files = sorted(p for p in out.iterdir() if p.is_file() and p.name not in ['SHA256SUMS', 'SHA256SUMS.txt'])
     for path in files:
         if path.suffix.lower() in ['.p12', '.jks', '.keystore', '.dpapi', '.db', '.log'] or path.name.startswith('.'):

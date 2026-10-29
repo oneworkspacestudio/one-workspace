@@ -576,6 +576,9 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 					d.Member = ""
 				}
 			}
+			if a, ok := releaseAsset(suiteRelease, "workspace-package-"+id+".bin"); ok && validNamedAsset(a, Repository, suiteRelease.Tag, a.Name, 2<<30) && a.Digest == "sha256:"+p.SHA256 && a.Size == p.Size {
+				d = UpdateDownload{Asset: a, Repository: Repository, Tag: suiteRelease.Tag}
+			}
 			ch.Downloads[id] = d
 		}
 		// An explicit component contract also supplies smaller download assets
@@ -1016,6 +1019,9 @@ func StartupDefaultPlan(ctx context.Context, current catalog.Catalog) (UpdatePla
 		ch.Available = true
 		for id, p := range ch.Packages {
 			ch.Downloads[id] = UpdateDownload{Asset: bundle, Repository: Repository, Tag: release.Tag, Member: p.File}
+			if a, ok := releaseAsset(release, "workspace-package-"+id+".bin"); ok && validNamedAsset(a, Repository, release.Tag, a.Name, 2<<30) && a.Digest == "sha256:"+p.SHA256 && a.Size == p.Size {
+				ch.Downloads[id] = UpdateDownload{Asset: a, Repository: Repository, Tag: release.Tag}
+			}
 		}
 		plan.Choices = append(plan.Choices, ch)
 	}
@@ -1058,7 +1064,11 @@ func StageUpdateFiles(ctx context.Context, target catalog.Catalog, sources map[s
 		report(label)
 		archivePath := filepath.Join(dir, "download-"+platform.Token())
 		transferCtx := operationprogress.Observe(ctx, func(e operationprogress.Event) {
-			operationprogress.Report(ctx, e.Stage, label, e.Done, e.Total, e.Unit)
+			detail := label
+			if strings.Contains(e.Detail, "automatically retrying") {
+				detail = e.Detail
+			}
+			operationprogress.Report(ctx, e.Stage, detail, e.Done, e.Total, e.Unit)
 		})
 		if e := downloadMailAsset(transferCtx, h, token, d.Asset, archivePath); e != nil {
 			return e

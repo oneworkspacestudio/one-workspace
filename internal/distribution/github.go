@@ -4,7 +4,6 @@ package distribution
 import (
 	"archive/zip"
 	"context"
-	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -134,35 +133,8 @@ func Latest(ctx context.Context, progress func(string), temporaryRoots ...string
 		}
 	}()
 	path := filepath.Join(dir, bundleName)
-	file, err := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
-	if err != nil {
-		return nil, err
-	}
-	downloadCtx, downloadCancel := context.WithTimeout(ctx, 10*time.Minute)
-	defer downloadCancel()
-	// Public downloads avoid API quotas; authenticated private releases use the API.
-	req, err := request(downloadCtx, assetEndpoint(asset, token), token)
-	if err != nil {
-		file.Close()
-		return nil, err
-	}
-	req.Header.Set("Accept", "application/octet-stream")
-	response, err := httpClient.Do(req)
-	if err != nil {
-		file.Close()
-		return nil, errors.New("Workspace download failed. Check your connection and retry; no old bundle was installed")
-	}
-	defer response.Body.Close()
-	if response.StatusCode != 200 {
-		file.Close()
-		return nil, fmt.Errorf("Workspace download failed (HTTP %d). Check GitHub access and retry", response.StatusCode)
-	}
-	hash := sha256.New()
-	counter := &downloadProgress{total: asset.Size, tag: release.Tag, report: progress}
-	n, err := io.Copy(io.MultiWriter(file, hash, counter), io.LimitReader(response.Body, asset.Size+1))
-	closeErr := file.Close()
-	if err != nil || closeErr != nil || n != asset.Size || "sha256:"+hex.EncodeToString(hash.Sum(nil)) != asset.Digest {
-		return nil, errors.New("Workspace download was incomplete or failed SHA256 verification. Retry installation; no old bundle was installed")
+	if err := downloadMailAsset(ctx, httpClient, token, asset, path); err != nil {
+		return nil, fmt.Errorf("Workspace bundle download: %w", err)
 	}
 	progress("Verifying the latest application bundle")
 	archive, err := zip.OpenReader(path)

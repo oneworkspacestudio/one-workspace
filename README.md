@@ -220,7 +220,7 @@ Updates keep the apps you already selected.
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
 same MyAccounts sign-in. Download the signed APK from the
-[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.102/OneWorkspace-Android-0.1.0-preview.8.apk).
+[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.103/OneWorkspace-Android-0.1.0-preview.9.apk).
 Enter your remote Workspace address once; Chat is found automatically, or you can
 choose a separate Chat server. Your addresses and valid sign-in are remembered.
 It includes a saved app launcher and native Chat notification/background integration. Alerts require the

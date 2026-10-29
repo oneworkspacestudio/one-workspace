@@ -2,11 +2,8 @@ package distribution
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -65,34 +62,13 @@ func DownloadInstaller(ctx context.Context, i InstallerRelease, dir string, repo
 		return "", errors.New("Installer release is not verified")
 	}
 	a := i.Download.Asset
-	req, e := request(ctx, assetEndpoint(a, githubToken(ctx)), githubToken(ctx))
-	if e != nil {
-		return "", e
-	}
-	req.Header.Set("Accept", "application/octet-stream")
-	r, e := client().Do(req)
-	if e != nil {
-		return "", e
-	}
-	defer r.Body.Close()
-	if r.StatusCode != 200 {
-		return "", errors.New("Workspace installer download failed; your installation has not been changed")
-	}
 	path := filepath.Join(dir, installerName)
-	f, e := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
-	if e != nil {
-		return "", e
+	if report != nil {
+		report("Downloading the verified Workspace installer")
 	}
-	h := sha256.New()
-	counter := &installerProgress{ctx: ctx, total: a.Size, report: report}
-	n, e := io.Copy(io.MultiWriter(f, h, counter), io.LimitReader(r.Body, a.Size+1))
-	if e == nil {
-		e = f.Sync()
-	}
-	closeErr := f.Close()
-	if e != nil || closeErr != nil || n != a.Size || "sha256:"+hex.EncodeToString(h.Sum(nil)) != a.Digest {
+	if err := downloadMailAsset(ctx, client(), githubToken(ctx), a, path); err != nil {
 		os.Remove(path)
-		return "", errors.New("Workspace installer failed size or SHA256 verification; your installation has not been changed")
+		return "", err
 	}
 	return path, nil
 }

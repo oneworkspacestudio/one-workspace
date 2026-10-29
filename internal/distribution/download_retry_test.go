@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func TestDownloadResumesInterruptedResponse(t *testing.T) {
@@ -60,5 +61,62 @@ func TestDownloadRetriesCorruptResponse(t *testing.T) {
 	}
 	if calls != 2 {
 		t.Fatal(calls)
+	}
+}
+
+func TestLargeDownloadUsesBoundedRanges(t *testing.T) {
+	data := make([]byte, 10<<20)
+	for i := range data {
+		data[i] = byte(i)
+	}
+	sum := sha256.Sum256(data)
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		var start, end int
+		if _, err := fmt.Sscanf(r.Header.Get("Range"), "bytes=%d-%d", &start, &end); err != nil || end-start+1 > 8<<20 || start < 0 || end >= len(data) {
+			t.Error("invalid bounded range", r.Header.Get("Range"))
+			w.WriteHeader(400)
+			return
+		}
+		w.Header().Set("Content-Range", fmt.Sprintf("bytes %d-%d/%d", start, end, len(data)))
+		w.WriteHeader(206)
+		w.Write(data[start : end+1])
+	}))
+	defer server.Close()
+	if err := downloadMailAsset(context.Background(), server.Client(), "", Asset{Name: "large", URL: server.URL, Size: int64(len(data)), Digest: "sha256:" + hex.EncodeToString(sum[:])}, filepath.Join(t.TempDir(), "asset")); err != nil {
+		t.Fatal(err)
+	}
+	if calls != 2 {
+		t.Fatal("expected two chunks", calls)
+	}
+}
+
+func TestLargeDownloadExceedsSingleRequestTimeoutSafely(t *testing.T) {
+	data := make([]byte, 10<<20)
+	for i := range data {
+		data[i] = byte(i)
+	}
+	sum := sha256.Sum256(data)
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		time.Sleep(300 * time.Millisecond)
+		var start, end int
+		if _, err := fmt.Sscanf(r.Header.Get("Range"), "bytes=%d-%d", &start, &end); err != nil || end-start+1 > 8<<20 || start < 0 || end >= len(data) {
+			t.Error("invalid bounded range", r.Header.Get("Range"))
+			w.WriteHeader(400)
+			return
+		}
+		w.Header().Set("Content-Range", fmt.Sprintf("bytes %d-%d/%d", start, end, len(data)))
+		w.WriteHeader(206)
+		w.Write(data[start : end+1])
+	}))
+	defer server.Close()
+	if err := downloadMailAsset(context.Background(), &http.Client{Timeout: 500 * time.Millisecond}, "", Asset{Name: "large", URL: server.URL, Size: int64(len(data)), Digest: "sha256:" + hex.EncodeToString(sum[:])}, filepath.Join(t.TempDir(), "asset")); err != nil {
+		t.Fatal(err)
+	}
+	if calls != 2 {
+		t.Fatal("expected two chunks", calls)
 	}
 }

@@ -164,7 +164,14 @@ func downloadMailAsset(ctx context.Context, client *http.Client, token string, a
 		}
 		req.Header.Set("Accept", "application/octet-stream")
 		req.Header.Set("Accept-Encoding", "identity")
-		if offset > 0 {
+		end := asset.Size - 1
+		if end-offset >= 8<<20 {
+			end = offset + (8 << 20) - 1
+		}
+		expected := asset.Size - offset
+		if asset.Size > 8<<20 {
+			req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", offset, end))
+		} else if offset > 0 {
 			req.Header.Set("Range", fmt.Sprintf("bytes=%d-", offset))
 		}
 		resp, err := client.Do(req)
@@ -172,18 +179,20 @@ func downloadMailAsset(ctx context.Context, client *http.Client, token string, a
 			last = fmt.Errorf("download connection interrupted: %w", err)
 			continue
 		}
-		if resp.StatusCode == http.StatusPartialContent && offset > 0 {
-			wanted := fmt.Sprintf("bytes %d-%d/%d", offset, asset.Size-1, asset.Size)
+		if resp.StatusCode == http.StatusPartialContent && (offset > 0 || asset.Size > 8<<20) {
+			wanted := fmt.Sprintf("bytes %d-%d/%d", offset, end, asset.Size)
 			if resp.Header.Get("Content-Range") != wanted {
 				resp.Body.Close()
 				return errors.New("Release server returned an invalid download range")
 			}
+			expected = end - offset + 1
 		} else if resp.StatusCode == http.StatusOK {
 			if err := out.Truncate(0); err != nil {
 				resp.Body.Close()
 				return err
 			}
 			offset = 0
+			expected = asset.Size
 		} else {
 			resp.Body.Close()
 			last = fmt.Errorf("Release download failed (HTTP %d)", resp.StatusCode)
@@ -196,12 +205,16 @@ func downloadMailAsset(ctx context.Context, client *http.Client, token string, a
 			resp.Body.Close()
 			return err
 		}
-		meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, asset.Size-offset)
-		n, copyErr := io.Copy(io.MultiWriter(out, meter), io.LimitReader(resp.Body, asset.Size-offset+1))
+		meter := operationprogress.Bytes(ctx, "download", "Downloading "+asset.Name, expected)
+		n, copyErr := io.Copy(io.MultiWriter(out, meter), io.LimitReader(resp.Body, expected+1))
 		resp.Body.Close()
 		meter.Finish()
-		if copyErr != nil || n+offset != asset.Size {
+		if copyErr != nil || n != expected {
 			last = errors.New("Release download interrupted or incomplete; automatic retries exhausted")
+			continue
+		}
+		if offset+n < asset.Size {
+			attempt = -1
 			continue
 		}
 		if _, err := out.Seek(0, io.SeekStart); err != nil {
