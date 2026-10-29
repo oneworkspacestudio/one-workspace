@@ -53,3 +53,35 @@ Forms2 per its history. Inspect each actual state before protected installation.
 Remote Chrome DESKTOP-Workstation still waits for the user's PIN entry.
 Stopped synthetic Workspace4 and shipping Finance services; removed only stopped
 extracted engines and verified duplicate release cache. Evidence remains on I/source.
+
+## Final release and primary delivery,29OctoberUTC
+
+Rebuilt frozen effdc0e with Forms2 and both protected-update fixes. All175 bundle
+payloads and unrelated prior candidate app contracts/packages verified; Finance1
+EXE/runtime match its public release. Published Workspace v0.3.0-preview.100 via
+required signed Android publisher. Signed Android6 SHA6adc13fa722b4aea9fdf3cbfb53c84705b09284b3ce661d4a89c4dedc2415b63.
+All30 uploaded assets size/SHA verified, anonymous APK download and exact public
+raw-main index verified. Publisher pushed channel7ba2958. Actions stay disabled.
+Release/source/preferred-source/licence/build/acceptance assets complete; published
+bytes immutable. Old unpublished draft427302813 was removed before replacement.
+
+Primary normal protected96→100 offline update completed from those exact bytes.
+1.47GB recovery verified, newest retained; all31 services healthy. All30 prior
+app contracts,143 prior package records checked/138 unselected package bytes,
+all existing settings/DPAPI identity/hosting/client credentials retained. Adds
+Finance1 and Forms2 through default General app policy. Blue icon bytes served
+correctly, native Finance engine/OneAccount configured, anonymous ledger denied,
+Forms readiness passes. Existing signed-in Chrome reaches live HTTPS Finance
+welcome/native Actual entry with no second password; no budget created or bank
+accessed. Startup setting remains unchanged (false). Anonymous public updater now
+reports100/Finance1/Forms2 current. Installed candidate/manager bytes reconciled
+against published assets. Sanitized receipts docs/evidence/finance-20261028/.
+
+Removed own C:/Projects/.cache/my-finance-20261028 after process/reparse/source-copy
+checks; all synthetic preview services stopped, artifacts/source retained on I.
+Owner recovery/data never treated as disposable. App evidence/docs pushed separately.
+User deferred DESKTOP-Workstation and requested local only for now: its own remote
+tab still needs PIN; connected tab belongs to another chat. Never claim both
+installed. Next only secondary protected delivery after access, preserving its
+actual state (last Forms98/Forms2). No official provider sandbox/live, headless
+bank sync, clean-host/reboot/power-loss qualification. No primary reinstall needed.

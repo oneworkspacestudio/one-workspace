@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "version": "0.3.0-preview.100",
+  "apps": 32,
+  "packages": 175,
+  "allBundlePayloadsMatch": true,
+  "financeExecutableMatchesRelease": true,
+  "runtimeContainsNoUserStores": true,
+  "sourceCommit": "effdc0e7bd8acca50dad0f7371aa5c6e2099f5ae",
+  "unrelatedCandidateAppContractsAndPackagesRetained": true,
+  "formsVersion": "0.1.0-preview.2",
+  "ownerInstallationTested": false
+}
