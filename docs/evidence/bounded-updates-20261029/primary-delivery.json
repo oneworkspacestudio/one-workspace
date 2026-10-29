@@ -1,0 +1,14 @@
+{
+  "rebootAcceptance": false,
+  "manager": "0.3.0-preview.103",
+  "allServicesRunning": 31,
+  "ownerSettingsAndCredentialsRetained": true,
+  "existingAppsCompared": 32,
+  "activeUpdate": false,
+  "previous": "0.3.0-preview.102",
+  "physicalPhoneAcceptance": false,
+  "schema": 1,
+  "unselectedAppContractsAndExecutableBytesRetained": true,
+  "categoryPolicy": "general+administration default; development optional",
+  "normalProtectedWorkspaceOnlyUpdate": true
+}

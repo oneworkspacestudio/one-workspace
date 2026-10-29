@@ -313,3 +313,7 @@ status. A lost response does not resend the install, reinstall or restore reques
 If the server PC or its network stays offline, restore its connection first;
 the browser cannot restart an unreachable PC. Refresh an older open Updates tab
 after installing the new manager to load the current controller.
+
+## If an older updater keeps failing during download
+
+On the computer hosting Workspace, download the latest installer from the GitHub release using your normal browser. Run it and select your existing Workspace folder, then choose the reinstall option that saves a recovery copy. This replaces the older updater while retaining your installation. Do not create a second installation to repair the first one. Version103 and later use small, resumable download requests for installation, repair and updates. Supporting releases also offer individual verified package files so adding an app does not require downloading the whole suite. Internet outages can still delay an update; unverified files are never installed.
