@@ -85,3 +85,11 @@ tab still needs PIN; connected tab belongs to another chat. Never claim both
 installed. Next only secondary protected delivery after access, preserving its
 actual state (last Forms98/Forms2). No official provider sandbox/live, headless
 bank sync, clean-host/reboot/power-loss qualification. No primary reinstall needed.
+
+29October mobile follow-up: public My Finance v0.1.0-preview.2 adds hamburger
+navigation, compact header, destination views and consistent mobile controls/forms.
+Sourceb2f94cf; all10 asset hashes verified; public channel promotedc0b1aa2.
+Normal local Finance-only1→2 update passed,382MB verified recovery retained;
+other apps/contracts/executables and existing credentials preserved, all services
+healthy. Live CSS matches source. App evidence/history in my-finance repository.
+Suite100 remains immutable; secondary delivery still deferred by user.
