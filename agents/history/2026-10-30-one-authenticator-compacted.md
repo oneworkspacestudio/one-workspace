@@ -42,3 +42,19 @@ must be hash-verified before publishing. Then public channel/anonymous checks an
 supported backed owner update. Preserve existing public108 recovery and credentials;
 no manual standalone shortcut is delivery. Other installed PCs/physical phones
 are not claimed. Update this handoff with exact releases and per-target receipts.
+
+Final component releases are public: Authenticator preview2 (3586737) supersedes
+immutable preview1 with manual-save camera cleanup; provider preview-20261030.1
+(926137b). Exact QR/manual camera shutdown, offline lifecycle and real SW1→2
+upgrade preserving encrypted vault passed. Full35-app/313-package build passed.
+Actual fresh managed setup proved old portal-cookie denial after MFA activation,
+password-only denial and real OTP SSO access to Drive/Docs/Photos.
+
+First upgrade attempt correctly refused before mutation: fixed group registered
+but updatePackageOwner lacked authenticator namespace. New focused regression
+reproduced package-missing failure before fix, then complete catalog/distribution/
+suite tests passed after registering authenticator and authenticator-* ownership.
+Rebuild and rerun actual protected upgrade/rollback before suite publication.
+The first fresh harness also assumed built-in org; actual managed myaccounts org
+is now read from the signed-in synthetic profile. No product workaround or owner
+fixture was used. Existing owner108 has preexisting Cinema failed readiness.

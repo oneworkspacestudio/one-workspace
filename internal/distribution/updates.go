@@ -289,6 +289,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "authenticator" || strings.HasPrefix(id, "authenticator-") {
+		return "authenticator"
+	}
 	if id == "tickets" || strings.HasPrefix(id, "tickets-") {
 		return "tickets"
 	}
