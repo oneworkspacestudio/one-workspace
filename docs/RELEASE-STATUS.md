@@ -1,5 +1,21 @@
 # One Workspace release status
 
+## Preview 105: My Tickets
+
+Adds My Tickets to General and the default installation, with MyAccounts sign-in,
+project permissions, issues, boards, sprints, dashboards and protected attachments.
+New-app upgrades preserve previous selections, apps and credentials. Installer
+integration5 and minimum manager105 protect the new native storage and identity
+contract. SDK backups can include consistent application database snapshots and
+verify declared SQLite databases before restore. Includes signed Android10.
+
+My Tickets is an evaluation preview. Its public acceptance report distinguishes
+synthetic tests from live service checks and records limitations including remote
+Drive API storage, durable webhook retry queues, scheduled due-date automations,
+Windows service/reboot and clean-VM testing. Remote desktop stays off unless the
+owner enables it. Existing application payloads are retained from verified public
+component releases.
+
 ## Preview 104: Managed My Remote delivery
 
 Requires the104 installer (bundle integration4) so older controllers cannot drop required sidecars. Adds My Remote5 through normal setup, MyAccounts sign-in, app navigation and the protected updater. Runtime payloads are verified and supervised; desktop access stays off until the owner enables it with a PIN. New default-app discovery adds Remote to earlier installations while retaining existing selections and unrelated app versions. The build validates all33 managed entries against an explicit inventory. App creation/maintenance requirements are in APP-LIFECYCLE.md. Includes signed Android10.

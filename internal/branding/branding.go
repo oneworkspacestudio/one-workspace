@@ -75,6 +75,7 @@ func Icon(app string) string {
 		"forms":   "my_forms",
 		"finance": "my_finance",
 		"remote":  "my_remote",
+		"tickets": "my_tickets",
 		"shield":  "my_shield",
 		"push":    "my_push",
 		"backups": "backups", "calendar": "my_calendar", "contacts": "my_contacts", "drive": "my_drive", "docs": "my_office", "office": "my_office",

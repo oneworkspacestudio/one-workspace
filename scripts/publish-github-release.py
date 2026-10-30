@@ -67,7 +67,7 @@ def public_apk(url, expected):
 
 
 def validate_managed_catalog(catalog):
-    if catalog.get('installerIntegration') != 4:
+    if catalog.get('installerIntegration') != 5:
         raise RuntimeError('Use the current installer contract for complete app-owned runtimes')
     registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text(encoding='utf-8'))['apps']
     apps = {a['id']: a for a in catalog['apps']}
@@ -158,6 +158,9 @@ def main():
         for name in ['assets/licenses/APACHE-2.0.txt', 'assets/licenses/THIRD-PARTY-NOTICES.txt']:
             archive.getinfo(name)
     if not args.tag.startswith('android-'):
+        build_metadata = out / 'managed-build.json'
+        if build_metadata.exists() and json.loads(build_metadata.read_text()).get('candidate'):
+            raise RuntimeError('Candidate acceptance builds cannot be published; rebuild from the published component pins')
         for name in ['WorkspaceSetup-windows-amd64.exe', 'Workspace.exe', 'catalog.json', 'workspace-bundle.zip']:
             if not (out / name).is_file():
                 raise RuntimeError('Workspace release is missing ' + name)

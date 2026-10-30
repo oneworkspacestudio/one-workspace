@@ -243,5 +243,12 @@
     "name": "My Remote",
     "description": "Access this PC through Workspace with owner-approved desktop sharing.",
     "url": "https://github.com/oneworkspacestudio/my-remote"
+  },
+  {
+    "id": "tickets",
+    "icon": "my_tickets",
+    "name": "My Tickets",
+    "description": "Plan projects, track issues and follow team progress.",
+    "url": "https://github.com/oneworkspacestudio/my-tickets"
   }
 ]

@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 4){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 5){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
 $required=@($registry.apps | ForEach-Object {$_.id})
 foreach($id in $required){if(@($cat.apps|Where-Object id -CEQ $id).Count -ne 1){throw ('Organization app missing or duplicated: '+$id)}}
@@ -28,7 +28,7 @@ $hosting=$cat.apps|Where-Object id -eq 'hosting'
 $hostingArgs=@('--data','${DATA}/my-hosting','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/hosting','--no-browser')
 if($cat.packages.hosting.file -cne 'MyHosting.exe' -or -not $cat.packages.'hosting-LICENSE' -or -not $cat.packages.'hosting-NOTICE' -or -not $cat.packages.'hosting-THIRD-PARTY-LICENSES.txt' -or -not $cat.packages.'hosting-compatibility.json'){throw 'My Hosting executable, attribution or integration contract missing'}
 if(-not $hosting.oidc -or $hosting.callback -cne '/hosting/auth/callback' -or $hosting.route -cne '/hosting' -or -not $hosting.stripPrefix -or @($hosting.depends).Count -ne 1 -or $hosting.depends[0] -cne 'accounts' -or ($hosting.args|ConvertTo-Json -Compress) -cne ($hostingArgs|ConvertTo-Json -Compress)){throw 'My Hosting managed authentication, data or launch contract is incorrect'}
-foreach($entry in @(@{id='remote';exe='MyRemote.exe';port=9025},@{id='finance';exe='MyFinance.exe';port=9024},@{id='shield';exe='MyShield.exe';port=9022},@{id='push';exe='MyPush.exe';port=9021},@{id='my3d';exe='My3D.exe';port=9018},@{id='create';exe='MyCreate.exe';port=9017},@{id='maps';exe='Maps.exe';port=9015},@{id='meet';exe='Meet.exe';port=9016},@{id='clips';exe='MyClips.exe';port=9014},@{id='tasks';exe='MyTasks.exe';port=9008},@{id='pdf';exe='MyPDF.exe';port=9009},@{id='monitor';exe='MyMonitor.exe';port=9010},@{id='search';exe='MySearch.exe';port=9011},@{id='slicer';exe='MySlicer.exe';port=9012},@{id='social';exe='MySocial.exe';port=9013})){
+foreach($entry in @(@{id='tickets';exe='MyTickets.exe';port=9026},@{id='remote';exe='MyRemote.exe';port=9025},@{id='finance';exe='MyFinance.exe';port=9024},@{id='shield';exe='MyShield.exe';port=9022},@{id='push';exe='MyPush.exe';port=9021},@{id='my3d';exe='My3D.exe';port=9018},@{id='create';exe='MyCreate.exe';port=9017},@{id='maps';exe='Maps.exe';port=9015},@{id='meet';exe='Meet.exe';port=9016},@{id='clips';exe='MyClips.exe';port=9014},@{id='tasks';exe='MyTasks.exe';port=9008},@{id='pdf';exe='MyPDF.exe';port=9009},@{id='monitor';exe='MyMonitor.exe';port=9010},@{id='search';exe='MySearch.exe';port=9011},@{id='slicer';exe='MySlicer.exe';port=9012},@{id='social';exe='MySocial.exe';port=9013})){
  $app=$cat.apps|Where-Object id -CEQ $entry.id
  $expected=@('--data',('${DATA}/'+$entry.id),'--listen','127.0.0.1:${PORT}','--origin',('${ORIGIN}/'+$entry.id),'--no-browser')
  if($cat.packages.($entry.id).file -cne $entry.exe -or -not $app.oidc -or $app.route -cne ('/'+$entry.id) -or $app.callback -cne ('/'+$entry.id+'/auth/callback') -or -not $app.stripPrefix -or $app.port -ne $entry.port -or ($app.args|ConvertTo-Json -Compress) -cne ($expected|ConvertTo-Json -Compress)){throw ('Invalid four-app launch or identity contract: '+$entry.id)}

@@ -1,13 +1,14 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.104',
+ [string]$Version='0.3.0-preview.105',
  [string]$Out='',
  [string]$Cache='',
  [string]$SeedArchive='',
  [string]$MyPushPackage='',
  [string]$MyFormsPackage='',
  [string]$MyShieldPackage='',
- [string]$MyFinancePackage=''
+ [string]$MyFinancePackage='',
+ [string]$MyTicketsCandidate=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -18,6 +19,7 @@ if($lock.managedSeed){
  if(-not $Out){$Out=Join-Path $root 'dist'}
  $buildArgs=@((Join-Path $PSScriptRoot 'build-managed-seed.py'),'--go',$Go,'--version',$Version,'--cache',$Cache,'--out',$Out)
  if($SeedArchive){$buildArgs+=@('--seed-archive',$SeedArchive)}
+ if($MyTicketsCandidate){$buildArgs+=@('--tickets-candidate',$MyTicketsCandidate)}
  & python @buildArgs
  if($LASTEXITCODE -ne 0){throw 'Managed organization build failed'}
  & (Join-Path $PSScriptRoot 'check-org-catalog.ps1') -Catalog (Join-Path $Out 'catalog.json')

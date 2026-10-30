@@ -2,6 +2,26 @@
 import hashlib,json
 from pathlib import Path
 
+def tickets_component(root):
+ root=Path(root).resolve()
+ c=json.loads((root/'compatibility.json').read_text(encoding='utf-8-sig'))
+ assert c['schema']==1 and c['id']=='tickets' and c['route']=='/tickets' and c['oidc']
+ assert c['workspaceInstallerIntegration']==5 and c['minimumWorkspaceVersion']=='0.3.0-preview.105'
+ assert c['singleExecutable'] is True and c['capabilities']==['native-tickets-v1']
+ inputs={}
+ for p in sorted(root.rglob('*')):
+  if not p.is_file():continue
+  rel=p.relative_to(root).as_posix()
+  if rel=='MyTickets.exe':key,dest='tickets',rel
+  elif rel.startswith('licenses/'):key,dest='tickets-license-'+hashlib.sha256(rel.encode()).hexdigest()[:16],'licenses/MyTickets/'+rel[9:]
+  elif rel in ['LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt']:key,dest='tickets-'+rel,'licenses/MyTickets-'+rel
+  elif rel in ['compatibility.json','manifest.json']:key,dest='tickets-'+('contract' if rel=='compatibility.json' else 'manifest'),'docs/MyTickets/'+rel
+  else:raise ValueError('Unexpected managed Tickets package member '+rel)
+  inputs[key]={'source':str(p),'file':dest}
+ assert all(k in inputs for k in ['tickets','tickets-contract','tickets-manifest','tickets-LICENSE'])
+ app={'id':'tickets','name':'My Tickets','description':'Plan projects, track issues and follow team progress','version':c['version'],'kind':'process','package':'tickets','executable':'MyTickets.exe','port':9026,'route':'/tickets','stripPrefix':True,'health':'/readyz','depends':['accounts'],'oidc':True,'callback':'/tickets/auth/callback','args':['--data','${DATA}/tickets','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/tickets','--no-browser'],'source':'https://github.com/oneworkspacestudio/my-tickets/releases/tag/v'+c['version']}
+ return {'app':app,'inputs':inputs}
+
 def remote_component(root):
  root=Path(root).resolve()
  c=json.loads((root/'compatibility.json').read_text(encoding='utf-8-sig'))

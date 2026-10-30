@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net"
 	"net/http"
@@ -16,10 +17,12 @@ import (
 )
 
 func foundationApp(id string) bool {
-	if id == "remote" || id == "push" || id == "shield" || id == "forms" || id == "finance" {
-		return true
+	for _, app := range catalog.ManagedApps() {
+		if app.ID == id {
+			return app.Foundation
+		}
 	}
-	return id == "cinema" || id == "myai" || id == "my3d" || id == "create" || id == "maps" || id == "meet" || id == "clips" || id == "social" || id == "slicer" || id == "tasks" || id == "pdf" || id == "monitor" || id == "search"
+	return false
 }
 func monitorCapability(secret string) string {
 	if secret == "" {

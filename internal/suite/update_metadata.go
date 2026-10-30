@@ -44,6 +44,7 @@ var preservedUpdateDataV1 = []string{
 	"maps/tiles", "maps/offline", "maps/cache", "maps/downloads", "meet/recordings", "meet/engine",
 	"create/uploads", "create/outputs", "create/assets", "create/cache", "my3d/models", "my3d/projects", "my3d/outputs", "my3d/cache",
 	"pdf/uploads", "pdf/outputs", "pdf/cache", "search/cache", "monitor/logs",
+	"tickets/core/attachments", "tickets/tmp",
 }
 
 func preservedUpdateData(path string) bool {
@@ -155,7 +156,7 @@ func validateUpdateMetadata(c Config, p *UpdateMetadataPolicy) error {
 }
 
 func knownUpdateStorageProfile(id string) bool {
-	if id == "finance" || id == "remote" {
+	if id == "finance" || id == "remote" || id == "tickets" {
 		return true
 	}
 	switch id {

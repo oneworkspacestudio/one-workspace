@@ -35,6 +35,7 @@ var suiteSignIns = []appSignIn{
 	{"clips", "My Clips", "/clips", "/api/me", "/clips/auth/login", "/clips/auth/logout", []string{"clips_session"}},
 	{"social", "My Social", "/social", "/api/me", "/social/auth/login", "/social/auth/logout", []string{"social_session"}},
 	{"slicer", "My Slicer", "/slicer", "/api/me", "/slicer/auth/login", "/slicer/auth/logout", []string{"slicer_session"}},
+	{"tickets", "My Tickets", "/tickets", "/api/me", "/tickets/auth/login", "/tickets/auth/logout", []string{"tickets_session"}},
 	{"tasks", "My Tasks", "/tasks", "/api/me", "/tasks/auth/login", "/tasks/auth/logout", []string{"tasks_session"}},
 	{"pdf", "My PDF", "/pdf", "/api/me", "/pdf/auth/login", "/pdf/auth/logout", []string{"pdf_session"}},
 	{"monitor", "My Monitor", "/monitor", "/api/me", "/monitor/auth/login", "/monitor/auth/logout", []string{"monitor_session"}},

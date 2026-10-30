@@ -91,6 +91,7 @@ type updateGroup struct {
 
 var updateGroups = []updateGroup{
 	{"remote", "My Remote", "my-remote", []string{"remote"}},
+	{"tickets", "My Tickets", "my-tickets", []string{"tickets"}},
 	{"finance", "My Finance", "my-finance", []string{"finance"}},
 	{"shield", "My Shield", "my-shield", []string{"shield"}},
 	{"forms", "My Forms", "my-forms", []string{"forms"}},
@@ -287,6 +288,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "tickets" || strings.HasPrefix(id, "tickets-") {
+		return "tickets"
+	}
 	if id == "remote" || strings.HasPrefix(id, "remote-") {
 		return "remote"
 	}

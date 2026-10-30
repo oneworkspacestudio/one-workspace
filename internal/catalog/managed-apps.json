@@ -322,6 +322,16 @@
       "recovery": "app"
     },
     {
+      "id": "tickets",
+      "name": "My Tickets",
+      "route": "/tickets",
+      "repository": "oneworkspacestudio/my-tickets",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "tickets",
+      "recovery": "app"
+    },
+    {
       "id": "remote",
       "name": "My Remote",
       "route": "/remote",

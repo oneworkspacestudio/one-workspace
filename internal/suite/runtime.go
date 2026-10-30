@@ -327,6 +327,9 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 		if e := ensureSocialDriveSource(rt.Config); e != nil {
 			return e
 		}
+		if e := ensureTicketsDriveSource(rt.Config); e != nil {
+			return e
+		}
 		if e := ensureFormsDriveSource(rt.Config); e != nil {
 			return e
 		}

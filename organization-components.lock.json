@@ -202,5 +202,11 @@
     "tag": "v0.1.0-preview.5",
     "asset": "my-remote-0.1.0-preview.5-windows-amd64.zip",
     "sha256": "7056c5f9b47b111d0b6a71f60d066c9c36b6e1ca80ed992b8e0bde8fea3ce317"
+  },
+  "myTickets": {
+    "repository": "oneworkspacestudio/my-tickets",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-tickets-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "770b37f590caa23c6d1a732156658556fd9f080b25e7819d6fe6a7fc3a11e536"
   }
 }
