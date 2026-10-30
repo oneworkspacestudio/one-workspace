@@ -6,6 +6,7 @@ and contracts are preserved exactly; the complete managed registry is validated.
 import argparse,hashlib,json,os,shutil,subprocess,tempfile,urllib.request,zipfile
 from pathlib import Path
 from managed_component import remote_component, tickets_component
+from authenticator_component import authenticator_component
 
 ROOT=Path(__file__).resolve().parents[1]
 def sha(p):
@@ -30,7 +31,7 @@ def extract(z,target):
    assert (m.external_attr>>16)&0o170000!=0o120000
   src.extractall(target)
 def main():
- p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--authenticator-candidate',help='Local acceptance only');p.add_argument('--accounts-candidate',help='Local acceptance only');a=p.parse_args()
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  seed=asset(lock['managedSeed'],cache,a.seed_archive);remote=asset(lock['myRemote'],cache)
@@ -41,18 +42,26 @@ def main():
  contract=remote_component(stage)
  ticket_stage=Path(tempfile.mkdtemp(prefix='tickets-',dir=cache));extract(tickets,ticket_stage)
  ticket_contract=tickets_component(ticket_stage)
- contracts=[contract,ticket_contract]
+ if a.authenticator_candidate:
+  auth=Path(a.authenticator_candidate).resolve();assert sha(auth)==lock['oneAuthenticator']['sha256']
+ else:auth=asset(lock['oneAuthenticator'],cache)
+ if a.accounts_candidate:
+  accounts=Path(a.accounts_candidate).resolve();assert sha(accounts)==lock['accounts']['sha256']
+ else:accounts=asset(lock['accounts'],cache)
+ auth_stage=Path(tempfile.mkdtemp(prefix='authenticator-',dir=cache));extract(auth,auth_stage)
+ contracts=[contract,ticket_contract,authenticator_component(auth_stage)]
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=5
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=6
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:
     for b in iter(lambda:src.read(4194304),b''):h.update(b);size+=len(b)
    assert size==item['size'] and h.hexdigest()==item['sha256'],key
-  replacements={'Workspace.exe':out/'Workspace.exe','licenses/components/Workspace-release-status.md':ROOT/'docs/RELEASE-STATUS.md'}
+  account_app=next(x for x in cat['apps'] if x['id']=='accounts');account_file=cat['packages'][account_app['package']]['file'];account_app['version']=lock['accounts']['tag'];account_app['source']='https://github.com/'+lock['accounts']['repository']+'/releases/tag/'+lock['accounts']['tag']
+  replacements={account_file:accounts,'Workspace.exe':out/'Workspace.exe','licenses/components/Workspace-release-status.md':ROOT/'docs/RELEASE-STATUS.md'}
   for k,pkg in cat['packages'].items():
    if pkg['file'] in replacements:
     f=replacements[pkg['file']];pkg.update(size=f.stat().st_size,sha256=sha(f))
@@ -76,6 +85,6 @@ def main():
     for item in contract['inputs'].values():dst.write(item['source'],item['file'])
  shutil.copyfile(payload,out/'workspace-bundle.zip')
  go('build','-buildvcs=false','-trimpath','-ldflags','-s -w -X github.com/oneworkspacestudio/one-workspace/internal/distribution.Repository=oneworkspacestudio/one-workspace','-o',str(out/'WorkspaceSetup-windows-amd64.exe'),'./cmd/setup')
- (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'candidate':bool(a.tickets_candidate),'priorAppContractsRetained':True,'priorPackagesRetainedExceptManagerAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
+ (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'authenticator':lock['oneAuthenticator'],'candidate':bool(a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate),'priorAppContractsRetainedExceptAccountsVersion':True,'priorPackagesRetainedExceptManagerAccountsAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
  print('Verified managed bundle:',len(cat['apps']),'apps;',len(cat['packages']),'packages',flush=True)
 if __name__=='__main__':main()

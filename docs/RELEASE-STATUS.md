@@ -1,5 +1,16 @@
 # One Workspace release status
 
+## Preview109: One Authenticator and central OneAccount MFA
+
+Adds the encrypted offline OneAccount PWA through managed setup, navigation,
+private runtime ownership, independent updates and recovery. MyAccounts adds
+pending enrolment, ten single-use recovery codes, account-wide factor limits,
+atomic replay protection, encrypted server seeds and central token/session MFA
+proof. Workspace revalidates provider sessions, including proxied streams.
+Installer integration6 and manager109 are required. Includes signed Android11.
+Physical Android/iPhone, reboot and clean-host acceptance remain open. This is
+an evaluation preview, not a production security certification.
+
 ## Preview108: bundled private-app update discovery
 
 Corrects false up-to-date results for private-source apps distributed through

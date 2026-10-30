@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-4a7333d2.png)
+![The complete One Workspace app collection](docs/branding/app-suite-ac5632ab.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -205,6 +205,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_tickets.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-tickets"><strong>My Tickets</strong></a></td>
       <td>Plan projects, track issues and follow team progress.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/one_authenticator.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/one-authenticator"><strong>One Authenticator</strong></a></td>
+      <td>Keep your OneAccount security codes on your phone, even offline.</td>
     </tr>
   </tbody>
 </table>

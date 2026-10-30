@@ -340,6 +340,16 @@
       "foundation": true,
       "updateGroup": "remote",
       "recovery": "app"
+    },
+    {
+      "id": "authenticator",
+      "name": "One Authenticator",
+      "route": "/authenticator",
+      "repository": "oneworkspacestudio/one-authenticator",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "authenticator",
+      "recovery": "workspace"
     }
   ]
 }

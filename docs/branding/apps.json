@@ -250,5 +250,12 @@
     "name": "My Tickets",
     "description": "Plan projects, track issues and follow team progress.",
     "url": "https://github.com/oneworkspacestudio/my-tickets"
+  },
+  {
+    "id": "authenticator",
+    "icon": "one_authenticator",
+    "name": "One Authenticator",
+    "description": "Keep your OneAccount security codes on your phone, even offline.",
+    "url": "https://github.com/oneworkspacestudio/one-authenticator"
   }
 ]

@@ -156,7 +156,7 @@ func validateUpdateMetadata(c Config, p *UpdateMetadataPolicy) error {
 }
 
 func knownUpdateStorageProfile(id string) bool {
-	if id == "finance" || id == "remote" || id == "tickets" {
+	if id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
 		return true
 	}
 	switch id {

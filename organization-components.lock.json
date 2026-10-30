@@ -8,9 +8,9 @@
   },
   "accounts": {
     "repository": "oneworkspacestudio/myaccounts",
-    "tag": "preview-20261020.1",
+    "tag": "preview-20261030.1",
     "asset": "MyAccounts-windows-amd64.exe",
-    "sha256": "c3a309d396774427aeb9fdf0db355b70fb37a107abdd7b7156fe817744ec1d34"
+    "sha256": "eb941eafea934cc9977f199e18fbd454c9d8caa38abf023a46b0e652c2ad4275"
   },
   "studio": {
     "repository": "oneworkspacestudio/Photo-Editor",
@@ -208,5 +208,11 @@
     "tag": "v0.1.0-preview.1",
     "asset": "my-tickets-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "770b37f590caa23c6d1a732156658556fd9f080b25e7819d6fe6a7fc3a11e536"
+  },
+  "oneAuthenticator": {
+    "repository": "oneworkspacestudio/one-authenticator",
+    "tag": "v0.1.0-preview.1",
+    "asset": "one-authenticator-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "3d4ad880829b6e0f1f80e2717b78bb397131d6daa37c9e8cb59a09b88f774b26"
   }
 }

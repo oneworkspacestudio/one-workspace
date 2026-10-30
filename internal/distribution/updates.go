@@ -92,6 +92,7 @@ type updateGroup struct {
 var updateGroups = []updateGroup{
 	{"remote", "My Remote", "my-remote", []string{"remote"}},
 	{"tickets", "My Tickets", "my-tickets", []string{"tickets"}},
+	{"authenticator", "One Authenticator", "one-authenticator", []string{"authenticator"}},
 	{"finance", "My Finance", "my-finance", []string{"finance"}},
 	{"shield", "My Shield", "my-shield", []string{"shield"}},
 	{"forms", "My Forms", "my-forms", []string{"forms"}},

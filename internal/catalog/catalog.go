@@ -57,9 +57,9 @@ type AppSelection struct {
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
-// Version5 adds the managed native Tickets profile. Older controllers must hand
+// Version6 adds independent Authenticator public routes and central MFA revalidation. Older controllers must hand
 // off before applying a catalog whose launch/storage/SSO registry they lack.
-const InstallerIntegration = 5
+const InstallerIntegration = 6
 
 func (c Catalog) Validate() error {
 	if c.InstallerIntegration < 0 || c.InstallerIntegration > InstallerIntegration {

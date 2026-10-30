@@ -553,7 +553,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private static String appCategory(String id) {
-    if (Arrays.asList("accounts", "backups", "monitor", "shield", "remote", "updates", "app-status")
+    if (Arrays.asList("authenticator", "accounts", "backups", "monitor", "shield", "remote", "updates", "app-status")
         .contains(id)) return "administration";
     return Arrays.asList("gitea", "hosting", "myai", "my3d", "studio", "create", "slicer", "push").contains(id) ? "development" : "general";
   }
