@@ -168,3 +168,28 @@ retained. All33 services healthy, all125 Remote payload hashes match release, pu
 HTTPS MyAccounts bootstrap reports7. No PIN/host enrollment was performed; the
 owner must retry Enable remote access. Second PC remains pending. Evidence is
 docs/evidence/remote-host-setup7*.json. No real desktop/reboot/physical-phone claim.
+
+## Remote8 Windows client policy repair
+
+Remote8 source7edcc79 is published as immutable v0.1.0-preview.8. All12 public
+assets match sizes/SHA256; anonymous checksums match. The normal builder pin is
+advanced from7 to8 without changing package paths. The public channel includes8,
+continues withholding6 and excludes private Shield metadata. This channel refresh
+also discovers the already-public MyAccounts and Authenticator component releases;
+it does not publish a Workspace suite release or install those components.
+
+Windows Restricted blocks the app's unsigned -File scripts before their existing
+host checks run. Configure/verify/migration now use the documented process-only
+application-hosted policy option; machine/user settings remain unchanged and Group
+Policy retains precedence. Owner-only read-only diagnostics expose six allowlisted
+enums; setup errors/logs use fixed reason codes without raw PowerShell output.
+17 Node checks pass, including full synthetic NTFS configuration under a Restricted
+parent and a unique test registry namespace. Exact package idle/auth/CSRF/PIN/mobile
+acceptance passes. Payload namespace is unchanged:124 files plus manifest.
+
+Catalog tests pass. The full distribution run initially hit its existing500ms
+large-download timing test; the focused rerun passed. Owner deployment and actual
+host activation remain pending. Secondary108 was restarted through its installed
+launcher after its public tunnel/local manager became unavailable; public Remote7
+and MyAccounts sign-in recovered. Its private drive was observed as NTFS. An old
+paging-file error in launcher.log is not evidence of today's failure cause.
