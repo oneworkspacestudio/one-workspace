@@ -28,6 +28,7 @@ type Server struct {
 	mu                  sync.Mutex
 	operationMu         sync.Mutex
 	Data, Token, Origin string
+	ControllerSHA256    string
 	Busy                bool
 	Phase, Problem      string
 	Operation           *operationState
@@ -67,9 +68,13 @@ func Serve(ctx context.Context, data string, open bool) error {
 	defer cancel()
 	s := &Server{Data: c.Data, Initial: c, Token: platform.Token(), Origin: fmt.Sprintf("http://localhost:%d", listener.Addr().(*net.TCPAddr).Port), Context: ctx, Close: cancel, Phase: "Check for updates when you are ready."}
 	exe, _ := os.Executable()
+	s.ControllerSHA256, e = suite.UpdateControllerDigest(exe)
+	if e != nil {
+		return e
+	}
 	link := s.Origin + "/#" + s.Token
 	marker := filepath.Join(root, "window.json")
-	if e = platform.SaveJSON(marker, map[string]any{"pid": os.Getpid(), "executable": exe, "url": link, "remoteProtocol": suite.RemoteUpdateProtocol}); e != nil {
+	if e = platform.SaveJSON(marker, map[string]any{"pid": os.Getpid(), "executable": exe, "url": link, "remoteProtocol": suite.RemoteUpdateProtocol, "binarySHA256": s.ControllerSHA256}); e != nil {
 		return e
 	}
 	defer os.Remove(marker)
@@ -141,8 +146,27 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /api/state", func(w http.ResponseWriter, r *http.Request) {
 		s.mu.Lock()
 		defer s.mu.Unlock()
+		controllerChanged := s.ControllerSHA256 != "" && !suite.UpdateControllerCurrent(s.Data, s.ControllerSHA256)
+		if controllerChanged {
+			// A future catalog may be unreadable by this executable. Report the
+			// installed header and ongoing work without loading a recovery catalog
+			// and accidentally labelling its older version as the current install.
+			var header struct {
+				Version string `json:"version"`
+			}
+			if err := platform.LoadJSON(filepath.Join(s.Data, "workspace.json"), &header); err != nil {
+				http.Error(w, "Could not read the installed Workspace version. Reopen Updates from Workspace.", 503)
+				return
+			}
+			phase := s.Phase
+			if !s.Busy {
+				phase = "Workspace was upgraded. Opening the updated updater."
+			}
+			json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": phase, "error": s.Problem, "version": header.Version, "origin": s.Initial.Origin, "plan": nil, "pending": suite.UpdatePending(s.Initial), "progress": s.snapshotLocked(), "repair": s.Repair, "newController": true, "controllerChanged": true})
+			return
+		}
 		c, e := suite.LoadUpdateConfig(s.Data)
-		newController := false
+		newController := controllerChanged
 		if e != nil && s.Repair != nil && s.Initial.Data == s.Data {
 			c = s.Initial
 			c.Version = s.Repair.Version
@@ -159,7 +183,7 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		cleanup, _ := suite.LoadUpdateCleanup(c)
-		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "cleanup": cleanup, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked(), "repair": s.Repair, "newController": newController})
+		json.NewEncoder(w).Encode(map[string]any{"busy": s.Busy, "phase": s.Phase, "error": s.Problem, "plan": s.Plan, "backups": backups, "cleanup": cleanup, "pending": suite.UpdatePending(c), "version": c.Version, "origin": c.Origin, "progress": s.snapshotLocked(), "repair": s.Repair, "newController": newController, "controllerChanged": controllerChanged})
 	})
 	mux.HandleFunc("POST /api/check", func(w http.ResponseWriter, r *http.Request) {
 		s.work("check", func(ctx context.Context) error {
@@ -268,6 +292,17 @@ func (s *Server) Handler() http.Handler {
 		s.work("rollback", func(ctx context.Context) error { return suite.RollbackUpdate(ctx, s.Data, in.ID, s.progress) })
 		w.WriteHeader(202)
 	})
+	mux.HandleFunc("POST /api/reopen", func(w http.ResponseWriter, r *http.Request) {
+		if s.ControllerSHA256 == "" || suite.UpdateControllerCurrent(s.Data, s.ControllerSHA256) {
+			http.Error(w, "The current updater is already running", http.StatusConflict)
+			return
+		}
+		if err := suite.ReopenInstalledUpdates(s.Data); err != nil {
+			http.Error(w, "Could not open the updated Workspace. Reopen Updates from Workspace.", http.StatusServiceUnavailable)
+			return
+		}
+		w.WriteHeader(http.StatusAccepted)
+	})
 	mux.HandleFunc("POST /api/close", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(202)
 		go func() { time.Sleep(100 * time.Millisecond); s.Close() }()
@@ -291,6 +326,10 @@ func (s *Server) Handler() http.Handler {
 				return
 			}
 			if r.Method != "GET" {
+				if r.URL.Path != "/api/close" && r.URL.Path != "/api/reopen" && s.ControllerSHA256 != "" && !suite.UpdateControllerCurrent(s.Data, s.ControllerSHA256) {
+					http.Error(w, "Workspace was upgraded. Reopen Updates to use the installed version.", http.StatusConflict)
+					return
+				}
 				if !s.operationMu.TryLock() {
 					http.Error(w, "Another update request is running", 409)
 					return

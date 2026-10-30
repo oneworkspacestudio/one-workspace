@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -857,6 +856,20 @@ func launchUpdates(c Config, open bool) error {
 	if open && OpenExistingUpdates(c) {
 		return nil
 	}
+	portal := &Portal{rt: &Runtime{Config: c}}
+	if window, target, err := portal.updateWindow(); err == nil {
+		if controllerMatches(c, window) {
+			if open {
+				platform.OpenBrowser(window.URL)
+			}
+			return nil
+		}
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+		if err := retireUpdateController(ctx, window, target); err != nil {
+			return err
+		}
+	}
 	helper := filepath.Join(root, "WorkspaceUpdate.exe")
 	current, e := os.Executable()
 	if e != nil {
@@ -884,17 +897,11 @@ func launchUpdates(c Config, open bool) error {
 }
 
 func OpenExistingUpdates(c Config) bool {
-	var window struct {
-		PID        int    `json:"pid"`
-		Executable string `json:"executable"`
-		URL        string `json:"url"`
-	}
-	if platform.LoadJSON(filepath.Join(c.Data, "updates", "window.json"), &window) == nil && platform.ProcessRunning(window.PID, window.Executable) {
-		u, e := url.Parse(window.URL)
-		if e == nil && u.Scheme == "http" && u.Hostname() == "localhost" && u.Port() != "" && u.Path == "/" && len(u.Fragment) == 64 {
-			platform.OpenBrowser(window.URL)
-			return true
-		}
+	portal := &Portal{rt: &Runtime{Config: c}}
+	window, _, err := portal.updateWindow()
+	if err == nil && controllerMatches(c, window) {
+		platform.OpenBrowser(window.URL)
+		return true
 	}
 	return false
 }

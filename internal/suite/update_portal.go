@@ -2,7 +2,6 @@ package suite
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -19,6 +18,7 @@ type updateWindow struct {
 	Executable     string `json:"executable"`
 	URL            string `json:"url"`
 	RemoteProtocol int    `json:"remoteProtocol"`
+	BinarySHA256   string `json:"binarySHA256"`
 }
 
 // Refresh idle older controllers so the owner receives the current reconnect UI.
@@ -45,48 +45,12 @@ func (p *Portal) ensureUpdateWindow(ctx context.Context) (*url.URL, error) {
 	p.maintenanceMu.Lock()
 	defer p.maintenanceMu.Unlock()
 	old, u, e := p.updateWindow()
-	if e == nil && old.RemoteProtocol == RemoteUpdateProtocol {
+	if e == nil && controllerMatches(p.rt.Config, old) {
 		return u, nil
 	}
 	if e == nil {
-		// An idle legacy controller can be retired without requiring access to the
-		// server desktop. Never interrupt an operation already running there.
-		client := &http.Client{Timeout: 5 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
-		origin := "http://" + u.Host
-		req, _ := http.NewRequestWithContext(ctx, "GET", origin+"/api/state", nil)
-		req.Header.Set("X-Workspace-Update", u.Fragment)
-		response, err := client.Do(req)
-		if err != nil {
-			return nil, errors.New("An existing update controller is not responding. Retry after it finishes.")
-		}
-		var state struct {
-			Busy bool `json:"busy"`
-		}
-		err = json.NewDecoder(io.LimitReader(response.Body, 16<<20)).Decode(&state)
-		response.Body.Close()
-		if err != nil || response.StatusCode != 200 || state.Busy {
-			return nil, errors.New("An update operation is already running. Wait for it to finish, then refresh this page.")
-		}
-		req, _ = http.NewRequestWithContext(ctx, "POST", origin+"/api/close", nil)
-		req.Header.Set("X-Workspace-Update", u.Fragment)
-		req.Header.Set("Origin", origin)
-		response, err = client.Do(req)
-		if err != nil {
-			return nil, errors.New("Could not restart the idle update controller. Retry shortly.")
-		}
-		response.Body.Close()
-		if response.StatusCode != 202 {
-			return nil, errors.New("The update controller is busy. Retry after it finishes.")
-		}
-		for i := 0; i < 40 && platform.ProcessRunning(old.PID, old.Executable); i++ {
-			select {
-			case <-ctx.Done():
-				return nil, ctx.Err()
-			case <-time.After(100 * time.Millisecond):
-			}
-		}
-		if platform.ProcessRunning(old.PID, old.Executable) {
-			return nil, errors.New("The previous update controller is closing. Refresh to continue.")
+		if err := retireUpdateController(ctx, old, u); err != nil {
+			return nil, err
 		}
 	}
 	if e = LaunchUpdatesBackground(p.rt.Config); e != nil {
@@ -94,7 +58,7 @@ func (p *Portal) ensureUpdateWindow(ctx context.Context) (*url.URL, error) {
 	}
 	for i := 0; i < 60; i++ {
 		window, target, err := p.updateWindow()
-		if err == nil && window.RemoteProtocol == RemoteUpdateProtocol {
+		if err == nil && controllerMatches(p.rt.Config, window) {
 			return target, nil
 		}
 		select {
