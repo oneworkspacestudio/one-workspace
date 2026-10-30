@@ -33,7 +33,7 @@ func appUpdatePrivatePaths(id string) []string {
 		return []string{id, id + "-settings.json"}
 	case "chat", "slicer", "tasks", "pdf", "monitor", "search", "maps", "meet", "create", "my3d", "cinema":
 		return []string{id}
-	case "shield", "finance":
+	case "shield", "finance", "remote":
 		return []string{id}
 	case "forms":
 		return []string{"forms", "forms-drive"}

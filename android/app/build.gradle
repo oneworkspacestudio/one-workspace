@@ -21,8 +21,8 @@ android {
         applicationId 'uk.co.m8e.workspace'
         minSdk 28
         targetSdk 35
-        versionCode 9
-        versionName '0.1.0-preview.9'
+        versionCode 10
+        versionName '0.1.0-preview.10'
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
     sourceSets.main.assets.srcDir(provenanceAssets)

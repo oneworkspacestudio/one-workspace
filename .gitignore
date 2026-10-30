@@ -8,3 +8,6 @@
 *.log
 .env*
 node_modules/
+
+# Local Python build/publisher bytecode
+__pycache__/

@@ -236,5 +236,12 @@
     "name": "My Finance",
     "description": "Plan household budgets, track spending and import bank statements.",
     "url": "https://github.com/oneworkspacestudio/my-finance"
+  },
+  {
+    "id": "remote",
+    "icon": "my_remote",
+    "name": "My Remote",
+    "description": "Access this PC through Workspace with owner-approved desktop sharing.",
+    "url": "https://github.com/oneworkspacestudio/my-remote"
   }
 ]

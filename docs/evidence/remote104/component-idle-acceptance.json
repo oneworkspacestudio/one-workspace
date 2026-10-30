@@ -1,0 +1,10 @@
+{
+  "freshPrivateData": true,
+  "unconfiguredStartupHealthy": true,
+  "noHostCredentialsCreated": true,
+  "ownerAndCSRFEnforced": true,
+  "invalidPINDoesNotConfigureHost": true,
+  "mobileNoErrorsOrOverflow": true,
+  "ownerDataUsed": false,
+  "actualDesktopCaptureRetested": false
+}

@@ -73,6 +73,15 @@ func InstallPackageIDs(c Catalog, selected map[string]bool) map[string]bool {
 			continue
 		}
 		keep[a.Package] = true
+		// Runtime, contracts and other app-owned payloads share its namespace.
+		// Keep this generic: a new app must not need another selector exception.
+		if a.Package != "" {
+			for id := range c.Packages {
+				if strings.HasPrefix(id, a.Package+"-") {
+					keep[id] = true
+				}
+			}
+		}
 		if a.ID == "mail" {
 			for id := range c.Packages {
 				if strings.HasPrefix(id, "msvc-") {
@@ -93,7 +102,7 @@ func InstallPackageIDs(c Catalog, selected map[string]bool) map[string]bool {
 		}
 	}
 	for id, p := range c.Packages {
-		if strings.HasPrefix(filepath.ToSlash(p.File), "licenses/") || (selected["vault"] && strings.HasPrefix(id, "vault-")) || (selected["cinema"] && strings.HasPrefix(id, "cinema-")) || (selected["myai"] && strings.HasPrefix(id, "myai-")) || (selected["shield"] && strings.HasPrefix(id, "shield-")) || (selected["finance"] && strings.HasPrefix(id, "finance-")) {
+		if strings.HasPrefix(filepath.ToSlash(p.File), "licenses/") {
 			keep[id] = true
 		}
 	}

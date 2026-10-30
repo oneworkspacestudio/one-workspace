@@ -1,0 +1,335 @@
+{
+  "schema": 1,
+  "apps": [
+    {
+      "id": "accounts",
+      "name": "MyAccounts",
+      "route": "",
+      "repository": "oneworkspacestudio/myaccounts",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "accounts",
+      "recovery": "workspace"
+    },
+    {
+      "id": "drive",
+      "name": "Drive",
+      "route": "/drive/",
+      "repository": "oneworkspacestudio/drive",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "drive",
+      "recovery": "workspace"
+    },
+    {
+      "id": "docs",
+      "name": "Docs",
+      "route": "/drive/files/My%20Drive/Documents",
+      "repository": "oneworkspacestudio/drive",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "drive",
+      "recovery": "workspace"
+    },
+    {
+      "id": "photos",
+      "name": "Photos",
+      "route": "/photos-app/",
+      "repository": "oneworkspacestudio/drive",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "drive",
+      "recovery": "workspace"
+    },
+    {
+      "id": "gitea",
+      "name": "Git",
+      "route": "/git",
+      "repository": "oneworkspacestudio/gitea",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "gitea",
+      "recovery": "workspace"
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "route": "/music",
+      "repository": "oneworkspacestudio/Music",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "music",
+      "recovery": "workspace"
+    },
+    {
+      "id": "mail",
+      "name": "Mail",
+      "route": "/mail",
+      "repository": "oneworkspacestudio/mail",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "mail",
+      "recovery": "workspace"
+    },
+    {
+      "id": "studio",
+      "name": "Photo Editor",
+      "route": "/drive/studio",
+      "repository": "oneworkspacestudio/Photo-Editor",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "studio",
+      "recovery": "workspace"
+    },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "route": "/notes",
+      "repository": "oneworkspacestudio/notes",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "notes",
+      "recovery": "workspace"
+    },
+    {
+      "id": "chat",
+      "name": "Chat",
+      "route": "/chat",
+      "repository": "oneworkspacestudio/chat",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "chat",
+      "recovery": "workspace"
+    },
+    {
+      "id": "my-tube",
+      "name": "My Tube",
+      "route": "/my-tube",
+      "repository": "oneworkspacestudio/my-tube",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "my-tube",
+      "recovery": "workspace"
+    },
+    {
+      "id": "hosting",
+      "name": "My Hosting",
+      "route": "/hosting",
+      "repository": "oneworkspacestudio/my-hosting",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "hosting",
+      "recovery": "workspace"
+    },
+    {
+      "id": "vault",
+      "name": "My Vault",
+      "route": "/vault",
+      "repository": "oneworkspacestudio/my-vault",
+      "oidc": false,
+      "foundation": false,
+      "updateGroup": "vault",
+      "recovery": "workspace"
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "route": "/calendar",
+      "repository": "oneworkspacestudio/calendar",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "calendar",
+      "recovery": "workspace"
+    },
+    {
+      "id": "contacts",
+      "name": "Contacts",
+      "route": "/contacts",
+      "repository": "oneworkspacestudio/calendar",
+      "oidc": true,
+      "foundation": false,
+      "updateGroup": "calendar",
+      "recovery": "workspace"
+    },
+    {
+      "id": "maps",
+      "name": "My Maps",
+      "route": "/maps",
+      "repository": "oneworkspacestudio/my-maps",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "maps",
+      "recovery": "app"
+    },
+    {
+      "id": "create",
+      "name": "My Create",
+      "route": "/create",
+      "repository": "oneworkspacestudio/my-create",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "create",
+      "recovery": "app"
+    },
+    {
+      "id": "cinema",
+      "name": "My Cinema",
+      "route": "/cinema",
+      "repository": "oneworkspacestudio/my-cinema",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "cinema",
+      "recovery": "app"
+    },
+    {
+      "id": "myai",
+      "name": "My AI",
+      "route": "/myai",
+      "repository": "oneworkspacestudio/my-ai",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "myai",
+      "recovery": "app"
+    },
+    {
+      "id": "my3d",
+      "name": "My 3D",
+      "route": "/my3d",
+      "repository": "oneworkspacestudio/my-3d",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "my3d",
+      "recovery": "app"
+    },
+    {
+      "id": "meet",
+      "name": "My Meet",
+      "route": "/meet",
+      "repository": "oneworkspacestudio/my-meet",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "meet",
+      "recovery": "app"
+    },
+    {
+      "id": "clips",
+      "name": "My Clips",
+      "route": "/clips",
+      "repository": "oneworkspacestudio/my-clips",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "clips",
+      "recovery": "app"
+    },
+    {
+      "id": "social",
+      "name": "My Social",
+      "route": "/social",
+      "repository": "oneworkspacestudio/my-social",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "social",
+      "recovery": "app"
+    },
+    {
+      "id": "slicer",
+      "name": "My Slicer",
+      "route": "/slicer",
+      "repository": "oneworkspacestudio/my-slicer",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "slicer",
+      "recovery": "app"
+    },
+    {
+      "id": "tasks",
+      "name": "My Tasks",
+      "route": "/tasks",
+      "repository": "oneworkspacestudio/my-tasks",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "tasks",
+      "recovery": "app"
+    },
+    {
+      "id": "pdf",
+      "name": "My PDF",
+      "route": "/pdf",
+      "repository": "oneworkspacestudio/my-pdf",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "pdf",
+      "recovery": "app"
+    },
+    {
+      "id": "monitor",
+      "name": "My Monitor",
+      "route": "/monitor",
+      "repository": "oneworkspacestudio/my-monitor",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "monitor",
+      "recovery": "app"
+    },
+    {
+      "id": "finance",
+      "name": "My Finance",
+      "route": "/finance",
+      "repository": "oneworkspacestudio/my-finance",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "finance",
+      "recovery": "app"
+    },
+    {
+      "id": "shield",
+      "name": "My Shield",
+      "route": "/shield",
+      "repository": "oneworkspacestudio/my-shield",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "shield",
+      "recovery": "app"
+    },
+    {
+      "id": "forms",
+      "name": "My Forms",
+      "route": "/forms",
+      "repository": "oneworkspacestudio/my-forms",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "forms",
+      "recovery": "app"
+    },
+    {
+      "id": "push",
+      "name": "My Push",
+      "route": "/push",
+      "repository": "oneworkspacestudio/my-push",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "push",
+      "recovery": "workspace"
+    },
+    {
+      "id": "search",
+      "name": "My Search",
+      "route": "/search",
+      "repository": "oneworkspacestudio/my-search",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "search",
+      "recovery": "app"
+    },
+    {
+      "id": "remote",
+      "name": "My Remote",
+      "route": "/remote",
+      "repository": "oneworkspacestudio/my-remote",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "remote",
+      "recovery": "app"
+    }
+  ]
+}

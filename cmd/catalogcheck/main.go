@@ -17,6 +17,10 @@ func main() {
 		var c catalog.Catalog
 		c, err = catalog.Read(b)
 		if err == nil {
+			if err = c.ValidateManagedInventory(); err != nil {
+				fmt.Fprintln(os.Stderr, err)
+				os.Exit(1)
+			}
 			for _, app := range c.Apps {
 				if !catalog.DefaultInstall(app.ID) {
 					continue

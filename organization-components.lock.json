@@ -190,5 +190,17 @@
     "tag": "v0.1.0-preview.1",
     "asset": "my-finance-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "ff42aa929855eaf0422a4f1ba55857b10ae54edb8b5e84c325d719b7ac3b9004"
+  },
+  "managedSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.103",
+    "asset": "workspace-bundle.zip",
+    "sha256": "cc61e4bf4f12ed0a7062d8af9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
+  },
+  "myRemote": {
+    "repository": "oneworkspacestudio/my-remote",
+    "tag": "v0.1.0-preview.5",
+    "asset": "my-remote-0.1.0-preview.5-windows-amd64.zip",
+    "sha256": "7056c5f9b47b111d0b6a71f60d066c9c36b6e1ca80ed992b8e0bde8fea3ce317"
   }
 }

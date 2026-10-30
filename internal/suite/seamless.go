@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"remote", "My Remote", "/remote", "/api/me", "/remote/auth/login", "/remote/auth/logout", []string{"remote_session"}},
 	{"forms", "My Forms", "/forms", "/api/me", "/forms/auth/login", "/forms/auth/logout", []string{"forms_session"}},
 	{"finance", "My Finance", "/finance", "/api/me", "/finance/auth/login", "/finance/auth/logout", []string{"finance_session"}},
 	{"push", "My Push", "/push", "/api/me", "/push/auth/login", "/push/auth/logout", []string{"push_session"}},
@@ -152,6 +153,11 @@ func (p *Portal) seamlessApp(w http.ResponseWriter, r *http.Request) bool {
 	app, ok := p.signInForPath(r.URL.Path)
 	if !ok || app.id == "chat" {
 		return false
+	}
+	if app.id == "remote" {
+		if _, loggedIn := p.user(r); !loggedIn {
+			return false
+		}
 	}
 	guard, destination := "workspace_sso_"+app.id, "workspace_return_"+app.id
 	if r.URL.Path == app.logout && (r.Method == http.MethodPost || app.id == "music") {

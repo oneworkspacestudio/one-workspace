@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview 104: Managed My Remote delivery
+
+Requires the104 installer (bundle integration4) so older controllers cannot drop required sidecars. Adds My Remote5 through normal setup, MyAccounts sign-in, app navigation and the protected updater. Runtime payloads are verified and supervised; desktop access stays off until the owner enables it with a PIN. New default-app discovery adds Remote to earlier installations while retaining existing selections and unrelated app versions. The build validates all33 managed entries against an explicit inventory. App creation/maintenance requirements are in APP-LIFECYCLE.md. Includes signed Android10.
+
+The unconfigured standalone preview has a conservative launcher migration; enrolled standalone desktops require explicit migration review. Before-Windows-sign-in access, secure desktop, audio, file transfer and individual monitor selection remain unavailable. Per-target deployment and physical desktop acceptance are recorded separately.
+
+
 ## Preview 103: Bounded downloads across installation and repair
 
 Uses bounded 8 MB range requests for large assets with final whole-file SHA256 verification, retries and resumable transfer. Initial installation, reinstall and staged updates share this downloader. Releases include verified independent package assets so new apps and notices do not require the entire suite bundle on supporting managers. Older managers must first receive this version; this cannot retroactively change an updater already running version98. Includes signed Android9.

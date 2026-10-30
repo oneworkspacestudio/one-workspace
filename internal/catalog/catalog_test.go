@@ -35,7 +35,7 @@ func TestInstallerIntegrationGate(t *testing.T) {
 	if err = d.Decode(&legacy); err == nil {
 		t.Fatal("older installer accepted a shared-service catalog")
 	}
-	c.InstallerIntegration = 4
+	c.InstallerIntegration = InstallerIntegration + 1
 	data, _ = json.Marshal(c)
 	if _, err = Read(data); err == nil {
 		t.Fatal("future integration accepted")

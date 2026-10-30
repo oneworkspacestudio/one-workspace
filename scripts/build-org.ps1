@@ -1,6 +1,7 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.103',
+ [string]$Version='0.3.0-preview.104',
+ [string]$Out='',
  [string]$Cache='',
  [string]$SeedArchive='',
  [string]$MyPushPackage='',
@@ -12,6 +13,17 @@ $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
 if(-not $Cache){$Cache=Join-Path $root 'dist/org-component-cache'}
 $lock=Get-Content -LiteralPath (Join-Path $root 'organization-components.lock.json') -Raw|ConvertFrom-Json
+if($lock.managedSeed){
+ if($MyPushPackage -or $MyFormsPackage -or $MyShieldPackage -or $MyFinancePackage){throw 'Publish and pin component updates when using the managed seed build'}
+ if(-not $Out){$Out=Join-Path $root 'dist'}
+ $buildArgs=@((Join-Path $PSScriptRoot 'build-managed-seed.py'),'--go',$Go,'--version',$Version,'--cache',$Cache,'--out',$Out)
+ if($SeedArchive){$buildArgs+=@('--seed-archive',$SeedArchive)}
+ & python @buildArgs
+ if($LASTEXITCODE -ne 0){throw 'Managed organization build failed'}
+ & (Join-Path $PSScriptRoot 'check-org-catalog.ps1') -Catalog (Join-Path $Out 'catalog.json')
+ if($LASTEXITCODE -ne 0){throw 'Managed catalog audit failed'}
+ return
+}
 if($lock.schema -ne 1){throw 'Unsupported organization component lock'}
 if(-not $lock.myPush -and -not $MyPushPackage){throw 'Publish and pin My Push, or supply -MyPushPackage for a local development bundle.'}
 New-Item -ItemType Directory -Force $Cache|Out-Null

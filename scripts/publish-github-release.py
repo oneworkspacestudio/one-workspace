@@ -66,8 +66,24 @@ def public_apk(url, expected):
         raise RuntimeError('Anonymous APK download did not match the signed local APK')
 
 
+def validate_managed_catalog(catalog):
+    if catalog.get('installerIntegration') != 4:
+        raise RuntimeError('Use the current installer contract for complete app-owned runtimes')
+    registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text(encoding='utf-8'))['apps']
+    apps = {a['id']: a for a in catalog['apps']}
+    if len(apps) != len(catalog['apps']) or set(apps) != {a['id'] for a in registry}:
+        raise RuntimeError('Release inventory differs from managed-apps.json; complete every managed app before publishing')
+    for expected in registry:
+        app = apps[expected['id']]
+        if any(app.get(k, False if k == 'oidc' else '') != expected[k] for k in ['name', 'route', 'oidc']):
+            raise RuntimeError('Managed app contract drift: ' + expected['id'])
+        if not app['source'].startswith('https://github.com/' + expected['repository'] + '/'):
+            raise RuntimeError('Managed app source drift: ' + expected['id'])
+
+
 def prepare_package_assets(out):
     catalog = json.loads((out / 'catalog.json').read_text(encoding='utf-8'))
+    validate_managed_catalog(catalog)
     with zipfile.ZipFile(out / 'workspace-bundle.zip') as bundle:
         for key, package in catalog['packages'].items():
             if not re.fullmatch(r'[A-Za-z0-9_.-]{1,180}', key):

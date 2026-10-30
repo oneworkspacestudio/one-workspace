@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "checks": [
+    {
+      "path": "fresh",
+      "actualInstaller": true,
+      "MyAccountsOIDC": true,
+      "sharedPicker": true,
+      "ownerAPI": true,
+      "guestShell": true,
+      "unauthorizedEnrollmentDenied": true,
+      "idleWithoutHostCredentials": true,
+      "desktopAndPhoneNoErrorsOrOverflow": true
+    },
+    {
+      "path": "upgrade",
+      "actualInstaller": true,
+      "MyAccountsOIDC": true,
+      "sharedPicker": true,
+      "ownerAPI": true,
+      "guestShell": true,
+      "unauthorizedEnrollmentDenied": true,
+      "idleWithoutHostCredentials": true,
+      "desktopAndPhoneNoErrorsOrOverflow": true
+    }
+  ],
+  "remoteVersion": "0.1.0-preview.5",
+  "freshSetupOffersRemoteDefault": true,
+  "priorVersion": "0.3.0-preview.103",
+  "backupAndCompletedTransaction": true,
+  "oldControllerRejectsNewRuntimeContractBeforeMutation": true,
+  "oldAccountAndSelectionRetained": true,
+  "ownerDataUsed": false,
+  "actualHostEnrollment": false,
+  "physicalPhone": false
+}

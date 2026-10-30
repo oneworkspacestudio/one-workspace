@@ -194,6 +194,8 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 33
 		case "finance":
 			app.Port = r.Port + 34
+		case "remote":
+			app.Port = r.Port + 35
 		case "search":
 			app.Port = r.Port + 21
 		case "hosting":
@@ -267,6 +269,12 @@ func CheckPorts(c Config) error {
 	for _, a := range c.Catalog.Apps {
 		if a.Kind == "process" {
 			ports = append(ports, a.Port)
+			if a.ID == "remote" {
+				if a.Port > 65300 {
+					return errors.New("My Remote needs two private service ports; choose a lower Workspace base port")
+				}
+				ports = append(ports, a.Port+101, a.Port+102)
+			}
 			if a.ID == "meet" {
 				if a.Port > 64000 {
 					return errors.New("My Meet needs media ports above its app port; choose a Workspace base port below 63975")

@@ -1,5 +1,15 @@
 # Workspace repository
 
+## Managed app delivery
+
+Follow [docs/APP-LIFECYCLE.md](docs/APP-LIFECYCLE.md) for creating, maintaining,
+releasing or repairing an app. Register every intended managed app in
+`internal/catalog/managed-apps.json` and complete catalog/build, runtime/storage,
+identity/proxy, discovery/branding and update/recovery integration. A standalone
+package or per-PC shortcut is not managed delivery. Verify fresh install and
+upgrade through supported paths, public channel promotion and each claimed
+installed target. Keep blocked or unverified stages explicit in the final report.
+
 Use repository-history before substantive changes and maintain agents/history.
 Never test against the existing live MyAccounts/FileBrowser installations.
 Test new suite installations in fresh NTFS private-data folders; program payloads

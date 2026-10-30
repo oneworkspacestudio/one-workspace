@@ -14,6 +14,7 @@ func installPortFixture(t *testing.T) (Request, catalog.Catalog) {
 		{ID: "accounts", Kind: "process"}, {ID: "monitor", Kind: "process"},
 		{ID: "mail", Kind: "process"}, {ID: "vault", Kind: "process"},
 		{ID: "meet", Kind: "process"}, {ID: "create", Kind: "process"},
+		{ID: "remote", Kind: "process"},
 	}}
 	for port := 32000; port < 40000; port += 32 {
 		r := Request{Port: port, Mode: "local"}
@@ -39,7 +40,7 @@ func TestFreshInstallMovesWholeGroupOnCollision(t *testing.T) {
 		offset int
 		udp    bool
 	}{{"portal", 0, false}, {"accounts", 1, false}, {"mail engine", 7, false},
-		{"vault engine", 15, false}, {"Meet media TCP", 1026, false}, {"Meet media UDP", 1027, true}} {
+		{"vault engine", 15, false}, {"Remote broker", 136, false}, {"Remote host", 137, false}, {"Meet media TCP", 1026, false}, {"Meet media UDP", 1027, true}} {
 		t.Run(tc.name, func(t *testing.T) {
 			r, cat := installPortFixture(t)
 			address := fmt.Sprintf("127.0.0.1:%d", r.Port+tc.offset)

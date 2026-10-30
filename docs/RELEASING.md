@@ -8,6 +8,9 @@ GitHub Actions remains disabled. Publishing runs on the maintainer's computer.
 Do not create a source-only release through GitHub's web interface or raw `gh`
 commands. The supported entry point is `scripts/publish-release.ps1`.
 
+Before adding or maintaining an app, complete [APP-LIFECYCLE.md](APP-LIFECYCLE.md),
+including the managed registry and fresh-install/upgrade acceptance.
+
 ## Before publishing
 
 1. Finish the intended changes. For Android changes, increase `versionCode` and

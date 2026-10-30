@@ -220,6 +220,9 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		current, _ := p.user(r)
+		if !p.revokeRemoteDesktop(w, r) {
+			return
+		}
 		if !p.revokeRemoteAdmin(w, r) {
 			return
 		}
@@ -320,7 +323,7 @@ func (p *Portal) Handler(control string) http.Handler {
 		route := strings.TrimRight(a.Route, "/")
 		h := proxy(fmt.Sprintf("http://127.0.0.1:%d", a.Port), p.rt.Config.Origin, route, a.StripPrefix, false)
 		mux.Handle(route+"/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if _, ok := p.user(r); !ok && a.ID != "gitea" && a.ID != "music" && !p.hostingWebhook(r) && !p.publicMonitor(r) && !p.nativePushRequest(r) && !nativeSocialRequest(r) && !publicFormsRequest(r) {
+			if _, ok := p.user(r); !ok && a.ID != "gitea" && a.ID != "music" && !p.hostingWebhook(r) && !p.publicMonitor(r) && !p.nativePushRequest(r) && !nativeSocialRequest(r) && !publicFormsRequest(r) && !publicRemoteRequest(r) {
 				http.Redirect(w, r, "/auth/login?"+url.Values{"returnTo": {r.URL.RequestURI()}}.Encode(), 302)
 				return
 			}
@@ -364,7 +367,7 @@ func (p *Portal) Handler(control string) http.Handler {
 			return
 		}
 		if p.isAppRequest(r) {
-			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) && !p.hostingWebhook(r) && !p.publicMonitor(r) && !p.nativePushRequest(r) && !nativeSocialRequest(r) && !publicFormsRequest(r) {
+			if _, ok := p.user(r); !ok && !nativeGitRequest(r) && !nativeDriveRequest(r) && !p.hostingWebhook(r) && !p.publicMonitor(r) && !p.nativePushRequest(r) && !nativeSocialRequest(r) && !publicFormsRequest(r) && !publicRemoteRequest(r) {
 				if r.Method == "GET" && strings.Contains(r.Header.Get("Accept"), "text/html") {
 					http.Redirect(w, r, "/auth/login?returnTo="+url.QueryEscape(safeReturnPath(r.URL.RequestURI())), http.StatusSeeOther)
 				} else {

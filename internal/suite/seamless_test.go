@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
@@ -55,7 +56,7 @@ func signInFixture(t *testing.T, app appSignIn, status int) *Portal {
 	t.Cleanup(up.Close)
 	u, _ := url.Parse(up.URL)
 	port, _ := strconv.Atoi(u.Port())
-	return &Portal{rt: &Runtime{Config: Config{Origin: "https://workspace.example.test", Catalog: catalog.Catalog{Apps: []catalog.App{{ID: app.id, Port: port, Route: app.route}}}}}, secure: true}
+	return &Portal{rt: &Runtime{Config: Config{Origin: "https://workspace.example.test", Catalog: catalog.Catalog{Apps: []catalog.App{{ID: app.id, Port: port, Route: app.route}}}}}, secure: true, sessions: map[string]session{"fixture-portal-session": {Subject: "fixture-owner", Expires: time.Now().Add(time.Hour)}}}
 }
 
 func signInRequest(path string) *http.Request {

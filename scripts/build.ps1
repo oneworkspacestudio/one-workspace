@@ -3,7 +3,7 @@ param(
  [Parameter(Mandatory)][string]$Drive,
  [Parameter(Mandatory)][string]$Photos,
  [Parameter(Mandatory)][string]$Cloudflared,
- [string]$Version='0.3.0-preview.103',
+ [string]$Version='0.3.0-preview.104',
  [string]$Go='go',
  [string]$AccountsVersion='preview-20261020.1',
  [string]$DriveVersion='photos-preview-local',
@@ -67,6 +67,7 @@ param(
  [string]$MySearch='',
  [string]$MySearchVersion='0.1.0-preview.1',
  [string]$MySearchNotices='',
+ [string]$MyRemotePackageRoot='',
  [string]$MyForms='',
  [string]$MyFormsVersion='0.1.0-preview.1',
  [string]$MyFormsNotices='',
@@ -167,6 +168,13 @@ try {
  if($MyShield){$inputs['shield']=@{source=$MyShield;file='MyShield.exe'};if(-not $MyShieldNotices){throw 'My Shield requires licence notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['shield-'+$name]=@{source=(Join-Path $MyShieldNotices $name);file='licenses/MyShield-'+$name}}}
  if($MyForms){$inputs['forms']=@{source=$MyForms;file='MyForms.exe'};if(-not $MyFormsNotices){throw 'My Forms requires licence notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['forms-'+$name]=@{source=(Join-Path $MyFormsNotices $name);file='licenses/MyForms-'+$name}}}
  if($MyPush){$inputs['push']=@{source=$MyPush;file='MyPush.exe'};if(-not $MyPushNotices){throw 'My Push requires license notices'};foreach($name in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){$inputs['push-'+$name]=@{source=(Join-Path $MyPushNotices $name);file='licenses/MyPush-'+$name}}}
+ if($MyRemotePackageRoot){
+  $componentFile=Join-Path $root 'dist/remote-component-inputs.json'
+  & python (Join-Path $PSScriptRoot 'managed_component.py') $MyRemotePackageRoot $componentFile
+  if($LASTEXITCODE){throw 'Invalid My Remote managed package'}
+  $remoteComponent=Get-Content -LiteralPath $componentFile -Raw | ConvertFrom-Json
+  foreach($p in $remoteComponent.inputs.PSObject.Properties){$inputs[$p.Name]=@{source=$p.Value.source;file=$p.Value.file}}
+ }
  $packages=[ordered]@{};foreach($key in $inputs.Keys){$item=Get-Item -LiteralPath $inputs[$key].source;$packages[$key]=@{file=$inputs[$key].file;size=$item.Length;sha256=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
  $apps=@(
   @{id='accounts';name='MyAccounts';description='Your account, people and passwords';version=$AccountsVersion;kind='process';package='accounts';executable='MyAccounts.exe';port=8991;route='';health='/healthz';args=@('-data','${DATA}/accounts','-no-browser');source='https://github.com/oneworkspacestudio/myaccounts/releases/tag/'+$AccountsVersion},
@@ -206,8 +214,9 @@ try {
  if($MyForms){$apps+=@{id='forms';name='My Forms';description='Create forms and quizzes with responses saved in My Drive';version=$MyFormsVersion;kind='process';package='forms';executable='MyForms.exe';port=9023;route='/forms';stripPrefix=$true;health='/healthz';depends=@('accounts','drive');oidc=$true;callback='/forms/auth/callback';args=@('--data','${DATA}/forms','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/forms','--no-browser');source='https://github.com/oneworkspacestudio/my-forms/releases/tag/v'+$MyFormsVersion}}
  if($MyPush){$apps+=@{id='push';name='My Push';description='Private notification delivery for your Workspace apps';version=$MyPushVersion;kind='process';package='push';executable='MyPush.exe';port=9021;route='/push';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/push/auth/callback';args=@('--data','${DATA}/push','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/push','--no-browser');source='https://github.com/oneworkspacestudio/my-push/releases/tag/v'+$MyPushVersion}}
  if($MySearch){$apps+=@{id='search';name='My Search';description='Search connected apps with your own permissions';version=$MySearchVersion;kind='process';package='search';executable='MySearch.exe';port=9011;route='/search';stripPrefix=$true;health='/healthz';depends=@('accounts');oidc=$true;callback='/search/auth/callback';args=@('--data','${DATA}/search','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/search','--no-browser');source='https://github.com/oneworkspacestudio/my-search/releases/tag/v'+$MySearchVersion}}
+ if($MyRemotePackageRoot){$apps+= $remoteComponent.app}
  foreach($app in $apps){if($app.source -notmatch '^https://github\.com/oneworkspacestudio/'){throw ('App source must be an organization repository: '+$app.id)}}
- $catalog=@{schema=1;installerIntegration=3;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
+ $catalog=@{schema=1;installerIntegration=4;version=$Version;packages=$packages;apps=$apps}|ConvertTo-Json -Depth 15
  [IO.File]::WriteAllText((Join-Path $root 'dist/catalog.json'),$catalog,[Text.UTF8Encoding]::new($false))
  & $Go run -buildvcs=false ./cmd/catalogcheck dist/catalog.json
  if($LASTEXITCODE -ne 0){throw 'Complete catalog validation failed before packaging'}

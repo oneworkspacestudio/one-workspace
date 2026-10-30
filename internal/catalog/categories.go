@@ -20,7 +20,7 @@ func Categories() []Category {
 func CategoryFor(id string) Category {
 	index := 0
 	switch id {
-	case "accounts", "backups", "monitor", "shield", "updates", "app-status":
+	case "remote", "accounts", "backups", "monitor", "shield", "updates", "app-status":
 		index = 1
 	case "gitea", "hosting", "myai", "my3d", "studio", "create", "slicer", "push":
 		index = 2

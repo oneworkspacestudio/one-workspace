@@ -63,6 +63,7 @@ type UpdateChoice struct {
 	Downloads            map[string]UpdateDownload  `json:"downloads,omitempty"`
 	MinimumManager       string                     `json:"minimumManager,omitempty"`
 	RequiredCapabilities []string                   `json:"requiredCapabilities,omitempty"`
+	InstallerIntegration int                        `json:"installerIntegration,omitempty"`
 }
 type UpdatePlan struct {
 	IndexPublishedAt  time.Time         `json:"indexPublishedAt,omitempty"`
@@ -89,6 +90,7 @@ type updateGroup struct {
 }
 
 var updateGroups = []updateGroup{
+	{"remote", "My Remote", "my-remote", []string{"remote"}},
 	{"finance", "My Finance", "my-finance", []string{"finance"}},
 	{"shield", "My Shield", "my-shield", []string{"shield"}},
 	{"forms", "My Forms", "my-forms", []string{"forms"}},
@@ -285,6 +287,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "remote" || strings.HasPrefix(id, "remote-") {
+		return "remote"
+	}
 	if id == "finance" || strings.HasPrefix(id, "finance-") {
 		return "finance"
 	}
@@ -517,6 +522,9 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		operationprogress.Report(ctx, "check", "Checking "+g.name+" releases", int64(checked), int64(totalGroups), "repositories")
 		checked++
 		ch := UpdateChoice{ID: g.id, Name: g.name, Current: current.Version, Version: latest.Version, Source: "https://github.com/" + Repository + "/releases/tag/" + suiteRelease.Tag, Apps: groupApps(g, latest), Packages: groupPackages(g, latest), Downloads: map[string]UpdateDownload{}}
+		if g.id == "workspace" {
+			ch.InstallerIntegration = latest.InstallerIntegration
+		}
 		repo := "oneworkspacestudio/" + g.repo
 		var appReleases []Release
 		ch = markNewDefaults(current, latest, ch)
@@ -860,6 +868,9 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 		}
 		if id == "workspace" {
 			target.Version = ch.Version
+			if ch.InstallerIntegration > target.InstallerIntegration {
+				target.InstallerIntegration = ch.InstallerIntegration
+			}
 		}
 		for pid, p := range ch.Packages {
 			if p.SHA256 == withheldMusicSHA {
@@ -946,6 +957,9 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 	plan := UpdatePlan{BaseCatalogSHA256: catalogIdentity(current)}
 	for _, g := range suiteUpdateGroups(incoming) {
 		ch := UpdateChoice{ID: g.id, Name: g.name, Version: incoming.Version, Packages: groupPackages(g, incoming), Apps: groupApps(g, incoming)}
+		if g.id == "workspace" {
+			ch.InstallerIntegration = incoming.InstallerIntegration
+		}
 		ch = markNewDefaults(current, incoming, ch)
 		if g.id != "workspace" && len(groupApps(g, current)) == 0 && len(ch.NewApps) == 0 {
 			continue

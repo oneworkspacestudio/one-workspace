@@ -368,11 +368,17 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 	if e != nil {
 		return e
 	}
+	closePayloads, e := lockRemotePayloads(rt.Config, app)
+	if e != nil {
+		held.Close()
+		return e
+	}
 	cmd := rt.command(app)
 	// Each app owns its process tree. A failed health check or retry must not
 	// leave an old child listening, or terminate unrelated healthy apps.
 	appJob, e := platform.NewJob()
 	if e != nil {
+		closePayloads()
 		held.Close()
 		return e
 	}
@@ -385,6 +391,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 				<-exited
 			}
 			held.Close()
+			closePayloads()
 		}
 	}()
 	if e = startWithMemoryRetry(ctx, func() error { return appJob.Start(cmd) }, func() {
@@ -428,7 +435,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 	supervised = true
 	go func() {
 		defer rt.supervisors.Done()
-		defer func() { appJob.Close(); <-exited; held.Close(); release() }()
+		defer func() { appJob.Close(); <-exited; held.Close(); closePayloads(); release() }()
 		delay := time.Second
 		for {
 			select {

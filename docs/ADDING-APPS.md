@@ -1,5 +1,10 @@
 # Adding applications
 
+For organization-managed applications, follow [APP-LIFECYCLE.md](APP-LIFECYCLE.md).
+The extension example below does not register a managed app in the organization
+catalog, rebuild, shared navigation or public update channel. It must not be used
+as a substitute for those delivery requirements.
+
 An extension is a trusted Windows x64 executable that serves HTTP on a loopback
 port. Bundle its web assets into that executable. Multi-file installers, MSI
 packages, arbitrary shell commands and automatic migrations are not supported.
