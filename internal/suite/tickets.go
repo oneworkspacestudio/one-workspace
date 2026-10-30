@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
+	"github.com/oneworkspacestudio/one-workspace/pkg/apphost"
+	"io/fs"
 	"net/http"
 	"os"
 	"path"
@@ -29,6 +31,9 @@ func ensureTicketsDriveSource(c Config) error {
 		if filepath.Dir(current) == current {
 			return errors.New("Tickets storage is outside private data")
 		}
+	}
+	if err := prepareTicketsData(filepath.Join(c.Data, "tickets")); err != nil {
+		return err
 	}
 	if err := os.MkdirAll(root, 0700); err != nil {
 		return err
@@ -86,4 +91,44 @@ func nativeTicketsRequest(r *http.Request) bool {
 		return true
 	}
 	return false
+}
+
+// prepareTicketsData gives the SDK ownership before Drive creates its empty source.
+// Preview105 could create only core/attachments without the SDK marker. Adopt that
+// precise empty layout; never adopt files, foreign markers or reparse points.
+func prepareTicketsData(root string) error {
+	if _, err := os.Lstat(filepath.Join(root, "app.json")); err == nil {
+		return apphost.PrepareData(root, "tickets")
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+	if _, err := os.Lstat(root); os.IsNotExist(err) {
+		return apphost.PrepareData(root, "tickets")
+	} else if err != nil {
+		return err
+	}
+	if err := filepath.WalkDir(root, func(p string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if err = platform.RejectReparse(p); err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(root, p)
+		if err != nil {
+			return err
+		}
+		if !entry.IsDir() || rel != "." && rel != "core" && rel != filepath.Join("core", "attachments") {
+			return errors.New("existing Tickets storage needs explicit migration; no files were changed")
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	for _, rel := range []string{filepath.Join("core", "attachments"), "core"} {
+		if err := os.Remove(filepath.Join(root, rel)); err != nil && !os.IsNotExist(err) {
+			return err
+		}
+	}
+	return apphost.PrepareData(root, "tickets")
 }

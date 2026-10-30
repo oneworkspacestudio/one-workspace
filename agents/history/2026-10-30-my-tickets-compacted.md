@@ -42,3 +42,22 @@ App release/normal noncandidate suite105 build, mandatory signed Android publish
 public channel, backed-up owner104-to-105 install and installed byte/health receipt
 must be completed before delivery is claimed. Artifacts/caches on I task tooling;
 small NTFS fixtures on C. No owner data used as test fixtures.
+
+## Live Drive integration exposed a first-run bug
+App1 published/anonymous ZIP verified. Suite105 published through signed APK guard,
+328 assets verified, public channel initially promoted. First owner104-to-105 update
+refused insufficient space; recovered old runtime. Freed5.2GB disposable C Go cache
+and offloaded obsolete public preview72 installer to I. Normal retry backed up1834MB
+metadata/programs (1539MB reused,296MB new), preserved credentials, installed105.
+Other apps healthy; Tickets failed because ensureTicketsDriveSource created empty
+core/attachments before SDK app.json identity. Two-app fixtures omitted Drive.
+Do NOT claim delivered/healthy.105 is withheld; never overwrite its assets.
+Fix106 prepares SDK identity first; only the precise empty legacy layout can be
+adopted using empty-directory removals (no recursive deletion), files/foreign
+markers/reparse points fail. Explicit Tickets readyz gate added to updater; remove
+false all-apps-healthy claim for optional apps. Unit regressions/five packages PASS.
+Need real fresh+upgrade with Drive co-installed, release106, signed companion,
+channel, normal owner105-to-106 install/receipt. App1 EXE unchanged, no need replace
+immutable app assets. VM waived. No owner data as test fixture. Chrome UI control
+stopped on unreliable URL policy check; do not retry UI this turn or use owner
+browser/profile via another mechanism. Synthetic isolated headless tests are used.

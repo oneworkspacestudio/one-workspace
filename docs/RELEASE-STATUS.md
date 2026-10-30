@@ -1,6 +1,15 @@
 # One Workspace release status
 
-## Preview 105: My Tickets
+## Preview 106: My Tickets with Drive startup repair
+
+Prepares the native SDK data identity before Drive creates its protected attachment
+source. Safely repairs the exact empty source layout left by105; unrecognised files,
+foreign app markers and reparse points remain rejected. The updater now explicitly
+waits for Tickets readiness and reports Workspace readiness without claiming that
+optional app failures are healthy. Preview105 is withheld from the update channel;
+its immutable assets remain available for audit. Includes signed Android10.
+
+## Preview 105: My Tickets (withdrawn)
 
 Adds My Tickets to General and the default installation, with MyAccounts sign-in,
 project permissions, issues, boards, sprints, dashboards and protected attachments.

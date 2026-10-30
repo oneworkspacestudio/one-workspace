@@ -1,5 +1,6 @@
 """Local One Workspace publisher. Called by publish-release.ps1; never runs in Actions."""
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 from pathlib import Path
@@ -204,8 +205,13 @@ def main():
         else:
             missing.append(path)
     if missing:
-        for command in upload_commands(args.tag, missing):
-            subprocess.run(command, check=True)
+        # Independent immutable draft assets can upload in parallel. Two bounded
+        # command batches keep Windows argument limits and avoid serializing both
+        # large installer/bundle transfers behind all the small licence files.
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            pending = [pool.submit(subprocess.run, command, check=True) for command in upload_commands(args.tag, missing)]
+            for result in pending:
+                result.result()
     verify_assets(api('releases/' + str(release['id'])), files)
     release = api('releases/' + str(release['id']), {'draft': False})
     if api('commits/' + args.tag)['sha'] != source:

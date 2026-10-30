@@ -216,6 +216,13 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 	for time.Now().Before(deadline) {
 		var progress Progress
 		if platform.LoadJSON(filepath.Join(c.Data, "startup-progress.json"), &progress) == nil && progress.PID == cmd.Process.Pid && progress.State == "ready" {
+			if tickets, installed := c.Catalog.Find("tickets"); installed {
+				if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d/readyz", tickets.Port), 90*time.Second, done, func(detail string) {
+					operationprogress.Report(ctx, "restart", "Checking My Tickets: "+detail, 0, 0, "")
+				}); e != nil {
+					return fmt.Errorf("My Tickets did not become ready: %w", e)
+				}
+			}
 			if forms, installed := c.Catalog.Find("forms"); installed {
 				if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d/readyz", forms.Port), 90*time.Second, done, func(detail string) {
 					operationprogress.Report(ctx, "restart", "Checking My Forms Drive storage: "+detail, 0, 0, "")
@@ -677,7 +684,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 		return nil
 	}
 	cleanup := cleanupSuccessfulUpdate(ctx, next, backup, stage, report)
-	report("Update complete. All apps are healthy. " + cleanup.Summary() + " Recovery backup: " + backup.Path)
+	report("Update complete. Workspace is ready. " + cleanup.Summary() + " Recovery backup: " + backup.Path)
 	return nil
 }
 func RecoverUpdate(ctx context.Context, data string, report func(string)) error {

@@ -3,6 +3,7 @@ package suite
 import (
 	"encoding/json"
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
+	"github.com/oneworkspacestudio/one-workspace/pkg/apphost"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
@@ -50,6 +51,9 @@ func TestTicketsDriveSourceIsIdempotentAndPrivate(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+	if err := apphost.PrepareData(filepath.Join(c.Data, "tickets"), "tickets"); err != nil {
+		t.Fatal("Drive precreation broke native startup:", err)
+	}
 	b, err := os.ReadFile(file)
 	if err != nil {
 		t.Fatal(err)
@@ -85,5 +89,56 @@ func TestTicketsAgentRoutingRequiresNarrowPathAndCredentialShape(t *testing.T) {
 		if got := nativeTicketsRequest(r); got != test.want {
 			t.Errorf("%s %s: %v", test.method, test.path, got)
 		}
+	}
+}
+
+func TestTicketsRepairsOnlyEmptyLegacyDriveLayout(t *testing.T) {
+	for _, shape := range []string{"fresh", "legacy", "files", "extra", "foreign"} {
+		t.Run(shape, func(t *testing.T) {
+			root := filepath.Join(t.TempDir(), "tickets")
+			if shape != "fresh" {
+				if err := os.MkdirAll(filepath.Join(root, "core", "attachments"), 0700); err != nil {
+					t.Fatal(err)
+				}
+			}
+			switch shape {
+			case "files":
+				if err := os.WriteFile(filepath.Join(root, "core", "attachments", "keep.txt"), []byte("do not adopt or delete"), 0600); err != nil {
+					t.Fatal(err)
+				}
+			case "extra":
+				if err := os.Mkdir(filepath.Join(root, "unrelated"), 0700); err != nil {
+					t.Fatal(err)
+				}
+			case "foreign":
+				if err := os.WriteFile(filepath.Join(root, "app.json"), []byte(`{"schema":1,"id":"different"}`), 0600); err != nil {
+					t.Fatal(err)
+				}
+			}
+			err := prepareTicketsData(root)
+			if shape == "fresh" || shape == "legacy" {
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err = apphost.PrepareData(root, "tickets"); err != nil {
+					t.Fatal(err)
+				}
+			} else {
+				if err == nil {
+					t.Fatal("adopted unrecognized data")
+				}
+				if shape == "files" {
+					b, e := os.ReadFile(filepath.Join(root, "core", "attachments", "keep.txt"))
+					if e != nil || string(b) != "do not adopt or delete" {
+						t.Fatal("changed existing files", e)
+					}
+				}
+				if shape != "foreign" {
+					if _, e := os.Stat(filepath.Join(root, "app.json")); !os.IsNotExist(e) {
+						t.Fatal("stamped unrecognized directory")
+					}
+				}
+			}
+		})
 	}
 }
