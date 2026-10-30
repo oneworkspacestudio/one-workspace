@@ -242,3 +242,82 @@ func clearRecoveryMetadata(root, start string) error {
 	}
 	return nil
 }
+
+// Both snapshots have been verified and the runtime stopped before this runs.
+// A path absent from the old catalog was introduced by this update. Keep its
+// verified current bytes in the recovery archive, then remove only that file so
+// restoring the old catalog does not leave an unmanaged collision on reapply.
+func clearIntroducedRecoveryPrograms(c Config, before, current UpdateBackup) error {
+	ownedBefore := map[string]bool{}
+	for _, pkg := range before.Config.Catalog.Packages {
+		ownedBefore[strings.ToLower(pkg.File)] = true
+	}
+	archived := map[string]BackupFile{}
+	for _, f := range current.Files {
+		if f.Area == "programs" && !f.Directory {
+			archived[strings.ToLower(f.Path)] = f
+		}
+	}
+	var paths []string
+	for _, rel := range before.Metadata.Programs {
+		if ownedBefore[strings.ToLower(rel)] {
+			continue
+		}
+		full, err := checkedScopePath(c.Programs, rel)
+		if err != nil {
+			return err
+		}
+		st, err := os.Lstat(full)
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			return err
+		}
+		saved, ok := archived[strings.ToLower(rel)]
+		if !st.Mode().IsRegular() || !ok {
+			return errors.New("introduced program has no verified current-state recovery copy")
+		}
+		sum, size, err := fileDigest(full)
+		if err != nil {
+			return err
+		}
+		if sum != saved.SHA256 || size != saved.Size {
+			return errors.New("introduced program changed after its recovery snapshot; current files were kept")
+		}
+		streams, err := platform.NamedStreams(full)
+		if err != nil {
+			return err
+		}
+		if len(streams) != len(saved.Streams) {
+			return errors.New("introduced program streams changed after their recovery snapshot; current files were kept")
+		}
+		for _, stream := range streams {
+			matched := false
+			for _, stored := range saved.Streams {
+				if stream.Name != stored.Name {
+					continue
+				}
+				sum, size, err := fileDigest(full + ":" + stream.Name)
+				if err != nil {
+					return err
+				}
+				matched = sum == stored.SHA256 && size == stored.Size
+				break
+			}
+			if !matched {
+				return errors.New("introduced program stream has no matching recovery copy; current files were kept")
+			}
+		}
+		paths = append(paths, full)
+	}
+	for _, full := range paths {
+		if err := platform.ClearFileReadOnly(full); err != nil {
+			return err
+		}
+		if err := os.Remove(full); err != nil {
+			return err
+		}
+	}
+	return nil
+}

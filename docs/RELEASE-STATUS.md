@@ -7,7 +7,9 @@ private runtime ownership, independent updates and recovery. MyAccounts adds
 pending enrolment, ten single-use recovery codes, account-wide factor limits,
 atomic replay protection, encrypted server seeds and central token/session MFA
 proof. Workspace revalidates provider sessions, including proxied streams.
-Installer integration6 and manager109 are required. Includes signed Android11.
+Installer integration6 and manager109 are required. Recovery archives and removes
+verified program files introduced by an update, allowing a clean rollback and
+reapplication while keeping changed files and named streams safe. Includes signed Android11.
 Physical Android/iPhone, reboot and clean-host acceptance remain open. This is
 an evaluation preview, not a production security certification.
 

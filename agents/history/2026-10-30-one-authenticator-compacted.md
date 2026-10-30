@@ -58,3 +58,12 @@ Rebuild and rerun actual protected upgrade/rollback before suite publication.
 The first fresh harness also assumed built-in org; actual managed myaccounts org
 is now read from the signed-in synthetic profile. No product workaround or owner
 fixture was used. Existing owner108 has preexisting Cinema failed readiness.
+
+Protected upgrade passed after ownership fix. Full rollback/reapply acceptance
+found a generic metadata recovery defect: introduced program files survived old
+catalog restoration and blocked reapplication as unmanaged files. New regression
+reproduced it. Recovery now removes only catalog-introduced file paths after both
+snapshots verify and runtime stops, matching main bytes and all NTFS named streams
+against the current-state archive. Unrelated/changed/unarchived files remain.
+Catalog/distribution/suite tests and focused changed-byte/named-stream refusal
+checks pass. Rebuild and rerun full fresh/upgrade/rollback/reapply before publication.
