@@ -1,0 +1,20 @@
+{
+  "newFailures": [],
+  "unselectedContractsAndBytesPreserved": true,
+  "status": "PASS",
+  "publicAuthenticatorAnonymousHealthy": true,
+  "signingKeysPreserved": true,
+  "accounts": "preview-20261030.1",
+  "version": "0.3.0-preview.109",
+  "schema": 1,
+  "identityAndPasswordInvariant": true,
+  "remainingFailures": [],
+  "phoneEnrolled": false,
+  "runningServices": 34,
+  "authenticator": "0.1.0-preview.2",
+  "finished": "2026-10-30T23:05:52.7950593Z",
+  "preexistingFailures": [],
+  "recoveryManifestVerified": true,
+  "normalProtectedPairedUpdate": true,
+  "ownerConfigurationAndCredentialsPreserved": true
+}

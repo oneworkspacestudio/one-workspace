@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "defaultOnline": true,
+  "offlineFlag": false,
+  "availableApps": 35,
+  "authenticatorDefaultAdministration": true,
+  "ownerDataUsed": false,
+  "installationSubmitted": false
+}

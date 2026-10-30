@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "tag": "v0.3.0-preview.109",
+  "draft": false,
+  "releaseId": 429531649,
+  "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.109",
+  "publicChannelVerified": true,
+  "managedAcceptancePassed": true,
+  "anonymousWindowsRangeVerified": true,
+  "allImmutableAssetDigestsVerified": true,
+  "actionsDisabled": true,
+  "completeManagedInventory": 35,
+  "assetsVerified": 343,
+  "releaseSource": "2da2fe88c5bd7739d2d8e6a09c63cdc76bd6f074",
+  "signedAndroidVersion": "0.1.0-preview.11",
+  "signedAndroidSHA256": "a0c04fd460e00b09e94ed4a879f4c0e55b8daddb09c411673aa6bd373b2ac861",
+  "channelPromotionCommit": "c0801b6",
+  "components": {
+    "authenticator": "v0.1.0-preview.2",
+    "accounts": "preview-20261030.1"
+  }
+}
