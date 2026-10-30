@@ -211,8 +211,8 @@
   },
   "oneAuthenticator": {
     "repository": "oneworkspacestudio/one-authenticator",
-    "tag": "v0.1.0-preview.1",
-    "asset": "one-authenticator-0.1.0-preview.1-windows-amd64.zip",
-    "sha256": "3d4ad880829b6e0f1f80e2717b78bb397131d6daa37c9e8cb59a09b88f774b26"
+    "tag": "v0.1.0-preview.2",
+    "asset": "one-authenticator-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "81771dc89aa9270378903e3f7353a5c852c2fb05f527f2f91b383a2feae03f31"
   }
 }
