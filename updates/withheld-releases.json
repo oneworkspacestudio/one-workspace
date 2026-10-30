@@ -55,6 +55,11 @@
       "tag": "v0.1.0-preview.1",
       "repository": "oneworkspacestudio/my-push",
       "reason": "Superseded before owner server installation: default catalogue port conflicts with My AI and initial metadata used a legacy filename. Use preview.2 / Workspace94."
+    },
+    {
+      "repository": "oneworkspacestudio/one-workspace",
+      "tag": "v0.3.0-preview.105",
+      "reason": "Drive could precreate an unmarked empty Tickets folder, preventing first startup. Use preview106, which prepares SDK ownership safely and explicitly gates update completion on Tickets readiness."
     }
   ]
 }
