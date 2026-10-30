@@ -124,3 +124,23 @@ observing Updates; use supported manager108 then Shield4 flow, preserve unrelate
 apps. Do not interact with unrelated Remote setup/security modal. MiniPC excluded.
 Manifest credential-fetch401 is separate and still unresolved; app4 fixes Settings
 map crash,108 fixes global update discovery. AI stays off/Monitor-only.
+
+## Remote protected update started (20:13 UTC)
+
+Native Chrome activation succeeded via fresh @oai/sky window. Current remote GUI
+freshly showed installed manager107, Remote7, Shield3 (false up-to-date as expected).
+Checked public channel, selected ONLY Workspace108:17.6MB/two package payloads,
+manager + release notice; other available app rows unselected. Started normal
+Back up and install selected updates. At20:23 UTC recovery1888.6MB copied and
+verifying21442 files. Do not repeat install. Controller remote localhost52971.
+Chrome Remote Desktop DESKTOP-Workstation session remains connected; current remote
+updater tab is visible. No shell or owner data used through GUI.
+
+Local Windows Firewall suite.test.exe prompt now covers browser. Async user request
+asks user handle prompt; mandatory Computer Use security deny prevents interaction.
+No click Allow/Cancel attempted. After prompt handled, fresh native screenshot then
+await native completion, reconnect new108 controller (old idle close/refresh only
+if needed), check releases and select Shield4 only, verify Settings/backup controls.
+Do not claim remote completion yet. Earlier pending remote foreground request has
+been satisfied by native Chrome activation. Public delivery evidence committed
+and pushed e5a9776; current PC108 complete except Cinema readiness failure.
