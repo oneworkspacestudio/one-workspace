@@ -142,3 +142,29 @@ as separate evidence-backed stages. No remaining primary distribution work.
 Second PC remains pending by user instruction. Desktop hosting is inactive until
 owner setup; no actual host enrollment, physical-phone, reboot, pre-login, secure
 desktop, audio, files or individual-monitor acceptance is claimed.
+
+## Host setup repair delivered as Remote7
+
+Reproduced screenshot failure in a synthetic NTFS host-configuration fixture and
+isolated registry namespace. apphost.Service omits PATHEXT/PATH; Windows PowerShell
+reported CantActivateDocumentInPipeline on icacls.exe before private host setup.
+Remote7 supplies standard executable extensions and trusted system command paths
+to PowerShell without importing interactive PATH.13 Node regressions pass, including
+real restricted Windows PowerShell failure/success, plus Go manager-boundary tests.
+The original idle acceptance did not exercise opt-in host configuration. Lifecycle
+rules now explicitly require that path in the supervised environment.
+
+Remote6 immutable checkpoint added a runtime file and was correctly refused by
+the106 planner before mutation.7 moves the helper into existing lifecycle.cjs;
+all125 package IDs/paths match5.6 is withheld;7 release assets/digests and anonymous
+checksums/channel were verified; normal organization builder pin is7. No suite
+release was needed. Do not replace published6 assets.
+
+Primary was already106 (not earlier104) and stopped at deployment preflight.
+Old104 installer refused the newer contract; the installed106 protected Updates
+controller successfully applied only Remote7. Transaction and cleanup completed,
+latest verified recovery kept,33 unrelated app contracts and locations/identity
+retained. All33 services healthy, all125 Remote payload hashes match release, public
+HTTPS MyAccounts bootstrap reports7. No PIN/host enrollment was performed; the
+owner must retry Enable remote access. Second PC remains pending. Evidence is
+docs/evidence/remote-host-setup7*.json. No real desktop/reboot/physical-phone claim.

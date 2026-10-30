@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "remote": "0.1.0-preview.7",
+  "sourceCommit": "6c2b8e7d2f13791420de6f46eb55606aeff8dddb",
+  "nodeTestsPassed": 13,
+  "goManagerBoundaryTestsPassed": true,
+  "restrictedWindowsPowerShellNativeCommandFailureReproduced": true,
+  "restrictedWindowsPowerShellNativeCommandFixPassed": true,
+  "isolatedRegistryHostConfigurationPassed": true,
+  "packageIDsAndPathsMatchInstalled5Contract": true,
+  "releaseAssetsVerified": 10,
+  "anonymousReleaseChecksumVerified": true,
+  "ownerEnrollmentPerformed": false,
+  "ownerDataUsedAsFixture": false
+}

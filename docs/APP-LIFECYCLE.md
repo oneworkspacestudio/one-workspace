@@ -64,6 +64,9 @@ Required acceptance for a new app:
 2. Install using the actual installer on a fresh supported filesystem. Check
    setup selection, tile/picker discovery, launch, first sign-in, permissions,
    health, static assets, required sidecars and the primary user workflow.
+   Exercise opt-in native setup in the supervised worker's restricted environment,
+   not only an interactive shell. Declare required Windows command paths and
+   executable extensions explicitly. An idle health check does not verify host setup.
 3. Upgrade an earlier catalog/manager through the normal backed-up path. Check
    new default-app discovery and optional-app selection. Verify old app payloads,
    settings, identity, exclusions and files are retained as intended.

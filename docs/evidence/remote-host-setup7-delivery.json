@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "managerHealthy": true,
+  "remote": "0.1.0-preview.7",
+  "manager": "0.3.0-preview.106",
+  "transactionComplete": true,
+  "existingLocationsAndIdentityRetained": true,
+  "unrelatedAppContractsRetained": 33,
+  "hostEnrolledByAgent": false,
+  "normalProtectedAppUpdate": true,
+  "version": "0.1.0-preview.7",
+  "allComponentPayloadHashesVerified": 125,
+  "publicMyAccountsBootstrapVersionVerified": true,
+  "hostEnrollmentPerformed": false
+}
