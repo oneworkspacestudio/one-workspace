@@ -61,3 +61,47 @@ channel, normal owner105-to-106 install/receipt. App1 EXE unchanged, no need rep
 immutable app assets. VM waived. No owner data as test fixture. Chrome UI control
 stopped on unreliable URL policy check; do not retry UI this turn or use owner
 browser/profile via another mechanism. Synthetic isolated headless tests are used.
+
+## Corrected106 acceptance and primary installation
+Source259f436 prepares SDK marker before Drive and adds explicit Tickets readyz
+update gate. Five Go packages PASS. Normal published-pin106 catalog34/307 PASS.
+Real fresh106 +104-to-106 upgrade with Accounts/Drive/Tickets PASS, then independent
+synthetic Tickets2 update and verified rollback PASS (106-base fixture; older105
+fixture was correctly rejected as a downgrade). No synthetic2 release published.
+App1 EXE remainsF112..., unchanged. Owner105-to-106 normal backed-up deployment
+PASS:34 prior app contracts,282 unchanged installed payload hashes, credentials/
+settings retained; all33 supervised services running; nativeSDK marker/ready/OIDC
+verified, remote/tickets navigation303 to sign-in. No owner fixture or browser
+session extraction. Latest verified recovery retained; metadata/program backup
+1834.5MB,1538.7MB reused,295.8MB new. Prior105 failed first startup; never claim it
+healthy. Owner no longer blocked. C free~7GB after deleting disposable5.2GB Go
+build cache and task frontend/fixtures; old public72 installer moved verified to I.
+Use I task GOCACHE, not the removed C category cache. Preserve owner backups/data.
+
+Publication106 is still a draft at this checkpoint. First upload hitHTTP408 on
+Drive and Setup;166 correct assets retained, no partial assets removed. Mandatory
+signed-Android publisher retried without changing source or assets; current retry
+retains all matching bytes and uploads missing assets. APK88070a8cc44964db449f861ddc31202da497ef6e15f0ce6f1b7e7ae1dbe299fa, source259f436.
+Need final all329 asset verification, anonymous signedAPK and public channel proof,
+then update this checkpoint and push final documentation. Do not touch immutable
+105/app1 assets;105 is withheld. No further UI interaction this turn (URL policy
+stopped native Chrome); don't bypass via owner browser profiles. RemoteAPI and
+synthetic isolated browser tests provide stated checks. Only thisPC targeted.
+
+## Final publication and delivery
+Workspace v0.3.0-preview.106 is PUBLIC, tag source259f436,329 assets size/digest
+verified, signed APK88070... anonymous download verified, exact public update
+channel confirmed. Promotion commit e0accfe.106 retry retained all166 uploaded
+assets and completed missing transfers; no published asset replacement.105 remains
+withheld; app1 remains public at8650cb8 source/F112EXE/770bZIP. Both org Actions
+permissions disabled. Native first-run/SSO, 3-app Drive co-install fresh+104upgrade,
+independent update/rollback and primary105-to-106 install PASS. Source/doc followup
+commits do not move release tags. Final source status should be clean after push.
+Installed thisPC only,34 registrations/33 supervised services healthy, all old
+credentials/settings and282 unchanged installed hashes retained, SDK ownership
+repair/native readiness and protected remote303 navigation verified. Owner-profile
+GUI/phone/reboot/service qualification remain unverified; no owner test fixtures.
+Evidence remains on I task tooling (primary106-delivery.json,remote106-delivery.json,
+managed106/native reports); sanitized synthetic evidence accompanies release.
+Clean remaining disposable C release clone only after publisher exits and confirms
+pushed channel; preserve current C owner data and newest verified recovery backup.
