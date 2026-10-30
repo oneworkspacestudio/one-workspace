@@ -28,6 +28,9 @@ func Main(config Config, ui fs.FS, build func(*Host) (Application, error)) error
 	if e := f.Parse(os.Args[1:]); e != nil {
 		return e
 	}
+	if len(f.Args()) != 0 {
+		return errors.New("unexpected command argument; check quoted paths and flags")
+	}
 	if *version {
 		fmt.Println(config.Version)
 		return nil
@@ -54,7 +57,7 @@ func Main(config Config, ui fs.FS, build func(*Host) (Application, error)) error
 		if *backup != "" {
 			return errors.New("choose backup or restore")
 		}
-		return Restore(config.Data, config.ID, *restore, os.Getenv("WORKSPACE_BACKUP_PASSWORD"))
+		return RestoreWithDatabaseFiles(config.Data, config.ID, *restore, os.Getenv("WORKSPACE_BACKUP_PASSWORD"), config.RestoreFiles, config.RestoreDatabases)
 	}
 	h, e := New(config, ui)
 	if e != nil {
@@ -90,7 +93,11 @@ func Main(config Config, ui fs.FS, build func(*Host) (Application, error)) error
 		link = h.SetupURL()
 	}
 	fmt.Println(h.Config.Name + ": " + link)
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	parent := config.ParentContext
+	if parent == nil {
+		parent = context.Background()
+	}
+	ctx, cancel := signal.NotifyContext(parent, os.Interrupt)
 	defer cancel()
 	if !*noBrowser {
 		platform.OpenBrowser(link)

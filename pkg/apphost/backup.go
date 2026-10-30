@@ -20,6 +20,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 )
@@ -219,7 +220,33 @@ func (h *Host) Snapshot(dst io.Writer, password string) error {
 	if e = add(dbpath, "state.sqlite"); e != nil {
 		return e
 	}
-	for _, name := range []string{"objects", "secret.key"} {
+	names := make([]string, 0, len(h.SnapshotFiles))
+	for name := range h.SnapshotFiles {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if name == "state.sqlite" || name == "manifest.json" || name == "secret.key" || strings.HasPrefix(name, "objects/") {
+			return errors.New("reserved snapshot path")
+		}
+		path, err := platform.Inside(filepath.Join(tmp, "extra"), name)
+		if err != nil {
+			return err
+		}
+		if err = os.MkdirAll(filepath.Dir(path), 0700); err != nil {
+			return err
+		}
+		if err = h.SnapshotFiles[name](path); err != nil {
+			return err
+		}
+		if err = add(path, name); err != nil {
+			return err
+		}
+	}
+	for _, name := range append([]string{"objects", "secret.key"}, h.BackupPaths...) {
+		if _, err := platform.Inside(h.Config.Data, name); err != nil {
+			return err
+		}
 		path := filepath.Join(h.Config.Data, name)
 		if _, e = os.Stat(path); os.IsNotExist(e) {
 			continue
@@ -261,7 +288,16 @@ func (h *Host) Snapshot(dst io.Writer, password string) error {
 	}
 	return encryptArchive(dst, archive, password)
 }
-func Restore(root, app, archive, password string) (result error) {
+func Restore(root, app, archive, password string) error {
+	return RestoreWithFiles(root, app, archive, password, nil)
+}
+
+// RestoreWithFiles accepts only extra paths explicitly named by the application.
+func RestoreWithFiles(root, app, archive, password string, extra []string) error {
+	return RestoreWithDatabaseFiles(root, app, archive, password, extra, nil)
+}
+
+func RestoreWithDatabaseFiles(root, app, archive, password string, extra, databases []string) (result error) {
 	if _, e := os.Lstat(root); !os.IsNotExist(e) {
 		return errors.New("restore requires a new, empty destination path; existing data is preserved")
 	}
@@ -329,7 +365,16 @@ func Restore(root, app, archive, password string) (result error) {
 		if total > uint64(maxBackupBytes) || f.UncompressedSize64 > 512<<20 {
 			return errors.New("backup decompression limit exceeded")
 		}
-		if f.Name != "manifest.json" && f.Name != "state.sqlite" && f.Name != "secret.key" && !strings.HasPrefix(f.Name, "objects/") {
+		allowedExtra := false
+		for _, name := range extra {
+			if _, err := platform.Inside(outdir, strings.TrimSuffix(name, "/")); err != nil {
+				return err
+			}
+			if f.Name == name || strings.HasSuffix(name, "/") && strings.HasPrefix(f.Name, name) {
+				allowedExtra = true
+			}
+		}
+		if f.Name != "manifest.json" && f.Name != "state.sqlite" && f.Name != "secret.key" && !strings.HasPrefix(f.Name, "objects/") && !allowedExtra {
 			return errors.New("unknown backup entry")
 		}
 		if strings.HasPrefix(f.Name, "objects/") {
@@ -377,6 +422,11 @@ func Restore(root, app, archive, password string) (result error) {
 			return errors.New("backup object checksum mismatch")
 		}
 	}
+	for _, required := range extra {
+		if !strings.HasSuffix(required, "/") && !seen[required] {
+			return errors.New("backup is missing a required application file")
+		}
+	}
 	if manifest.Schema != 1 || manifest.App != app || !seen["state.sqlite"] {
 		return errors.New("backup does not belong to this application")
 	}
@@ -409,6 +459,41 @@ func Restore(root, app, archive, password string) (result error) {
 	}
 	if closeErr != nil {
 		return closeErr
+	}
+	for _, name := range databases {
+		declared := false
+		for _, allowed := range extra {
+			if name == allowed {
+				declared = true
+			}
+		}
+		if !declared {
+			return errors.New("database snapshot is not declared in the restore allowlist")
+		}
+		path, err := platform.Inside(outdir, name)
+		if err != nil {
+			return err
+		}
+		embedded, err := sql.Open("sqlite", path)
+		if err != nil {
+			return err
+		}
+		embedded.SetMaxOpenConns(1)
+		_, err = embedded.ExecContext(ctx, "PRAGMA trusted_schema=OFF")
+		var status string
+		if err == nil {
+			err = embedded.QueryRowContext(ctx, "PRAGMA quick_check").Scan(&status)
+		}
+		closeErr := embedded.Close()
+		if err != nil {
+			return errors.New("an application database failed restore integrity validation")
+		}
+		if status != "ok" {
+			return errors.New("an application database failed restore integrity validation")
+		}
+		if closeErr != nil {
+			return closeErr
+		}
 	}
 	if e = os.Rename(outdir, root); e != nil {
 		return e

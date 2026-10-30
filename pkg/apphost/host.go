@@ -31,7 +31,13 @@ import (
 )
 
 type Config struct {
+	ParentContext context.Context
+
 	ID, Name, Version, Data, Listen, Origin, Issuer, ClientID, ClientSecret, Owner, WorkspaceURL, RegistryURL, RegistryToken string
+	// RestoreFiles is an application-owned allowlist, never read from an archive.
+	RestoreFiles []string
+	// RestoreDatabases are declared SQLite snapshots checked before committing restore.
+	RestoreDatabases []string
 	// MediaCapture is an explicit app capability. Permission still requires a user gesture.
 	MediaCapture bool
 	// Explicit browser capabilities; disabled unless an application requests them.
@@ -61,21 +67,29 @@ type loginAttempt struct {
 	Since time.Time
 }
 type Host struct {
-	Config   Config
-	DB       *sql.DB
-	Mux      *http.ServeMux
-	Base     string
-	Freeze   sync.RWMutex
-	Log      *slog.Logger
-	lock     *os.File
-	logFile  *os.File
-	ui       fs.FS
-	authMu   sync.Mutex
-	flows    map[string]flow
-	attempts map[string]loginAttempt
-	oauth    oauth2.Config
-	verifier *oidc.IDTokenVerifier
-	setup    string
+	// UIHandler serves an embedded application UI when the app supplies its own router.
+	UIHandler http.Handler
+	// SnapshotFiles writes consistent snapshots of additional application databases.
+	SnapshotFiles map[string]func(string) error
+	// BackupPaths contains additional immutable files/directories under Data.
+	BackupPaths []string
+	// CloseHooks release embedded database resources before the private-data lock.
+	CloseHooks []func() error
+	Config     Config
+	DB         *sql.DB
+	Mux        *http.ServeMux
+	Base       string
+	Freeze     sync.RWMutex
+	Log        *slog.Logger
+	lock       *os.File
+	logFile    *os.File
+	ui         fs.FS
+	authMu     sync.Mutex
+	flows      map[string]flow
+	attempts   map[string]loginAttempt
+	oauth      oauth2.Config
+	verifier   *oidc.IDTokenVerifier
+	setup      string
 }
 type contextKey struct{}
 
@@ -258,6 +272,11 @@ func New(c Config, ui fs.FS) (h *Host, result error) {
 	return h, nil
 }
 func (h *Host) Close() error {
+	for _, close := range h.CloseHooks {
+		if err := close(); err != nil {
+			h.Log.Error("embedded resource close failed", "kind", fmt.Sprintf("%T", err))
+		}
+	}
 	_, _ = h.DB.Exec("PRAGMA wal_checkpoint(TRUNCATE)")
 	e := h.DB.Close()
 	if h.logFile != nil {
@@ -351,6 +370,10 @@ func (h *Host) routes() {
 	h.Mux.HandleFunc("GET /api/me", h.Require(func(w http.ResponseWriter, r *http.Request) { JSON(w, 200, Current(r)) }))
 	h.Mux.HandleFunc("POST /api/local-users", h.Owner(h.localUser))
 	h.Mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		if h.UIHandler != nil {
+			h.UIHandler.ServeHTTP(w, r)
+			return
+		}
 		if h.ui == nil {
 			http.NotFound(w, r)
 			return
