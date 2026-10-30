@@ -193,3 +193,22 @@ host activation remain pending. Secondary108 was restarted through its installed
 launcher after its public tunnel/local manager became unavailable; public Remote7
 and MyAccounts sign-in recovered. Its private drive was observed as NTFS. An old
 paging-file error in launcher.log is not evidence of today's failure cause.
+
+Remote8 delivery follow-up: primary normal protected app-only update completed on
+Workspace108;125 payload hashes match,33 unrelated contracts and existing
+locations/identity/credential contents remain. All apps now report running and the
+verified recovery copy is retained. DPAPI ciphertext changes on ordinary Save;
+compare decrypted contents only in memory for preservation checks, never store or
+print them. No credential change occurred.
+
+Second-PC Updates UI and public bootstrap confirm Remote8 installed on108, with
+completed update/recovery retained. Owner-only read-only diagnostics confirm
+effective Restricted, machine/user Undefined, FullLanguage, Valid host signature,
+NTFS. Actual owner host activation remains pending at the open PIN/setup form;
+the owner must submit it. App evidence: docs/host-setup8-delivery.json in my-remote.
+
+The final full catalog/distribution run passed catalog but again failed the
+existing timing-sensitive TestLargeDownloadExceedsSingleRequestTimeoutSafely
+(expected two chunks, got3). Its earlier focused rerun passed. No distribution
+source or timing test changed for this channel/pin-only repair; do not report the
+full distribution suite as passing.
