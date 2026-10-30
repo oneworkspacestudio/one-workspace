@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "from": "0.1.0-preview.1",
+  "to": "0.1.0-preview.2",
+  "waitingWorkerActivatesAfterClosingApp": true,
+  "encryptedVaultSurvivesUpdate": true,
+  "offlineUnlockAfterHostStopped": true,
+  "physicalDevice": false
+}

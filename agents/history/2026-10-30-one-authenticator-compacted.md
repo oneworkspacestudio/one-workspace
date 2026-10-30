@@ -67,3 +67,20 @@ snapshots verify and runtime stops, matching main bytes and all NTFS named strea
 against the current-state archive. Unrelated/changed/unarchived files remain.
 Catalog/distribution/suite tests and focused changed-byte/named-stream refusal
 checks pass. Rebuild and rerun full fresh/upgrade/rollback/reapply before publication.
+
+Final native installer acceptance PASS (managed-final6):35-app default setup;
+actual managed PWA encryption/offline codes; old hub-session denial after MFA;
+password-only rejection and real OTP SSO to Drive/Docs/Photos; protected108→109
+identity/selection/file preservation; old controller rejects integration6 before
+mutation; full supported rollback, clean reapplication and original-password SSO
+after restore. Recovery fix independently tested changed-byte and NTFS-stream
+refusal. Sanitized evidence docs/evidence/one-authenticator109/.
+
+A five-minute harness CLI limit was too short under heavy I/O; extended to20min
+with checkpointed fixture phases. An attempted resume used service AdminPassword,
+which is deliberately different from the owner password; that check was invalid.
+Final6 used a fresh synthetic password retained only in task-local CurrentUser
+DPAPI for retry, never a product credential or owner installation. All final6
+phases passed uninterrupted. Product Windows bits match source79c7dbc; subsequent
+changes are test/evidence only. Freeze/tag next, mandatory signed Android11
+publisher, anonymous public channel/assets, then protected owner108 paired update.

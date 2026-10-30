@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "schema": 1,
+  "checks": [
+    {
+      "path": "fresh",
+      "managedPublicOfflinePWA": true,
+      "encryptedPhoneEnrollment": true,
+      "centralOldHubSessionRevoked": true,
+      "passwordOnlyAppDenied": true,
+      "totpCompletesRealDriveSSO": true
+    },
+    {
+      "path": "upgrade",
+      "managedPublicOfflinePWA": true,
+      "encryptedPhoneEnrollment": true,
+      "centralOldHubSessionRevoked": true,
+      "passwordOnlyAppDenied": true,
+      "totpCompletesRealDriveSSO": true
+    }
+  ],
+  "freshInventory35": true,
+  "authenticatorDefaultAdministration": true,
+  "oldControllerRejectedBeforeMutation": true,
+  "priorIdentitySelectionAndFilesPreserved": true,
+  "protectedRecoveryAndTransactionComplete": true,
+  "supportedRollbackAndReapply": true,
+  "originalPasswordAndSSOAfterReapply": true,
+  "ownerDataUsed": false,
+  "physicalPhone": false
+}

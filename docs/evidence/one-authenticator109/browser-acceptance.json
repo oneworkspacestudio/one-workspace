@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "physicalDevice": false,
+  "browser": "Chrome headless",
+  "offlineReloadUnlock": true,
+  "reopenOffline": true,
+  "rfcCodeMatch": true,
+  "encryptedIndexedDB": true,
+  "wrongPassphraseDenied": true,
+  "backgroundLock": true,
+  "noCachedSecrets": true,
+  "noThirdPartyRequests": true,
+  "phoneAndDesktopLayout": true,
+  "measuredEncryptionMs": 273
+}
