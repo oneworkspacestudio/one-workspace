@@ -120,7 +120,7 @@ func TestNativeControllerUpgrade(t *testing.T) {
 	if err := Save(c, secret); err != nil {
 		t.Fatal(err)
 	}
-	if err := platform.CopyFile(current, installed); err != nil {
+	if err := writeReplace(current, installed); err != nil {
 		t.Fatal(err)
 	}
 	launch()
