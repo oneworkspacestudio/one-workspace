@@ -93,3 +93,19 @@ Workspace logout/native token revocation and desktop/phone no errors/overflow.
 Evidence is docs/evidence/remote104/. Synthetic services were stopped afterward.
 No real host enrollment was performed. Source is ready for required signed-APK
 publication and protected primary deployment; those remain pending at this commit.
+
+## Published104 and Windows publisher hardening
+
+Workspace104 source01e96882648e9f2b994b12b438783d5c4a776531 is published via
+the mandatory signed-Android publisher:338 asset sizes/digests, approved Android10
+certificate/source provenance, anonymous APK and public channel verified. Channel
+commitd281625 promoted104 plus Remote5.
+
+Windows publication exposed default CP1252 decoding and Win32 argument limits
+with300 payloads. Publication used UTF-8 process configuration and short staging;
+main now explicitly decodes UTF-8 and batches below24000 UTF-16 units. Three
+regression tests cover600 assets/Unicode, no omissions/duplicates and empty/
+overlong input. Large exFAT uploads stalled; official portable gh2.103.3 and
+hash-verified NTFS copies recovered only the missing draft payloads. The required
+publisher then reverified all338 and performed publication/channel promotion.
+No public assets/tags were overwritten. Runtime bytes stay at the tested104 tag.

@@ -71,3 +71,15 @@ was not performed.
 This local guard and repository policy apply to One Workspace releases. GitHub
 itself permits maintainers to bypass a local script, so use this entry point for
 every release. Server app repositories retain their own release workflows.
+
+## Windows publication reliability
+
+The publisher decodes GitHub/Git output as UTF-8 and batches asset arguments below
+Windows UTF-16 command-line limits. `python scripts/test-publisher.py` covers
+large catalogs, Unicode paths and empty/overlong input without network writes.
+
+For very large assets, use current official GitHub CLI tooling and NTFS staging
+if another filesystem stalls reads. A failed draft upload may be resumed with
+the same source and exact bytes. Verify retained assets, retry only missing files,
+then rerun the mandatory publisher to verify the full set and promote. Never
+clobber published assets or announce an unverified channel.

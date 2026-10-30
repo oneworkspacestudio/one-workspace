@@ -17,7 +17,7 @@ INDEX_URL = 'https://raw.githubusercontent.com/' + REPO + '/main/updates/release
 
 
 def run(args, **kwargs):
-    return subprocess.check_output([str(a) for a in args], text=True, **kwargs).strip()
+    return subprocess.check_output([str(a) for a in args], text=True, encoding='utf-8', **kwargs).strip()
 
 
 def git(*args):
@@ -79,6 +79,24 @@ def validate_managed_catalog(catalog):
             raise RuntimeError('Managed app contract drift: ' + expected['id'])
         if not app['source'].startswith('https://github.com/' + expected['repository'] + '/'):
             raise RuntimeError('Managed app source drift: ' + expected['id'])
+
+
+def upload_commands(tag, paths, limit=24000):
+    """Stay below Windows' UTF-16 CreateProcess command-line limit."""
+    prefix = ['gh', 'release', 'upload', tag, '--repo', REPO]
+    def length(args):
+        return len(subprocess.list2cmdline(args).encode('utf-16-le')) // 2
+    batch = []
+    for path in paths:
+        path = str(path)
+        if length(prefix + [path]) > limit:
+            raise RuntimeError('Release asset path is too long; choose a shorter staging folder')
+        if batch and length(prefix + batch + [path]) > limit:
+            yield prefix + batch
+            batch = []
+        batch.append(path)
+    if batch:
+        yield prefix + batch
 
 
 def prepare_package_assets(out):
@@ -183,7 +201,8 @@ def main():
         else:
             missing.append(path)
     if missing:
-        subprocess.run(['gh', 'release', 'upload', args.tag, '--repo', REPO] + [str(p) for p in missing], check=True)
+        for command in upload_commands(args.tag, missing):
+            subprocess.run(command, check=True)
     verify_assets(api('releases/' + str(release['id'])), files)
     release = api('releases/' + str(release['id']), {'draft': False})
     if api('commits/' + args.tag)['sha'] != source:
