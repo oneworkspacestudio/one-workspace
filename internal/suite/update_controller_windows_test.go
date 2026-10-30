@@ -120,8 +120,12 @@ func TestNativeControllerUpgrade(t *testing.T) {
 	if err := Save(c, secret); err != nil {
 		t.Fatal(err)
 	}
-	if err := writeReplace(current, installed); err != nil {
+	if err := replaceUpdaterFile(current, installed); err != nil {
 		t.Fatal(err)
+	}
+	probe := &Portal{rt: &Runtime{Config: c}}
+	if _, _, err := probe.updateWindow(); err != nil {
+		t.Fatalf("legacy window must be discoverable before replacement: %v (image %s)", err, filepath.Base(old.Executable))
 	}
 	launch()
 	fresh := waitWindow(old.PID)

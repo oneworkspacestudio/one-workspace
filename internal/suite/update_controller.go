@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"time"
@@ -39,6 +40,29 @@ func UpdateControllerCurrent(data, digest string) bool {
 
 func controllerMatches(c Config, window updateWindow) bool {
 	return window.RemoteProtocol == RemoteUpdateProtocol && window.BinarySHA256 != "" && window.BinarySHA256 == c.Catalog.Packages["manager"].SHA256
+}
+
+// Windows can retain an executable image lock briefly after process exit.
+// Retry only access/sharing failures, for a bounded time, without terminating
+// processes or changing permissions. Callers must retire an old controller first.
+func replaceUpdaterFile(src, dst string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	return retryUpdaterReplace(ctx, func() error { return writeReplace(src, dst) })
+}
+
+func retryUpdaterReplace(ctx context.Context, replace func() error) error {
+	for {
+		err := replace()
+		if err == nil || !os.IsPermission(err) {
+			return err
+		}
+		select {
+		case <-ctx.Done():
+			return err
+		case <-time.After(100 * time.Millisecond):
+		}
+	}
 }
 
 func closeIdleUpdateController(ctx context.Context, target *url.URL) error {

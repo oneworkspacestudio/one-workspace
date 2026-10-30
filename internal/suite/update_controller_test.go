@@ -2,6 +2,7 @@ package suite
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -11,6 +12,32 @@ import (
 
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 )
+
+func TestUpdateControllerReplacementRetriesOnlyTransientAccessFailure(t *testing.T) {
+	calls := 0
+	err := retryUpdaterReplace(context.Background(), func() error {
+		calls++
+		if calls < 3 {
+			return os.ErrPermission
+		}
+		return nil
+	})
+	if err != nil || calls != 3 {
+		t.Fatalf("transient retry: calls=%d error=%v", calls, err)
+	}
+	calls = 0
+	err = retryUpdaterReplace(context.Background(), func() error { calls++; return os.ErrNotExist })
+	if !errors.Is(err, os.ErrNotExist) || calls != 1 {
+		t.Fatal("unexpected retry for non-sharing failure")
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	calls = 0
+	err = retryUpdaterReplace(ctx, func() error { calls++; return os.ErrPermission })
+	if !errors.Is(err, os.ErrPermission) || calls != 1 {
+		t.Fatal("retry ignored cancellation")
+	}
+}
 
 func TestUpdateControllerIdentitySurvivesProtocolReuse(t *testing.T) {
 	c := Config{Catalog: catalog.Catalog{Packages: map[string]catalog.Package{"manager": {SHA256: "new-binary"}}}}

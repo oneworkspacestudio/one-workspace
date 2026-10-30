@@ -878,7 +878,7 @@ func launchUpdates(c Config, open bool) error {
 	if !strings.EqualFold(filepath.Clean(current), filepath.Join(c.Data, "Workspace.exe")) {
 		return errors.New("open updates from the protected installed manager")
 	}
-	if e = writeReplace(current, helper); e != nil {
+	if e = replaceUpdaterFile(current, helper); e != nil {
 		return e
 	}
 	action := "updates"
