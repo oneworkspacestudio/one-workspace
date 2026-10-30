@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "workspace": "0.3.0-preview.104",
+  "remote": "0.1.0-preview.5",
+  "releaseAssetsVerified": 338,
+  "signedAndroidCompanion": "0.1.0-preview.10",
+  "approvedAndroidCertificateAndSourceVerified": true,
+  "anonymousAndroidDownloadVerified": true,
+  "anonymousPublicChannelVerified": true,
+  "previous103ControllerRequiresNewInstallerBeforeMutation": true,
+  "newInstallerAnonymousPublicBundleDownloadVerified": true,
+  "newInstallerPublicCatalogIncludesRemote5": true,
+  "ownerDataUsedAsDevelopmentFixture": false
+}

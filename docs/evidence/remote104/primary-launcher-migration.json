@@ -1,0 +1,9 @@
+{
+  "managedStartupPerformedMigration": true,
+  "schema": 1,
+  "existingLaunchersUseWorkspace": true,
+  "legacyStartupAndStopRetired": true,
+  "originalLaunchersBackedUp": true,
+  "legacyListenersStopped": true,
+  "legacyProgramAndDataPreserved": true
+}

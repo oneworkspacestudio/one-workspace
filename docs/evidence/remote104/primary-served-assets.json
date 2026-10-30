@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "manager": "0.3.0-preview.104",
+  "remote": "0.1.0-preview.5",
+  "exactManagerBinary": true,
+  "publicHTTPSRoute": true,
+  "publicBootstrapMyAccounts": true,
+  "publicServedAssetsMatched": [
+    "index-BEK0TzWB.js",
+    "index-C9_ZXOo2.css"
+  ],
+  "anonymousDesktopDenied": true,
+  "invalidOriginDenied": true,
+  "desktopActivationEnabled": false,
+  "ownerDataUsedAsDevelopmentFixture": false,
+  "secondPC": "pending"
+}

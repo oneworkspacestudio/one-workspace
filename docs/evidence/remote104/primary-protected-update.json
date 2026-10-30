@@ -1,0 +1,18 @@
+{
+  "protectedUpdate": true,
+  "remote": "0.1.0-preview.5",
+  "physicalPhoneAcceptance": false,
+  "transactionComplete": true,
+  "MyAccountsClientAdded": true,
+  "allServicesRunning": 32,
+  "secondPC": "pending",
+  "unchangedPayloadHashesVerified": 150,
+  "schema": 1,
+  "existingAppContractsRetained": 32,
+  "rebootAcceptance": false,
+  "backupPresent": true,
+  "existingSettingsAndCredentialsRetained": true,
+  "previous": "0.3.0-preview.103",
+  "manager": "0.3.0-preview.104",
+  "desktopAccessEnabled": false
+}

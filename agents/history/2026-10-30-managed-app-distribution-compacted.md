@@ -109,3 +109,36 @@ overlong input. Large exFAT uploads stalled; official portable gh2.103.3 and
 hash-verified NTFS copies recovered only the missing draft payloads. The required
 publisher then reverified all338 and performed publication/channel promotion.
 No public assets/tags were overwritten. Runtime bytes stay at the tested104 tag.
+
+## Delivery completed on the primary PC
+
+The anonymous103 controller requires104 before interpreting the new runtime
+contract; the104 installer anonymously downloaded and verified the public bundle
+and found Remote5. Required publication verified338 assets and Android10.
+
+Normal protected103-to104 primary deployment completed with installerIntegration4,
+33 installed apps and all32 supervised services healthy. All32 previous app
+contracts, installation settings and existing identity credentials were retained;
+150 unchanged payload digests and every new Remote payload were verified. The
+manager binary matches the tested release. The latest recovery backup remains
+verified; ordinary updater cleanup retired one older automatic recovery copy.
+An initial low-disk preflight correctly refused before mutation and restarted103.
+The successful retry followed space recovery from a disposable Go build archive;
+no private data, installed programs or recovery copies were manually removed.
+
+Public HTTPS Remote bootstrap uses MyAccounts; actual served JS/CSS match Remote5.
+Anonymous desktop access and invalid origins are denied. Managed startup migrated
+the unconfigured preview2 shortcuts to the Workspace route, backed up originals,
+retired duplicate startup/stop launchers and stopped old listeners while preserving
+legacy programs/data. Evidence: docs/evidence/remote104/primary-*.json and
+public-distribution.json. Python's default urllib user-agent received an edge403;
+an explicit delivery-verification user-agent and PowerShell both passed. No edge
+policy or authentication was changed.
+
+Central lifecycle rules are docs/APP-LIFECYCLE.md and the immutable104 release
+asset APP-LIFECYCLE.md. User workspace AGENTS.md points to the same rules. Treat
+standalone app delivery, managed integration, publication and per-PC installation
+as separate evidence-backed stages. No remaining primary distribution work.
+Second PC remains pending by user instruction. Desktop hosting is inactive until
+owner setup; no actual host enrollment, physical-phone, reboot, pre-login, secure
+desktop, audio, files or individual-monitor acceptance is claimed.
