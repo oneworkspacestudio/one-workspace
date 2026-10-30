@@ -1,5 +1,13 @@
 # One Workspace release status
 
+## Preview108: bundled private-app update discovery
+
+Corrects false up-to-date results for private-source apps distributed through
+Workspace bundles. Verified newer suite pins can advance without public private
+release timestamps. Lower versions remain blocked. Includes the existing Shield4
+Settings/backup repair; app-only updates preserve unrelated app versions.
+
+
 ## Preview 106: My Tickets with Drive startup repair
 
 Prepares the native SDK data identity before Drive creates its protected attachment
