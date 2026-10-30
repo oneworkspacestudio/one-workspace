@@ -560,7 +560,15 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 				ch.Source = ch.Apps[0].Source
 				oldTime := releaseTime(appReleases, sourceTag(oldApps[0].Source, repo))
 				newTime := releaseTime(appReleases, sourceTag(ch.Source, repo))
-				if ch.Source != oldApps[0].Source && (oldTime.IsZero() || !newTime.After(oldTime)) {
+				// Private-source release histories are deliberately empty in the public
+				// index. The verified suite catalog can still advance their pin.
+				index, publicIndex := ctx.Value(indexContextKey{}).(*releaseIndex)
+				historyOmitted := publicIndex && len(index.Repositories[repo]) == 0 && len(appReleases) == 0
+				suiteAdvance := historyOmitted &&
+					sourceTag(ch.Source, repo) == "v"+ch.Version &&
+					sourceTag(oldApps[0].Source, repo) == "v"+oldApps[0].Version &&
+					newerWorkspace(ch.Version, oldApps[0].Version)
+				if ch.Source != oldApps[0].Source && !suiteAdvance && (oldTime.IsZero() || !newTime.After(oldTime)) {
 					if len(ch.NewApps) > 0 {
 						ch.Reason = "New apps require a compatible suite pin for the newer installed app; no downgrade was selected."
 						plan.Choices = append(plan.Choices, ch)
