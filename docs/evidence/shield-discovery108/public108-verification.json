@@ -1,0 +1,1679 @@
+{
+  "schema": 1,
+  "tag": "v0.3.0-preview.108",
+  "url": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.108",
+  "sourceCommit": "e0faae924422a7124ea6244356cb59565e6375ff",
+  "draft": false,
+  "assetsVerified": 333,
+  "publicChannelVerified": true,
+  "privateShieldMetadataOmitted": true,
+  "publisherVerifiedAllLocalHashes": true,
+  "anonymousAPKVerified": true,
+  "assets": [
+    {
+      "name": "ANDROID-BUILD.json",
+      "size": 659,
+      "sha256": "bf078f10c5bde5680f72c3e4c26d8ff1eb9e3a4ba2948694f7412e2a2d0c4256"
+    },
+    {
+      "name": "ANDROID-LICENSE.txt",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "ANDROID-NOTICES.txt",
+      "size": 1061,
+      "sha256": "93d92561cf2a83fb1fea6d020486abf695091e6616e3a3cb588520fe084bbed4"
+    },
+    {
+      "name": "ANDROID-SIGNATURE.txt",
+      "size": 985,
+      "sha256": "0af5e3bcad7d74c11ff3ac9bf765e7b61222a9d32d23089c5f90980e4f3cb9bf"
+    },
+    {
+      "name": "ANDROID.md",
+      "size": 7795,
+      "sha256": "13cf9a2301cca4a496b45c4857c44f566e3ad3fa743fccacfc4b46e016322ce5"
+    },
+    {
+      "name": "APP-LIFECYCLE.md",
+      "size": 6882,
+      "sha256": "194429dd9e96212a18ce9f457dcc1c995f8d3e4ed76e56dcb80696f3b0362acc"
+    },
+    {
+      "name": "build-info.json",
+      "size": 478,
+      "sha256": "d4112ba6d464cfcf74a4ce587de0fafdb8ea1e50bcc8f1373c4dd06e9090165c"
+    },
+    {
+      "name": "catalog.json",
+      "size": 86825,
+      "sha256": "4ddbf4ae4d29993fbd26f5c5cf4112b432fdb042dd797e2166475b7bd1b8847c"
+    },
+    {
+      "name": "INSTALL-RECOVERY.md",
+      "size": 2357,
+      "sha256": "50ea99da993ceb4838afd468b59b99b0b7ab87d089e399e363e475c6fc75c759"
+    },
+    {
+      "name": "KNOWN-LIMITATIONS.md",
+      "size": 84296,
+      "sha256": "7cce1d5c6fdcff52e1b986bb899cf5ccf3b25309813c393c18b79c9c49da9395"
+    },
+    {
+      "name": "LICENSE",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "managed-build.json",
+      "size": 977,
+      "sha256": "b9588089f416b3a16745987a91025cb277ebcaf4ef0018f0c524f7476e53afe4"
+    },
+    {
+      "name": "MY-SHIELD.md",
+      "size": 3085,
+      "sha256": "4a6c35871a8fe2df840deb7d0251cb08996932afd0b55fd1f0d8d9a918c85d8c"
+    },
+    {
+      "name": "NOTICE",
+      "size": 664,
+      "sha256": "ba5d1ffddbef7cfd9ff5aabab279657194dbb1deab201ca981a546237f8977bc"
+    },
+    {
+      "name": "one-workspace-source.zip",
+      "size": 17489461,
+      "sha256": "0b2be85e6d3066d3e29f42f006f0d13f41abacadcb88e06e61a78b1f8a03236a"
+    },
+    {
+      "name": "OneWorkspace-Android-0.1.0-preview.10.apk",
+      "size": 13278827,
+      "sha256": "ffa2e02f922eae4bed45c978cf8dd068654a7ca0e24c68b78667692dfec7c400"
+    },
+    {
+      "name": "OneWorkspace-Android-source.zip",
+      "size": 755216,
+      "sha256": "d19299ffd3f8a31d63a5374b9119ca286da4caeeea753d3e74567298b95131f7"
+    },
+    {
+      "name": "organization-components.json",
+      "size": 11864,
+      "sha256": "1ea3f8395f48325bd5c4e6ca6cb94b42ec9c6a981542d2f0205dbc8bcc5c0e17"
+    },
+    {
+      "name": "REINSTALL.md",
+      "size": 1977,
+      "sha256": "e020d885e46ec8c73ea0ab9ae71e6221a725687b53cc5c09cd1622210a5946b6"
+    },
+    {
+      "name": "RELEASE-STATUS.md",
+      "size": 84296,
+      "sha256": "7cce1d5c6fdcff52e1b986bb899cf5ccf3b25309813c393c18b79c9c49da9395"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "size": 36766,
+      "sha256": "3c298fa2b4b4a33f75086631ca60743e9085dd430922b768ab12b6303b3d5801"
+    },
+    {
+      "name": "SOURCE-MANIFEST.json",
+      "size": 5953,
+      "sha256": "5def4e77a02eda06a9cb2e758904ab31bd4164a8190004745fbdccb1e15cde2d"
+    },
+    {
+      "name": "UPDATES.md",
+      "size": 20454,
+      "sha256": "0795a4f0d1c5ad0a00f85e7bfe8131913c599b129870fbb85bbfd114839e994b"
+    },
+    {
+      "name": "workspace-bundle.zip",
+      "size": 1292354447,
+      "sha256": "4a106a86e1351cc8d5227ed8910cdbd7291e64e03c0819cfd32bbe3e685a2fca"
+    },
+    {
+      "name": "workspace-package-accounts.bin",
+      "size": 132906496,
+      "sha256": "c3a309d396774427aeb9fdf0db355b70fb37a107abdd7b7156fe817744ec1d34"
+    },
+    {
+      "name": "workspace-package-calendar-license.bin",
+      "size": 34255,
+      "sha256": "79735a75d0274d2a5dcc240d11a0f81e34cfc3533939b7fce8e84e35a150a238"
+    },
+    {
+      "name": "workspace-package-calendar.bin",
+      "size": 9140224,
+      "sha256": "449e4bd85d9d1ece5f8eeb306ae2f8758185994b4e34ebc206ec02be725b0e53"
+    },
+    {
+      "name": "workspace-package-chat-LICENSE.bin",
+      "size": 35821,
+      "sha256": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b"
+    },
+    {
+      "name": "workspace-package-chat-NOTICE.bin",
+      "size": 595,
+      "sha256": "d00ff90d153d765e3d181473afc75cf9501110c48df582fa12f68cf0bf31fee9"
+    },
+    {
+      "name": "workspace-package-chat-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 555925,
+      "sha256": "f49f0c7eb816736bf708497c6ee4a5d4d207597ab9f0fcfb4db8c797dcd3b74a"
+    },
+    {
+      "name": "workspace-package-chat.bin",
+      "size": 101288448,
+      "sha256": "8b4daa7061540a2cab2aaad1d187e26c81313e43978ad0f57d09aae0dcf2daa3"
+    },
+    {
+      "name": "workspace-package-cinema-contract.bin",
+      "size": 562,
+      "sha256": "814c27a175aba112c03db6405b8629e9543646344d950fc89456dc815bac56cb"
+    },
+    {
+      "name": "workspace-package-cinema-doc-ADR-001-architecture.md.bin",
+      "size": 995,
+      "sha256": "8e26daff9582fcf28ce60c96035fca0cf6559a064bea672acb64afe4765ef09e"
+    },
+    {
+      "name": "workspace-package-cinema-doc-SECURITY-CHECKS.md.bin",
+      "size": 2262,
+      "sha256": "f076216222f756d9893b000bd9769979b51da91a139bd5df901370ce9f2a8920"
+    },
+    {
+      "name": "workspace-package-cinema-doc-SETUP.md.bin",
+      "size": 4177,
+      "sha256": "41c07f94dddb5bf835761f7be1838290f3664875954ff6eac34b5705506d9c2e"
+    },
+    {
+      "name": "workspace-package-cinema-doc-SUPPORT.md.bin",
+      "size": 2972,
+      "sha256": "b96fb404213100bf9ef9380684de13e8e55d9d1f027e44c8f0362c7fa5ee86f5"
+    },
+    {
+      "name": "workspace-package-cinema-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-cinema-NOTICE.bin",
+      "size": 415,
+      "sha256": "f8d369ba64c4a2e301d57110a1f60fab142beb2ca89c91c24c887c8932e42185"
+    },
+    {
+      "name": "workspace-package-cinema-provenance.bin",
+      "size": 2359,
+      "sha256": "0617ca870068d6bf77e966becd490938806dab6be135438f9d42889c45fdb012"
+    },
+    {
+      "name": "workspace-package-cinema-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 1834,
+      "sha256": "472fccde97b0e1c333ada8d6394db65d5488fcfcd84f0523b844ece135310e03"
+    },
+    {
+      "name": "workspace-package-cinema.bin",
+      "size": 222540327,
+      "sha256": "378e0ebba0c31d6c319e48480ff34496e3ea237af3d5c9a91f5ad9e7e5dd375b"
+    },
+    {
+      "name": "workspace-package-clips-contract.bin",
+      "size": 324,
+      "sha256": "56089a7880006f7b77ef05e8577aa51763e3a2493144745d881b0425ff9db112"
+    },
+    {
+      "name": "workspace-package-clips-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-clips-NOTICE.bin",
+      "size": 556,
+      "sha256": "a842f941a510aef80ad078cdf28dbb926022220594329ecc059f5cef79e66668"
+    },
+    {
+      "name": "workspace-package-clips-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 474821,
+      "sha256": "e129ace97b56e3028818d404daa8f47c0f3e1d596f9a8c848074eb3bc2626836"
+    },
+    {
+      "name": "workspace-package-clips.bin",
+      "size": 15804928,
+      "sha256": "293e80d3ec88e146bd26faa7bd6c2812749fe0a9ba28a5374107a50c8e6b311d"
+    },
+    {
+      "name": "workspace-package-cloudflared.bin",
+      "size": 55365048,
+      "sha256": "86aee4017b26625cee8484c113558f48effa4cd47f7aa05fcf425604e5d2b23c"
+    },
+    {
+      "name": "workspace-package-contacts.bin",
+      "size": 9143296,
+      "sha256": "8775dc72814a6fab70828a4fb79b64633edb12c32f8ee2c9ee25267cc94e018f"
+    },
+    {
+      "name": "workspace-package-create-contract.bin",
+      "size": 653,
+      "sha256": "3607c5bd92b72ad476f1f721d7466db9958fc3225f5dfd014ba143e0fe7d7358"
+    },
+    {
+      "name": "workspace-package-create-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-create-NOTICE.bin",
+      "size": 463,
+      "sha256": "91e28a3334713afcc0adf35c4b2fc9c7d98bdb65652330784eb2d981e84286e9"
+    },
+    {
+      "name": "workspace-package-create-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 367752,
+      "sha256": "59f52f64625e25fd7a7387af524ea5ff9508020fea6c693fa828928061a01312"
+    },
+    {
+      "name": "workspace-package-create.bin",
+      "size": 16156672,
+      "sha256": "53b0cd8a89e229320d7b8203e72efd0511f4e282098eae44ff9ff0d2318b7590"
+    },
+    {
+      "name": "workspace-package-drive.bin",
+      "size": 571487232,
+      "sha256": "9b8249b0511aff740782dd05fce5d04e61209a2b6b137f865d5569c02a3b20ef"
+    },
+    {
+      "name": "workspace-package-finance-LICENSE.bin",
+      "size": 1083,
+      "sha256": "5a4e6a1aab2f2f20c31ecb3c6af292255ef9c3a9efff577688a3b97a716fa302"
+    },
+    {
+      "name": "workspace-package-finance-NOTICE.bin",
+      "size": 1002,
+      "sha256": "981593421a0e816c703af53b5178d2d11ca149bf434aaf0c25a023cf204609d0"
+    },
+    {
+      "name": "workspace-package-finance-runtime.bin",
+      "size": 102179416,
+      "sha256": "f3c4675bf401042356310325a35de736de3c7b2f53aab2e74b611839f98da3ca"
+    },
+    {
+      "name": "workspace-package-finance-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 755479,
+      "sha256": "9ec9b2cea61f17709d2e40552f9970689ac600c348a13e8832cb9738e2a5f4d8"
+    },
+    {
+      "name": "workspace-package-finance.bin",
+      "size": 13554688,
+      "sha256": "3eb8a47edded3df880136197815bfbd099d8b27a164538dba172c15edc0af1ed"
+    },
+    {
+      "name": "workspace-package-forms-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-forms-NOTICE.bin",
+      "size": 357,
+      "sha256": "f4aee5a2f3f852b0134a9db0b8b2deba59dca153bc3b1eccf8881388d73209d2"
+    },
+    {
+      "name": "workspace-package-forms-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 142572,
+      "sha256": "d67f458e78098a9d0345d450eef2a7340d81557abec95d0e8e2036f895951d1e"
+    },
+    {
+      "name": "workspace-package-forms.bin",
+      "size": 13471744,
+      "sha256": "f3e14457a0a201708cc161206a25ab3e6fe56046209b373902d774e32faacd9f"
+    },
+    {
+      "name": "workspace-package-gitea.bin",
+      "size": 95686656,
+      "sha256": "cabc040856ae1ef19e934179d9353e2d8c1c93ce25e9437cdf64682d208fbc5b"
+    },
+    {
+      "name": "workspace-package-hosting-compatibility.json.bin",
+      "size": 486,
+      "sha256": "bdc65bc39d2b0f8c65c0b82c70315a11325273afe165bade9cdb3281076deb87"
+    },
+    {
+      "name": "workspace-package-hosting-dependencies.json.bin",
+      "size": 16624,
+      "sha256": "404735215d03713848cf9c00a0b14061055edab8801670175ec134bb15d5bf96"
+    },
+    {
+      "name": "workspace-package-hosting-doc-ACCEPTANCE.md.bin",
+      "size": 6286,
+      "sha256": "0517b52495d181717eaaf096ba9afc5f0b81ca8f81712a38fe37f4d39fc50d79"
+    },
+    {
+      "name": "workspace-package-hosting-doc-FRAMEWORKS.md.bin",
+      "size": 2619,
+      "sha256": "127eee912f5b8735226f8de0d4fb44e18b088a6606c6c746c0ee8b76834ad9e9"
+    },
+    {
+      "name": "workspace-package-hosting-doc-openapi.json.bin",
+      "size": 71243,
+      "sha256": "517beb1b9a19119a01e892f67db70f02d6b9cbd8630fe0992f2d6ff8d10c0db4"
+    },
+    {
+      "name": "workspace-package-hosting-doc-OPERATIONS.md.bin",
+      "size": 8383,
+      "sha256": "bd148e8a716955ee24749565848e9f832b1aedd79263db7e8582b37f7baa20b9"
+    },
+    {
+      "name": "workspace-package-hosting-doc-PUBLISHING.md.bin",
+      "size": 3635,
+      "sha256": "080d18b8e4f9d655282c5410a34916dedc17caacd5feacef7edbaac1938890c7"
+    },
+    {
+      "name": "workspace-package-hosting-LICENSE.bin",
+      "size": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "name": "workspace-package-hosting-NOTICE.bin",
+      "size": 840,
+      "sha256": "af6ccf1141f924c969bdb63a990bfe73717a23982184ff8e640ac07b9c1640d8"
+    },
+    {
+      "name": "workspace-package-hosting-runtime-pins.json.bin",
+      "size": 681,
+      "sha256": "695641a793c01daa12e43aa4ff9a910d10e89928ea9e8485efcca46b2ea3c230"
+    },
+    {
+      "name": "workspace-package-hosting-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 46614,
+      "sha256": "a897e7c7c7f624f6f58279132db3e415156f7530a4af3109cf3be3f5a03a6207"
+    },
+    {
+      "name": "workspace-package-hosting.bin",
+      "size": 13916160,
+      "sha256": "b85e9474bbea6a93ec1a2b6fc011d28d6a03086d33730479d3fdb32ed6c70295"
+    },
+    {
+      "name": "workspace-package-license.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-mail-license.bin",
+      "size": 34255,
+      "sha256": "79735a75d0274d2a5dcc240d11a0f81e34cfc3533939b7fce8e84e35a150a238"
+    },
+    {
+      "name": "workspace-package-mail-notice.bin",
+      "size": 964,
+      "sha256": "e01ecc4584f0bec80c376b517847ccab5962bce35ce250fa98b07d73763a081d"
+    },
+    {
+      "name": "workspace-package-mail.bin",
+      "size": 53474304,
+      "sha256": "cf4fb4203e8a14cba790f7db44db9602ea7046689b226f25141e04c9672146aa"
+    },
+    {
+      "name": "workspace-package-manager.bin",
+      "size": 17538048,
+      "sha256": "826124188fc7761ed493a14c6da726afa43fa4f36a302b49464661e296eb6030"
+    },
+    {
+      "name": "workspace-package-maps-contract.bin",
+      "size": 642,
+      "sha256": "db02992af8e50189c9af3a6ad3c58e99f6fe8970b051425a0b8a2a6c7d6d16d1"
+    },
+    {
+      "name": "workspace-package-maps-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-maps-NOTICE.bin",
+      "size": 923,
+      "sha256": "150f2dbcc43d1f52343250ac814a363e643fee80b20afb667b14c0098262c58d"
+    },
+    {
+      "name": "workspace-package-maps-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 189324,
+      "sha256": "83ed50624043da9252287752b60901c0ab199e9f738ed95db47fa759f374e898"
+    },
+    {
+      "name": "workspace-package-maps.bin",
+      "size": 15724032,
+      "sha256": "04d5af2b7c3cf7aeed00112e65448eb712629fa3f48ccfbbc0b979d067020d95"
+    },
+    {
+      "name": "workspace-package-meet-contract.bin",
+      "size": 583,
+      "sha256": "b3566ff2c39589a57a4651e48ddd958a70b990e2644278fc7c25804473826439"
+    },
+    {
+      "name": "workspace-package-meet-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-meet-NOTICE.bin",
+      "size": 555,
+      "sha256": "64107524a5472d0642053b0439728173b21195e946982ec68bcbf764c28991cf"
+    },
+    {
+      "name": "workspace-package-meet-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 823753,
+      "sha256": "1019215a867ac5d22f9c6d700c1ff7737c18d1b7d99b794b3d4805de62bed9c0"
+    },
+    {
+      "name": "workspace-package-meet.bin",
+      "size": 34112000,
+      "sha256": "90c9ecb2d3ddc606bcb589e750bb5e945d3b1078eaed110d338d4e39e8513912"
+    },
+    {
+      "name": "workspace-package-monitor-LICENSE.bin",
+      "size": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "name": "workspace-package-monitor-NOTICE.bin",
+      "size": 119,
+      "sha256": "b74e7e9dd20072aba187a94b8766459269a2c12cc3530d893934e6ad9c8e42d7"
+    },
+    {
+      "name": "workspace-package-monitor-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 245968,
+      "sha256": "ad632971ae23a6f3a00ccb1e6e55d1ea046fde5d18688dec08c17dca94ec3b72"
+    },
+    {
+      "name": "workspace-package-monitor.bin",
+      "size": 13790208,
+      "sha256": "7198cddf7455ff34586aaa90a3a741f86fc08a9d7027fcbcecebc02af66c15b4"
+    },
+    {
+      "name": "workspace-package-msvc-concrt140.bin",
+      "size": 374200,
+      "sha256": "54716f0738af891f283d213b5c8d11b25896bb8ee3097d301eae718560cf974e"
+    },
+    {
+      "name": "workspace-package-msvc-msvcp140.bin",
+      "size": 643512,
+      "sha256": "7c26614e1d733892c2deac7e245ce115504b1d80592dd0a01b08e3e5a55f89ca"
+    },
+    {
+      "name": "workspace-package-msvc-msvcp140_1.bin",
+      "size": 35768,
+      "sha256": "206c931bf90fdad8816de3b5e2ef80b2bcaa9406c89ecc05fe6fddffe251e982"
+    },
+    {
+      "name": "workspace-package-msvc-msvcp140_2.bin",
+      "size": 274872,
+      "sha256": "d50d7883f20d1dc6191768d3746f52dd9cac89c346ffaed5be1f110c2f34a838"
+    },
+    {
+      "name": "workspace-package-msvc-msvcp140_atomic_wait.bin",
+      "size": 57792,
+      "sha256": "3d0cbfaa1bf3eecf5a3f4491d2960ee803cb994f30292c6adc4a07c498f60e2b"
+    },
+    {
+      "name": "workspace-package-msvc-msvcp140_codecvt_ids.bin",
+      "size": 31160,
+      "sha256": "8a65c7596ef2e6938731f5a1058e7e40145b6d97967cc649231a076b9a608d78"
+    },
+    {
+      "name": "workspace-package-msvc-notice.bin",
+      "size": 1252,
+      "sha256": "ec4071f9425f8a13b1707c505414bafe0c6a294293bd047887c1f6cf51bb804f"
+    },
+    {
+      "name": "workspace-package-msvc-vcruntime140.bin",
+      "size": 178616,
+      "sha256": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7"
+    },
+    {
+      "name": "workspace-package-msvc-vcruntime140_1.bin",
+      "size": 50112,
+      "sha256": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e"
+    },
+    {
+      "name": "workspace-package-msvc-vcruntime140_threads.bin",
+      "size": 38840,
+      "sha256": "40f39e8cee5f5a531b4010e18b807e8fe265b908dc58f959ecb7ebc6ea6cb11a"
+    },
+    {
+      "name": "workspace-package-music.bin",
+      "size": 76759893,
+      "sha256": "6029a71ee44a22d856e980c7328e6912a48a98978acc5b51509e03217ede9782"
+    },
+    {
+      "name": "workspace-package-my-tube-LICENSE.bin",
+      "size": 34523,
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+    },
+    {
+      "name": "workspace-package-my-tube-NOTICE.bin",
+      "size": 1535,
+      "sha256": "bbcf6b2b472e4cc32f815ab39bca47338a5bbf884a254b2a1e87ffb752395d15"
+    },
+    {
+      "name": "workspace-package-my-tube-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 330965,
+      "sha256": "085024cfe05864f40ee6ae3aa46b16e34d2239fb36aaca90f08abcf4a48a5364"
+    },
+    {
+      "name": "workspace-package-my-tube.bin",
+      "size": 14414848,
+      "sha256": "e4ead29601b3a09387e9c98175e12d5a6d74e8e57606a6782940b9a42c6310ec"
+    },
+    {
+      "name": "workspace-package-my3d-contract.bin",
+      "size": 336,
+      "sha256": "b96dab1207b83ed4118034ab4aead375e390bb59b4ab614ae21110c56a50bd1a"
+    },
+    {
+      "name": "workspace-package-my3d-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-my3d-NOTICE.bin",
+      "size": 328,
+      "sha256": "d843bd262ccbe085d50b9947ca77df960c2542b6378e88c1fcdf52650563ee21"
+    },
+    {
+      "name": "workspace-package-my3d-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 55633,
+      "sha256": "0f9e12fe04ae71c6279d550383f3024ea364fd21771df31c06131cf04e5df691"
+    },
+    {
+      "name": "workspace-package-my3d.bin",
+      "size": 38251520,
+      "sha256": "d92865d05cbc45b2ddaf6ff61884176223081a942d648d314ee7be06920156e2"
+    },
+    {
+      "name": "workspace-package-myai-contract.bin",
+      "size": 600,
+      "sha256": "35283b10f2ef18b9172bdf627fccf619a05a3edb0a0314a1542b64a105206be3"
+    },
+    {
+      "name": "workspace-package-myai-doc-ADR-001-architecture.md.bin",
+      "size": 4299,
+      "sha256": "335f5e7638eb157fb5ddd6d6cf3d3620084a61c89ddd0655c352f7731c34fd89"
+    },
+    {
+      "name": "workspace-package-myai-doc-SECURITY-CHECKS.md.bin",
+      "size": 4499,
+      "sha256": "80b7a82e69f018e42b9c17a3586de649705ba3b3302a98e0a5bce8e2989e3f6a"
+    },
+    {
+      "name": "workspace-package-myai-doc-SETUP.md.bin",
+      "size": 9613,
+      "sha256": "fe42d2f5711f2a8a06e0a9ecc8b13787c5698542e9082a8955e71ad94215b3ec"
+    },
+    {
+      "name": "workspace-package-myai-doc-SUPPORT.md.bin",
+      "size": 5856,
+      "sha256": "51dd0163d75131b453efaf8b7af3cc51c2696ce87f3ae30e26e45f31ecd83cf0"
+    },
+    {
+      "name": "workspace-package-myai-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-myai-NOTICE.bin",
+      "size": 708,
+      "sha256": "40bcb4666086a9a5880f2b153ac024db0745170f453c76a2e1d4fb0a2f19e510"
+    },
+    {
+      "name": "workspace-package-myai-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 557728,
+      "sha256": "d4f54e7e4758e841173638809fe60aac3ff34169503f2c3e506d2a49061f3653"
+    },
+    {
+      "name": "workspace-package-myai.bin",
+      "size": 52268032,
+      "sha256": "817e3c373901b7485ae69f7e10ed42cb9be4ca4ba52a4b0556d54bc2d03400ba"
+    },
+    {
+      "name": "workspace-package-notes-LICENSE.bin",
+      "size": 34523,
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+    },
+    {
+      "name": "workspace-package-notes-NOTICE.bin",
+      "size": 1390,
+      "sha256": "313fc9b3afdf5e279185e239d4ac613a718c0049ea102649883af5848dac391d"
+    },
+    {
+      "name": "workspace-package-notes-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 546710,
+      "sha256": "823d77b07ae1ae761aa76f847c714f0eeaa565237f8258fa5a9de2dffa2a8cd6"
+    },
+    {
+      "name": "workspace-package-notes.bin",
+      "size": 16544768,
+      "sha256": "d83fdc85089861b472bca4cdcae2a84307fac0bca32b8804070f1c01cce3251e"
+    },
+    {
+      "name": "workspace-package-notice-Calendar-LICENSE.txt.bin",
+      "size": 34255,
+      "sha256": "79735a75d0274d2a5dcc240d11a0f81e34cfc3533939b7fce8e84e35a150a238"
+    },
+    {
+      "name": "workspace-package-notice-Calendar-NOTICE.md.bin",
+      "size": 925,
+      "sha256": "7b15bf8f88635dfc954b647a3928d65710b35697af2e351c80943176427dc901"
+    },
+    {
+      "name": "workspace-package-notice-Calendar-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 63006,
+      "sha256": "557eeeb2e6d60093cf25a275227860e4719c7f7614ab9aca5a68d5f3c20d1c56"
+    },
+    {
+      "name": "workspace-package-notice-cloudflared-LICENSE.txt.bin",
+      "size": 11357,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "name": "workspace-package-notice-Editor-AGPL-LICENSE.txt.bin",
+      "size": 35179,
+      "sha256": "f24fa7d9333a3f40314c2f00dd28e0e706997819e66efe19619433dae285f3a3"
+    },
+    {
+      "name": "workspace-package-notice-Editor-NOTICE.txt.bin",
+      "size": 10283,
+      "sha256": "ca8a3d42c03ad5a8f0a0c1f78faa91d688ca4b15da80ad705f3ead3c73dce91c"
+    },
+    {
+      "name": "workspace-package-notice-FFmpeg-GPLv3.txt.bin",
+      "size": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    {
+      "name": "workspace-package-notice-FileBrowser-LICENSE.txt.bin",
+      "size": 11556,
+      "sha256": "0a26f70bb5f94f47b83f106a81aed3799f4d02950acd4d057f67f546e418afdd"
+    },
+    {
+      "name": "workspace-package-notice-FileBrowser-THIRD-PARTY-NOTICES.md.bin",
+      "size": 2694,
+      "sha256": "7a165f18bc90a0e99ce0ff519173e62d990f4b9c827461774c21b17c81a31289"
+    },
+    {
+      "name": "workspace-package-notice-Git-Music-SOURCES.txt.bin",
+      "size": 689,
+      "sha256": "ab2ac53046fad3a1b8a728a7c62f9c7341da93ad552920c9ca12ff2481fb9e35"
+    },
+    {
+      "name": "workspace-package-notice-Gitea-LICENSE.txt.bin",
+      "size": 1097,
+      "sha256": "ed2f10a9d78b8c6c9ef33f1420d0eb266981891caf2f15d630553f02dc60d3ae"
+    },
+    {
+      "name": "workspace-package-notice-Imageio-ffmpeg-LICENSE.txt.bin",
+      "size": 1317,
+      "sha256": "eca73421d0c905a92e952a553d4d58919c5a507c2c2c76e3c0cf9ba408c299e4"
+    },
+    {
+      "name": "workspace-package-notice-MyAccounts-LICENSE.txt.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-notice-MyAccounts-NOTICE.txt.bin",
+      "size": 501,
+      "sha256": "a3a917514e20f3c812e22b6c2bc9582915511ab83472328864bdde433607c8b1"
+    },
+    {
+      "name": "workspace-package-notice-organization-components.json.bin",
+      "size": 11864,
+      "sha256": "1ea3f8395f48325bd5c4e6ca6cb94b42ec9c6a981542d2f0205dbc8bcc5c0e17"
+    },
+    {
+      "name": "workspace-package-notice-Photo-Editor-source.txt.bin",
+      "size": 196,
+      "sha256": "4b2b50369ab20d3b2fe521412738ea8886ca756da301d2e4ed62b77c4ace3718"
+    },
+    {
+      "name": "workspace-package-notice-SwingMusic-LICENSE.txt.bin",
+      "size": 35184,
+      "sha256": "6f1e622c82a380075843bb084a7ec3b1f1d12a4a02526d75e78b0924a860aa75"
+    },
+    {
+      "name": "workspace-package-notice-SwingMusic-Webclient-LICENSE.txt.bin",
+      "size": 1070,
+      "sha256": "30b0f446384bbda0c6d6b8ca0655e3fe76194828ec4065a9ffffe876c8944fda"
+    },
+    {
+      "name": "workspace-package-notice-Vue-LICENSE.txt.bin",
+      "size": 1091,
+      "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+    },
+    {
+      "name": "workspace-package-notice-Workspace-release-status.md.bin",
+      "size": 84296,
+      "sha256": "7cce1d5c6fdcff52e1b986bb899cf5ccf3b25309813c393c18b79c9c49da9395"
+    },
+    {
+      "name": "workspace-package-notice.bin",
+      "size": 664,
+      "sha256": "ba5d1ffddbef7cfd9ff5aabab279657194dbb1deab201ca981a546237f8977bc"
+    },
+    {
+      "name": "workspace-package-pdf-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-pdf-NOTICE.bin",
+      "size": 118,
+      "sha256": "bc08ca73887cfa4af7e0e4221af2d57be86e03442adf49c50a0fa390caaff80e"
+    },
+    {
+      "name": "workspace-package-pdf-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 344875,
+      "sha256": "007afe2f6dfe6eb92567b6d8e05bb2a97588ebd646398907c456e980eeefc458"
+    },
+    {
+      "name": "workspace-package-pdf.bin",
+      "size": 24844288,
+      "sha256": "5867f59ab43b773db22fb3df1b977fcc4b479eff044623281bc0f03377ffe3ef"
+    },
+    {
+      "name": "workspace-package-photos.bin",
+      "size": 7780352,
+      "sha256": "9ffc67cd8d133658c7866a727b9c9750aec62c0aee22f5474754bc548bb0e759"
+    },
+    {
+      "name": "workspace-package-push-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-push-NOTICE.bin",
+      "size": 486,
+      "sha256": "56810a8226744864c914e491226771a05f8851633f72ed07d96e1452f7ce98af"
+    },
+    {
+      "name": "workspace-package-push-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 309867,
+      "sha256": "4e7b142ab29b9e8da7fa9662b9bfd65c41440c5e5b4f6aa030862160a1eebd5a"
+    },
+    {
+      "name": "workspace-package-push.bin",
+      "size": 18488320,
+      "sha256": "ae790b9b0e949f62027368032df6b001a9e00dd4b2ff1a4ccc10d0fc395f8632"
+    },
+    {
+      "name": "workspace-package-remote-contract.bin",
+      "size": 549,
+      "sha256": "595a5a7e5f478192fbbbf9055a67cbf77069f1ad3816c8b866dcfb99685b787f"
+    },
+    {
+      "name": "workspace-package-remote-license-0c428af4cfc27e39.bin",
+      "size": 2004,
+      "sha256": "668dcc52803480e0a026b31140a4cae668772663cd764e5991d252eef03f98db"
+    },
+    {
+      "name": "workspace-package-remote-license-13266375de3b0bb9.bin",
+      "size": 1091,
+      "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+    },
+    {
+      "name": "workspace-package-remote-license-13827d377379e2b6.bin",
+      "size": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "name": "workspace-package-remote-license-13cb11865b508232.bin",
+      "size": 1095,
+      "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8"
+    },
+    {
+      "name": "workspace-package-remote-license-144503583538e7a5.bin",
+      "size": 1119,
+      "sha256": "95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3"
+    },
+    {
+      "name": "workspace-package-remote-license-1d301b24e5862b8b.bin",
+      "size": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+    },
+    {
+      "name": "workspace-package-remote-license-1e54f28333297006.bin",
+      "size": 126,
+      "sha256": "dccd26c6fd9c296daf44d0bc56bb4efc566edd4880381b3331c9a63e6e471338"
+    },
+    {
+      "name": "workspace-package-remote-license-1ea5871572afe77d.bin",
+      "size": 787,
+      "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750"
+    },
+    {
+      "name": "workspace-package-remote-license-1fd8992a05151660.bin",
+      "size": 1479,
+      "sha256": "dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d"
+    },
+    {
+      "name": "workspace-package-remote-license-209dbaea94241ed4.bin",
+      "size": 1633,
+      "sha256": "e016d1a1cd1201c61e1fad8b10b1d40bdb8ee5f8e4689e6a8e872613a8702911"
+    },
+    {
+      "name": "workspace-package-remote-license-2466f77453dd7268.bin",
+      "size": 1106,
+      "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161"
+    },
+    {
+      "name": "workspace-package-remote-license-2ed7b5537fbadf10.bin",
+      "size": 74323,
+      "sha256": "b4366b9c27a9364633e015011a231913ed19bf1228f335bf617e50a6f7b168a6"
+    },
+    {
+      "name": "workspace-package-remote-license-32c901352c0de965.bin",
+      "size": 1526,
+      "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
+    },
+    {
+      "name": "workspace-package-remote-license-3435f58dd9489980.bin",
+      "size": 1486,
+      "sha256": "7dc07397727fc500d5ce768d724e4d555eee8fb7687f421fd40d72249868b0ca"
+    },
+    {
+      "name": "workspace-package-remote-license-35a464b6602afa2d.bin",
+      "size": 15648,
+      "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+    },
+    {
+      "name": "workspace-package-remote-license-38813e72b173e3c5.bin",
+      "size": 1507,
+      "sha256": "c08e5ef2e6d004c97f92d45eee4f3a0257b6c957a6c68c7b2053d013ec3725c2"
+    },
+    {
+      "name": "workspace-package-remote-license-3cebaa12035d7c94.bin",
+      "size": 254,
+      "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+    },
+    {
+      "name": "workspace-package-remote-license-3d3194f8884bfaf3.bin",
+      "size": 3567,
+      "sha256": "4719790df5e9d33b1cef3a67df8264fb1e3e7f54f3ca900c562e84a951de62d9"
+    },
+    {
+      "name": "workspace-package-remote-license-433f69ee96bf8c7a.bin",
+      "size": 11553,
+      "sha256": "f7f9a3c8d34e8d814af869a71557ec3807ad049a4b7979616c429876feee7c1b"
+    },
+    {
+      "name": "workspace-package-remote-license-452a72ba565f9d11.bin",
+      "size": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+    },
+    {
+      "name": "workspace-package-remote-license-4667f9bea71c877e.bin",
+      "size": 1095,
+      "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987"
+    },
+    {
+      "name": "workspace-package-remote-license-46f50dee599ff316.bin",
+      "size": 11601,
+      "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+    },
+    {
+      "name": "workspace-package-remote-license-48f57be2c39b4101.bin",
+      "size": 108786,
+      "sha256": "a47172e44a86a7e2cd1c16282341f7726ec60caafe3a6166fe3e0602005b6fa6"
+    },
+    {
+      "name": "workspace-package-remote-license-4a0dc3b5c258b288.bin",
+      "size": 15648,
+      "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+    },
+    {
+      "name": "workspace-package-remote-license-5c9ae36251dde7f9.bin",
+      "size": 1053,
+      "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86"
+    },
+    {
+      "name": "workspace-package-remote-license-5e86368608bfabe0.bin",
+      "size": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "name": "workspace-package-remote-license-6013147301ad305d.bin",
+      "size": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "name": "workspace-package-remote-license-614a39114471ea74.bin",
+      "size": 1072,
+      "sha256": "cfe0a410a4eb7084408621c077d60c95fe90d90969c1c18aade1f3d20b25cc77"
+    },
+    {
+      "name": "workspace-package-remote-license-66ea59334662eb5f.bin",
+      "size": 1484,
+      "sha256": "59895e669f48f168b6b858358f6005779cdf40a265f7828813061b56af67b496"
+    },
+    {
+      "name": "workspace-package-remote-license-67c03bdad0519250.bin",
+      "size": 9197,
+      "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
+    },
+    {
+      "name": "workspace-package-remote-license-69a038c23e3b2326.bin",
+      "size": 1088,
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+    },
+    {
+      "name": "workspace-package-remote-license-6c0a473aae27d5c0.bin",
+      "size": 16726,
+      "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+    },
+    {
+      "name": "workspace-package-remote-license-77d819297a2162d6.bin",
+      "size": 1088,
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+    },
+    {
+      "name": "workspace-package-remote-license-79f5c9e7e3394551.bin",
+      "size": 1482,
+      "sha256": "343748b20da2ceb739c1ab7b85fe16f6fe4b67fad88fea40c5835a08383d8ffe"
+    },
+    {
+      "name": "workspace-package-remote-license-7c1f11ad254f214c.bin",
+      "size": 1482,
+      "sha256": "95ff867eb55a56935fa7492406cfa953fb7c13ca73f4c0a86ae05756b4605600"
+    },
+    {
+      "name": "workspace-package-remote-license-89ff2156cee48e74.bin",
+      "size": 3567,
+      "sha256": "4719790df5e9d33b1cef3a67df8264fb1e3e7f54f3ca900c562e84a951de62d9"
+    },
+    {
+      "name": "workspace-package-remote-license-8b98a3c48f845e51.bin",
+      "size": 11601,
+      "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+    },
+    {
+      "name": "workspace-package-remote-license-8b9b071737947a6e.bin",
+      "size": 1099,
+      "sha256": "08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1"
+    },
+    {
+      "name": "workspace-package-remote-license-8e042577b39a92f3.bin",
+      "size": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "name": "workspace-package-remote-license-90c691cf074b22f5.bin",
+      "size": 1486,
+      "sha256": "7bc9df688c16dd8e64463ec0ad66728730a0e1a70a1dbda3dcbcd8a9b45bfaab"
+    },
+    {
+      "name": "workspace-package-remote-license-92083ad0df20422a.bin",
+      "size": 1486,
+      "sha256": "bfa9bf72a72ca009fd62a8f84fca3dca67e51d93af96352723646599898b6cf5"
+    },
+    {
+      "name": "workspace-package-remote-license-92ca8d7b062fe231.bin",
+      "size": 15957,
+      "sha256": "6c7088eb877b5d7e6e0e9d27e822ea25fcda2e83f9eba59bb5f1418a656796e0"
+    },
+    {
+      "name": "workspace-package-remote-license-97b9423c7c658b88.bin",
+      "size": 2163,
+      "sha256": "3ccd2242d7f5b6c5ae831a486f63cce1f18d8cd11c511f6a7a7251673763b2d1"
+    },
+    {
+      "name": "workspace-package-remote-license-97d07c556036f2f4.bin",
+      "size": 1068,
+      "sha256": "6ce72bbe12d975bd5286e5ab0a064c069693300c47bccbc57bec18485f1621ea"
+    },
+    {
+      "name": "workspace-package-remote-license-98702fe386a5ce13.bin",
+      "size": 11325,
+      "sha256": "cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14"
+    },
+    {
+      "name": "workspace-package-remote-license-997fdc3d22b2bc3d.bin",
+      "size": 11357,
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+    },
+    {
+      "name": "workspace-package-remote-license-9ef54846cb5c8aec.bin",
+      "size": 1489,
+      "sha256": "c6fe05491a60ae13bcd223088d2705e36dede24e5587226231d2459ada5c4822"
+    },
+    {
+      "name": "workspace-package-remote-license-a18fc4e828cba74c.bin",
+      "size": 654,
+      "sha256": "631c31b41ca21a599804f0ed910e4a6407a008a176998b29e87b425e76fae8ba"
+    },
+    {
+      "name": "workspace-package-remote-license-a357f9a818d5f1e6.bin",
+      "size": 1136,
+      "sha256": "a973b4498c13eb74baa2a8e5c351426a6826f2fcdd909916dbe53ee2e755fd71"
+    },
+    {
+      "name": "workspace-package-remote-license-a5634818a1a84072.bin",
+      "size": 1088,
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+    },
+    {
+      "name": "workspace-package-remote-license-a81f94afb757a494.bin",
+      "size": 4302,
+      "sha256": "e564f06d018e7b95bc3594c96a17f1d41865af4038c375e7aa974dd69df38602"
+    },
+    {
+      "name": "workspace-package-remote-license-aafd3d522d23abec.bin",
+      "size": 1479,
+      "sha256": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067"
+    },
+    {
+      "name": "workspace-package-remote-license-ac8951aa78d7ac9a.bin",
+      "size": 1481,
+      "sha256": "7a0dd90f1d1c8fa80d03c1806bdd8e4dca7285fae9b4a34f2c4a8a2552fdd77c"
+    },
+    {
+      "name": "workspace-package-remote-license-adcfd718745c8ba1.bin",
+      "size": 1506,
+      "sha256": "8438c9c89b849131ead81d5435cb97fcf052df5b0b286dda8a2d4c29e6cb3fd0"
+    },
+    {
+      "name": "workspace-package-remote-license-b31412918c4306e7.bin",
+      "size": 1090,
+      "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"
+    },
+    {
+      "name": "workspace-package-remote-license-bad520277e3580e0.bin",
+      "size": 1084,
+      "sha256": "3bc404ffa7888053253eedcc5a667619aa08dc1be0bea400e5ff28c51602180f"
+    },
+    {
+      "name": "workspace-package-remote-license-be3973a2078688df.bin",
+      "size": 1076,
+      "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f"
+    },
+    {
+      "name": "workspace-package-remote-license-bf13d7dd0149f6d6.bin",
+      "size": 4512,
+      "sha256": "84044c09058803d87a241bd28abb4ce30a433d7db9c27a04da3efad6a0ca539c"
+    },
+    {
+      "name": "workspace-package-remote-license-bf7f20f512eabb6a.bin",
+      "size": 1485,
+      "sha256": "0f594b710bedb0335b15155204150cb1aac98e76144b52b852b43ce6a65eaaad"
+    },
+    {
+      "name": "workspace-package-remote-license-cad7732a2d579c4b.bin",
+      "size": 1103,
+      "sha256": "29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5"
+    },
+    {
+      "name": "workspace-package-remote-license-cb1d31dc896975e6.bin",
+      "size": 1480,
+      "sha256": "0a8d61ed3cbfd5312326e8126c31ce9c627a283adc99131b56896d29ada04b2d"
+    },
+    {
+      "name": "workspace-package-remote-license-d3fb9a85831baa35.bin",
+      "size": 1489,
+      "sha256": "6d33428c98f9d7113dfc86e17fca00f81aeaac33e02f79c8a5afafb0a5fd33c6"
+    },
+    {
+      "name": "workspace-package-remote-license-daf748fd58cdc82f.bin",
+      "size": 10505,
+      "sha256": "f597097efe3d97021f89170746bd3a0fb9a8b6fb26b82043ed68a4e0283bee6c"
+    },
+    {
+      "name": "workspace-package-remote-license-dd3ac5935310048e.bin",
+      "size": 1480,
+      "sha256": "1c77905db36f407e0fdb513f97f1f2a3f2282049ca273637841face982d5d003"
+    },
+    {
+      "name": "workspace-package-remote-license-dd72b51c146ab190.bin",
+      "size": 254,
+      "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+    },
+    {
+      "name": "workspace-package-remote-license-e1c94806f37d44c9.bin",
+      "size": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "name": "workspace-package-remote-license-e391b8009acdaa14.bin",
+      "size": 1479,
+      "sha256": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067"
+    },
+    {
+      "name": "workspace-package-remote-license-e3a8fbe1c219dcac.bin",
+      "size": 1068,
+      "sha256": "38ae43959daf953a393a585b2988672cb65a5a541aca0d0be5e72595a0a16883"
+    },
+    {
+      "name": "workspace-package-remote-license-e427a4a787c5eca1.bin",
+      "size": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+    },
+    {
+      "name": "workspace-package-remote-license-e46fca8be706562e.bin",
+      "size": 1518,
+      "sha256": "c2eba69f20d05414538c3a5df7694dde392e065ff70882e1625e90f5d6659fff"
+    },
+    {
+      "name": "workspace-package-remote-license-e62431c9da3081cb.bin",
+      "size": 463,
+      "sha256": "4ea4117f8a6fea317f44789954982d39a757c0447464f04212434f1780bb5df1"
+    },
+    {
+      "name": "workspace-package-remote-license-e841071100e11f2c.bin",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "name": "workspace-package-remote-license-e8f1c0795c6b395f.bin",
+      "size": 463,
+      "sha256": "4ea4117f8a6fea317f44789954982d39a757c0447464f04212434f1780bb5df1"
+    },
+    {
+      "name": "workspace-package-remote-license-e9c5a86dedc3d435.bin",
+      "size": 62,
+      "sha256": "5ae5bee3072a841376451b48d8cfcec7188e10543926d5870828d36c8a750dc5"
+    },
+    {
+      "name": "workspace-package-remote-license-eb925fabba20097c.bin",
+      "size": 1302,
+      "sha256": "23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734"
+    },
+    {
+      "name": "workspace-package-remote-license-ed237e38051a4a87.bin",
+      "size": 11553,
+      "sha256": "f7f9a3c8d34e8d814af869a71557ec3807ad049a4b7979616c429876feee7c1b"
+    },
+    {
+      "name": "workspace-package-remote-license-eee7a45d1c32707e.bin",
+      "size": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "name": "workspace-package-remote-license-f091f1b0941be6e3.bin",
+      "size": 1304,
+      "sha256": "f4371b28457e3e9f2db1fc972eb5ba16353dc5f8d7f42b2d5c3c2e576e40dd05"
+    },
+    {
+      "name": "workspace-package-remote-license-f0f1282a61224acc.bin",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "name": "workspace-package-remote-license-f545ae7dbaad614c.bin",
+      "size": 157609,
+      "sha256": "5888dbb9a1d2b18f2c3e6c5f6af1b39de658372b402a0577b002777f14c62ace"
+    },
+    {
+      "name": "workspace-package-remote-license-f5c553851ccdabed.bin",
+      "size": 254,
+      "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+    },
+    {
+      "name": "workspace-package-remote-license-f859faa015cbd931.bin",
+      "size": 1062,
+      "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e"
+    },
+    {
+      "name": "workspace-package-remote-license-f9b161c492ee0f57.bin",
+      "size": 11601,
+      "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+    },
+    {
+      "name": "workspace-package-remote-license-fa2391e9c4ef66b0.bin",
+      "size": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "name": "workspace-package-remote-license-ff8e3a592c7f599e.bin",
+      "size": 1183,
+      "sha256": "2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef"
+    },
+    {
+      "name": "workspace-package-remote-LICENSE.bin",
+      "size": 11553,
+      "sha256": "f7f9a3c8d34e8d814af869a71557ec3807ad049a4b7979616c429876feee7c1b"
+    },
+    {
+      "name": "workspace-package-remote-manifest.bin",
+      "size": 21445,
+      "sha256": "5ff286c985012f97bfb81008a1e1807a5e0bb7b7d26f3a5259512b6984d23284"
+    },
+    {
+      "name": "workspace-package-remote-NOTICE.bin",
+      "size": 463,
+      "sha256": "4ea4117f8a6fea317f44789954982d39a757c0447464f04212434f1780bb5df1"
+    },
+    {
+      "name": "workspace-package-remote-runtime-0bcbbc44bea2f679.bin",
+      "size": 2932,
+      "sha256": "d8e2be2c61848a7d1b21474dd8bd0cdfebab877982cd2e5cb2fb0aff4fb90ee4"
+    },
+    {
+      "name": "workspace-package-remote-runtime-0c56ad32bde92950.bin",
+      "size": 15306,
+      "sha256": "bb979132f3cbff08ce47f36d041e18071f8f534d01f591c0b129ba7abf1e480e"
+    },
+    {
+      "name": "workspace-package-remote-runtime-2814ae52efa9c018.bin",
+      "size": 697,
+      "sha256": "9842b619bf1ad7a98a403c5d79affa06cf3639f3afeb513a82a0e64a512fd4fe"
+    },
+    {
+      "name": "workspace-package-remote-runtime-2938e09a81763441.bin",
+      "size": 6183,
+      "sha256": "852564f0f6b460287043803eae732666fb5610f676874354fc89f06aa4e986ed"
+    },
+    {
+      "name": "workspace-package-remote-runtime-2e4318e76342d498.bin",
+      "size": 503,
+      "sha256": "391e823142b8b370e55a2fd32b022deaf03b8415c56000009674ebc86a0b4f86"
+    },
+    {
+      "name": "workspace-package-remote-runtime-2e623d957ea2316b.bin",
+      "size": 16886,
+      "sha256": "d0791d30c3defd44dcabbddb879a901c757993fea2c00a7ffea01d53b23b4b77"
+    },
+    {
+      "name": "workspace-package-remote-runtime-366a21894c947aeb.bin",
+      "size": 796,
+      "sha256": "924564d5be26d59b9682c4263f68320e48dde7240bd2d1ad17ec305537429dd2"
+    },
+    {
+      "name": "workspace-package-remote-runtime-612a3f1b79e9af03.bin",
+      "size": 103761736,
+      "sha256": "23062343ad39fc79f12ae39cfb324e93a20ced5f1d342e7b850c148c022ddbca"
+    },
+    {
+      "name": "workspace-package-remote-runtime-616000d6f5aded77.bin",
+      "size": 554,
+      "sha256": "fe154662301fd558f935f9c217fccbe7a7dac02ff39e648a000589403ff27c7f"
+    },
+    {
+      "name": "workspace-package-remote-runtime-631721379fa641bc.bin",
+      "size": 1183,
+      "sha256": "2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef"
+    },
+    {
+      "name": "workspace-package-remote-runtime-74dd6709c7577f92.bin",
+      "size": 3903,
+      "sha256": "41ce8e83d0d434132e1704895fedb91f6703a701b42d91c80954ab29b2845593"
+    },
+    {
+      "name": "workspace-package-remote-runtime-780d010fb1ad733c.bin",
+      "size": 1034,
+      "sha256": "e0469d4b83f6ba764b15f80e1766b75c136fbff68f048f4c050f0b1c7f065f69"
+    },
+    {
+      "name": "workspace-package-remote-runtime-7f7711072796410a.bin",
+      "size": 14532,
+      "sha256": "02c31796f0132a335d4efe7b7adcebadbb69543a1ce65ae04aaccc3530e27ab9"
+    },
+    {
+      "name": "workspace-package-remote-runtime-88f62bc367bcfc61.bin",
+      "size": 1838608,
+      "sha256": "68be8f45403afbd5bc2312b39e40689fac9a0f00986f1e5773ba8845b2b050e8"
+    },
+    {
+      "name": "workspace-package-remote-runtime-8b014625a9d2849b.bin",
+      "size": 37367,
+      "sha256": "de5add831db49e159d3ee0adb1c5e042eba3af13166374c5584f4fc520d1e734"
+    },
+    {
+      "name": "workspace-package-remote-runtime-8d0074949a3c3192.bin",
+      "size": 10724,
+      "sha256": "fe59b72378a37adaceeb2ed4e93113d0ac2ea7b234a891c195d55e33558cc5f3"
+    },
+    {
+      "name": "workspace-package-remote-runtime-8e1e27bee5783c9b.bin",
+      "size": 1829,
+      "sha256": "5d9fcf3bb6aaa7c789b4a020b79e208e76fbc32b1989caf2c275db8cb04329de"
+    },
+    {
+      "name": "workspace-package-remote-runtime-9078385ef8c5d606.bin",
+      "size": 18760,
+      "sha256": "212cdb17ac4e8fe6db2d7ecef95905f92f79f9785d4977adf6e2173a957d3b20"
+    },
+    {
+      "name": "workspace-package-remote-runtime-a326ebc506f9228c.bin",
+      "size": 650,
+      "sha256": "de7fa31f12106a5657ef74000df481f0d1abb9ac98bf6984e89055df4ae21211"
+    },
+    {
+      "name": "workspace-package-remote-runtime-a6f176c224aed53b.bin",
+      "size": 88080,
+      "sha256": "36078f7e035a1e95af3712c3ec41f61a1329cd2c0f31aeaa3e058b4e914cdbe2"
+    },
+    {
+      "name": "workspace-package-remote-runtime-abd012c24d0dbbbd.bin",
+      "size": 3987,
+      "sha256": "17b873c529ce44502e9d0a2e2eb21ce4be48dd6552040b90718b1909d02dc174"
+    },
+    {
+      "name": "workspace-package-remote-runtime-b2e0e4d2cc2a366c.bin",
+      "size": 1498,
+      "sha256": "be3f6323d6f549568577dcba9004c1479d95c65a7abb0fe0c582875b9fac0b7c"
+    },
+    {
+      "name": "workspace-package-remote-runtime-b5e31dd199f548f6.bin",
+      "size": 3056,
+      "sha256": "8b0a45739132f82e25ea13163780abf547ccfe989267f3eb7abb475beec92da3"
+    },
+    {
+      "name": "workspace-package-remote-runtime-c2edd554987d3a76.bin",
+      "size": 176,
+      "sha256": "010da44addea1d88b2b732540c3f1fd0cbcb28926b96623d4c64222e0ead2d0e"
+    },
+    {
+      "name": "workspace-package-remote-runtime-ce5c113a8f44dc15.bin",
+      "size": 18431,
+      "sha256": "189b1af95d661151e054cea10c91b3d754e4de4d3fecfb074c1fb29476f7167b"
+    },
+    {
+      "name": "workspace-package-remote-runtime-cef0fd75df8716bf.bin",
+      "size": 80400,
+      "sha256": "00c737db60264cb437a23e709d14f70c174e749f651579b4d8899859c83ee018"
+    },
+    {
+      "name": "workspace-package-remote-runtime-db7b50729db5f9f5.bin",
+      "size": 2358,
+      "sha256": "a7333b3e6e8d9e2cb87d276496599b5225bd5ff3016c1d251f03f7f12510d26c"
+    },
+    {
+      "name": "workspace-package-remote-runtime-dc8eb69976fef18e.bin",
+      "size": 17439,
+      "sha256": "a6ada33c9a2d54eaf595824b821ea89ca2c6395f89aa06755c52142148274884"
+    },
+    {
+      "name": "workspace-package-remote-runtime-e0e2fec329a5e329.bin",
+      "size": 4204,
+      "sha256": "a56fcb6e2b152097ee820b6f5410b1f71e59819b45d08d9f8bda588fe39070ec"
+    },
+    {
+      "name": "workspace-package-remote-runtime-e3663e2e7c88efde.bin",
+      "size": 17022,
+      "sha256": "6d8dd89a841748c80445fd5fcdb5ba8005369b53cc3525135e11304c8b9c55e5"
+    },
+    {
+      "name": "workspace-package-remote-runtime-e67005f6904aaa73.bin",
+      "size": 7321,
+      "sha256": "c45d3c6e12d170c860c0c3f1a050aa0f864d9806632b609a1e607d675aba128c"
+    },
+    {
+      "name": "workspace-package-remote-runtime-e933fe3ddb000c12.bin",
+      "size": 108560,
+      "sha256": "568abfcb474b410f2c06f2f88fc8b7a0510f70c28a8d609c6abbd2b029d37cb1"
+    },
+    {
+      "name": "workspace-package-remote-runtime-f18e580d8e1c7b1a.bin",
+      "size": 487,
+      "sha256": "62bbe09b2c49bbeadcb81488fef9d31e61fe9e3549c54d820f6377d887ea031d"
+    },
+    {
+      "name": "workspace-package-remote-runtime-ff58fadd4e18fa1d.bin",
+      "size": 4922,
+      "sha256": "4b1b92a3749796f04ecb2713ad8eb72fe20380c05c5af1a4e6ce601a8ed30335"
+    },
+    {
+      "name": "workspace-package-remote-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 1633,
+      "sha256": "e016d1a1cd1201c61e1fad8b10b1d40bdb8ee5f8e4689e6a8e872613a8702911"
+    },
+    {
+      "name": "workspace-package-remote.bin",
+      "size": 14616064,
+      "sha256": "723e02f6c7fd723eb78be71e185b94edba846663ffd45b1cf78ae986b8ec1421"
+    },
+    {
+      "name": "workspace-package-search-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-search-NOTICE.bin",
+      "size": 121,
+      "sha256": "b84ea10c1f4aad28d91ec5bce3aee9ef48dfdadc018399233571b9ab8f6d7009"
+    },
+    {
+      "name": "workspace-package-search-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 245967,
+      "sha256": "22069a3988535c122fddb2ab410f7833f7160f98e016cae23d0e3daa082bb6e9"
+    },
+    {
+      "name": "workspace-package-search.bin",
+      "size": 13712896,
+      "sha256": "e63f9040a0427e26a2d22c72b7c1cf37048a30bff034135f12feea0105f0c585"
+    },
+    {
+      "name": "workspace-package-services-shared.bin",
+      "size": 8008192,
+      "sha256": "be73ef21554124207fbcbc546da2f8a62cf36a53383db974fa104c42b4390688"
+    },
+    {
+      "name": "workspace-package-shield-LICENSE.bin",
+      "size": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "name": "workspace-package-shield-NOTICE.bin",
+      "size": 652,
+      "sha256": "0bb744249bfbafc4ffcfa14cc4e70eaa844be46ae4082d4cf75a4e87a00545a0"
+    },
+    {
+      "name": "workspace-package-shield-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 245967,
+      "sha256": "f8012f51030e70bbd6609e8013cf473b6830ce2f0658a2b00cb7d9304c6c3be3"
+    },
+    {
+      "name": "workspace-package-shield.bin",
+      "size": 14536704,
+      "sha256": "864392306c2f366082479bfac406b1bf40b7d0f44290a5fe0ed84b0c1126dd9f"
+    },
+    {
+      "name": "workspace-package-slicer-contract.bin",
+      "size": 606,
+      "sha256": "3d3349c46eff26b068a1a9db4b411f4eab813ed54e6f5a2e1d0fd6e5b73a3361"
+    },
+    {
+      "name": "workspace-package-slicer-doc-ACCEPTANCE.md.bin",
+      "size": 3288,
+      "sha256": "f88ed0d39ecf0ce57059a2e0365563f9f4e5af851a285baed87860d1e81bd6eb"
+    },
+    {
+      "name": "workspace-package-slicer-doc-ENGINE.md.bin",
+      "size": 2075,
+      "sha256": "e92a555e4baa116a978d244e3001ea597f3e9c41caf21f840c1c9902e6672fec"
+    },
+    {
+      "name": "workspace-package-slicer-doc-SETUP.md.bin",
+      "size": 4188,
+      "sha256": "0fbfa3ad52976663fc75b40a46d90cc9abfba33a83ce0c27fda2b78cee168c5d"
+    },
+    {
+      "name": "workspace-package-slicer-LICENSE.bin",
+      "size": 35181,
+      "sha256": "282751b8c98ee9e445346eb57a992c9ecbe25ed8dd554df046777313e19b10f9"
+    },
+    {
+      "name": "workspace-package-slicer-NOTICE.bin",
+      "size": 629,
+      "sha256": "b30443ae21176d74bfcc14b7a793afa4ba26a4676e86c8e7805a9bece75464f7"
+    },
+    {
+      "name": "workspace-package-slicer-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 172814,
+      "sha256": "708555677faf38f81f0fa05135756ba1ed4104a8d261f3c7967d999fb9889001"
+    },
+    {
+      "name": "workspace-package-slicer.bin",
+      "size": 16563200,
+      "sha256": "c007ed84e5ab9d1a51d811c37122d8b5be6436a3793fd67e2611f0fb7ad90150"
+    },
+    {
+      "name": "workspace-package-social-contract.bin",
+      "size": 356,
+      "sha256": "6bd0cde15a64d8e97e069e2481e31f745ae10481d12ff739fdc9daf056cda432"
+    },
+    {
+      "name": "workspace-package-social-LICENSE.bin",
+      "size": 11558,
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "name": "workspace-package-social-NOTICE.bin",
+      "size": 392,
+      "sha256": "190de6161320d86231b135504d4dbc685c61b3c636a8c3d11fda48885e766d8b"
+    },
+    {
+      "name": "workspace-package-social-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 574179,
+      "sha256": "35216d050c13e988c67929284cd7509bb46354b2dc32dc9b1764cdd36dce9f45"
+    },
+    {
+      "name": "workspace-package-social.bin",
+      "size": 15510016,
+      "sha256": "07959a2e02babe47d6374bc30cbd6dcacc17b6b9a666f8391904f6a6fb4b9294"
+    },
+    {
+      "name": "workspace-package-stalwart-shared.bin",
+      "size": 131139072,
+      "sha256": "84c9345bc6d1056b059c09122529848b6bb58955a116d4520b3502a42092056d"
+    },
+    {
+      "name": "workspace-package-studio-license.bin",
+      "size": 1095,
+      "sha256": "67209670dd801be32bd392ecba2dadd32a5cff49481f6e702739ec77a9706749"
+    },
+    {
+      "name": "workspace-package-studio.bin",
+      "size": 15548416,
+      "sha256": "9c24a9f62093d3385b10f6c993c5740dedc0e215fd771d709d2955cb510c21f8"
+    },
+    {
+      "name": "workspace-package-tasks-LICENSE.bin",
+      "size": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "name": "workspace-package-tasks-NOTICE.bin",
+      "size": 117,
+      "sha256": "cf938e4d071bfe907513bbe0a4c7cf50a2d698a4906e937d2c104aa429e72932"
+    },
+    {
+      "name": "workspace-package-tasks-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 251643,
+      "sha256": "fcc56fb2a72a31b3ac9e94ec550ee3fd7abbc7aeaaaef21e8caf87bf39b2e093"
+    },
+    {
+      "name": "workspace-package-tasks.bin",
+      "size": 14157312,
+      "sha256": "dc82d585b0316dd4513f41bdd5e212fba0ea2f967c026de8cd98633fac1e5958"
+    },
+    {
+      "name": "workspace-package-tickets-contract.bin",
+      "size": 265,
+      "sha256": "b94081fece259f73158bda066dc6a6d07a0644345b9b02e2f118eab0f1558ec1"
+    },
+    {
+      "name": "workspace-package-tickets-license-07edd6ed9965e594.bin",
+      "size": 1879877,
+      "sha256": "ee9927e6310976b473cebf56a6d797561b18bcff49ff2edca7d6daad19ea59a9"
+    },
+    {
+      "name": "workspace-package-tickets-LICENSE.bin",
+      "size": 35184,
+      "sha256": "e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e"
+    },
+    {
+      "name": "workspace-package-tickets-manifest.bin",
+      "size": 684,
+      "sha256": "0057cc04f4585fb6be3c5fb9e18622d220e655955d99234df006402409aa4bda"
+    },
+    {
+      "name": "workspace-package-tickets-NOTICE.bin",
+      "size": 864,
+      "sha256": "3b20d9e91723e2bb83d0fb38107a35d33d5f435db1b1191708c88d0aa3142519"
+    },
+    {
+      "name": "workspace-package-tickets-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 1085,
+      "sha256": "6097e15197890d93561ea06f030d73ee2913642ae0750e1982719cbfa22e4065"
+    },
+    {
+      "name": "workspace-package-tickets.bin",
+      "size": 93282816,
+      "sha256": "f112e9635c179ac923458e75de1c6e0a5f5c2b03ca20a7c81fb39d04446e3b54"
+    },
+    {
+      "name": "workspace-package-vault-acceptance.json.bin",
+      "size": 6481,
+      "sha256": "497442a365a4f7e83b4a7b333a8d8a668a24208130812ad31b8aed7a5f16db29"
+    },
+    {
+      "name": "workspace-package-vault-ADMIN.md.bin",
+      "size": 3044,
+      "sha256": "d06941019f4364dd947979d4f0f7259227ae506eedf058b3a7f6700c28ba4981"
+    },
+    {
+      "name": "workspace-package-vault-CLIENTS.md.bin",
+      "size": 2948,
+      "sha256": "d2f95544f1e1db6e97f974b02c063703f417ab85d39d6623c07d5692c630a15b"
+    },
+    {
+      "name": "workspace-package-vault-HOSTING.md.bin",
+      "size": 4219,
+      "sha256": "28a6115100c8a57ebe51b622f1ce3744246a96438d757bf96ffd96fa6df3406b"
+    },
+    {
+      "name": "workspace-package-vault-LICENSE.bin",
+      "size": 34523,
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+    },
+    {
+      "name": "workspace-package-vault-NOTICE.bin",
+      "size": 867,
+      "sha256": "45ff0e236bb669910482fb1cd7801bb50edf6a7bfd61c8c611f66d04d66e22bf"
+    },
+    {
+      "name": "workspace-package-vault-PRODUCTION-GATES.md.bin",
+      "size": 3814,
+      "sha256": "996bb612853bf3fdd4754f176951b45e2130befbbbde9fcf74f963ba2a703eda"
+    },
+    {
+      "name": "workspace-package-vault-RECOVERY.md.bin",
+      "size": 4536,
+      "sha256": "1bd3f0e3a92655dcac5c4bc7489cbd8e7cfff4536adc7006936e4049b7fd7c9f"
+    },
+    {
+      "name": "workspace-package-vault-SECURITY-REVIEW.md.bin",
+      "size": 4411,
+      "sha256": "58ac1175549c659f0715607b1985594ecc2db6509938a99760eae357679e9b16"
+    },
+    {
+      "name": "workspace-package-vault-SIGN-IN.md.bin",
+      "size": 4078,
+      "sha256": "d719f9316b1a220b8e5ce43b7f5a7e2ae1b1faa14f924ba330107eb6b85e1b60"
+    },
+    {
+      "name": "workspace-package-vault-THIRD-PARTY-LICENSES.txt.bin",
+      "size": 5774230,
+      "sha256": "3363529e3d4b996b6d32ea7b42ef5af0688f1c6e91a21e1275d5c6190f185e96"
+    },
+    {
+      "name": "workspace-package-vault.bin",
+      "size": 66591744,
+      "sha256": "15ece2eeffe454224ba9ec24c7b4c4ac283d24441f1fe4e81706007984f12ebf"
+    },
+    {
+      "name": "Workspace.exe",
+      "size": 17538048,
+      "sha256": "826124188fc7761ed493a14c6da726afa43fa4f36a302b49464661e296eb6030"
+    },
+    {
+      "name": "WorkspaceSetup-windows-amd64.exe",
+      "size": 1306242560,
+      "sha256": "2e8ebec000fca2dff56cc5c608d4352d286cc24ce44648d443ebe08709fe2b7c"
+    }
+  ]
+}
