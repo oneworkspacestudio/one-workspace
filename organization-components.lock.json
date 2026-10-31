@@ -199,9 +199,9 @@
   },
   "myRemote": {
     "repository": "oneworkspacestudio/my-remote",
-    "tag": "v0.1.0-preview.8",
-    "asset": "my-remote-0.1.0-preview.8-windows-amd64.zip",
-    "sha256": "920eb2bb30edbaa437f62ead94e1ed036a25843b26af408b9f34d9f9efbdcce8"
+    "tag": "v0.1.0-preview.10",
+    "asset": "my-remote-0.1.0-preview.10-windows-amd64.zip",
+    "sha256": "270b1cfa93478636f22824fea526c1d7e06af8b2ebb2a396aedb785c34138875"
   },
   "myTickets": {
     "repository": "oneworkspacestudio/my-tickets",
