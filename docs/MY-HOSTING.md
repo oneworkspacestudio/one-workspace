@@ -64,3 +64,26 @@ A fresh synthetic Workspace installation reuses its MyAccounts sign-in and globa
 logout revokes the path-scoped Hosting session. Other-device/reboot/SCM and
 cross-machine recovery acceptance remain pending. The app is an original
 Apache-2.0 repository, not a cosmetic upstream fork. Builds/releases are local.
+
+
+## My Git sources
+
+Hosting2 with Workspace110 resolves a My Git repository by name, owner/name,
+HTTPS browser URL or HTTPS .git URL. My Git uses the connected MyAccounts subject
+and its repository read permissions. Private repositories require no extra token.
+An ambiguous shared name asks for owner/name. Open My Git once if that account has
+not yet linked its sign-in. Git remains an optional installation dependency;
+GitHub and ZIP deployments still work without it.
+
+The Source step resolves the repository before Review and detects its default
+branch and root build settings. Plain HTML uses no build commands. Node projects
+with a lockfile use npm ci; others use npm install. Build dependencies are included.
+Review the suggested settings for monorepos and custom output folders.
+
+Workspace provides a loopback-only read broker, with server-side impersonation
+and an immutable repository ID. Its Git recovery credential never leaves the
+manager. Builds receive neither this capability nor MyAccounts credentials.
+Access is checked again for each metadata and source request. Revoked/disabled
+accounts fail closed. Existing GitHub projects retain their original provider;
+new GitHub projects use an explicit github.com URL. Other public HTTPS
+Gitea/Forgejo sources accept a per-repository protected read token when needed.

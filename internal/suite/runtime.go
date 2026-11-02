@@ -223,6 +223,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		}
 		if app.ID == "hosting" {
 			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner)
+			if _, installed := c.Catalog.Find("gitea"); installed {
+				cmd.Env = append(cmd.Env, "WORKSPACE_GIT_URL="+strings.TrimRight(c.Origin, "/")+"/git", fmt.Sprintf("MYHOSTING_GIT_BRIDGE_URL=http://127.0.0.1:%d/_integration/hosting/git", c.Port), "MYHOSTING_GIT_BRIDGE_TOKEN="+hostingGitCapability(client.Secret))
+			}
 			if c.HostingDomain != "" {
 				cmd.Env = append(cmd.Env, hostingSiteEnvironment(c, s)...)
 			}

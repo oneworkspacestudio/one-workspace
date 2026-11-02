@@ -47,3 +47,26 @@ def remote_component(root):
 if __name__=='__main__':
  import sys
  Path(sys.argv[2]).write_text(json.dumps(remote_component(sys.argv[1]),indent=2),encoding='utf-8')
+
+
+def hosting_replacements(catalog, root, pin):
+ """Upgrade every existing Hosting payload, retaining its installed namespace."""
+ root=Path(root).resolve()
+ c=json.loads((root/'compatibility.json').read_text(encoding='utf-8-sig'))
+ assert c['application']=='my-hosting' and c['version']==pin['tag'].removeprefix('v')
+ assert c['minimumWorkspaceVersion']=='0.3.0-preview.110'
+ assert c['workspaceInstallerIntegration']==6 and c['capabilities']==['native-hosting-git-v1']
+ app=next(x for x in catalog['apps'] if x['id']=='hosting')
+ assert app['package']=='hosting' and app['executable']=='MyHosting.exe' and app['route']=='/hosting' and app['oidc']
+ replacements={}
+ for key,item in catalog['packages'].items():
+  if key=='hosting': member='MyHosting.exe'
+  elif key.startswith('hosting-doc-'): member='docs/'+key[len('hosting-doc-'):]
+  elif key.startswith('hosting-'): member=key[len('hosting-'):]
+  else:continue
+  f=root/member
+  assert f.is_file() and not f.is_symlink(), 'Missing Hosting release payload '+member
+  replacements[item['file']]=f
+ assert len(replacements)>=4 and 'MyHosting.exe' in replacements
+ app.update(version=c['version'],source='https://github.com/'+pin['repository']+'/releases/tag/'+pin['tag'])
+ return replacements

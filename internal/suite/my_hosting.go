@@ -53,7 +53,7 @@ func hostingSiteEnvironment(c Config, s Secrets) []string {
 	return env
 }
 
-var hostingHookPath = regexp.MustCompile(`^/hosting/hooks/github/[a-f0-9]{32}$`)
+var hostingHookPath = regexp.MustCompile(`^/hosting/hooks/(?:github|git)/[a-f0-9]{32}$`)
 
 // Only this exact POST reaches Hosting without a browser session. Hosting still
 // requires the project's HMAC and deduplicates its signed payload. No admin API,

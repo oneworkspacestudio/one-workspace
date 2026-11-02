@@ -60,3 +60,13 @@ func TestApplyPlanRechecksRequirementBeforePackages(t *testing.T) {
 		t.Fatal("stored plan bypassed manager gate")
 	}
 }
+
+func TestHostingMyGitRequirements(t *testing.T) {
+	caps := []string{"native-hosting-git-v1"}
+	if checkRequirements("0.3.0-preview.109", "0.3.0-preview.110", caps) == nil {
+		t.Fatal("old manager accepted My Git broker requirement")
+	}
+	if e := checkRequirements("0.3.0-preview.110", "0.3.0-preview.110", caps); e != nil {
+		t.Fatal(e)
+	}
+}

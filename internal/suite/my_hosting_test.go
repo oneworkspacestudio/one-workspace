@@ -15,7 +15,7 @@ func TestHostingWebhookHasExactAnonymousBoundary(t *testing.T) {
 	for _, test := range []struct {
 		method, path string
 		allowed      bool
-	}{{"POST", "/hosting/hooks/github/" + id, true}, {"GET", "/hosting/hooks/github/" + id, false}, {"POST", "/hosting/hooks/github/invalid", false}, {"POST", "/hosting/hooks/github/" + id + "/extra", false}, {"POST", "/hosting/api/projects", false}, {"POST", "/hosting/auth/logout", false}, {"POST", "/mail/hooks/github/" + id, false}} {
+	}{{"POST", "/hosting/hooks/git/" + id, true}, {"GET", "/hosting/hooks/git/" + id, false}, {"POST", "/hosting/hooks/git/" + id + "/extra", false}, {"POST", "/hosting/hooks/github/" + id, true}, {"GET", "/hosting/hooks/github/" + id, false}, {"POST", "/hosting/hooks/github/invalid", false}, {"POST", "/hosting/hooks/github/" + id + "/extra", false}, {"POST", "/hosting/api/projects", false}, {"POST", "/hosting/auth/logout", false}, {"POST", "/mail/hooks/github/" + id, false}} {
 		r := httptest.NewRequest(test.method, test.path, nil)
 		if p.hostingWebhook(r) != test.allowed {
 			t.Errorf("unexpected anonymous route: %s %s", test.method, test.path)
@@ -34,6 +34,17 @@ func TestHostingOwnerAndStorageLaunchContract(t *testing.T) {
 	for _, expected := range []string{"WORKSPACE_OWNER_SUBJECT=configured-owner", "WORKSPACE_OIDC_CLIENT_ID=fixture-client", "WORKSPACE_SITES_DOMAIN=sites.example.test", "WORKSPACE_SITES_TRANSPORT=direct"} {
 		if !strings.Contains(env, expected) {
 			t.Fatal("Hosting identity contract missing", expected)
+		}
+	}
+	if strings.Contains(env, "MYHOSTING_GIT_BRIDGE_TOKEN=") {
+		t.Fatal("My Git capability supplied without Git installed")
+	}
+	rt.Config.Port = 19300
+	rt.Config.Catalog.Apps = []catalog.App{{ID: "gitea", Port: 19304}}
+	gitEnv := strings.Join(rt.command(a).Env, "\n")
+	for _, expected := range []string{"WORKSPACE_GIT_URL=https://workspace.example.test/git", "MYHOSTING_GIT_BRIDGE_URL=http://127.0.0.1:19300/_integration/hosting/git", "MYHOSTING_GIT_BRIDGE_TOKEN=" + hostingGitCapability("fixture-only")} {
+		if !strings.Contains(gitEnv, expected) {
+			t.Fatal("My Git integration missing", expected)
 		}
 	}
 	if !strings.Contains(strings.Join(cmd.Args, " "), "my-hosting") {
