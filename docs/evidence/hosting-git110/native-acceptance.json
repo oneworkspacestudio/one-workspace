@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "passed": true,
+  "syntheticIsolatedNTFS": true,
+  "ownerDataUsed": false,
+  "nativeGit": "28.1.0",
+  "runtimeNode": "24.22.0",
+  "runtimeCaddy": "2.11.7",
+  "staticAndNpmBuildPublished": true,
+  "privateNameBrowserAndCloneInputs": true,
+  "crossUserPrivateDenied": true,
+  "disabledAndUnlinkedDenied": true,
+  "immutableSource": true,
+  "fullGoSuites": true,
+  "productionWizardDesktopMobile": true
+}

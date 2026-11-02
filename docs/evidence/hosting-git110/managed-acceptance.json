@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "passed": true,
+  "checks": [
+    {
+      "label": "fresh",
+      "installer": true,
+      "myAccountsSSO": true,
+      "gitSubjectBinding": true,
+      "privateNameBrowserCloneInputs": true,
+      "actualWizard": true,
+      "actualCaddyPublication": true
+    },
+    {
+      "label": "upgrade",
+      "installer": true,
+      "myAccountsSSO": true,
+      "gitSubjectBinding": true,
+      "privateNameBrowserCloneInputs": true,
+      "actualWizard": true,
+      "actualCaddyPublication": true
+    }
+  ],
+  "protectedUpdateComplete": true,
+  "identityAndFilesPreserved": true,
+  "legacyGitHubPreserved": true,
+  "rollbackAndReapply": true,
+  "ownerDataUsed": false,
+  "physicalPhone": false,
+  "reboot": false
+}

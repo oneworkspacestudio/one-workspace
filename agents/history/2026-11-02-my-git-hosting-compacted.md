@@ -31,3 +31,30 @@ pushing. Preserve owner's completed Social11 update and all unrelated versions.
 Verified seed103 exists in prior task's range-cache/seed103-verified.zip; its
 cache/<sha>-workspace-bundle.zip is a truncated348MB file and MUST NOT be used.
 Owner current install is C:/tmp/workspace; do not use its private state as a test.
+
+
+## Verified artifacts and managed acceptance
+
+Hosting2 source67136ad0f3c8a439e7b88c7ab3f5a046351d347d is public. All17
+assets match size/digest; anonymous ZIP verified SHA256
+278c2d6250bcc60c1f936400e1e377309418cf34d9e8a51ced6769c0358165ac.
+Its schema2 marker owns the four installed Hosting payloads and requires110 plus
+native-hosting-git-v1. Includes unchanged approved Android11 launcher from109,
+with original Android source/provenance; suite110 rebuilds its own companion.
+Public app channel promoted in f10e451. GitHub Actions remain disabled.
+
+Ordinary rebuild passed35-app/313-package catalog with public Hosting2 pin;
+verified seed103 supplied explicitly. Runtime bridge/application code was built
+at f10e451; subsequent source changes only add acceptance evidence and helper.
+Supported headless fresh setup and109→110 Workspace+Hosting protected upgrade
+passed actual MyAccounts/Git SSO, all3 private-repo inputs, wizard and Caddy
+publication. Rollback/reapply, original sign-in, user-file sentinel and legacy
+GitHub project/provider preservation passed. See docs/evidence/hosting-git110.
+Owner installation was not a fixture. Native fixture accounts are disposable.
+Three earlier harness runs needed Git write:user token scope, completion of
+asynchronous runtime maintenance and a real HTTP Host header (Node fetch ignored
+it); these were test harness issues, not changes to production access rules.
+
+Origin b7be993 (Social11 delivery) was incorporated before pushing. Owner's
+Social11 complete update/newest recovery and all unselected versions must remain.
+Public Workspace110 and each requested installed target are still pending.
