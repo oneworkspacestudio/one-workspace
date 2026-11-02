@@ -27,3 +27,25 @@ Promoting via standard channel publisher, preserving all prior entries/withholdi
 and refreshing only MyAI builder pin. No Workspace/Android release needed. Primary
 suite110/MyAI18 and transactioncomplete at precheck; other task handles secondary.
 Normal protected app-only primary install and final audit still pending.
+
+## Confirmed primary delivery
+
+Channel540ded3 anonymously verified. Normal protected MyAI-only update complete
+on retained Workspace110:34 other app contracts and286 package contracts/bytes
+unchanged; identity/location, decrypted installation/provider credentials and
+existing model profiles retained. Four registered MyAI payloads match public19;
+served bootstrap19 and JS index-B0veHvrq/CSS index-gfmkwG4Q match tested build,
+all34 services healthy; anonymous context/settings/app connection denied. Scoped
+schema3 recovery manifest and11 payload files independently hashed. Normal updater
+finished full retained recovery verification and cleanup, retired1 eligible old
+backup (~1872MB), kept newest usable recovery. Primary reservation released to
+authorized peer; secondary MyAI remains pending and was not touched.
+
+Actual Ollama inventory has19 models after update. Pre/post filesystem check covered
+only empty default model folder, not configured OLLAMA_MODELS; do not claim a full
+model-library byte audit. No model/Ollama mutation requested. Sanitized full receipt
+is MyAI docs/context-files19-delivery.json at21d7643; immutable release tag unchanged.
+Own synthetic UI server stopped/native processes stopped; viewport reset. Task
+C source/native/temp roots remain because automatic approval review blocked the
+requested recursive cleanup; do not bypass via another shell/API. I final source
+worktree and public Git preserve the implementation. No owner functional fixture.
