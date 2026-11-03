@@ -350,3 +350,18 @@ ordinary retirement of eligible older copies is recorded above; no global PATH
 change was made. I tooling/public evidence is retained. Private
 PC2 recovered-speech screenshot remains outside Git; live recovered owner page
 is the deliverable. No further repair or target remains pending.
+
+## Preview4 full-script repair — publication checkpoint
+
+App source2c6f6f7 is pushed; immutable v0.1.0-preview.4 has14 verified public
+assets. EXE SHA5f70ec07ca6d71dee84bc584283a97097cbf9a1c5dd0f953188f5a63bc26c25e;
+ZIP SHA2dc243844a067c030a219393c5ba8c0688906ccb0bb3a7c1bb9ea594e641d6b0.
+The editor now sends complete canonical text independently of details visibility,
+keeps previews separate, and collapses details by default. Actual15-chunk75.320s
+WAV includes every chunk and MP3; frontend6 regressions, Go tests/vet and build pass.
+Runtime/schema/116 owned packages/integration7 unchanged; app-only promotion needs
+no new suite/Android release. Channel adds only Voice4 while preserving every
+existing row/withholding; ordinary component pin4. Protected managed update and
+primary113 delivery follow. User explicitly deferred PC2 until its model benchmark
+finishes; latest other-chat final reports interrupted run/fresh run pending, so no
+PC2 restart is authorized yet. Full artifact/progress handoff is in app history.
