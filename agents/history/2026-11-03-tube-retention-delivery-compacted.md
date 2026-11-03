@@ -31,3 +31,26 @@ anonymous exact raw-main discovery, normal Tube-only backed-up update on both PC
 fresh up-to-date checks, unrelated installed versions and served new feature UI.
 PC2's separate My AI benchmark visibly Finished before any7 apply. No7 owner apply
 has occurred yet. Never replay interrupted apply or bypass an updater lock.
+
+## Delivery complete
+
+Standard publisher/channel e3919c9 contains7/13 assets; exact anonymous raw-main
+check passes after the five-minute CDN cache refreshed. Full ordinary rebuild
+completed:37 apps/451 payloads, complete registry audit and every archived payload
+size/SHA256 verified. Evidence in docs/evidence/tube7-managed-build.json. Local114
+is QA only; no suite114 release/tag or Android publication occurred.
+
+Both Tube6->7 normal protected updates completed: primary2m40s, secondary2m47s.
+All nine stages including verified recovery/startup/cleanup passed. Latest usable
+recovery retained on each; one older automatic update recovery retired normally.
+Fresh update checks show7 up to date and all unrelated displayed installed versions
+unchanged. Primary four owned installed payloads match release hashes/sizes and
+transaction is complete. Both served new content-addressed JavaScript, visible7
+and working new schedule/retention controls; CSS/logo bytes equal tested release.
+New imports10/daily on both; existing secondary source stays Unlimited/daily.
+No owner settings/imports changed as fixtures. No active benchmark interrupted.
+
+Synthetic NTFS fixture/processes removed. Private completion receipts, installed
+version comparisons and screenshot remain outside Git. Updater tabs closed and
+app views retained. No pending target/work; app handoff updated separately without
+moving the immutable release tag. No Linux runtime/physical-phone/reboot claim.
