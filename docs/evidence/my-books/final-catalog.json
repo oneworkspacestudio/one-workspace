@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "candidate": true,
+  "workspace": "0.3.0-preview.113",
+  "apps": 37,
+  "packages": 451,
+  "booksPayloadsVerified": 22,
+  "testedWindowsBinaryMatches": true,
+  "public": false,
+  "ownerInstalled": false
+}

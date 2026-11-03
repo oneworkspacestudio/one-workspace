@@ -1,9 +1,11 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 7){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 8){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
 $required=@($registry.apps | ForEach-Object {$_.id})
+$books=$cat.apps|Where-Object id -CEQ 'books'
+if(-not $books.oidc -or $books.route -cne '/books' -or $books.callback -cne '/books/auth/callback' -or $books.port -ne 9029 -or $books.env.MYBOOKS_LIBRARY_ROOT -cne '${FILES}/My Books' -or $cat.packages.books.file -cne 'MyBooks.exe' -or -not $cat.packages.'books-contract' -or -not $cat.packages.'books-manifest'){throw 'Books managed storage, identity or owned payload contract is incomplete'}
 $voice=$cat.apps|Where-Object id -CEQ 'voice'
 if(-not $voice.oidc -or $voice.route -cne '/voice' -or $voice.callback -cne '/voice/auth/callback' -or $voice.port -ne 9028 -or $cat.packages.voice.file -cne 'MyVoice.exe' -or -not $cat.packages.'voice-contract' -or -not $cat.packages.'voice-manifest' -or -not $cat.packages.'voice-LICENSE' -or -not $cat.packages.'voice-NOTICE'){throw 'My Voice managed launch, authentication or owned payload is incomplete'}
 foreach($id in $required){if(@($cat.apps|Where-Object id -CEQ $id).Count -ne 1){throw ('Organization app missing or duplicated: '+$id)}}

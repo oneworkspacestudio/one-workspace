@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-ec8bd640.png)
+![The complete One Workspace app collection](docs/branding/app-suite-530b9f0c.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -215,6 +215,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_voice.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-voice"><strong>My Voice</strong></a></td>
       <td>Turn text into speech and create private voices on your PC.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_books.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-books"><strong>My Books</strong></a></td>
+      <td>Upload your books and settle into a comfortable, personal reading space.</td>
     </tr>
   </tbody>
 </table>

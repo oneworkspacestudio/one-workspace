@@ -360,6 +360,16 @@
       "foundation": true,
       "updateGroup": "voice",
       "recovery": "app"
+    },
+    {
+      "id": "books",
+      "name": "My Books",
+      "route": "/books",
+      "repository": "oneworkspacestudio/my-books",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "books",
+      "recovery": "app"
     }
   ]
 }

@@ -1,5 +1,24 @@
 # One Workspace release status
 
+## Preview113: My Books
+
+Adds My Books to General apps and default installation: upload your own DRM-free
+EPUB, PDF and text books, organise a bookshelf and resume reading with bookmarks,
+themes and adjustable type. MyAccounts provides sign-in; original uploads live in
+Files/My Books and library metadata lives in its own private data folder.
+
+Installer integration8 registers complete Books payload ownership, storage,
+navigation, independent updates and recovery. Older controllers request the new
+installer before applying this contract. Scoped updates retain newer unrelated
+apps, including Voice3 and MyAI20. Includes the required signed Android12 launcher.
+
+Isolated Windows acceptance covers real fresh setup, omission, earlier-manager
+upgrade, independent Books update/rollback, MyAccounts sign-in, original-file
+preservation and EPUB/PDF/TXT reading on phone/desktop browser widths. Linux x64
+compiles; Linux runtime and physical-phone checks are not claimed. See My Books'
+research, security and acceptance guides for format and reader limitations.
+
+
 ## Preview112: discover newly available optional apps
 
 Fixes the outer update-discovery filter so a new optional app reaches the normal

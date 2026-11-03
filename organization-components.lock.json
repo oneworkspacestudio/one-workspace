@@ -220,5 +220,11 @@
     "tag": "v0.1.0-preview.3",
     "asset": "my-voice-0.1.0-preview.3-windows-amd64.zip",
     "sha256": "9516d4f43e9edd3753afe033bd90d357759e349a433f4d1f39fd30fa0f067591"
+  },
+  "myBooks": {
+    "repository": "oneworkspacestudio/my-books",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-books-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "d4aca0cb5a314a97ddb8dd3629cc0463931620eba32b0781e274f57621177fe7"
   }
 }

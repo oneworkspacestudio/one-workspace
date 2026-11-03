@@ -7,6 +7,7 @@ import argparse,hashlib,json,os,shutil,subprocess,tempfile,urllib.request,zipfil
 from pathlib import Path
 from managed_component import remote_component, tickets_component, hosting_replacements
 from voice_component import voice_component
+from books_component import books_component
 from authenticator_component import authenticator_component
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -32,7 +33,7 @@ def extract(z,target):
    assert (m.external_attr>>16)&0o170000!=0o120000
   src.extractall(target)
 def main():
- p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--authenticator-candidate',help='Local acceptance only');p.add_argument('--accounts-candidate',help='Local acceptance only');p.add_argument('--voice-candidate',help='Local acceptance only; publisher rejects candidate builds');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--authenticator-candidate',help='Local acceptance only');p.add_argument('--accounts-candidate',help='Local acceptance only');p.add_argument('--books-candidate',help='Local My Books acceptance archive; not a public pin');p.add_argument('--voice-candidate',help='Local acceptance only; publisher rejects candidate builds');a=p.parse_args()
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  seed=asset(lock['managedSeed'],cache,a.seed_archive);remote=asset(lock['myRemote'],cache)
@@ -56,12 +57,17 @@ def main():
   voice=Path(a.voice_candidate).resolve();assert sha(voice)==lock['myVoice']['sha256']
  else:voice=asset(lock['myVoice'],cache)
  voice_stage=Path(tempfile.mkdtemp(prefix='voice-',dir=cache));extract(voice,voice_stage)
- contracts=[contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
+ if a.books_candidate:books=Path(a.books_candidate).resolve()
+ elif lock.get('myBooks'):books=asset(lock['myBooks'],cache)
+ else:raise ValueError('Publish and pin My Books before a release, or use --books-candidate for local acceptance')
+ books_stage=Path(tempfile.mkdtemp(prefix='books-',dir=cache));extract(books,books_stage)
+ books_contract=books_component(books_stage,allow_candidate=bool(a.books_candidate))
+ contracts=[books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=7
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=8
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:
@@ -93,6 +99,6 @@ def main():
     for item in contract['inputs'].values():dst.write(item['source'],item['file'])
  shutil.copyfile(payload,out/'workspace-bundle.zip')
  go('build','-buildvcs=false','-trimpath','-ldflags','-s -w -X github.com/oneworkspacestudio/one-workspace/internal/distribution.Repository=oneworkspacestudio/one-workspace','-o',str(out/'WorkspaceSetup-windows-amd64.exe'),'./cmd/setup')
- (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'hosting':lock['myHosting'],'voice':lock['myVoice'],'authenticator':lock['oneAuthenticator'],'candidate':bool(a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate or a.voice_candidate),'priorAppContractsRetainedExceptAccountsAndHostingVersions':True,'priorPackagesRetainedExceptManagerAccountsHostingAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
+ (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'hosting':lock['myHosting'],'voice':lock['myVoice'],'authenticator':lock['oneAuthenticator'],'books':lock.get('myBooks'),'candidate':bool(a.books_candidate or a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate or a.voice_candidate),'priorAppContractsRetainedExceptAccountsAndHostingVersions':True,'priorPackagesRetainedExceptManagerAccountsHostingAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
  print('Verified managed bundle:',len(cat['apps']),'apps;',len(cat['packages']),'packages',flush=True)
 if __name__=='__main__':main()

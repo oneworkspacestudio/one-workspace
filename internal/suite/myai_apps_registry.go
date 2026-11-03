@@ -32,11 +32,16 @@ func aiOperations(id string) []aiOperation {
 		ops = append(ops, aiChange(id, title, method, path, body))
 	}
 	switch id {
- case "voice":
-  read("voices", "List permitted speech voices", "/api/voices")
-  read("history", "List your speech recordings", "/api/history", "q")
-  read("job", "Read speech generation status", "/api/tts/jobs/{id}")
-  change("generate", "Generate private speech on CPU", "POST", "/api/tts/jobs", map[string]any{"text":"Words to say", "name":"Speech", "voice":"ID from voices", "model":"pocket18", "language":"en"})
+	case "books":
+		read("library", "List your books and saved reading positions", "/api/books")
+		read("book", "Read book metadata and contents", "/api/books/{id}")
+		read("bookmarks", "List book bookmarks", "/api/books/{id}/bookmarks")
+		read("search", "Search text within a book", "/api/books/{id}/search", "q")
+	case "voice":
+		read("voices", "List permitted speech voices", "/api/voices")
+		read("history", "List your speech recordings", "/api/history", "q")
+		read("job", "Read speech generation status", "/api/tts/jobs/{id}")
+		change("generate", "Generate private speech on CPU", "POST", "/api/tts/jobs", map[string]any{"text": "Words to say", "name": "Speech", "voice": "ID from voices", "model": "pocket18", "language": "en"})
 	case "tasks":
 		read("lists", "List task lists", "/api/lists")
 		read("tasks", "Find tasks", "/api/tasks", "q", "list", "tag", "view", "includeCompleted", "offset")

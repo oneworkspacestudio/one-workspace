@@ -264,5 +264,12 @@
     "name": "My Voice",
     "description": "Turn text into speech and create private voices on your PC.",
     "url": "https://github.com/oneworkspacestudio/my-voice"
+  },
+  {
+    "id": "books",
+    "icon": "my_books",
+    "name": "My Books",
+    "description": "Upload your books and settle into a comfortable, personal reading space.",
+    "url": "https://github.com/oneworkspacestudio/my-books"
   }
 ]
