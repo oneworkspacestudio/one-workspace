@@ -24,3 +24,5 @@ MOSS was slower than real time on the tested CPU; older low-memory PCs and
 non-English pronunciation need separate review. This preview does not claim full
 ElevenLabs feature or voice-quality parity. Model downloads remain an explicit
 first-use action on each PC.
+
+[Verified managed delivery on both PCs](my-voice-delivery.json).

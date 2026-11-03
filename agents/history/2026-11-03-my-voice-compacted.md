@@ -213,3 +213,52 @@ CUA Chrome3: voiceRolloutTab585734847 secondary/updates; voiceSecondaryHealthTab
 ## Secondary repair succeeded;112 fixes actual discovery gate
 
 Secondary eventually reconnected after~27min verified repair;111 and34 services healthy, old app versions retained. Reloaded111 UI then actual public Check found no Voice row. Root cause: CheckUpdates outer included-group gates still used newDefaultIDs, skipping optional groups before markNewApps. Earlier unit helper/direct-bundle tests did not exercise this filter. Added full public-index CheckUpdates regression (same suite version, Accounts dependency, explicit Voice selection and explicit exclusion). Reproduced failure on111 (choice nil), fixed one shared includedGroups plan from markNewApps for progress and iteration; all distribution/maintenance/suite/catalog tests and distribution vet pass. No app bytes/data/integration changes. Building112 through normal pins; Android12 source unchanged, mandatory signed companion rebuilt with new release provenance.111 immutable release retained. Primary111/Voice2 complete; no need to change its working controller. Secondary111 needs normal small Workspace112 update, then optional Voice-only UI install; another repair is unnecessary. Native isolated112 actual UI discovery/public-package install acceptance pending before publication.
+
+## Final delivery — complete on both PCs
+
+My Voice2 source c07ace5,13 immutable assets and anonymous ZIP/EXE/source/codec
+checks pass. Exact native EXE SHA256 is
+e66d61720002393890a8ab46273919a04cb95dbf716f217f88ae84f6a23b4189.
+Workspace112 source33aaa79/442 assets, signed Android12 and ordinary public
+channel436758f are verified.111 and source-only app1 tags/assets remain intact.
+No GitHub Actions/VM/WSL/hosted builds. Runtime/model pins are unchanged by112.
+
+Delivery caught111's outer discovery gate hiding optional groups before its
+correct selection helper ran.112 fixes that gate, with a full CheckUpdates
+public-index red/green regression and native110 setup→111 repair→112 ordinary
+update→unchecked optional Voice→Voice-only install acceptance. All relevant Go
+checks/vet pass; every pre-existing fixture app/manager byte is retained. The
+initial fresh111 harness intentionally had a Voice setup opt-out and correctly
+hid it; its timeout was a fixture assumption, not a remaining discovery defect.
+
+Primary: normal protected111 + Voice2 complete. All116 owned payloads and served
+JS/CSS/logo match public/tested bytes;35 native services running/no failures.
+All35 old app contracts/payloads, old decrypted secret entries, identity/password
+fields and installation locations retained; MyAI20/Hosting2 unchanged. Independently
+verified19124 recovery files and manifest; newest recovery retained, normal cleanup
+retired1 older eligible copy (~53.1MB). Primary authenticated browser required a
+normal sign-in, so no authenticated owner browser acceptance is claimed there;
+local version/managed OIDC metadata and anonymous private API denial pass.
+
+Secondary: supported owner Updates110→111 repair completed, followed by normal
+17.7MB Workspace-only112 update. Corrected UI offered Voice UNCHECKED; selected
+only Voice2 (73.6MB/116 files). All9 native stages/backup/startup/cleanup complete
+in13m35s.35 services healthy including Voice; fresh check reports Voice2 and112
+Up to date. All32 other displayed groups/versions retained, including MyAI20 and
+Hosting2. Existing MyMeet review warning predates this task. Actual MyAccounts
+session opens Voice home, renders2, expected index-en0bbr1A.js/index-CljoH0WX.css,
+and shared Apps picker includes Voice in Creative & Development. Latest verified
+recovery update-20261103T043541-ff73f589a0fe kept; normal cleanup retired1 eligible
+older copy (~292.2MB). No independent remote filesystem/credential audit claimed.
+
+Combined sanitised receipts: app docs/delivery-preview2.json and Workspace
+ docs/my-voice-delivery.json. Owner screenshots stay private; source screenshots
+use synthetic accounts. No owner audio, references, model-download acknowledgements
+or functional fixtures were created. Models remain explicit first-use Settings
+downloads per PC. MOSS cloning and ungated Pocket presets need no HF login; no
+blind quality-superiority or non-English/old-laptop/physical-phone/reboot/clean-host
+claim. Native CPU/WAV/MP3/clone/Drive/queue/recovery and390px acceptance are recorded
+in the report/receipts. All task NTFS fixtures and idle test controllers removed;
+owner data/recovery and other apps retained. Completed updater/task verification
+tabs closed; live secondary Voice tab left as deliverable. Nothing remains for
+this managed app delivery; immutable release assets and code tags stay unchanged.
