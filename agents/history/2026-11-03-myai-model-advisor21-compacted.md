@@ -7,7 +7,7 @@ immutable v0.1.0-preview.21. All9 assets size/digest verified, anonymous checksu
 matches; Actions disabled. Tested EXE SHA256
 3c3d1b7ed44fe14baa489394613e0f4f1a28f83dc8a7fce5c8b6fdbf5ff106a1.
 
-Models → Test this PC embeds the trusted guarded benchmark in MyAI, using its
+Models â†’ Test this PC embeds the trusted guarded benchmark in MyAI, using its
 unchanged verified bundled Python runtime. Owner start/stop, authenticated shared
 progress/export, persists across navigation, interruption on restart, foreground
 turn/library/maintenance cancellation and unload. Real installed-model inference
@@ -22,17 +22,49 @@ Portable stdlib Python runner supports Windows/Linux/macOS; managed app Windows.
 17 Python regressions, full Go/bundled SearXNG tests,vet,reachable vulnerability
 gate,npm audit and production AUI/TS build pass. Final isolated native included-
 runtime QA covers auth/CSRF,duplicate job,shared progress,health stop,ZIP,unload and
-restart; desktop navigation/download confirmation and390×844 visual layout pass.
+restart; desktop navigation/download confirmation and390Ã—844 visual layout pass.
 No owner installation used as fixture; no physical-phone functional claim.
 New owned MODEL-ADVISOR documentation makes10 managed MyAI payloads; no registry,
 runtime contract or suite release change. Full publisher preserves all old public
 release rows/withholdings and unrelated pins, adds onlyMyAI21; pin updated onlyMyAI.
 Managed groups, index verification and MyAI document-layout tests pass.
 
-Protected isolated public20→21 upgrade and PC2 install/full real model run remain
+Protected isolated public20â†’21 upgrade and PC2 install/full real model run remain
 pending. PC2 public URL returns Cloudflare1033 from17:17 through17:28UTC; concurrent
 Books113 maintenance is possible but not confirmed. Inspect native updater/remote
 desktop before applying anything; do not overlap an active transaction. Preserve
 113/Voice3/Books and other newer apps. Previous primary research ranking cannot
 stand in for PC2 evidence. Artifacts tooling/my-ai-model-advisor-20261103. Public
 release assets stay immutable; later delivery receipts belong in a docs commit.
+
+##22 and managed-build correction
+
+22 supersedes21 without altering its immutable assets. Public app source
+ ebd6d58713b8c7b7e8268d7498717a28523051ec; tagv0.1.0-preview.22, all9 assets
+size/digest verified and anonymous checksum matches. Final EXE SHA256
+11089d8805d3dbbb40191fe1317c098a97f48e57173aa72bb75882c07a132f6d,
+portableZIP214a317a062d7752d2326f5ebe5aacd0658e295f3c73ae34d2f8df2de8af3c4a.
+Rechecks maintenance under the start lock after model discovery, closing a
+concurrent owner-tab upgrade race. Deterministic Go regression, full Go/search,
+vet and native included-runtime checks pass; frontend is identical to accepted21.
+
+The public110 fixture refused the current index because113 changes installer
+integration; no apply occurred. Fresh verified public113 Setup installed MyAI14:
+managedSeed103 ignored the legacy myAI pin. This exposed a shared build defect.
+New myai_component.py verifies the public pin/clean provenance/contract/EXE,
+replaces only its namespace, includes the new owned guide and preserves other
+apps. Normal build-managed-seed now consumes this component, not merely the
+unused legacy field. Two boundary/preservation tests pass. Actual public113
+catalog projection retains36 unrelated apps/442 package contracts. Full ordinary
+rebuild through scripts/rebuild.ps1 passes37 apps/452 byte-hash-verified archived
+payloads, with exactly10 MyAI payloads. Unrelated public113 contracts/bytes are
+retained except the expected rebuilt manager/release notes. Evidence in
+ docs/my-ai-model-advisor22-build.json. Generated114 bundle is local QA only;
+no suite114 release or owner installation occurred. Public target path remains
+113 plus independent MyAI22; future suite publication still needs signed Android.
+
+Full publisher adds only22, preserving every prior row/withholding and unrelated
+pin. Actions remain disabled. Fresh isolated113/MyAI14 protected update to22 is
+next. PC2 public address remains offline; existing remote host is online but PIN
+entry is required. User has the Remote Desktop handoff; no PC2 installation,
+model download or ranking has been claimed. Primary untouched by this task.
