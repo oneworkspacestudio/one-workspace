@@ -217,8 +217,8 @@
   },
   "myVoice": {
     "repository": "oneworkspacestudio/my-voice",
-    "tag": "v0.1.0-preview.2",
-    "asset": "my-voice-0.1.0-preview.2-windows-amd64.zip",
-    "sha256": "ccee56059037e06298d302cca8487961825cda0df9865efcab7b31c46f43fdf5"
+    "tag": "v0.1.0-preview.3",
+    "asset": "my-voice-0.1.0-preview.3-windows-amd64.zip",
+    "sha256": "9516d4f43e9edd3753afe033bd90d357759e349a433f4d1f39fd30fa0f067591"
   }
 }

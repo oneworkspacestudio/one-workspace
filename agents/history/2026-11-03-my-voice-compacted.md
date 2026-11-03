@@ -262,3 +262,39 @@ in the report/receipts. All task NTFS fixtures and idle test controllers removed
 owner data/recovery and other apps retained. Completed updater/task verification
 tabs closed; live secondary Voice tab left as deliverable. Nothing remains for
 this managed app delivery; immutable release assets and code tags stay unchanged.
+
+## Preview3 worker repair channel in progress
+
+User reports PC2 Pocket18/Alba generic worker failure after first-use download.
+No private log/status was provided yet, so the production root cause remains
+unconfirmed. Public2 short speech reproductions pass on this AVX2 host. Official
+Pocket targets x86-64-v3; app3 adds a native baseline x86-64/static CRT fallback
+only for STATUS_ILLEGAL_INSTRUCTION and safe actionable status errors. Model and
+integration7 contracts/formats unchanged. Complete app handoff in its repository.
+
+Public app3 source02851da74be82f3ea289074a9b83d412474ccd1f /14 immutable assets
+verified; anonymous ZIP SHA9516d4f43e9edd3753afe033bd90d357759e349a433f4d1f39fd30fa0f067591,
+EXE67f8aebe04f60dce52e48373844b8effbee9c9466b827865eec673b644e2adbf.
+Both Pocket model WAV/MP3, native Windows exception/fallback/privacy, real portable
+restricted-worker speech, Go tests/vet, production UI and offline Rust recipe
+pass. All old runtime bytes unchanged; only portable worker added. All116 package
+IDs/destinations match111/112 contract. No suite release/Android rebuild is needed
+for this independent app repair; future component pin advances to3.
+
+Artifacts I:/Projects/tooling/my-voice-worker-fix-20261103; synthetic NTFS root
+C:/Projects/.cache/my-voice-worker-fix-20261103. Actual public112 setup with
+Accounts+Voice2 is running localhost39820; baseline MyAccounts/Voice and genuine
+nested Pocket generation pass. Needs normal public-channel Voice3 update,
+retention/recovery/rollback/reapply/post-update generation before owner rollout.
+Track managed-process.json, then stop task services and clean disposable C data.
+Native3 standalone is already stopped. Never create owner feature fixtures.
+
+Next: inspect/push refreshed public channel (retain all old rows/withholdings),
+anonymous normal check, synthetic app-only protected update gates, primary111
+and PC2/112 app-only updates through supported paths. Primary data C:/tmp/workspace/
+Private, PC2 remote I:/Workspace/Private. Preserve manager/unselected apps/identity/
+credentials/paths/model/audio/recovery. Retry the user's existing PC2 failed job
+as intended recovery after tested rollout, without adding fake owner QA speech.
+Capture real outcome/status, keep failed recovery explicit if unresolved. Public
+old tags/assets and original delivery receipts remain immutable. No Actions,
+subagents, VM/WSL/container or owner feature-fixture use.
