@@ -32,3 +32,41 @@ No Tube apply has been submitted by this task. After public channel promotion,
 select only My Tube in each normal updater, retain unrelated installed versions,
 wait for verified recovery/startup completion and inspect served branding bytes.
 Private receipts/artifacts belong outside Git in tooling/tube-branding-20261103.
+
+## Build/channel and PC2 verification
+
+Normal scripts/rebuild.ps1 completed:37 apps/451 payloads, complete organization
+catalog audit and every archived payload size/SHA256 verified. Local114 output is
+QA only; no suite release/tag/Android publication occurred. Evidence is recorded
+in docs/evidence/tube6-managed-build.json. Public channel52785eb contains Tube6;
+anonymous exact raw-main URL check passes. All preceding promoted rows/assets and
+withholding records remain identical; concurrent Finance4/MyAI23 docs retained.
+
+PC2 Tube-only normal update completed healthy in2m41s. Verified recovery retained;
+normal cleanup retired one older53.8MB app recovery. Fresh updater reports Tube6
+up to date and every unrelated displayed installed version equals its baseline.
+Served SVG and CSS bytes equal the tested release, light accent#2563eb, visible
+repo logo and footer6. The existing Imports tab was refreshed. No second PC2
+restart/update should be added; another owner workload resumes after maintenance.
+
+Primary attempt stopped before preparation because an independent Finance4 CLI
+updater held update.lock during recovery cleanup. Windows Restart Manager read-only
+inspection confirmed the owner. No process/lock was forced or bypassed. That CLI
+has now exited; refresh/reselect only Tube6 and finish the primary deployment.
+Private receipts/screenshots remain outside Git in the task artifact directory.
+
+## Delivery complete
+
+Primary normal Tube2->6 update completed in5m52s after the Finance4 CLI released
+its lock. All nine stages completed, recovery retained; cleanup retired one older
+automatic recovery without disturbing scheduled/manual copies. Fresh public check
+shows Tube6 up to date, Workspace113 and every unrelated displayed installed
+version unchanged. All four primary payloads equal release sizes/hashes; primary
+served logo/CSS bytes equal the tested release and visible header/footer show6.
+PC2 delivery above remains complete; no further PC2 restart was performed.
+
+Both deployments and public release/channel are verified. Updated My Tube's own
+handoff separately; release source tag remains immutable at e7d562b. Only compact
+handoffs/evidence follow in this docs commit. All task synthetic processes/data
+are cleaned up. No required delivery work remains; no suite114 release, physical
+phone, Linux runtime or reboot acceptance is claimed.

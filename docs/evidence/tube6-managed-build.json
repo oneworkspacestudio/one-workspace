@@ -1,0 +1,21 @@
+{
+  "appVersion": "0.1.0-preview.6",
+  "appSourceCommit": "e7d562b948a390c7d00641d21b2187457bb59a0d",
+  "publicBaseline": "v0.3.0-preview.113",
+  "publicBaselineCatalogSHA256": "8b19446ac35090a7de287604616ac170021a91ee1b7f34915a27e0600211c083",
+  "ordinaryRebuildEntryPoint": "scripts/rebuild.ps1",
+  "localSuiteBuildVersion": "0.3.0-preview.114",
+  "suiteReleasePublished": false,
+  "catalogAuditPassed": true,
+  "apps": 37,
+  "packages": 451,
+  "everyArchivedPayloadSizeAndSHA256Verified": true,
+  "myTubeOwnedPayloads": 4,
+  "componentProjectionUnrelatedAppsPreserved": 36,
+  "componentProjectionUnrelatedPackagesPreserved": 447,
+  "candidateManifestPlannerTestsPassed": true,
+  "catalogAndDistributionTestsPassed": true,
+  "componentBoundaryTestsPassed": 2,
+  "githubActionsUsed": false,
+  "cleanHostOrRebootAcceptanceClaimed": false
+}
