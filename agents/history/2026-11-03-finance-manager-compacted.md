@@ -28,3 +28,14 @@ credentials, locations and latest verified recovery must be retained. Second PC
 remains deferred in this chat. Synthetic test server/browser stopped, named NTFS
 fixture removed; artifacts retained in tooling/finance-manager-20261103. Append
 normal installed verification receipt before claiming Finance4 delivered.
+
+Primary delivery COMPLETE19:59:46UTC through public113's protected Finance-only
+update. Workspace113 retained, Finance4/five payload hashes and served UI match.
+All423 unselected package contracts/existence/bytes, all other app contracts,
+existing credentials and locations preserved.36 services healthy, no new startup
+failure. Backup382.4MB verified; normal cleanup retired one eligible older automatic
+copy and kept the latest verified recovery. Cleanup ran over20minutes, actively
+checking many small files; completed transaction alone precedes cleanup/audit end.
+Source c05fb03 channel/pin promotion preserved every old public row and MyAI23.
+No owner ledger fixture or paid provider request; second PC still deferred here.
+Full sanitized receipts are in my-finance docs/evidence/manager-20261103.
