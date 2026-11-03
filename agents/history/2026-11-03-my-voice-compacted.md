@@ -365,3 +365,29 @@ existing row/withholding; ordinary component pin4. Protected managed update and
 primary113 delivery follow. User explicitly deferred PC2 until its model benchmark
 finishes; latest other-chat final reports interrupted run/fresh run pending, so no
 PC2 restart is authorized yet. Full artifact/progress handoff is in app history.
+
+## Preview4 managed acceptance and primary delivery complete
+
+Channel4a7445c / app source2c6f6f7 /14 immutable public4 assets verify anonymously.
+Ordinary component projection consumes116 exact public files; catalog/distribution
+tests pass. Actual public112 setup→normal channel Voice2→4 with verified current
+public113 installer retains manager112/Accounts, identities/paths/models/projects/
+audio, all116 payloads and22 recovery files. Old112 installer correctly required
+new113 reader for the current integration8 catalog and made no changes. Fresh
+MyAccounts/proxy UI speech is7.792s with all3 chunks and MP3; details collapsed.
+
+Primary app-only protected Voice4 update retains Workspace113 and every unrelated
+app/package contract/byte, account/password fields, existing secret contents and
+locations.36 services healthy; served production JS/CSS and116 payloads exact.
+Actual MyAccounts/proxy editor4 opens with Show segment details collapsed. Recovery
+verified and retained; normal cleanup retired1 eligible older copy. No owner
+feature fixture/model/audio was created. Synthetic sessions/controllers stopped;
+only the guarded disposable task NTFS root removed, tooling evidence retained.
+
+PC2 is explicitly deferred at the user's reaffirmed request: finish its model
+benchmark first. Latest benchmark chat ended with interrupted run/fresh run pending.
+No Voice4 apply/restart submitted there; do not claim both targets complete. Resume
+only after benchmark completion or explicit reprioritization, inspect current
+operations/versions, then use normal Voice-only update and verify health/SSO/retention.
+Full receipt in my-voice docs/delivery-preview4.json; app docs commit3c533d6. App-only
+contract unchanged, so no new suite/Android release or immutable asset replacement.
