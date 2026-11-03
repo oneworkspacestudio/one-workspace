@@ -116,3 +116,87 @@ func TestSlicerPublicationScope(t *testing.T) {
 	}
 	t.Log("Anonymous channel, asset download and every selected payload digest verified")
 }
+
+// Validate the public controller and app together against a synthetic historical
+// registration. This deliberately does not load an installed user's catalog.
+func TestSlicerControllerPublicDelivery(t *testing.T) {
+	root := os.Getenv("WORKSPACE_SLICER_CONTROLLER_PUBLICATION_ROOT")
+	if root == "" {
+		t.Skip("public controller release acceptance inputs required")
+	}
+	b, err := os.ReadFile(filepath.Join(root, "catalog113.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var base catalog.Catalog
+	if err := json.Unmarshal(b, &base); err != nil {
+		t.Fatal(err)
+	}
+	for _, id := range []string{"slicer-contract", "slicer-doc-SETUP.md", "slicer-doc-ACCEPTANCE.md", "slicer-doc-ENGINE.md"} {
+		delete(base.Packages, id)
+	}
+	t.Setenv("GH_TOKEN", "")
+	t.Setenv("GITHUB_TOKEN", "")
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	defer cancel()
+	plan, err := CheckUpdates(ctx, base)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, id := range []string{"workspace", "slicer"} {
+		found := false
+		for _, ch := range plan.Choices {
+			if ch.ID == id {
+				want := "0.3.0-preview.114"
+				if id == "slicer" {
+					want = "0.1.0-preview.8"
+				}
+				if !ch.Available || ch.Version != want {
+					t.Fatalf("%s public offer: %+v", id, ch)
+				}
+				found = true
+			}
+		}
+		if !found {
+			t.Fatalf("missing public offer: %s", id)
+		}
+	}
+	target, downloads, err := SelectUpdates(base, plan, []string{"workspace", "slicer"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if target.Version != "0.3.0-preview.114" {
+		t.Fatal("wrong controller")
+	}
+	for _, app := range base.Apps {
+		if app.ID == "slicer" {
+			continue
+		}
+		now, ok := target.Find(app.ID)
+		if !ok || !reflect.DeepEqual(app, now) {
+			t.Fatalf("unselected app changed: %s", app.ID)
+		}
+	}
+	for _, id := range []string{"slicer-contract", "slicer-doc-SETUP.md", "slicer-doc-ACCEPTANCE.md", "slicer-doc-ENGINE.md"} {
+		if _, exists := target.Packages[id]; exists {
+			t.Fatal("unregistered optional document was installed", id)
+		}
+	}
+	tempBase := os.Getenv("WORKSPACE_SLICER_TEST_TEMP")
+	if tempBase == "" {
+		t.Fatal("named isolated NTFS staging required")
+	}
+	dir, err := os.MkdirTemp(tempBase, "controller-public-download-")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(dir)
+	if err := StageUpdateFiles(ctx, target, downloads, dir, func(string) {}); err != nil {
+		t.Fatal(err)
+	}
+	proof := map[string]any{"passed": true, "anonymousNativeChannelAndPayloads": true, "workspace": target.Version, "slicer": "0.1.0-preview.8", "legacyFourPackageRegistration": true, "unselectedAppContractsPreserved": true, "selectedDownloads": len(downloads), "ownerInstallationUsed": false}
+	b, _ = json.MarshalIndent(proof, "", "  ")
+	if err := os.WriteFile(filepath.Join(root, "controller114-anonymous-native.json"), b, 0600); err != nil {
+		t.Fatal(err)
+	}
+}
