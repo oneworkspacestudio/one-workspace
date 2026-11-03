@@ -391,3 +391,34 @@ only after benchmark completion or explicit reprioritization, inspect current
 operations/versions, then use normal Voice-only update and verify health/SSO/retention.
 Full receipt in my-voice docs/delivery-preview4.json; app docs commit3c533d6. App-only
 contract unchanged, so no new suite/Android release or immutable asset replacement.
+
+## Preview5 cloning readiness — public and primary delivered
+
+App c88e162 / immutable v0.1.0-preview.5 /14 assets verify anonymously. EXE SHA
+b795db672a314bf40110d1556a6ccd6ded32dddd4ff66d659d82bb80df2c72b4; ZIP SHA
+52f30ee82e31b7159536ccdff0f2094513e6888cae2be940b91617e2f25ee01a.
+Channel/pin b152f7e promotes only Voice5, retaining concurrent Slicer rows and all
+prior releases/withholdings. Ordinary build projects116 exact public files; suite
+catalog/distribution checks pass. Capability/readiness are separate; cloning UI
+lists uninstalled MOSS with inline setup, progress/retry and capture guards.
+Fresh763682544-byte MOSS download+reference preparation passes; public CC0 clone
+and exact native5 WAV/MP3,11 frontend tests, Go tests/vet, AUI/TS/Vite pass.
+
+Public112 managed Voice2→5 through current public113 updater retains manager/
+Accounts/identities/paths/models/projects/audio;116 payloads and22 recovery files
+independently verified. Actual MyAccounts/proxy clone and6.7028s preview pass.
+Primary app-only4→5 retains Workspace113, every unselected app/package contract/
+byte, identity/password fields, old secret contents and paths;36 services healthy.
+Served production assets exact; actual cloning UI offers MOSS install before
+recording. Verified recovery kept; normal cleanup retired1 eligible old copy.
+No owner model download/reference/licence acceptance fixture. Synthetic sessions/
+controllers stopped and guarded disposable NTFS root removed; I evidence retained.
+Full receipt in my-voice docs/delivery-preview5.json. Schema/runtime/model/116-file
+contract unchanged, so no new suite/Android release or asset replacement.
+
+PC2 remains EXPLICITLY DEFERRED at the user's reaffirmed benchmark-first request.
+No Voice5 apply/restart there. Resume only after benchmark completion or user
+reprioritization; inspect current installed/public versions and active operations,
+then normal Voice-only update, retention/recovery/health/SSO verification. Do not
+claim both targets complete. All other implementation/publication/delivery work
+is finished; preserve existing owner recording tabs when resuming.
