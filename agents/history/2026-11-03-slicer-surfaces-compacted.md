@@ -8,7 +8,7 @@ and unchanged originals pass in an isolated native app. No physical print/contac
 Reconciled against current mainc05fb03 and public Workspace113, not the old74
 installer recipe. Primary113 has37 app contracts and independently installed
 Slicer7. Public113 offline setup actually installs Slicer4. Fresh native113 setup
-with synthetic MyAccounts/Drive/Slicer and normal protected app-only4â†’8 update
+with synthetic MyAccounts/Drive/Slicer and normal protected app-only4→8 update
 passes SSO identity/session, retained project, full geometry, original bytes,
 anonymous private-API denial, desktop/mobile and unchanged unrelated contracts.
 Initial test incorrectly expected bundled7; corrected to the verified public
