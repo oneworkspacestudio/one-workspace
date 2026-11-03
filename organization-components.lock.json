@@ -214,5 +214,11 @@
     "tag": "v0.1.0-preview.2",
     "asset": "one-authenticator-0.1.0-preview.2-windows-amd64.zip",
     "sha256": "81771dc89aa9270378903e3f7353a5c852c2fb05f527f2f91b383a2feae03f31"
+  },
+  "myVoice": {
+    "repository": "oneworkspacestudio/my-voice",
+    "tag": "v0.1.0-preview.2",
+    "asset": "my-voice-0.1.0-preview.2-windows-amd64.zip",
+    "sha256": "ccee56059037e06298d302cca8487961825cda0df9865efcab7b31c46f43fdf5"
   }
 }

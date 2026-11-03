@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-ac5632ab.png)
+![The complete One Workspace app collection](docs/branding/app-suite-ec8bd640.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -210,6 +210,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/one_authenticator.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/one-authenticator"><strong>One Authenticator</strong></a></td>
       <td>Keep your OneAccount security codes on your phone, even offline.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_voice.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-voice"><strong>My Voice</strong></a></td>
+      <td>Turn text into speech and create private voices on your PC.</td>
     </tr>
   </tbody>
 </table>

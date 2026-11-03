@@ -350,6 +350,16 @@
       "foundation": false,
       "updateGroup": "authenticator",
       "recovery": "workspace"
+    },
+    {
+      "id": "voice",
+      "name": "My Voice",
+      "route": "/voice",
+      "repository": "oneworkspacestudio/my-voice",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "voice",
+      "recovery": "app"
     }
   ]
 }

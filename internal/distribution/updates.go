@@ -58,6 +58,7 @@ type UpdateChoice struct {
 	Reason               string                     `json:"reason,omitempty"`
 	ReviewURL            string                     `json:"reviewUrl,omitempty"`
 	NewApps              []string                   `json:"newApps,omitempty"`
+	Optional             bool                       `json:"optional,omitempty"`
 	Apps                 []catalog.App              `json:"apps,omitempty"`
 	Packages             map[string]catalog.Package `json:"packages,omitempty"`
 	Downloads            map[string]UpdateDownload  `json:"downloads,omitempty"`
@@ -90,6 +91,7 @@ type updateGroup struct {
 }
 
 var updateGroups = []updateGroup{
+	{"voice", "My Voice", "my-voice", []string{"voice"}},
 	{"remote", "My Remote", "my-remote", []string{"remote"}},
 	{"tickets", "My Tickets", "my-tickets", []string{"tickets"}},
 	{"authenticator", "One Authenticator", "one-authenticator", []string{"authenticator"}},
@@ -289,6 +291,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "voice" || strings.HasPrefix(id, "voice-") {
+		return "voice"
+	}
 	if id == "authenticator" || strings.HasPrefix(id, "authenticator-") {
 		return "authenticator"
 	}
@@ -391,13 +396,33 @@ func newDefaultIDs(current, latest catalog.Catalog) map[string]bool {
 	}
 	return out
 }
-func markNewDefaults(current, latest catalog.Catalog, ch UpdateChoice) UpdateChoice {
+func markNewApps(current, latest catalog.Catalog, ch UpdateChoice) UpdateChoice {
 	allowed := newDefaultIDs(current, latest)
+	installable := map[string]bool{}
+	for _, a := range latest.DefaultApps(current.EffectiveSelection()) {
+		installable[a.ID] = true
+	}
+	// Existing coupled groups retain their per-app selection. Only a new group
+	// consisting entirely of optional apps can be offered as an optional unit.
+	optionalGroup := len(ch.Apps) > 0
 	for _, a := range ch.Apps {
-		if allowed[a.ID] {
-			ch.NewApps = append(ch.NewApps, a.ID)
+		_, installed := current.Find(a.ID)
+		if installed || catalog.DefaultInstall(a.ID) {
+			optionalGroup = false
 		}
 	}
+	optional := 0
+	for _, a := range ch.Apps {
+		_, installed := current.Find(a.ID)
+		newOptional := optionalGroup && !installed && installable[a.ID]
+		if allowed[a.ID] || newOptional {
+			ch.NewApps = append(ch.NewApps, a.ID)
+			if newOptional {
+				optional++
+			}
+		}
+	}
+	ch.Optional = optional > 0 && optional == len(ch.NewApps)
 	return ch
 }
 func scopeUpdateChoice(current catalog.Catalog, ch UpdateChoice) UpdateChoice {
@@ -535,7 +560,7 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		}
 		repo := "oneworkspacestudio/" + g.repo
 		var appReleases []Release
-		ch = markNewDefaults(current, latest, ch)
+		ch = markNewApps(current, latest, ch)
 		if g.id != "workspace" && len(oldApps) == 0 {
 			if len(ch.Apps) == 0 {
 				continue
@@ -843,6 +868,9 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 	}
 	if includeDefaults {
 		for _, ch := range plan.Choices {
+			if ch.Optional {
+				continue
+			}
 			if len(ch.NewApps) > 0 && !ch.Available {
 				return target, nil, fmt.Errorf("cannot include new apps from %s: %s", ch.Name, ch.Reason)
 			}
@@ -976,7 +1004,7 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 		if g.id == "workspace" {
 			ch.InstallerIntegration = incoming.InstallerIntegration
 		}
-		ch = markNewDefaults(current, incoming, ch)
+		ch = markNewApps(current, incoming, ch)
 		if g.id != "workspace" && len(groupApps(g, current)) == 0 && len(ch.NewApps) == 0 {
 			continue
 		}
@@ -992,7 +1020,7 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 	}
 	if len(selected) == 0 {
 		for _, ch := range plan.Choices {
-			if ch.Available {
+			if ch.Available && !ch.Optional {
 				selected = append(selected, ch.ID)
 			}
 		}
@@ -1041,8 +1069,8 @@ func StartupDefaultPlan(ctx context.Context, current catalog.Catalog) (UpdatePla
 	}
 	for _, g := range suiteUpdateGroups(latest) {
 		ch := UpdateChoice{ID: g.id, Name: g.name, Apps: groupApps(g, latest), Packages: groupPackages(g, latest), Downloads: map[string]UpdateDownload{}}
-		ch = markNewDefaults(current, latest, ch)
-		if len(ch.NewApps) == 0 {
+		ch = markNewApps(current, latest, ch)
+		if len(ch.NewApps) == 0 || ch.Optional {
 			continue
 		}
 		ch = scopeUpdateChoice(current, ch)

@@ -257,5 +257,12 @@
     "name": "One Authenticator",
     "description": "Keep your OneAccount security codes on your phone, even offline.",
     "url": "https://github.com/oneworkspacestudio/one-authenticator"
+  },
+  {
+    "id": "voice",
+    "icon": "my_voice",
+    "name": "My Voice",
+    "description": "Turn text into speech and create private voices on your PC.",
+    "url": "https://github.com/oneworkspacestudio/my-voice"
   }
 ]

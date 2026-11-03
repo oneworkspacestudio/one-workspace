@@ -647,7 +647,7 @@ func restoreUpdateBackup(c Config, r BackupReceipt, recovery BackupReceipt, repo
 		if e = clearIntroducedRecoveryPrograms(c, b, currentBackup); e != nil {
 			return e
 		}
-		if e = clearRecoveryMetadata(c.Data, c.Data); e != nil {
+		if e = clearRecoveryMetadata(c.Data, c.Data, introducedAppRecoveryRoots(b, currentBackup)...); e != nil {
 			return e
 		}
 	} else {

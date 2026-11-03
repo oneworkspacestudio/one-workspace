@@ -229,6 +229,13 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 					return fmt.Errorf("My Forms Drive storage did not become ready: %w", e)
 				}
 			}
+			if voice, installed := c.Catalog.Find("voice"); installed {
+				if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://127.0.0.1:%d/healthz", voice.Port), 90*time.Second, done, func(detail string) {
+					operationprogress.Report(ctx, "restart", "Checking My Voice: "+detail, 0, 0, "")
+				}); e != nil {
+					return fmt.Errorf("My Voice did not become ready: %w", e)
+				}
+			}
 			return nil
 		}
 		time.Sleep(100 * time.Millisecond)

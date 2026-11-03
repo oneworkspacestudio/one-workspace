@@ -1,5 +1,28 @@
 # One Workspace release status
 
+## Preview111: My Voice and optional managed apps
+
+Adds My Voice2 in Creative with private CPU speech, consent-based MOSS cloning,
+Pocket18/7 preset voices, projects, dictionaries, dialogue, history and WAV/MP3/ZIP
+exports. Scoped My Drive import/export and MyAccounts SSO use existing permissions.
+Models download separately from fixed public sources after first-use review;
+no Hugging Face account is needed. No owner voice reference is bundled.
+
+Installer integration7 and manager111 own the native runtime/private storage,
+independent Voice updates, navigation and protected recovery. New optional apps
+appear unchecked and install only when explicitly selected. Rollback preserves
+complete private state for exclusively new apps so supported reapply remains safe.
+Voice readiness is verified before an update succeeds. Existing apps and newer
+independent versions are retained by scoped upgrades and repair.
+
+Native synthetic fresh/omitted selection, protected110 upgrade/rollback/reapply,
+actual restricted CPU engines, cloning, Drive byte reconciliation, account isolation,
+full Go checks and desktop/phone UI passed. Includes signed Android12. The app's
+report records CPU timings and limitations; MOSS is slower than real time on the
+tested host. No claim of ElevenLabs parity, quality superiority, physical-phone,
+reboot or clean-host acceptance. Production delivery is recorded separately.
+
+
 ## Preview110: My Git sources for My Hosting
 
 My Hosting2 accepts a repository name, owner/name, browser URL or HTTPS .git URL.

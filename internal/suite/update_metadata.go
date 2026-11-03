@@ -45,6 +45,7 @@ var preservedUpdateDataV1 = []string{
 	"create/uploads", "create/outputs", "create/assets", "create/cache", "my3d/models", "my3d/projects", "my3d/outputs", "my3d/cache",
 	"pdf/uploads", "pdf/outputs", "pdf/cache", "search/cache", "monitor/logs",
 	"tickets/core/attachments", "tickets/tmp",
+	"voice/models", "voice/runtime", "voice/projects", "voice/tmp",
 }
 
 func preservedUpdateData(path string) bool {
@@ -156,7 +157,7 @@ func validateUpdateMetadata(c Config, p *UpdateMetadataPolicy) error {
 }
 
 func knownUpdateStorageProfile(id string) bool {
-	if id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
+	if id == "voice" || id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
 		return true
 	}
 	switch id {
@@ -193,7 +194,7 @@ func sameMetadataPolicy(a, b *UpdateMetadataPolicy) bool {
 // Gather and check first, then remove metadata entries individually. Never
 // RemoveAll an ancestor of a preserved library: files created after an update
 // must survive its rollback too. No preserved tree is traversed or modified.
-func clearRecoveryMetadata(root, start string) error {
+func clearRecoveryMetadata(root, start string, keepRoots ...string) error {
 	var paths []string
 	err := filepath.WalkDir(start, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -204,6 +205,14 @@ func clearRecoveryMetadata(root, start string) error {
 			return err
 		}
 		rel = filepath.ToSlash(rel)
+		for _, keep := range keepRoots {
+			if strings.EqualFold(rel, keep) || strings.HasPrefix(strings.ToLower(rel), strings.ToLower(keep)+"/") {
+				if d.IsDir() {
+					return filepath.SkipDir
+				}
+				return nil
+			}
+		}
 		first := strings.ToLower(strings.SplitN(rel, "/", 2)[0])
 		if privateUpdateExclusions[first] || strings.HasPrefix(first, ".apps-stage-") || preservedUpdateData(rel) {
 			if d.IsDir() {
@@ -241,6 +250,47 @@ func clearRecoveryMetadata(root, start string) error {
 		}
 	}
 	return nil
+}
+
+// A rolled-back app which did not exist in the saved catalog has no old DB or
+// identity marker to restore. Retain its complete, exclusively owned private
+// state for a later supported reinstall; the old manager does not launch it.
+func introducedAppRecoveryRoots(before, after UpdateBackup) []string {
+	oldRoots := []string{}
+	for _, a := range before.Config.Catalog.Apps {
+		oldRoots = append(oldRoots, appUpdatePrivatePaths(a.ID)...)
+	}
+	roots := map[string]bool{}
+	for _, a := range after.Config.Catalog.Apps {
+		if _, exists := before.Config.Catalog.Find(a.ID); exists {
+			continue
+		}
+		for _, root := range appUpdatePrivatePaths(a.ID) {
+			root = strings.ToLower(filepath.ToSlash(root))
+			conflict := false
+			for _, old := range oldRoots {
+				old = strings.ToLower(filepath.ToSlash(old))
+				if root == old || strings.HasPrefix(root, old+"/") || strings.HasPrefix(old, root+"/") {
+					conflict = true
+				}
+			}
+			for _, f := range before.Files {
+				name := strings.ToLower(filepath.ToSlash(f.Path))
+				if f.Area == "private" && (name == root || strings.HasPrefix(name, root+"/")) {
+					conflict = true
+				}
+			}
+			if !conflict {
+				roots[root] = true
+			}
+		}
+	}
+	out := []string{}
+	for root := range roots {
+		out = append(out, root)
+	}
+	sort.Strings(out)
+	return out
 }
 
 // Both snapshots have been verified and the runtime stopped before this runs.

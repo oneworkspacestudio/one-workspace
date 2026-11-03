@@ -77,7 +77,7 @@ func run() error {
 		}
 		if len(selected) == 0 {
 			for _, ch := range plan.Choices {
-				if ch.Available {
+				if ch.Available && !ch.Optional {
 					selected = append(selected, ch.ID)
 				}
 			}
