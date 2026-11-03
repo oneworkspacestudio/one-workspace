@@ -10,6 +10,7 @@ from voice_component import voice_component
 from books_component import books_component
 from myai_component import myai_replacements
 from tube_component import tube_replacements
+from slicer_component import slicer_replacements
 from authenticator_component import authenticator_component
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -45,6 +46,8 @@ def main():
  myai_stage=Path(tempfile.mkdtemp(prefix='myai-',dir=cache));extract(myai,myai_stage)
  tube=asset(lock['myTube'],cache)
  tube_stage=Path(tempfile.mkdtemp(prefix='tube-',dir=cache));extract(tube,tube_stage)
+ slicer=asset(lock['mySlicer'],cache)
+ slicer_stage=Path(tempfile.mkdtemp(prefix='slicer-',dir=cache));extract(slicer,slicer_stage)
  if a.tickets_candidate:
   tickets=Path(a.tickets_candidate).resolve();assert sha(tickets)==lock['myTickets']['sha256']
  else:tickets=asset(lock['myTickets'],cache)
@@ -84,6 +87,7 @@ def main():
   replacements.update(hosting_replacements(cat,hosting_stage,lock['myHosting']))
   replacements.update(myai_replacements(cat,myai_stage,lock['myAI']))
   replacements.update(tube_replacements(cat,tube_stage,lock['myTube']))
+  replacements.update(slicer_replacements(cat,slicer_stage,lock['mySlicer']))
   for k,pkg in cat['packages'].items():
    if pkg['file'] in replacements:
     f=replacements[pkg['file']];pkg.update(size=f.stat().st_size,sha256=sha(f))
