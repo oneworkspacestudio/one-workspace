@@ -15,8 +15,8 @@ class MyAIContract(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    root,cat,pin=self.fixture(d);before=copy.deepcopy(cat);paths=myai_replacements(cat,d,pin)
    self.assertEqual(cat['apps'][1],before['apps'][1]);self.assertEqual(cat['packages']['other'],before['packages']['other']);self.assertEqual(cat['apps'][0]['args'],['keep'])
-   self.assertEqual(cat['apps'][0]['version'],'0.1.0-preview.22');self.assertEqual(len(paths),10)
-   self.assertIn('docs/MyAI/MODEL-ADVISOR.md',paths);self.assertEqual(cat['packages']['myai']['sha256'],hashlib.sha256((root/'MyAI.exe').read_bytes()).hexdigest())
+   self.assertEqual(cat['apps'][0]['version'],'0.1.0-preview.22');self.assertEqual(len(paths),9)
+   self.assertIn('docs/MyAI/SUPPORT.md',paths);self.assertEqual(cat['packages']['myai']['sha256'],hashlib.sha256((root/'MyAI.exe').read_bytes()).hexdigest())
  def test_dirty_or_tampered_program_and_foreign_ownership_fail_closed(self):
   for change in ['dirty','program','ownership']:
    with self.subTest(change=change),tempfile.TemporaryDirectory() as d:

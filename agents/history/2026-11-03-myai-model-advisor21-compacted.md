@@ -68,3 +68,34 @@ pin. Actions remain disabled. Fresh isolated113/MyAI14 protected update to22 is
 next. PC2 public address remains offline; existing remote host is online but PIN
 entry is required. User has the Remote Desktop handoff; no PC2 installation,
 model download or ranking has been claimed. Primary untouched by this task.
+
+##23: protected document contract corrected before target apply
+
+Public113's planner rejected21/22's additional untracked guide before any apply.
+Full catalog validation accepted it, but the independent updater deliberately
+recognizes only four exact optional guide names.23 retains9 owned payloads and
+includes the advisor guide in existing SUPPORT.md; portable/source still include
+MODEL-ADVISOR.md. No ownership guard was weakened and all old assets stay immutable.
+App23 source620b935a9abb8db39d9e88c71434db9213deae65; EXE SHA256
+135efc323004eca2613ef9ef020159a28555076958c7dad6e4e89d766aad4e0e,
+portableZIP612d1e01cc4c2ba008b3e576315d0f373cbb41ae7fb0892312b91dccf0ea40f9.
+All9 public assets/digests and anonymous checksum verified. Native final runtime,
+permissions, interruption/unload and restart pass. Actual full/quick profile,
+8Kcontext/batch32 and elapsed monitoring now stay visible across navigation.
+Desktop and390×844 visual review pass;17 Python regressions retained.
+
+New TestMyAIPrepublicationManifestContract consumes the actual candidate and a
+verified public baseline, checking the real planner in minimal/full layouts and
+unrelated-app retention before publication. It rejected real22 with the observed
+ownership error and passed23 before tag/publish. App RELEASING.md requires this
+gate. Future managed-seed replacement now uses the same9-payload contract.
+Public113 catalog projection retains36 unrelated apps/442 package contracts.
+Ordinary37-app rebuild passes with451 payloads; final archive verification is
+recorded separately. Historical22/452-payload evidence is not target delivery.
+
+PC2 recovered after Books113 and Finance3 work; use its normal updater, select
+onlyMyAI23 and preserve newer unrelated apps. Remote PIN is no longer needed;
+our unused Remote Desktop connection is closed. Native public113/MyAI14 protected
+upgrade remains the immediate acceptance step before PC2 apply, then download
+Qwen3.5:9b/2b if absent and run full guarded installed-model comparison. Existing
+primary report does not establish PC2 ranking. No primary update authorized here.

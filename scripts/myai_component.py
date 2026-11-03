@@ -15,7 +15,7 @@ def myai_replacements(catalog,stage,pin):
  assert app['package']=='myai' and app['route']==c['route'] and app['executable']==c['executable'] and app['oidc'] is True
  mapping={'myai':('MyAI.exe','MyAI.exe'),'myai-contract':('docs/MyAI/compatibility.json','compatibility.json')}
  for name in ['LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt']:mapping['myai-'+name]=('licenses/MyAI-'+name,name)
- for name in ['SETUP.md','SUPPORT.md','ADR-001-architecture.md','SECURITY-CHECKS.md','MODEL-ADVISOR.md']:mapping['myai-doc-'+name]=('docs/MyAI/'+name,'docs/'+name)
+ for name in ['SETUP.md','SUPPORT.md','ADR-001-architecture.md','SECURITY-CHECKS.md']:mapping['myai-doc-'+name]=('docs/MyAI/'+name,'docs/'+name)
  assert {k for k in catalog['packages'] if k=='myai' or k.startswith('myai-')}<=set(mapping),'Unrecognized existing My AI payload ownership'
  replacements={}
  for key,(target,member) in mapping.items():

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "localBuildOnly": true,
+  "suiteVersion": "0.3.0-preview.114",
+  "suitePublished": false,
+  "normalOrganizationRebuildPassed": true,
+  "completeInventory": 37,
+  "verifiedArchivedPayloads": 451,
+  "myAI": "0.1.0-preview.23",
+  "myAIPayloads": 9,
+  "unrelatedPublic113AppContractsRetained": 36,
+  "unrelatedPublic113PayloadContractsRetainedExceptManagerAndReleaseNotes": true,
+  "appSourceSHA256": "135efc323004eca2613ef9ef020159a28555076958c7dad6e4e89d766aad4e0e"
+}
