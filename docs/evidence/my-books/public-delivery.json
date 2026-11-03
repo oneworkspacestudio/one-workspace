@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "workspace": "0.3.0-preview.113",
+  "books": "0.1.0-preview.1",
+  "appRelease": "https://github.com/oneworkspacestudio/my-books/releases/tag/v0.1.0-preview.1",
+  "workspaceRelease": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.113",
+  "workspaceSourceCommit": "53ec57499b2e3a24aa090b6ac6f64074a4e43b1f",
+  "publicAssetsVerified": 469,
+  "anonymousInstallerVerified": true,
+  "anonymousAPKVerified": true,
+  "githubActionsUsed": false,
+  "primary": {
+    "health": {
+      "checked": "2026-11-03T17:59:28.3330923Z",
+      "failures": [],
+      "runningApps": 36,
+      "books": "running"
+    },
+    "installedBooksPayloadsVerified": 22,
+    "existingPackagesMatchPriorCatalog": 404,
+    "identityAndExistingCredentialAuditPassed": true,
+    "installedStaticAssetsMatchTestedBuild": true
+  },
+  "secondary": {
+    "schema": 1,
+    "target": "secondary",
+    "workspace": "0.3.0-preview.113",
+    "books": "0.1.0-preview.1",
+    "transaction": "complete",
+    "health": {
+      "checked": "2026-11-03T17:59:28.6099581Z",
+      "failures": [],
+      "runningApps": 36,
+      "books": "running"
+    },
+    "verifiedRecoveryRetained": true,
+    "cleanupCompleted": true,
+    "generalTileVerified": true,
+    "contentAddressedIconLoaded": true,
+    "seamlessReopen": true,
+    "sharedPickerVerified": true,
+    "ownerBookUploadPerformed": false,
+    "directCredentialFileAuditPerformed": false,
+    "otherReleaseWarnings": [
+      "My AI",
+      "My Meet"
+    ]
+  },
+  "ownerDataUsedAsFunctionalFixture": false,
+  "linux": {
+    "compiled": true,
+    "runtimeTested": false,
+    "archiveRequiresChmod": true
+  },
+  "knownFollowups": [
+    "Metadata recovery copies Finance engine files; new-app additions use broader metadata recovery",
+    "My AI and My Meet show separate release-review warnings on secondary"
+  ],
+  "finished": "2026-11-03T18:00:01.843524+00:00"
+}

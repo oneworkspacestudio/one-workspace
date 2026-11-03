@@ -80,3 +80,73 @@ The published EXE exactly matches native-tested247a7288; Linux compiled only.
 Includes the unchanged approved Android12 companion from public112 with original
 provenance. Normal complete suite113 must use the mandatory signed-Android
 publisher. Both owner installs and suite publication remain pending.
+
+## Public delivery and primary installation
+
+Workspace113 released from53ec57499b2e3a24aa090b6ac6f64074a4e43b1f via the
+mandatory signed-Android publisher. All469 asset sizes/digests verified; anonymous
+APK download and exact raw public channel verified. Channel promotion854920d.
+The ordinary installer --check-updates anonymously downloaded and verified the
+complete public113 bundle, Books1 and Voice3. Exact release installer fresh setup
+also passed real MyAccounts, Books upload/reopen, picker, originals and denial of
+anonymous private access. Its isolated fixture was stopped and removed (845MB
+across test roots); no owner fixture. Linux compiled only; Windows-created Linux
+tar needs chmod700, now documented in app README/release notes; immutable assets
+were not replaced. Future Linux packaging must explicitly set executable mode.
+
+Primary completed normal protected selective workspace,books update111→113. All36
+services healthy; manager and22 Books payloads match public release;404 unchanged
+package payloads match prior catalog, all existing app contracts/locations and
+identity/password/client credential fields match verified pre-update recovery.
+Latest verified recovery retained and cleanup finished. Installed Books loopback
+serves exact tested SVG/JS/CSS; public proxy correctly requires an owner session.
+Primary browser session was already expired, so no owner book upload or functional
+account fixture was used. Private delivery/audit receipts live in
+I:/Projects/tooling/my-books-release-20261103.
+
+Operational finding inherited from the base: full manager recovery copies16546
+Finance engine runtime files, causing long downtime despite small changed programs.
+Investigate a narrowly scoped finance/engine cache exclusion after confirming its
+storage contract; never exclude financial state/budgets generically. The20-minute
+CLI watcher expired while the installer remained active; no update was resubmitted.
+The installer completed and was audited from its hash-verified recovery, including
+an ACL-protected temporary identity audit copy removed afterward.
+
+Secondary public repair112→113 is active. It intentionally preserves its installed
+selection; after controller113 is online, use the normal Updates list to install
+new default Books1. Preserve Voice3/MyAI20. Public tunnel has reconnected, startup
+pending. Old update page holds progress and reconnects. Optional Remote Desktop
+host DESKTOP-Workstation asks for existing PIN; user handoff requested, never stored.
+Do not start another repair while it is active. Resume by checking public health
+and updater, then Books install/health/SSO/branding and final delivery handoff.
+
+## Completed both targets
+
+Secondary repair completed113 with35 healthy existing services. Its normal update
+list discovered default Books automatically; only books was selected (18.6MB,
+22 files). The protected new-app update completed in12m42s with verified recovery,
+startup and cleanup (one older update backup removed, approximately69.3MB freed).
+It now reports Workspace113/Books1 up to date; Voice3/MyAI20 remain installed.
+Final health on both targets:36 running services, Books running, no failures.
+Secondary General tile uses the loaded expected content-addressed Books SVG; the
+library opens/reopens through the hub without another sign-in. Shared picker and
+close verified. No owner books uploaded or owner data used as a functional fixture.
+Secondary verification is the managed update receipt, UI/health/SSO/navigation;
+no direct remote-file or credential audit is claimed. Remote Desktop was optional,
+PIN was not provided/needed. Evidence: docs/evidence/my-books/public-delivery.json
+and public-fresh-install.json; owner UI captures stay private outside Git.
+
+Source main advanced independently tobe0a63d for AI21 channel promotion during
+deployment; fetched/reconciled it and preserved that promotion. Secondary still
+shows separate My AI20 and My Meet3 release-review/package-ownership warnings;
+do not claim all release checks are clear. They were not selected or modified.
+New-app additions deliberately use broad metadata recovery, so the Finance cache
+cost occurred again. Existing app-only updates retain the tested narrow scope.
+These are recorded follow-ups, not fixed by Books publication.
+
+Task C temporary root removed after process/reparse checks; synthetic fixtures
+and protected temporary identity-audit copy are gone. Owner programs/data/files,
+newest usable recovery and unrelated caches were preserved. All release artifacts
+remain on I:. Both immutable public releases and channel are verified. Delivery
+record changes are documentation-only. No Actions, Linux runtime or physical-phone
+acceptance claim. My Books tab on secondary is left available for the user.
