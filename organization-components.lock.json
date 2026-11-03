@@ -217,9 +217,9 @@
   },
   "myVoice": {
     "repository": "oneworkspacestudio/my-voice",
-    "tag": "v0.1.0-preview.6",
-    "asset": "my-voice-0.1.0-preview.6-windows-amd64.zip",
-    "sha256": "e377181fd9ba0e5f0380efbc8a6932c6931274836662bcbccaca643e428b05d4"
+    "tag": "v0.1.0-preview.7",
+    "asset": "my-voice-0.1.0-preview.7-windows-amd64.zip",
+    "sha256": "14be4bfd120b11cfee5fd6c2383b29106f6a4aa946604a9c8ecf8312769ff5d5"
   },
   "myBooks": {
     "repository": "oneworkspacestudio/my-books",
