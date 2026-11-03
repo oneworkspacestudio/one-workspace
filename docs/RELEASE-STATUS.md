@@ -1,5 +1,19 @@
 # One Workspace release status
 
+## Preview112: discover newly available optional apps
+
+Fixes the outer update-discovery filter so a new optional app reaches the normal
+Updates list even when Workspace itself is current. Preview111's inner selection
+and recovery logic worked, but its earlier group filter still admitted only new
+default apps. My Voice now appears unchecked after an existing installation is
+repaired or upgraded; explicit setup exclusions and dependency exclusions remain.
+A full public-index discovery/selection regression reproduces the111 omission.
+No app payload, private-data format or installer-integration change. My Voice2
+continues to use its exact native-tested bytes. Existing111 installations use a
+normal small Workspace-only update; another installer repair is unnecessary.
+Includes the required signed Android12 companion rebuilt for this source.
+
+
 ## Preview111: My Voice and optional managed apps
 
 Adds My Voice2 in Creative with private CPU speech, consent-based MOSS cloning,

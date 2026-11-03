@@ -1,7 +1,7 @@
 # My Voice
 
 My Voice lives in Creative at `/voice`. Select it during setup, or update to
-Workspace111 and explicitly select the new optional My Voice row in Updates.
+Workspace112 and explicitly select the new optional My Voice row in Updates.
 Accounts SSO and the shared Apps picker use the normal Workspace session.
 Existing apps, paths and independent app versions remain selected as before.
 

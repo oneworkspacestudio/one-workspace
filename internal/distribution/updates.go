@@ -529,27 +529,21 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 	if latest.Version != strings.TrimPrefix(suiteRelease.Tag, "v") || !validAsset(bundle, Repository, suiteRelease.Tag) {
 		return plan, errors.New("invalid Workspace release version or bundle")
 	}
-	totalGroups = 1
-	newIDs := newDefaultIDs(current, latest)
-	for _, g := range suiteUpdateGroups(latest) {
-		if g.id != "workspace" {
-			included := len(groupApps(g, current)) > 0
-			for _, id := range g.apps {
-				included = included || newIDs[id]
-			}
-			if included {
-				totalGroups++
-			}
+	totalGroups = 0
+	groups := suiteUpdateGroups(latest)
+	includedGroups := map[string]bool{}
+	for _, g := range groups {
+		offer := markNewApps(current, latest, UpdateChoice{Apps: groupApps(g, latest)})
+		included := g.id == "workspace" || len(groupApps(g, current)) > 0 || len(offer.NewApps) > 0
+		includedGroups[g.id] = included
+		if included {
+			totalGroups++
 		}
 	}
 	checked := 0
-	for _, g := range suiteUpdateGroups(latest) {
+	for _, g := range groups {
 		oldApps := groupApps(g, current)
-		included := g.id == "workspace" || len(oldApps) > 0
-		for _, id := range g.apps {
-			included = included || newIDs[id]
-		}
-		if !included {
+		if !includedGroups[g.id] {
 			continue
 		}
 		operationprogress.Report(ctx, "check", "Checking "+g.name+" releases", int64(checked), int64(totalGroups), "repositories")
