@@ -1,5 +1,22 @@
 # One Workspace release status
 
+## Preview114: complete My Slicer previews and older-install updates
+
+Includes My Slicer8: detailed model previews retain complete surfaces rather than
+discarding triangles. Existing STL imports use their full stored model; cached
+3MF previews regenerate from the original. Original model and print data stay intact.
+
+The updater accepts the exact optional Slicer guides missing from older four-file
+registrations. It leaves those unregistered guides uninstalled while still
+requiring every registered runtime/license payload. Full fresh installs keep all
+eight owned files. Unknown runtimes, moved files and cross-app paths remain blocked.
+
+The ordinary managed build consumes the verified Slicer8 pin. Existing installed
+apps, sign-in, paths and data are retained by scoped updates. Includes the signed
+Android13 launcher built for this source. No physical-printer, physical-phone or
+reboot certification is claimed. Release and installed receipts follow validation.
+
+
 ## Preview113: My Books
 
 Adds My Books to General apps and default installation: upload your own DRM-free

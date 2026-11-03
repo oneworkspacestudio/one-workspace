@@ -45,3 +45,30 @@ Wait actual updater exit/cleanup, compare all unselected bytes/contracts, DPAPI
 credential/identity invariants and served assets; keep latest usable recovery.
 No owner or second-PC Slicer8 installation is claimed yet. Update this handoff
 and app history with final receipts, scoped cleanup and any pending target.
+
+## Legacy registration requires controller114
+
+App8/source pin/channel9b287b5 are public and native anonymous full-registration
+download validation passed. Owner online app-only attempt refused before any
+transaction or data change: its Slicer registration has only four packages despite
+manager113. manifestChoice rejected the three untracked optional guides (the
+compatibility document was already optional). Do not overwrite immutable8 or
+bypass the guard by editing the owner's catalog/using a private-derived manifest.
+
+Added exact Slicer guide pairs to the same narrow exception already used by
+MyAI/Cinema. Legacy four-file registrations leave optional docs uninstalled;
+full eight-file registrations still require them. Unknown runtime IDs, moved
+paths, cross-app files and omitted tracked guides remain rejected. Both layouts
+and boundary regressions pass; full catalog/distribution/suite tests pass.
+
+Preparing normal Workspace114 build and signed Android13 via the mandatory
+publisher. User authorization covers the required shared updater repair. Existing
+protected permanent Android signing setup is available and validated without
+printing secrets. No new key/debug signing or manual suite-publication bypass.
+Source build retains the Slicer8 pin and concurrent Tube/Voice/AI public pins.
+The cached public103 seed was truncated348MB and was rejected untouched; the
+ordinary builder is fetching and verifying a new public seed in this task cache.
+Source main/rebuild default advances114; no unpublished manager is installed.
+Remaining: full114 fresh/legacy upgrade acceptance, signed publication/channel,
+anonymous check, selected workspace+slicer protected owner update and preservation
+audit. Primary remains113/Slicer7; the initial refused update changed nothing.

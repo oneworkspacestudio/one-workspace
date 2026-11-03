@@ -824,6 +824,13 @@ func untrackedCompatibilityDocument(g updateGroup, current catalog.Catalog, id, 
 				}
 			}
 		}
+		if installed && a.ID == "slicer" && a.Kind == "process" && a.Executable == "MySlicer.exe" {
+			for _, name := range []string{"SETUP.md", "ACCEPTANCE.md", "ENGINE.md"} {
+				if id == "slicer-doc-"+name && file == "docs/MySlicer/"+name {
+					return true
+				}
+			}
+		}
 		if installed && a.ID == "cinema" && a.Kind == "process" && a.Executable == "MyCinema.exe" {
 			for _, name := range []string{"SETUP.md", "SUPPORT.md", "ADR-001-architecture.md", "SECURITY-CHECKS.md"} {
 				if id == "cinema-doc-"+name && file == "docs/MyCinema/"+name {
