@@ -11,6 +11,7 @@ from books_component import books_component
 from myai_component import myai_replacements
 from tube_component import tube_replacements
 from slicer_component import slicer_replacements
+from finance_component import finance_replacements
 from authenticator_component import authenticator_component
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -48,6 +49,8 @@ def main():
  tube_stage=Path(tempfile.mkdtemp(prefix='tube-',dir=cache));extract(tube,tube_stage)
  slicer=asset(lock['mySlicer'],cache)
  slicer_stage=Path(tempfile.mkdtemp(prefix='slicer-',dir=cache));extract(slicer,slicer_stage)
+ finance=asset(lock['myFinance'],cache)
+ finance_stage=Path(tempfile.mkdtemp(prefix='finance-',dir=cache));extract(finance,finance_stage)
  if a.tickets_candidate:
   tickets=Path(a.tickets_candidate).resolve();assert sha(tickets)==lock['myTickets']['sha256']
  else:tickets=asset(lock['myTickets'],cache)
@@ -88,6 +91,7 @@ def main():
   replacements.update(myai_replacements(cat,myai_stage,lock['myAI']))
   replacements.update(tube_replacements(cat,tube_stage,lock['myTube']))
   replacements.update(slicer_replacements(cat,slicer_stage,lock['mySlicer']))
+  replacements.update(finance_replacements(cat,finance_stage,lock['myFinance']))
   for k,pkg in cat['packages'].items():
    if pkg['file'] in replacements:
     f=replacements[pkg['file']];pkg.update(size=f.stat().st_size,sha256=sha(f))
@@ -114,6 +118,6 @@ def main():
     for item in contract['inputs'].values():dst.write(item['source'],item['file'])
  shutil.copyfile(payload,out/'workspace-bundle.zip')
  go('build','-buildvcs=false','-trimpath','-ldflags','-s -w -X github.com/oneworkspacestudio/one-workspace/internal/distribution.Repository=oneworkspacestudio/one-workspace','-o',str(out/'WorkspaceSetup-windows-amd64.exe'),'./cmd/setup')
- (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'hosting':lock['myHosting'],'voice':lock['myVoice'],'authenticator':lock['oneAuthenticator'],'books':lock.get('myBooks'),'myAI':lock['myAI'],'myTube':lock['myTube'],'mySlicer':lock['mySlicer'],'candidate':bool(a.books_candidate or a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate or a.voice_candidate),'priorAppContractsRetainedExceptAccountsHostingMyAIMyTubeAndSlicerVersions':True,'priorPackagesRetainedExceptManagerAccountsHostingMyAIMyTubeSlicerAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
+ (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'hosting':lock['myHosting'],'voice':lock['myVoice'],'authenticator':lock['oneAuthenticator'],'books':lock.get('myBooks'),'myAI':lock['myAI'],'myTube':lock['myTube'],'mySlicer':lock['mySlicer'],'myFinance':lock['myFinance'],'candidate':bool(a.books_candidate or a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate or a.voice_candidate),'priorAppContractsRetainedExceptAccountsHostingMyAIMyTubeSlicerAndFinanceVersions':True,'priorPackagesRetainedExceptManagerAccountsHostingMyAIMyTubeSlicerFinanceAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
  print('Verified managed bundle:',len(cat['apps']),'apps;',len(cat['packages']),'packages',flush=True)
 if __name__=='__main__':main()

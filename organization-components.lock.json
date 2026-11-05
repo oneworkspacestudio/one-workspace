@@ -187,9 +187,9 @@
   },
   "myFinance": {
     "repository": "oneworkspacestudio/my-finance",
-    "tag": "v0.1.0-preview.4",
-    "asset": "my-finance-0.1.0-preview.4-windows-amd64.zip",
-    "sha256": "8e9cc6bcd513fba0616757ee37c8a81e3cdd06e2b5a61dd53ee0feaab93cb366"
+    "tag": "v0.1.0-preview.5",
+    "asset": "my-finance-0.1.0-preview.5-windows-amd64.zip",
+    "sha256": "28bb36eb27fd8cb040ad8de6641862af61859df0d9cfb8281547b00816696a43"
   },
   "managedSeed": {
     "repository": "oneworkspacestudio/one-workspace",
