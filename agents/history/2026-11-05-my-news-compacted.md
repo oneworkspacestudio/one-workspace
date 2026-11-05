@@ -125,3 +125,14 @@ installer SHA256 against public116. Full public115 proof now includes that resul
 Secondary repair was submitted exactly once through Updates; public installer was
 downloaded and verified. Its tunnel is currently offline (1033) during maintenance;
 do not repeat repair. Wait for reconnect or inspect the PC's supported startup path.
+
+At17:14 UTC secondary reconnected with36 existing services healthy and no News.
+Do not infer116 completion from health alone: inspect the authenticated Updates
+completion receipt/version, reload the new UI, Check for updates, and select only
+News (preserve Finance4/Slicer7 and other versions unless another authorized task
+changed them). Windows permission overlay and current primary MyAccounts login
+require user interaction; async question asks Cancel then sign in and reply done.
+No further browser actions should occur until dismissed. Primary delivery is complete,
+not a pending install. Own build/test temporary roots cleaned; retained release bytes,
+receipts and evidence are under the named my-news-release-20261105 tooling directory.
+Published documentation: app4cc9561; suite7114bac before this status append.
