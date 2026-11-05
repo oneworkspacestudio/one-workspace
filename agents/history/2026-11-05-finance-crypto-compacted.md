@@ -93,3 +93,25 @@ Never overlap potentially mutating installers. Exact standalone --check-updates
 only downloads/verifies a bundle and is safe to distinguish from installation.
 App evidence/handoff commit f89f392 records this unresolved delivery; second PC
 remains deferred. Preserve all concurrent public pins/channel rows on merge.
+
+
+## Primary Finance6 delivery completed
+
+Final protected Finance5 -> 6 update completed 2026-11-05T17:29:50.0467879Z using the
+verified public Workspace116 installer after concurrent News115/Commute116 updates
+finished. Primary manager remains 0.3.0-preview.116; all five Finance payloads,
+nine UI assets, index and managed OIDC bootstrap match the released source. All
+481 unselected package records/bytes and all unrelated apps,
+existing credentials/settings/locations are retained; 38 services
+are running with no new failure. Public anonymous Finance access requires sign-in.
+The latest verified recovery backup remains and normal update cleanup completed.
+Owner financial data was not used as a test fixture. This supersedes the pending
+delivery notes above; the first attempt's verified rollback remains recorded.
+
+Finance6 release source remains immutable db88ea4; later commits add evidence only.
+No paid DeepSeek call, real wallet signature/swap or actual push/inbox delivery was
+qualified. Monitoring remains opt-in with the user's own DeepSeek key, Base wallet,
+limits and notification setup; every wallet transaction requires human approval.
+Second-machine installation remains explicitly deferred. Evidence in the my-finance repository:
+docs/evidence/crypto-20261105/delivery.json, served-verification.json and
+update-cleanup.json. No Finance implementation or deployment work remains locally.
