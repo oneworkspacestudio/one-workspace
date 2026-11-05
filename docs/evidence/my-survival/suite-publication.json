@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "tag": "v0.3.0-preview.117",
+  "sourceCommit": "185f99599f805a5623434a474ea66855c594a979",
+  "sourcePushed": true,
+  "signedCompanionVerified": true,
+  "managedAcceptancePassed": true,
+  "publicChannelVerified": true,
+  "anonymousInstallerVerified": true,
+  "assetsVerified": 538,
+  "release": "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.117"
+}

@@ -1,0 +1,51 @@
+{
+  "origin": "https://workspace.m8e.co.uk",
+  "servedAssetsMatchTestedBuild": true,
+  "verifiedFiles": 8,
+  "publicGuidesAccessible": true,
+  "anonymousPrivateAPIDenied": true,
+  "workspaceBrandingPath": "/branding/icons/my_survival-74bfdc4b53ffb120.svg",
+  "workspaceBrandingSHA256": "74bfdc4b53ffb1202b0a154ced5f9a8c682a4d82fe333440a9015dc48eb2aefa",
+  "assets": [
+    {
+      "path": "/survival/icon.svg",
+      "sha256": "4f138820bc37523126815dd877cdb206cad40d28a6852caea9c73a8eebe6105d",
+      "bytes": 335
+    },
+    {
+      "path": "/survival/manifest.webmanifest",
+      "sha256": "92a52c0af58777f65a4f5e497d1eceda777a35f5c40b701693757d23661f4dfa",
+      "bytes": 441
+    },
+    {
+      "path": "/survival/icon-192.png",
+      "sha256": "08a17ca12c989fbdbc6a94c36cb14cc2eaa4f0aedd5bba6f0c82945d2e258e6e",
+      "bytes": 4346
+    },
+    {
+      "path": "/survival/icon-512.png",
+      "sha256": "aeba2ca593e368027856583f2ff58063431f3b95450efbcf79b0b862aec955f2",
+      "bytes": 16451
+    },
+    {
+      "path": "/survival/assets/index-CF2JLee_.js",
+      "sha256": "a0b02c2ebce8a91d751cc3e0aa7fb8da3cc055d0ae3d552b9e49942710685eb7",
+      "bytes": 296103
+    },
+    {
+      "path": "/survival/assets/index-BVO5hDOW.css",
+      "sha256": "8c7ded03d8db31146e6e4164118e58c9d802460fc295dd49c23fdd5d0dcc95b8",
+      "bytes": 13183
+    },
+    {
+      "path": "/survival/index.html",
+      "sha256": "14be7c97985c5ca8c66a702da2af754ab0f86909f54f890af7b09585a1a247ff",
+      "bytes": 639
+    },
+    {
+      "path": "/survival/portable.html",
+      "sha256": "45519198d5c70a3bacc2a059354591abffa79b4b928ef524487b7dc088e51f6b",
+      "bytes": 309718
+    }
+  ]
+}

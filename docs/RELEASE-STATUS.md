@@ -15,8 +15,11 @@ and current Finance6, Voice8, MyAI24, Tube7 and Slicer8 pins. Includes the signe
 Android14 launcher built from this source. Physical-phone/reboot tests and an
 independent clinical review are not claimed. No live alerts or map download.
 
-Managed acceptance and per-machine delivery are recorded separately in compact
-history and `docs/evidence/my-survival`; availability alone is not installed proof.
+Published and promoted through the public channel. All six managed acceptance
+checks passed using the exact public installer. Primary Workspace117 + Survival1
+installation and served asset hashes are verified; existing apps, identities
+and locations were preserved. Receipts are in `docs/evidence/my-survival`.
+No second-PC installation is claimed.
 
 ## Preview115: My News and offline reading
 

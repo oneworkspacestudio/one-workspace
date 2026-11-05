@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "target": "primary",
+  "defaultNewsAdded": false,
+  "workspace": "0.3.0-preview.117",
+  "survival": "0.1.0-preview.1",
+  "transaction": "complete",
+  "verifiedSurvivalPayloads": 11,
+  "managerMatchesPublicRelease": true,
+  "unselectedAppsAndPackagesPreserved": true,
+  "identitiesAndExistingCredentialsPreserved": true,
+  "locationsPreserved": true,
+  "verifiedRecoveryRetained": true,
+  "cleanupFinished": "2026-11-05T19:03:49.5205216Z",
+  "runningAppCount": 39,
+  "baselineFailures": [],
+  "newFailures": [],
+  "finished": "2026-11-05T19:03:56.3585060Z"
+}
