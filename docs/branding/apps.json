@@ -271,5 +271,12 @@
     "name": "My Books",
     "description": "Upload your books and settle into a comfortable, personal reading space.",
     "url": "https://github.com/oneworkspacestudio/my-books"
+  },
+  {
+    "id": "news",
+    "icon": "my_news",
+    "name": "My News",
+    "description": "Explore news from around the world and save reading copies for offline.",
+    "url": "https://github.com/oneworkspacestudio/my-news"
   }
 ]

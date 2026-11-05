@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-530b9f0c.png)
+![The complete One Workspace app collection](docs/branding/app-suite-0237a6d6.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -220,6 +220,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_books.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-books"><strong>My Books</strong></a></td>
       <td>Upload your books and settle into a comfortable, personal reading space.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_news.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-news"><strong>My News</strong></a></td>
+      <td>Explore news from around the world and save reading copies for offline.</td>
     </tr>
   </tbody>
 </table>

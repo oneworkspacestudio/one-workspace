@@ -57,9 +57,9 @@ type AppSelection struct {
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
-// Version8 adds Books Files storage, runtime ownership and automatic General-app discovery.
+// Version9 adds News identity, runtime ownership and automatic General-app discovery.
 // Older controllers hand off before applying a catalog whose registry they lack.
-const InstallerIntegration = 8
+const InstallerIntegration = 9
 
 func (c Catalog) Validate() error {
 	if c.InstallerIntegration < 0 || c.InstallerIntegration > InstallerIntegration {

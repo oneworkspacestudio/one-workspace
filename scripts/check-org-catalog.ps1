@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 8){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 9){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
 $required=@($registry.apps | ForEach-Object {$_.id})
 $books=$cat.apps|Where-Object id -CEQ 'books'
@@ -39,3 +39,6 @@ foreach($entry in @(@{id='tickets';exe='MyTickets.exe';port=9026},@{id='remote';
  foreach($notice in @('LICENSE','NOTICE','THIRD-PARTY-LICENSES.txt')){if(-not $cat.packages.($entry.id+'-'+$notice)){throw ('Missing attribution '+$entry.id+' '+$notice)}}
 }
 Write-Output ('Verified '+$required.Count+' organization app entries and launch arguments')
+
+$news=$cat.apps|Where-Object id -CEQ 'news'
+if(-not $news.oidc -or $news.route -cne '/news' -or $news.callback -cne '/news/auth/callback' -or $news.port -ne 9030 -or $cat.packages.news.file -cne 'MyNews.exe' -or -not $cat.packages.'news-contract' -or -not $cat.packages.'news-manifest'){throw 'News managed identity or payload contract is incomplete'}

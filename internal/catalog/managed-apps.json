@@ -370,6 +370,16 @@
       "foundation": true,
       "updateGroup": "books",
       "recovery": "app"
+    },
+    {
+      "id": "news",
+      "name": "My News",
+      "route": "/news",
+      "repository": "oneworkspacestudio/my-news",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "news",
+      "recovery": "app"
     }
   ]
 }
