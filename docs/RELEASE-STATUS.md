@@ -1,5 +1,20 @@
 # One Workspace release status
 
+## Preview115: My News and offline reading
+
+Adds My News to General apps and default setup, with global and regional RSS/Atom
+feeds, category filters, search, followed topics and saved offline reading copies.
+MyAccounts supplies sign-in. Reading libraries and settings have dedicated private
+storage; saved copies persist in this browser for offline use. Publisher restrictions
+are respected; some feeds provide excerpts only. Images/video are not saved.
+
+Installer integration9 includes all News payloads, navigation, independent updates
+and protected recovery. Scoped delivery retains existing unrelated app versions.
+The normal build includes current Finance5, Voice8, MyAI24, Tube7 and Slicer8 pins.
+Windows synthetic acceptance covers fresh setup, omission, upgrade, News-only update
+and rollback. Linux compiles; physical-phone and reboot tests are not claimed.
+Includes the signed Android13 launcher rebuilt from this release source.
+
 ## Preview114: complete My Slicer previews and older-install updates
 
 Includes My Slicer8: detailed model previews retain complete surfaces rather than

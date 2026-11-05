@@ -5,7 +5,7 @@ from pathlib import Path
 def news_component(root,allow_candidate=False):
  root=Path(root).resolve();c=json.loads((root/'compatibility.json').read_text(encoding='utf-8-sig'))
  assert c['schema']==1 and c['id']=='news' and c['route']=='/news' and c['oidc']
- assert c['workspaceInstallerIntegration']==9 and c['minimumWorkspaceVersion']=='0.3.0-preview.114'
+ assert c['workspaceInstallerIntegration']==9 and c['minimumWorkspaceVersion']=='0.3.0-preview.115'
  assert c['singleExecutable'] is True and c['capabilities']==['native-news-v1']
  m=json.loads((root/'manifest.json').read_text(encoding='utf-8-sig'))
  assert m['version']==c['version'] and m['executableSHA256']==hashlib.sha256((root/'MyNews.exe').read_bytes()).hexdigest()

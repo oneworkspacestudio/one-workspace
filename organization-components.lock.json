@@ -226,5 +226,11 @@
     "tag": "v0.1.0-preview.1",
     "asset": "my-books-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "d4aca0cb5a314a97ddb8dd3629cc0463931620eba32b0781e274f57621177fe7"
+  },
+  "myNews": {
+    "repository": "oneworkspacestudio/my-news",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-news-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "41d341da2f9316b26066672ddeef73cfebd74262c6ca1758b2b7394417e64abd"
   }
 }

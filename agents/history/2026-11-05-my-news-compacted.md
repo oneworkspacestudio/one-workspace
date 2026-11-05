@@ -68,3 +68,11 @@ changed-package suite vet, News component/publisher tests and diff check pass.
 Owner state and newest recovery remain untouched. Source/build3/suite3 and sanitised
 evidence are retained. Acceptance docs were finalized after immutable local package
 creation; their source copies are the current delivery record.
+
+## Authorized publication and two-PC delivery
+
+The user subsequently explicitly requested release and installation on both PCs.
+Publication, channel promotion and normal protected owner updates are now authorized.
+Suite rebased onto public d84c798, retaining Finance5, Voice8, MyAI24, Tube7 and Slicer8.
+Workspace114 is already public; News integration9 now requires Workspace115.
+Earlier candidate114 evidence remains historical; final public verification follows.
