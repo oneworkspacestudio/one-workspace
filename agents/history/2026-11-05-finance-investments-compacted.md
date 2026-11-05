@@ -61,3 +61,28 @@ manager/unselected bytes, identity/decrypted credentials and paths verified. Rea
 Actual historical/current sums and original ledger hash retained; real paper
 setup/prices/reload and no-key/consent/ticker guards pass at five viewport widths.
 Reapply5 and final ordinary build/primary delivery remain in progress.
+
+Final verification supersedes the pending build/lifecycle notes above. The
+synthetic supported sequence 1→5→1→5 passed; final native ledger, real paper UI,
+served assets, executable/runtime and schema 6 checks passed. All synthetic
+processes stopped and task NTFS fixture/cache removed after path/reparse/process
+checks. No provider credentials, paid model or owner ledger used for QA.
+
+Ordinary scripts/rebuild.ps1 from d7cdffb4b205312bd324f7690d866ec6c1973d40
+completed as local QA115. All 37 apps/451 archive members and the launch-argument
+audit pass; every member size/SHA verified and Finance's five contracts equal the
+public 5 release. Receipt docs/evidence/finance5/managed-build-proof.json records
+ZIP 6fdec48025f2ba32ac42b924e24dbf841d9ece0b5dd89cdbb1e04287c55c1d38
+and setup f93699b493a271885385d483eafbbb42cd773b6a8134dec94dba2c124ab74950.
+QA115 is not published or installed; existing public114 is unchanged. Primary
+normal protected Finance-only update is running; append its completion receipt.
+
+Primary delivery COMPLETE at 2026-11-05 13:14 UTC. Public114's normal protected
+Finance-only update 4→5 retained Workspace114, all other apps and 423 unrelated
+package contracts/bytes, existing credentials, settings and paths. All five
+Finance files and served assets match public5; all 36 services run, no new failures.
+Recovery 382.5 MB verified and retained; automatic cleanup finished without
+warnings. Managed OIDC/index and public anonymous sign-in gate pass. No owner
+ledger used as a fixture and no owner cache/recovery workaround. Receipts in
+docs/evidence/finance5. Publication, public channel and local delivery are complete;
+the user-deferred second PC and unqualified live providers remain explicit limits.
