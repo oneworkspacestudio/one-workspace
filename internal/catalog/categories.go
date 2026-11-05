@@ -28,7 +28,7 @@ func CategoryFor(id string) Category {
 	return Categories()[index]
 }
 
-func DefaultInstall(id string) bool { return CategoryFor(id).DefaultInstall }
+func DefaultInstall(id string) bool { return id != "commute" && CategoryFor(id).DefaultInstall }
 
 // WantedApps preserves existing opt-ins/exclusions while adding only new defaults.
 // Used both when an older installer fetches a newer catalog and during updates.

@@ -22,6 +22,7 @@ type appSignIn struct {
 
 var suiteSignIns = []appSignIn{
 	{"news", "My News", "/news", "/api/me", "/news/auth/login", "/news/auth/logout", []string{"news_session"}},
+	{"commute", "My Commute", "/commute", "/api/me", "/commute/auth/login", "/commute/auth/logout", []string{"commute_session"}},
 	{"books", "My Books", "/books", "/api/me", "/books/auth/login", "/books/auth/logout", []string{"books_session"}},
 	{"voice", "My Voice", "/voice", "/api/me", "/voice/auth/login", "/voice/auth/logout", []string{"voice_session"}},
 	{"remote", "My Remote", "/remote", "/api/me", "/remote/auth/login", "/remote/auth/logout", []string{"remote_session"}},

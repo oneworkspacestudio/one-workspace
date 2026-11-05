@@ -1435,3 +1435,6 @@ Adds a narrow proxy route for expiring, single-ZIP Social upload permissions, wi
 ## Workspace100 preparation: My Finance
 
 Adds Actual-backed household budgeting, OneAccount owner/member budget sharing, exact-pence manual import, optional UK bank setup and encrypted export/server snapshot recovery. Bundles Finance1 and its hash-pinned Windows runtime. Preserves the published Forms integration on base+33; Finance uses base+34. Native/real local OneAccount/backup tests pass; official provider sandbox/live, headless bank sync, complete keyboard-only editing and clean-host/reboot qualification remain outstanding. Signed Android publication and both owner installations are still pending. See [My Finance](MY_FINANCE.md).
+
+## My Commute integration116
+Adds optional My Commute with live London arrivals, connection estimates and private saved journeys. Combined catalog retains News and the latest Finance/Voice/MyAI/Tube/Slicer pins. Installer integration10 requires older controllers to hand off before applying the new runtime contract. App-native and prior candidate managed acceptance passed; exact release-installer acceptance and owner deployment are recorded separately when verified. No physical-phone or credentialed Darwin acceptance is claimed.

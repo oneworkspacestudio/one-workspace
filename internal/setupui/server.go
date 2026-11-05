@@ -126,7 +126,7 @@ func (s *Server) Handler() http.Handler {
 		available := []map[string]any{}
 		for _, a := range s.cat.Apps {
 			category := catalog.CategoryFor(a.ID)
-			available = append(available, map[string]any{"id": a.ID, "name": a.Name, "description": a.Description, "depends": a.Depends, "category": category.ID, "categoryName": category.Name, "defaultInstall": category.DefaultInstall})
+			available = append(available, map[string]any{"id": a.ID, "name": a.Name, "description": a.Description, "depends": a.Depends, "category": category.ID, "categoryName": category.Name, "defaultInstall": catalog.DefaultInstall(a.ID)})
 		}
 		state["availableApps"] = available
 		state["offline"] = s.offline

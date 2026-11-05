@@ -187,9 +187,9 @@
   },
   "myFinance": {
     "repository": "oneworkspacestudio/my-finance",
-    "tag": "v0.1.0-preview.5",
-    "asset": "my-finance-0.1.0-preview.5-windows-amd64.zip",
-    "sha256": "28bb36eb27fd8cb040ad8de6641862af61859df0d9cfb8281547b00816696a43"
+    "tag": "v0.1.0-preview.6",
+    "asset": "my-finance-0.1.0-preview.6-windows-amd64.zip",
+    "sha256": "e160e4700a7347ee282892eb70df1e5c28b342c73b85bcd6fc459665513aab8a"
   },
   "managedSeed": {
     "repository": "oneworkspacestudio/one-workspace",
@@ -232,5 +232,12 @@
     "tag": "v0.1.0-preview.1",
     "asset": "my-news-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "41d341da2f9316b26066672ddeef73cfebd74262c6ca1758b2b7394417e64abd"
+  },
+  "myCommute": {
+    "repository": "oneworkspacestudio/my-commute",
+    "tag": "v0.1.0-preview.1",
+    "asset": "MyCommute-windows-amd64.zip",
+    "sha256": "9f89d930486f500e32379864aba4abd993d1d6802111b337b1cd3b1765cee54d",
+    "size": 11411477
   }
 }

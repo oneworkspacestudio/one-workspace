@@ -1,9 +1,11 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 9){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 10){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
 $required=@($registry.apps | ForEach-Object {$_.id})
+$commute=$cat.apps|Where-Object id -CEQ 'commute'
+if(-not $commute.oidc -or $commute.route -cne '/commute' -or $commute.callback -cne '/commute/auth/callback' -or $commute.port -ne 9040 -or $cat.packages.commute.file -cne 'MyCommute.exe' -or -not $cat.packages.'commute-contract' -or -not $cat.packages.'commute-manifest'){throw 'Commute managed contract incomplete'}
 $books=$cat.apps|Where-Object id -CEQ 'books'
 if(-not $books.oidc -or $books.route -cne '/books' -or $books.callback -cne '/books/auth/callback' -or $books.port -ne 9029 -or $books.env.MYBOOKS_LIBRARY_ROOT -cne '${FILES}/My Books' -or $cat.packages.books.file -cne 'MyBooks.exe' -or -not $cat.packages.'books-contract' -or -not $cat.packages.'books-manifest'){throw 'Books managed storage, identity or owned payload contract is incomplete'}
 $voice=$cat.apps|Where-Object id -CEQ 'voice'
