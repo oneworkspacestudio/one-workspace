@@ -2,6 +2,16 @@
   "schema": 1,
   "apps": [
     {
+      "id": "survival",
+      "name": "My Survival",
+      "route": "/survival",
+      "repository": "oneworkspacestudio/my-survival",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "survival",
+      "recovery": "app"
+    },
+    {
       "id": "accounts",
       "name": "MyAccounts",
       "route": "",

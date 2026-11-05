@@ -239,5 +239,12 @@
     "asset": "MyCommute-windows-amd64.zip",
     "sha256": "9f89d930486f500e32379864aba4abd993d1d6802111b337b1cd3b1765cee54d",
     "size": 11411477
+  },
+  "mySurvival": {
+    "repository": "oneworkspacestudio/my-survival",
+    "tag": "v0.1.0-preview.1",
+    "asset": "my-survival-0.1.0-preview.1-windows-amd64.zip",
+    "sha256": "7aa0cdeaef898faf03cbd76379ca4a112001ef61ab672f172defac10a59c077c",
+    "size": 5954801
   }
 }

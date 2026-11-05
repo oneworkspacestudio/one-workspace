@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.116',
+ [string]$Version='0.3.0-preview.117',
  [string]$Out='',
  [string]$Cache='',
  [string]$SeedArchive='',
@@ -14,7 +14,7 @@ param(
  [string]$MyVoiceCandidate='',
  [string]$MyBooksCandidate='',
  [string]$MyNewsCandidate='',
- [string]$MyCommuteCandidate=''
+ [string]$MySurvivalCandidate='',[string]$MyCommuteCandidate=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -30,6 +30,7 @@ if($lock.managedSeed){
  if($MyAccountsCandidate){$buildArgs+=@('--accounts-candidate',$MyAccountsCandidate)}
  if($MyVoiceCandidate){$buildArgs+=@('--voice-candidate',$MyVoiceCandidate)}
  if($MyNewsCandidate){$buildArgs+=@('--news-candidate',$MyNewsCandidate)}
+ if($MySurvivalCandidate){$buildArgs+=@('--survival-candidate',$MySurvivalCandidate)}
  if($MyCommuteCandidate){$buildArgs+=@('--commute-candidate',$MyCommuteCandidate)}
  if($MyBooksCandidate){$buildArgs+=@('--books-candidate',$MyBooksCandidate)}
  & python @buildArgs

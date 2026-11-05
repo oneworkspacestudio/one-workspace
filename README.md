@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-6b62c8d1.png)
+![The complete One Workspace app collection](docs/branding/app-suite-5bd63d88.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -230,6 +230,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/my_commute.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/my-commute"><strong>My Commute</strong></a></td>
       <td>Follow live London buses, Tube and trains and plan your next connection.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_survival.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-survival"><strong>My Survival</strong></a></td>
+      <td>Prepare for power cuts and emergencies with offline guidance and a private household plan.</td>
     </tr>
   </tbody>
 </table>

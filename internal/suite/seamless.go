@@ -24,6 +24,7 @@ var suiteSignIns = []appSignIn{
 	{"news", "My News", "/news", "/api/me", "/news/auth/login", "/news/auth/logout", []string{"news_session"}},
 	{"commute", "My Commute", "/commute", "/api/me", "/commute/auth/login", "/commute/auth/logout", []string{"commute_session"}},
 	{"books", "My Books", "/books", "/api/me", "/books/auth/login", "/books/auth/logout", []string{"books_session"}},
+	{"survival", "My Survival", "/survival", "/api/me", "/survival/auth/login", "/survival/auth/logout", []string{"survival_session"}},
 	{"voice", "My Voice", "/voice", "/api/me", "/voice/auth/login", "/voice/auth/logout", []string{"voice_session"}},
 	{"remote", "My Remote", "/remote", "/api/me", "/remote/auth/login", "/remote/auth/logout", []string{"remote_session"}},
 	{"forms", "My Forms", "/forms", "/api/me", "/forms/auth/login", "/forms/auth/logout", []string{"forms_session"}},
@@ -190,6 +191,9 @@ func (p *Portal) seamlessApp(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	}
 	relative := strings.TrimPrefix(r.URL.Path, app.route)
+	if app.id == "survival" && publicSurvivalRequest(r) {
+		return false // Emergency reference must remain accessible without sign-in.
+	}
 	for _, prefix := range []string{"/auth/", "/api/", "/assets/", "/static/", "/public/", "/user/oauth2/"} {
 		if strings.HasPrefix(relative, prefix) {
 			return false

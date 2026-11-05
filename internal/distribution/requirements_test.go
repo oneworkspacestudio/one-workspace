@@ -70,3 +70,13 @@ func TestHostingMyGitRequirements(t *testing.T) {
 		t.Fatal(e)
 	}
 }
+
+func TestSurvivalRequirements(t *testing.T) {
+	caps := []string{"offline-survival-v1"}
+	if checkRequirements("0.3.0-preview.116", "0.3.0-preview.117", caps) == nil {
+		t.Fatal("older manager accepted Survival integration")
+	}
+	if err := checkRequirements("0.3.0-preview.117", "0.3.0-preview.117", caps); err != nil {
+		t.Fatal(err)
+	}
+}

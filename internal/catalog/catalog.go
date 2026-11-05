@@ -57,9 +57,9 @@ type AppSelection struct {
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
-// Version10 adds optional Commute ownership while retaining News integration9.
+// Version11 adds Survival storage, public offline assets and General discovery.
 // Older controllers hand off before applying a catalog whose registry they lack.
-const InstallerIntegration = 10
+const InstallerIntegration = 11
 
 func (c Catalog) Validate() error {
 	if c.InstallerIntegration < 0 || c.InstallerIntegration > InstallerIntegration {

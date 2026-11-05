@@ -285,5 +285,12 @@
     "name": "My Commute",
     "description": "Follow live London buses, Tube and trains and plan your next connection.",
     "url": "https://github.com/oneworkspacestudio/my-commute"
+  },
+  {
+    "id": "survival",
+    "icon": "my_survival",
+    "name": "My Survival",
+    "description": "Prepare for power cuts and emergencies with offline guidance and a private household plan.",
+    "url": "https://github.com/oneworkspacestudio/my-survival"
   }
 ]

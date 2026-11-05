@@ -74,9 +74,9 @@ func TestEveryAppStartsNativeSignInWithoutAnotherLoginScreen(t *testing.T) {
 			p := signInFixture(t, app, http.StatusUnauthorized)
 			r := signInRequest(app.route + "/")
 			w := httptest.NewRecorder()
-			if app.id == "chat" {
+			if app.id == "chat" || app.id == "survival" {
 				if p.seamlessApp(w, r) {
-					t.Fatal("Dedicated Chat must not be probed using shared portal cookies")
+					t.Fatal("Dedicated Chat and public Survival shell must not force shared sign-in")
 				}
 				return
 			}

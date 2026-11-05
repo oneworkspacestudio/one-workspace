@@ -1,5 +1,23 @@
 # One Workspace release status
 
+## Preview117: My Survival offline emergency companion
+
+Adds My Survival to General apps and default setup, with 23 source-linked UK
+emergency guides, water and supply planning, contacts, printable plans and outage
+tools. Public guidance stays available from a verified offline browser copy;
+personal plans are encrypted locally with an explicit passphrase. Optional
+encrypted server backups use MyAccounts and dedicated private storage.
+
+Installer integration11 includes Survival-owned payloads, update discovery,
+shared navigation and recovery. Scoped Workspace + Survival updates preserve
+other installed app versions. The complete ordinary build retains News/Commute
+and current Finance6, Voice8, MyAI24, Tube7 and Slicer8 pins. Includes the signed
+Android14 launcher built from this source. Physical-phone/reboot tests and an
+independent clinical review are not claimed. No live alerts or map download.
+
+Managed acceptance and per-machine delivery are recorded separately in compact
+history and `docs/evidence/my-survival`; availability alone is not installed proof.
+
 ## Preview115: My News and offline reading
 
 Adds My News to General apps and default setup, with global and regional RSS/Atom

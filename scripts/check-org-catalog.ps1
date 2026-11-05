@@ -1,7 +1,9 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 10){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 11){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+$survival=$cat.apps|Where-Object id -CEQ 'survival'
+if(-not $survival.oidc -or $survival.route -cne '/survival' -or $survival.callback -cne '/survival/auth/callback' -or $survival.port -ne 9041 -or $cat.packages.survival.file -cne 'MySurvival.exe' -or -not $cat.packages.'survival-contract' -or -not $cat.packages.'survival-manifest'){throw 'My Survival managed contract is incomplete'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
 $required=@($registry.apps | ForEach-Object {$_.id})
 $commute=$cat.apps|Where-Object id -CEQ 'commute'

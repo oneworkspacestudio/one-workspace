@@ -9,6 +9,7 @@ from managed_component import remote_component, tickets_component, hosting_repla
 from voice_component import voice_component
 from books_component import books_component
 from commute_component import commute_component
+from survival_component import survival_component
 from myai_component import myai_replacements
 from tube_component import tube_replacements
 from slicer_component import slicer_replacements
@@ -39,7 +40,7 @@ def extract(z,target):
    assert (m.external_attr>>16)&0o170000!=0o120000
   src.extractall(target)
 def main():
- p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--authenticator-candidate',help='Local acceptance only');p.add_argument('--accounts-candidate',help='Local acceptance only');p.add_argument('--books-candidate',help='Local My Books acceptance archive; not a public pin');p.add_argument('--voice-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--news-candidate',help='Local My News acceptance archive; not a public pin');p.add_argument('--commute-candidate',help='Local My Commute acceptance only; never publish');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--authenticator-candidate',help='Local acceptance only');p.add_argument('--accounts-candidate',help='Local acceptance only');p.add_argument('--books-candidate',help='Local My Books acceptance archive; not a public pin');p.add_argument('--voice-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--news-candidate',help='Local My News acceptance archive; not a public pin');p.add_argument('--commute-candidate',help='Local My Commute acceptance only; never publish');p.add_argument('--survival-candidate',help='Local My Survival acceptance only');a=p.parse_args()
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  seed=asset(lock['managedSeed'],cache,a.seed_archive);remote=asset(lock['myRemote'],cache)
@@ -86,12 +87,16 @@ def main():
  else:raise ValueError('Publish and pin My Commute or pass --commute-candidate for local acceptance')
  commute_stage=Path(tempfile.mkdtemp(prefix='commute-',dir=cache));extract(commute,commute_stage)
  commute_contract=commute_component(commute_stage,allow_candidate=bool(a.commute_candidate))
- contracts=[news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
+ if a.survival_candidate:survival=Path(a.survival_candidate).resolve()
+ elif lock.get('mySurvival'):survival=asset(lock['mySurvival'],cache)
+ else:raise ValueError('Publish and pin My Survival before a release, or use --survival-candidate for local acceptance')
+ survival_stage=Path(tempfile.mkdtemp(prefix='survival-',dir=cache));extract(survival,survival_stage)
+ contracts=[survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=10
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=11
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:
@@ -130,6 +135,6 @@ def main():
     for item in contract['inputs'].values():dst.write(item['source'],item['file'])
  shutil.copyfile(payload,out/'workspace-bundle.zip')
  go('build','-buildvcs=false','-trimpath','-ldflags','-s -w -X github.com/oneworkspacestudio/one-workspace/internal/distribution.Repository=oneworkspacestudio/one-workspace','-o',str(out/'WorkspaceSetup-windows-amd64.exe'),'./cmd/setup')
- (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'hosting':lock['myHosting'],'voice':lock['myVoice'],'authenticator':lock['oneAuthenticator'],'books':lock.get('myBooks'),'news':lock.get('myNews'),'commute':lock.get('myCommute'),'myAI':lock['myAI'],'myTube':lock['myTube'],'mySlicer':lock['mySlicer'],'myFinance':lock['myFinance'],'candidate':bool(a.commute_candidate or a.news_candidate or a.books_candidate or a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate or a.voice_candidate),'priorAppContractsRetainedExceptAccountsHostingMyAIMyTubeSlicerAndFinanceVersions':True,'priorPackagesRetainedExceptManagerAccountsHostingMyAIMyTubeSlicerFinanceAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
+ (out/'managed-build.json').write_text(json.dumps({'schema':1,'version':a.version,'seed':lock['managedSeed'],'remote':lock['myRemote'],'tickets':lock['myTickets'],'accounts':lock['accounts'],'hosting':lock['myHosting'],'voice':lock['myVoice'],'authenticator':lock['oneAuthenticator'],'books':lock.get('myBooks'),'news':lock.get('myNews'),'commute':lock.get('myCommute'),'myAI':lock['myAI'],'myTube':lock['myTube'],'mySlicer':lock['mySlicer'],'myFinance':lock['myFinance'],'survival':lock.get('mySurvival'),'candidate':bool(a.survival_candidate or a.commute_candidate or a.news_candidate or a.books_candidate or a.tickets_candidate or a.authenticator_candidate or a.accounts_candidate or a.voice_candidate),'priorAppContractsRetainedExceptAccountsHostingMyAIMyTubeSlicerAndFinanceVersions':True,'priorPackagesRetainedExceptManagerAccountsHostingMyAIMyTubeSlicerFinanceAndReleaseNotes':True,'completeInventory':len(cat['apps']),'builder':'scripts/build-managed-seed.py'},indent=2),encoding='utf-8')
  print('Verified managed bundle:',len(cat['apps']),'apps;',len(cat['packages']),'packages',flush=True)
 if __name__=='__main__':main()
