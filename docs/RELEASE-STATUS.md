@@ -14,6 +14,8 @@ The normal build includes current Finance5, Voice8, MyAI24, Tube7 and Slicer8 pi
 Windows synthetic acceptance covers fresh setup, omission, upgrade, News-only update
 and rollback. Linux compiles; physical-phone and reboot tests are not claimed.
 Includes the signed Android13 launcher rebuilt from this release source.
+Startup progress writes retry short Windows file-sharing conflicts, preventing a
+healthy restarted service from losing its final readiness acknowledgement.
 
 ## Preview114: complete My Slicer previews and older-install updates
 

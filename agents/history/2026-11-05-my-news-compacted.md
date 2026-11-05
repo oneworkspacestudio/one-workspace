@@ -76,3 +76,12 @@ Publication, channel promotion and normal protected owner updates are now author
 Suite rebased onto public d84c798, retaining Finance5, Voice8, MyAI24, Tube7 and Slicer8.
 Workspace114 is already public; News integration9 now requires Workspace115.
 Earlier candidate114 evidence remains historical; final public verification follows.
+
+Final115 acceptance found a startup acknowledgement timeout; the protected updater
+automatically restored114 and a same-byte retry completed115. Investigation reproduced
+22 failed atomic replacements in500 writes with concurrent Windows readers. Progress
+previously discarded SaveJSON errors. The progress writer now retries bounded short
+conflicts and logs persistent failures; a native Windows held-reader test verifies
+that the final ready state and PID are retained. Readiness/rollback guards remain.
+News1 app release is public from0ab0d4c, exact native-tested executable e2fb5a4b45cc.
+Final suite rebuild/acceptance/publication and owner deployments still in progress.

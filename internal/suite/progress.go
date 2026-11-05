@@ -1,6 +1,7 @@
 package suite
 
 import (
+	"log"
 	"os"
 	"strings"
 	"sync"
@@ -52,7 +53,19 @@ func (p *ProgressTracker) save() {
 		p.value.Percent = 100 * p.value.Completed / p.value.Total
 	}
 	if p.path != "" {
-		_ = platform.SaveJSON(p.path, p.value)
+		// Windows readers may briefly hold the destination without delete sharing.
+		// Losing the final ready write makes a healthy update roll back.
+		var err error
+		for attempt := 0; attempt < 6; attempt++ {
+			err = platform.SaveJSON(p.path, p.value)
+			if err == nil {
+				return
+			}
+			if attempt < 5 {
+				time.Sleep(time.Duration(10<<attempt) * time.Millisecond)
+			}
+		}
+		log.Printf("Workspace progress could not be saved: %v", err)
 	}
 }
 func (p *ProgressTracker) Snapshot() Progress {
