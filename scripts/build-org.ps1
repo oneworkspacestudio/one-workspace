@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.115',
+ [string]$Version='0.3.0-preview.116',
  [string]$Out='',
  [string]$Cache='',
  [string]$SeedArchive='',
@@ -13,7 +13,8 @@ param(
  [string]$MyAccountsCandidate='',
  [string]$MyVoiceCandidate='',
  [string]$MyBooksCandidate='',
- [string]$MyNewsCandidate=''
+ [string]$MyNewsCandidate='',
+ [string]$MyCommuteCandidate=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -29,6 +30,7 @@ if($lock.managedSeed){
  if($MyAccountsCandidate){$buildArgs+=@('--accounts-candidate',$MyAccountsCandidate)}
  if($MyVoiceCandidate){$buildArgs+=@('--voice-candidate',$MyVoiceCandidate)}
  if($MyNewsCandidate){$buildArgs+=@('--news-candidate',$MyNewsCandidate)}
+ if($MyCommuteCandidate){$buildArgs+=@('--commute-candidate',$MyCommuteCandidate)}
  if($MyBooksCandidate){$buildArgs+=@('--books-candidate',$MyBooksCandidate)}
  & python @buildArgs
  if($LASTEXITCODE -ne 0){throw 'Managed organization build failed'}

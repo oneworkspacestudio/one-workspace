@@ -380,6 +380,16 @@
       "foundation": true,
       "updateGroup": "news",
       "recovery": "app"
+    },
+    {
+      "id": "commute",
+      "name": "My Commute",
+      "route": "/commute",
+      "repository": "oneworkspacestudio/my-commute",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "commute",
+      "recovery": "app"
     }
   ]
 }

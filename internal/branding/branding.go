@@ -72,6 +72,7 @@ func Handler() http.Handler {
 
 func Icon(app string) string {
 	name := map[string]string{
+		"commute":       "my_commute",
 		"books":         "my_books",
 		"news":          "my_news",
 		"voice":         "my_voice",
