@@ -85,3 +85,43 @@ conflicts and logs persistent failures; a native Windows held-reader test verifi
 that the final ready state and PID are retained. Readiness/rollback guards remain.
 News1 app release is public from0ab0d4c, exact native-tested executable e2fb5a4b45cc.
 Final suite rebuild/acceptance/publication and owner deployments still in progress.
+
+## Publication verified
+
+Workspace115 is public from08e175d, with all480 asset hashes verified and the
+permanent signed Android13 companion (APK af8a97015852). Final installer SHA256
+5ddab95dc108a74a71ede907afc7b393ff89b3c171782983d1db1fda099615bf; final bundle
+9763d10077c46d104862a061908351d477ff125d019dc79f9656c74c7e616dfe. Full final
+fresh/omission/News-only-update/rollback/114-to115 acceptance passed after the
+Windows progress fix. All isolated test installations were stopped and removed.
+
+GitHub returned422 for an already-uploaded matching PDF asset, cancelling one
+batch. Waited for all workers, verified454 existing draft hashes, and uploaded
+only26 missing assets individually. Re-ran the mandatory signed-Android publisher;
+APK reproduced exactly, all480 assets verified, release published. No asset was
+replaced. The channel push then met concurrent Commute/Finance commits. Merged
+public main and regenerated the channel including115,116, News1, Commute1 and
+Finance6; merge/channel af70e7b pushed. Both release tags remain unchanged.
+
+Public116 includes115 source and retains all11 News package contracts/hashes.
+Anonymous latest-bundle verification and both owner deliveries are in progress.
+Primary baseline114 was briefly recovering a separate Finance update; waited
+until rollback reported ready, then submitted the normal115 workspace/news update.
+Secondary113 uses the normal verified116 installer repair, then News-only install.
+Do not repeat either active request. Record actual completion separately.
+
+Primary delivery completed115 + News1 at17:02 UTC: manager/public byte match,
+all11 News payload hashes,37 services with no new failures, existing app/package
+contracts, identities/credentials and paths preserved; verified recovery retained
+and cleanup finished. Five static assets served by the native loopback News worker
+match the tested dist. Public assets require normal MyAccounts authentication.
+Opening the owner browser reached MyAccounts and another Windows permission overlay;
+asked the user to dismiss the overlay and sign in manually per computer-use guidance.
+
+The115 anonymous installer downloaded116 but correctly rejected integration10.
+Reused the concurrently completed116 anonymous check only after inspecting its
+no-token script, successful receipt/log (including News1), and matching the checked
+installer SHA256 against public116. Full public115 proof now includes that result.
+Secondary repair was submitted exactly once through Updates; public installer was
+downloaded and verified. Its tunnel is currently offline (1033) during maintenance;
+do not repeat repair. Wait for reconnect or inspect the PC's supported startup path.
