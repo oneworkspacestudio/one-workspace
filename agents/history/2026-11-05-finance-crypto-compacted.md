@@ -67,3 +67,29 @@ assets and an anonymously downloaded checksum file. Only myFinance changes in th
 organization lock. Standard channel publication retained all 270 prior public
 rows and all withholding records; its only added release is Finance6 (10 assets).
 The ordinary public-pin complete build is running; primary update is still pending.
+
+The ordinary scripts/rebuild.ps1 public-pin build passed with 39 current apps and
+509 packages. Every archive member was size/SHA256-verified; all five Finance6
+members match the immutable release and all current organization pins are retained.
+Local QA version116 was not released or installed. Bundle SHA256
+e9673763c2e1a870e71536584fdfff7238d38e9a3e71bd9671a8769a9a1f4498.
+The authorized primary Finance-only public update is now running via public114.
+
+## Interrupted primary delivery
+
+Primary Finance5 -> 6 with public114 installed the correct payloads and Finance
+passed health, but portal readiness failed; restart.log reported public MyAccounts
+discovery HTTP502. Normal automatic recovery fully restored Finance5 and retained
+both verified original recovery and attempted newer state. Restored5 payloads,
+manifest, public issuer and36 running services verified. No local6 completion yet.
+
+Concurrent authorized work published115/116 and promoted them. Installer114 now
+returns required public116 metadata without choices; verified public116 installer
+SHA2566a94ec72c514242c9a19539eba64bd3f788da417db0a9c49a22d7125eca2d141.
+Finance retry did not mutate because another chat started the actual primary
+Workspace/My News115 update. Wait for it to finish, re-read version/journal/health,
+then use current public installer for a Finance-only update if still needed.
+Never overlap potentially mutating installers. Exact standalone --check-updates
+only downloads/verifies a bundle and is safe to distinguish from installation.
+App evidence/handoff commit f89f392 records this unresolved delivery; second PC
+remains deferred. Preserve all concurrent public pins/channel rows on merge.
