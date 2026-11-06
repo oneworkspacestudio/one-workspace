@@ -46,6 +46,7 @@ type Agent struct {
 	browser            *Browser
 	modelURL, modelKey string
 	cancel             context.CancelFunc
+	modelCancel        context.CancelFunc
 	model              *exec.Cmd
 	data               string
 	observe            func(Action, Source)
@@ -74,7 +75,9 @@ func StartAgent(ctx context.Context, runtimeRoot, modelRoot, data string) (*Agen
 	if _, e = screenText(child, data, ""); e != nil {
 		return fail(e)
 	}
-	a.model = exec.CommandContext(child, filepath.Join(runtimeRoot, "llama", "llama-server.exe"), "--model", filepath.Join(modelRoot, "model.gguf"), "--mmproj", filepath.Join(modelRoot, "mmproj.gguf"), "--host", "127.0.0.1", "--port", itoa(port), "--ctx-size", "12288", "--parallel", "1", "--n-gpu-layers", "99", "--image-min-tokens", "1024", "--reasoning-budget", "256", "--no-webui", "--jinja")
+	modelCtx, modelCancel := context.WithCancel(child)
+	a.modelCancel = modelCancel
+	a.model = exec.CommandContext(modelCtx, filepath.Join(runtimeRoot, "llama", "llama-server.exe"), "--model", filepath.Join(modelRoot, "model.gguf"), "--mmproj", filepath.Join(modelRoot, "mmproj.gguf"), "--host", "127.0.0.1", "--port", itoa(port), "--ctx-size", "12288", "--parallel", "1", "--n-gpu-layers", "99", "--image-min-tokens", "1024", "--reasoning-budget", "256", "--no-webui", "--jinja")
 	a.model.Env = append(childEnvironment(), "LLAMA_API_KEY="+a.modelKey)
 	hideProcess(a.model)
 	a.model.Dir = filepath.Join(runtimeRoot, "llama")
@@ -94,22 +97,16 @@ func StartAgent(ctx context.Context, runtimeRoot, modelRoot, data string) (*Agen
 	if e = waitModel(child, a.modelURL, a.modelKey); e != nil {
 		return fail(e)
 	}
-	proxy, server, e := startProxy(child)
+	a.browser, e = startPortableBrowser(child, runtimeRoot, data)
 	if e != nil {
 		return fail(e)
 	}
-	browserExe, e := prepareBrowser(child, runtimeRoot, data)
-	if e != nil {
-		server.Close()
-		return fail(e)
-	}
-	a.browser, e = StartBrowser(child, browserExe, filepath.Join(data, "browser-profile"), proxy)
-	if e != nil {
-		server.Close()
-		return fail(e)
-	}
-	a.browser.proxy = server
 	return a, nil
+}
+func (a *Agent) StopModel() {
+	if a.modelCancel != nil {
+		a.modelCancel()
+	}
 }
 func (a *Agent) Close() {
 	if a.browser != nil {

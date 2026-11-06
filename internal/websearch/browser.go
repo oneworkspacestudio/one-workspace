@@ -22,14 +22,15 @@ import (
 // Browser exposes only rendered screenshots and physical browser input. There
 // is deliberately no DOM, accessibility, selector, JavaScript or shell tool.
 type Browser struct {
-	conn    *websocket.Conn
-	mu      sync.Mutex
-	seq     int
-	process *exec.Cmd
-	cancel  context.CancelFunc
-	proxy   *http.Server
-	target  string
-	done    chan struct{}
+	conn     *websocket.Conn
+	mu       sync.Mutex
+	seq      int
+	process  *exec.Cmd
+	cancel   context.CancelFunc
+	proxy    *http.Server
+	target   string
+	endpoint string
+	done     chan struct{}
 }
 type pageInfo struct {
 	ID    string `json:"id"`
@@ -101,6 +102,7 @@ func StartBrowser(ctx context.Context, executable, profile string, proxy string)
 	if endpoint == "" {
 		return fail(errors.New("portable browser did not become ready"))
 	}
+	b.endpoint = endpoint
 	request, _ := http.NewRequestWithContext(ctx, "GET", endpoint+"/json/list", nil)
 	client := &http.Client{Timeout: 5 * time.Second, Transport: &http.Transport{Proxy: nil}}
 	res, e := client.Do(request)
@@ -138,11 +140,28 @@ func StartBrowser(ctx context.Context, executable, profile string, proxy string)
 }
 
 func (b *Browser) Close() {
-	if b.conn != nil {
+	b.mu.Lock()
+	conn := b.conn
+	b.mu.Unlock()
+	graceful := false
+	if conn != nil {
 		ctx, stop := context.WithTimeout(context.Background(), 2*time.Second)
-		_ = b.Call(ctx, "Browser.close", nil, nil)
+		e := b.Call(ctx, "Browser.close", nil, nil)
+		if e != nil && b.endpoint != "" {
+			if b.Reconnect(ctx) == nil {
+				e = b.Call(ctx, "Browser.close", nil, nil)
+			}
+		}
+		graceful = e == nil
 		stop()
-		_ = b.conn.Close()
+		_ = conn.Close()
+	}
+	// Let Chromium flush cookies and profile state before a forced fallback.
+	if graceful && b.done != nil {
+		select {
+		case <-b.done:
+		case <-time.After(3 * time.Second):
+		}
 	}
 	if b.cancel != nil {
 		b.cancel()
@@ -160,6 +179,10 @@ func (b *Browser) Close() {
 func (b *Browser) Call(ctx context.Context, method string, params any, result any) error {
 	b.mu.Lock()
 	defer b.mu.Unlock()
+	conn := b.conn
+	if conn == nil {
+		return errors.New("browser connection unavailable")
+	}
 	if e := ctx.Err(); e != nil {
 		return e
 	}
@@ -167,13 +190,13 @@ func (b *Browser) Call(ctx context.Context, method string, params any, result an
 	if d, ok := ctx.Deadline(); ok && d.Before(deadline) {
 		deadline = d
 	}
-	_ = b.conn.SetWriteDeadline(deadline)
-	_ = b.conn.SetReadDeadline(deadline)
-	stopCancellation := context.AfterFunc(ctx, func() { _ = b.conn.Close() })
+	_ = conn.SetWriteDeadline(deadline)
+	_ = conn.SetReadDeadline(deadline)
+	stopCancellation := context.AfterFunc(ctx, func() { _ = conn.Close() })
 	defer stopCancellation()
 	b.seq++
 	id := b.seq
-	if e := b.conn.WriteJSON(map[string]any{"id": id, "method": method, "params": params}); e != nil {
+	if e := conn.WriteJSON(map[string]any{"id": id, "method": method, "params": params}); e != nil {
 		return e
 	}
 	for {
@@ -184,7 +207,7 @@ func (b *Browser) Call(ctx context.Context, method string, params any, result an
 				Message string `json:"message"`
 			} `json:"error"`
 		}
-		if e := b.conn.ReadJSON(&v); e != nil {
+		if e := conn.ReadJSON(&v); e != nil {
 			return e
 		}
 		if v.ID != id {
@@ -207,10 +230,13 @@ func (b *Browser) Screenshot(ctx context.Context) (string, error) {
 	return v.Data, e
 }
 func (b *Browser) Location(ctx context.Context) (Source, error) {
+	b.mu.Lock()
+	target := b.target
+	b.mu.Unlock()
 	var v struct {
 		Target pageInfo `json:"targetInfo"`
 	}
-	e := b.Call(ctx, "Target.getTargetInfo", map[string]string{"targetId": b.target}, &v)
+	e := b.Call(ctx, "Target.getTargetInfo", map[string]string{"targetId": target}, &v)
 	return Source{URL: v.Target.URL, Title: v.Target.Title}, e
 }
 func (b *Browser) Navigate(ctx context.Context, raw string) error {
@@ -246,6 +272,21 @@ func (b *Browser) Key(ctx context.Context, keys []string) error {
 		case "backspace":
 			key = "Backspace"
 			vk = 8
+		case "delete":
+			key = "Delete"
+			vk = 46
+		case "arrowleft", "left":
+			key = "ArrowLeft"
+			vk = 37
+		case "arrowright", "right":
+			key = "ArrowRight"
+			vk = 39
+		case "home":
+			key = "Home"
+			vk = 36
+		case "end":
+			key = "End"
+			vk = 35
 		case "arrowdown", "down":
 			key = "ArrowDown"
 			vk = 40
@@ -271,7 +312,8 @@ func (b *Browser) Key(ctx context.Context, keys []string) error {
 	}
 	// Content input only: address-bar, developer-tools and OS/clipboard shortcuts
 	// must never let the pilot escape the checked HTTPS navigation primitive.
-	if modifiers != 0 && !(modifiers == 2 && key == "a") && !(modifiers == 8 && key == "Tab") {
+	contentKey := key == "ArrowLeft" || key == "ArrowRight" || key == "ArrowUp" || key == "ArrowDown" || key == "Home" || key == "End" || key == "PageUp" || key == "PageDown" || key == "Backspace" || key == "Delete"
+	if modifiers != 0 && !(modifiers == 2 && (key == "a" || contentKey)) && !(modifiers == 8 && (key == "Tab" || contentKey)) && !(modifiers == 10 && contentKey) {
 		return errors.New("browser chrome shortcuts are unavailable; use visit_url for HTTPS navigation")
 	}
 	p := map[string]any{"type": "rawKeyDown", "key": key, "code": code, "modifiers": modifiers, "windowsVirtualKeyCode": vk}

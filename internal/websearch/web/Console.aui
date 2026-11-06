@@ -52,10 +52,36 @@ Page Console
           Row
             Text $item.name
             Button action=revoke item=$item.hash "Revoke"
-    Card
-      Heading level=2 "Browser preview"
-      Text "The browser keeps its own cookies and sessions. Live research controls it one request at a time."
-      Button action=preview disabled=$notReady "Refresh preview"
-      If condition=$preview
-        Image src=$preview alt="Private research browser screenshot"
+    Card id="remote-browser"
+      Heading level=2 "Remote browser"
+      Text "Resolve sign-in prompts and browser issues in the same private profile. Taking control pauses research. No local model is needed."
+      Text $remoteLabel
+      Row
+        Button action=openRemote disabled=$remoteOpenDisabled "Open remote browser"
+        Button action=reconnectRemote disabled=$remoteClosed "Reconnect"
+        Button action=closeRemote disabled=$remoteClosed "Release control"
+      If condition=$remoteOpen
+        Text "Click or tap the screen to focus it, then type, paste, drag or scroll. Interrupted research must be submitted again. Closing this view releases the browser back to research."
+        Input name=address label="Browser address" placeholder="https://example.com"
+        Row
+          Button action=navigate disabled=$remoteNotReady "Go"
+          Button action=back disabled=$remoteNotReady "Back"
+          Button action=forward disabled=$remoteNotReady "Forward"
+          Button action=reload disabled=$remoteNotReady "Reload"
+          Button action=newTab disabled=$remoteNotReady "New tab"
+          Button action=closeTab disabled=$remoteNotReady "Close tab"
+          Button action=fullscreen disabled=$remoteNotReady "Full screen"
+        For each=$tabs
+          Button action=selectTab item=$item.id disabled=$item.active "$item.label"
+        Text $remotePage
+        If condition=$remoteImage
+          Image variant=remote src=$remoteImage alt="Remote browser screen"
+        Input name=remoteText label="Private text to type" type=password placeholder="Type or paste text, then choose Send text"
+        Row
+          Button action=sendText disabled=$remoteNotReady "Send text"
+          Button action=enter disabled=$remoteNotReady "Enter"
+          Button action=tab disabled=$remoteNotReady "Tab"
+          Button action=scrollUp disabled=$remoteNotReady "Scroll up"
+          Button action=scrollDown disabled=$remoteNotReady "Scroll down"
+        Text "This view controls the research browser, not your PC desktop. Clipboard and operating-system shortcuts stay blocked. Release control when finished; disconnected sessions expire after 90 seconds."
     Text "Requests and results expire after 24 hours. Sign-in challenges pause research."

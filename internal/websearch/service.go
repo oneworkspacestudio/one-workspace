@@ -16,7 +16,7 @@ import (
 	"github.com/oneworkspacestudio/one-workspace/pkg/apphost"
 )
 
-const Version = "0.1.0-preview.1"
+const Version = "0.1.0-preview.2"
 
 func randomID() string  { return apphost.ID() }
 func itoa(n int) string { return strconv.Itoa(n) }
@@ -45,6 +45,7 @@ type Service struct {
 	setupBytes    int64
 	setupError    string
 	parent        context.Context
+	desktop       *desktopLease
 }
 
 func New(h *apphost.Host) (*Service, error) {
@@ -88,6 +89,7 @@ UPDATE search_jobs SET status='interrupted',error='Service restarted; submit aga
 	h.Mux.HandleFunc("POST /api/client/search", s.clientSubmit)
 	h.Mux.HandleFunc("GET /api/client/jobs/{id}", s.clientJob)
 	h.Mux.HandleFunc("DELETE /api/client/jobs/{id}", s.clientCancel)
+	s.registerDesktop()
 	return s, nil
 }
 func (s *Service) signal() {
@@ -101,7 +103,7 @@ func (s *Service) status(w http.ResponseWriter, r *http.Request) {
 	defer s.mu.Unlock()
 	var queued int
 	_ = s.h.DB.QueryRow("SELECT COUNT(*) FROM search_jobs WHERE status='queued'").Scan(&queued)
-	apphost.JSON(w, 200, map[string]any{"enabled": s.enabled, "state": s.state, "active": s.active, "queued": queued, "model": "Fara 1.5 4B", "version": Version, "profile": "Private Web Search browser", "control": "Screenshots, mouse and keyboard", "retentionHours": 24, "installingModel": s.setupRunning, "modelInstalled": modelsPresent(s.models), "downloadedBytes": s.setupBytes, "setupError": s.setupError})
+	apphost.JSON(w, 200, map[string]any{"controlActive": s.desktop != nil, "queuePaused": s.desktop != nil, "enabled": s.enabled, "state": s.state, "active": s.active, "queued": queued, "model": "Fara 1.5 4B", "version": Version, "profile": "Private Web Search browser", "control": "Screenshots, mouse and keyboard", "retentionHours": 24, "installingModel": s.setupRunning, "modelInstalled": modelsPresent(s.models), "downloadedBytes": s.setupBytes, "setupError": s.setupError})
 }
 func (s *Service) installModel(w http.ResponseWriter, r *http.Request) {
 	s.mu.Lock()
@@ -141,6 +143,12 @@ func (s *Service) settings(w http.ResponseWriter, r *http.Request) {
 	}
 	s.enabled = body.Enabled
 	if !body.Enabled {
+		if s.desktop != nil {
+			s.desktop.expires = time.Time{}
+			if s.desktop.cancel != nil {
+				s.desktop.cancel()
+			}
+		}
 		if s.cancel != nil {
 			s.cancel()
 		}
@@ -255,7 +263,7 @@ func (s *Service) submit(w http.ResponseWriter, r *http.Request, principal, sess
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if !s.enabled || s.state != "ready" {
+	if !s.enabled || (s.state != "ready" && s.desktop == nil) {
 		apphost.Problem(w, 503, "Web Search is off or its browser and model are starting")
 		return
 	}
@@ -382,7 +390,7 @@ func (s *Service) manualAction(w http.ResponseWriter, r *http.Request) {
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if s.agent == nil || s.active != "" {
+	if s.agent == nil || s.active != "" || s.desktop != nil {
 		apphost.Problem(w, 409, "Wait until research completes before using the browser")
 		return
 	}
@@ -423,6 +431,9 @@ func (s *Service) Run(ctx context.Context) error {
 		if s.runtimeCancel != nil {
 			s.runtimeCancel()
 		}
+		if s.desktop != nil {
+			s.desktop.close()
+		}
 	}()
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
@@ -435,7 +446,11 @@ func (s *Service) Run(ctx context.Context) error {
 		}
 		_, _ = s.h.DB.Exec("DELETE FROM search_jobs WHERE created<?", time.Now().Add(-24*time.Hour).Unix())
 		_, _ = s.h.DB.Exec("DELETE FROM search_jobs WHERE status NOT IN ('queued','running') AND id NOT IN (SELECT id FROM search_jobs ORDER BY created DESC,rowid DESC LIMIT 1000)")
+		_, _ = s.h.DB.Exec("UPDATE search_jobs SET status='expired',query='',error='Queue time limit reached' WHERE status='queued' AND created<?", time.Now().Add(-10*time.Minute).Unix())
 		s.mu.Lock()
+		if s.runDesktop(ctx) {
+			continue
+		}
 		enabled := s.enabled
 		a := s.agent
 		if !enabled {
@@ -455,9 +470,15 @@ func (s *Service) Run(ctx context.Context) error {
 			next, e := StartAgent(runtimeCtx, s.runtime, s.models, s.h.Config.Data)
 			s.mu.Lock()
 			if e != nil {
+				s.runtimeCancel = nil
 				s.state = "runtime unavailable"
 				s.setupError = e.Error()
+				manual := s.desktop != nil
 				s.mu.Unlock()
+				if manual {
+					s.signal()
+					continue
+				}
 				if delay(ctx, 5*time.Second) != nil {
 					return nil
 				}
@@ -487,7 +508,7 @@ func (s *Service) Run(ctx context.Context) error {
 			return e
 		}
 		s.mu.Lock()
-		if !s.enabled {
+		if !s.enabled || s.desktop != nil {
 			s.mu.Unlock()
 			continue
 		}
@@ -556,9 +577,17 @@ func (s *Service) Run(ctx context.Context) error {
 		s.cancel = nil
 		s.active = ""
 		if err != nil {
-			a.Close()
-			s.agent = nil
-			s.state = "restarting"
+			if d := s.desktop; d != nil {
+				d.agent = a
+				d.browser = a.browser
+				a.StopModel()
+				s.agent = nil
+				s.runtimeCancel = nil
+			} else {
+				a.Close()
+				s.agent = nil
+				s.state = "restarting"
+			}
 		}
 		s.mu.Unlock()
 		s.signal()

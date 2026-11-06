@@ -52,7 +52,7 @@ func fixture(t *testing.T) *harness {
 	f.csrf = me.CSRF
 	return f
 }
-func (f *harness) call(method, path string, body any, token string, origin bool) *httptest.ResponseRecorder {
+func (f *harness) call(method, path string, body any, token string, origin bool, control ...string) *httptest.ResponseRecorder {
 	raw, _ := json.Marshal(body)
 	r := httptest.NewRequest(method, f.h.Config.Origin+path, bytes.NewReader(raw))
 	r.RemoteAddr = "127.0.0.1:19001"
@@ -66,6 +66,9 @@ func (f *harness) call(method, path string, body any, token string, origin bool)
 		r.AddCookie(f.cookie)
 	}
 	r.Header.Set("X-CSRF-Token", f.csrf)
+	if len(control) > 0 {
+		r.Header.Set("X-WebSearch-Control", control[0])
+	}
 	w := httptest.NewRecorder()
 	f.h.Handler().ServeHTTP(w, r)
 	return w

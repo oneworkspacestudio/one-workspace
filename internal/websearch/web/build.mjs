@@ -10,5 +10,5 @@ await mkdir('generated',{recursive:true});await mkdir('dist',{recursive:true});
 const source=await readFile('Console.aui','utf8');
 const tsx=parser.compileReact(parser.parse(source)).replaceAll('@/components/ui','../main');
 await writeFile('generated/Console.tsx',tsx);
-await esbuild.build({entryPoints:['main.ts'],bundle:true,minify:true,format:'esm',outdir:'dist',jsx:'automatic',loader:{'.ts':'tsx','.tsx':'tsx'}});
+await esbuild.build({absWorkingDir:root,entryPoints:['main.ts'],bundle:true,minify:true,format:'esm',outdir:'dist',jsx:'automatic',loader:{'.ts':'tsx','.tsx':'tsx'}});
 await writeFile('dist/index.html','<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Web Search · One Workspace</title><link rel="stylesheet" href="./main.css"><script type="module" src="./main.js"></script></head><body><div id="root"></div></body></html>');

@@ -1,5 +1,9 @@
 # One Workspace release status
 
+## Preview121: Web Search remote browser
+
+Web Search2 adds owner-only live browser control for sign-in prompts and troubleshooting. Mouse, drag, keyboard, text paste, navigation, tabs and full-screen view use the existing private browser/profile. The queue pauses during takeover; the local model is not required for manual control. Exact-session leases revoke access on logout/expiry and close unreachable sessions after90seconds. Search API credentials cannot view or control the browser. No RDP/VNC service or Docker is introduced. Managed acceptance and each deployment are recorded separately in the compact handoff.
+
 ## Preview120: portable browser Web Search
 
 Optional owner-operated Web Search provides a private browser, local Fara1.5-4B model and bounded API queue. Portable executable packages require no Docker, WSL, Python or external model daemon. Explicit owner setup installs verified weights into private storage. Installer integration13 owns its runtime namespace. See [Web Search](WEB_SEARCH.md); native lifecycle acceptance and deployment are recorded separately.

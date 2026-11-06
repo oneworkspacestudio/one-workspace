@@ -15,7 +15,7 @@ def websearch_component(root,go,out,version):
  runtime=out/'runtime'
  from search_runtime import prepare_runtime
  prepare_runtime(lock,runtime,out/'downloads')
- compatibility={'schema':1,'id':'websearch','version':'0.1.0-preview.1','workspaceInstallerIntegration':13,'minimumWorkspaceVersion':'0.3.0-preview.120','route':'/websearch','oidc':True,'executable':'WebSearch.exe','health':'/healthz','runtime':'native-portable-v1','modelSetup':'explicit-owner-verified-download','storage':'private-websearch-v1'}
+ compatibility={'schema':1,'id':'websearch','version':'0.1.0-preview.2','workspaceInstallerIntegration':13,'minimumWorkspaceVersion':'0.3.0-preview.120','route':'/websearch','oidc':True,'executable':'WebSearch.exe','health':'/healthz','runtime':'native-portable-v1','modelSetup':'explicit-owner-verified-download','storage':'private-websearch-v1'}
  (out/'compatibility.json').write_text(json.dumps(compatibility,indent=2))
  inputs={'websearch':{'source':str(out/'WebSearch.exe'),'file':'WebSearch.exe'},'websearch-contract':{'source':str(out/'compatibility.json'),'file':'docs/WebSearch/compatibility.json'}}
  for path in sorted(runtime.rglob('*')):
@@ -26,5 +26,5 @@ def websearch_component(root,go,out,version):
   inputs['websearch-'+name]={'source':str(root/name),'file':'licenses/WebSearch-'+name}
  for rel in ['docs/WEB_SEARCH.md','docs/licenses/WebSearch-THIRD-PARTY.txt']:
   inputs['websearch-doc-'+Path(rel).name]={'source':str(root/rel),'file':rel}
- app={'id':'websearch','name':'Web Search','description':'Let your LLM research the web in a private browser','version':'0.1.0-preview.1','kind':'process','package':'websearch','executable':'WebSearch.exe','port':9043,'route':'/websearch','stripPrefix':True,'health':'/healthz','depends':['accounts'],'oidc':True,'callback':'/websearch/auth/callback','args':['--data','${DATA}/websearch','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/websearch','--no-browser'],'source':'https://github.com/oneworkspacestudio/one-workspace/releases/tag/v'+version}
+ app={'id':'websearch','name':'Web Search','description':'Let your LLM research the web in a private browser','version':'0.1.0-preview.2','kind':'process','package':'websearch','executable':'WebSearch.exe','port':9043,'route':'/websearch','stripPrefix':True,'health':'/healthz','depends':['accounts'],'oidc':True,'callback':'/websearch/auth/callback','args':['--data','${DATA}/websearch','--listen','127.0.0.1:${PORT}','--origin','${ORIGIN}/websearch','--no-browser'],'source':'https://github.com/oneworkspacestudio/one-workspace/releases/tag/v'+version}
  return {'app':app,'inputs':inputs}

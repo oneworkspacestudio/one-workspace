@@ -12,6 +12,26 @@ import (
 	"path/filepath"
 )
 
+// Owner troubleshooting uses this same browser/profile without requiring a model.
+func startPortableBrowser(ctx context.Context, runtimeRoot, data string) (*Browser, error) {
+	proxy, server, e := startProxy(ctx)
+	if e != nil {
+		return nil, e
+	}
+	executable, e := prepareBrowser(ctx, runtimeRoot, data)
+	if e != nil {
+		_ = server.Close()
+		return nil, e
+	}
+	b, e := StartBrowser(ctx, executable, filepath.Join(data, "browser-profile"), proxy)
+	if e != nil {
+		_ = server.Close()
+		return nil, e
+	}
+	b.proxy = server
+	return b, nil
+}
+
 // Chromium's Windows sandbox must be able to read its own immutable executable
 // files. When Programs is exFAT, stage ONLY browser code in the app's NTFS cache.
 // Profile, cookies, API keys and model data are never granted package access.

@@ -1,5 +1,36 @@
 # Web Search
 
+## Remote browser control
+
+Open Web Search and choose **Open remote browser**. The live view controls the
+same dedicated browser and private profile used for research. Click or tap its
+screen to focus it, then type, paste, drag or scroll. Navigation, back/forward,
+reload, tabs, full screen and a private text field are also available. Text in
+that field is cleared after sending. This is the research browser's remote view,
+not a remote desktop into the host PC; no RDP/VNC server or Docker is needed.
+
+Remote control works with research turned off, even without model weights or
+Windows OCR. Taking control pauses the queue and stops the local pilot model.
+An active request is interrupted and must be submitted again. Waiting requests
+stay queued and retain their normal ten-minute limit. Trusted API clients can
+continue queuing while research is enabled. A handoff keeps the current page,
+including an unfinished form or sign-in prompt, alive.
+
+Choose **Release control** when finished. The browser closes cleanly to preserve
+its profile; research resumes if it was enabled. Reconnect keeps the current
+page when the connection is interrupted. A crashed browser can be reopened.
+Closing the view or signing out ends control. An unreachable tab's lease expires
+after 90 seconds without a heartbeat. Only the exact, live MyAccounts owner
+session can view frames or send input; API search credentials cannot use these
+routes. Frames stop on logout, expiry or account changes and are not recorded.
+
+Use this view to complete legitimate sign-in and challenge prompts yourself.
+Public HTTPS browsing restrictions still apply. Clipboard/OS shortcuts remain
+blocked on the host; pasting sends only text you supply in the controlling
+browser. The pilot does not bypass authentication or CAPTCHA.
+
+## Research API
+
 Web Search gives an LLM a private browser for web research. A small local model
 looks at screenshots and uses browser mouse and keyboard input. Requests wait in
 one queue and use a persistent, dedicated profile. The service does not use DOM

@@ -236,3 +236,32 @@ docs/evidence/web-search/delivery.json; primary private receipts remain in the
 task artifact root. Release assets are immutable; final delivery receipts belong
 in source, not replacement release uploads. Source worktree is the dedicated
 codex/web-search-service branch in I:/Projects/workspace-web-search.
+
+## Remote browser maintenance in progress
+
+User requested remote desktop into the service to resolve browser issues. The
+implementation is an owner-only live view of the research browser, not the host
+desktop. No Docker/RDP/VNC dependency. Source adds browser-only startup without
+model/OCR, same-page handoff from the local pilot, queue pause/interruption,
+mouse/drag/keyboard/paste/navigation/tabs/fullscreen, and exact native-session
+90-second leases. Logout/role/expiry watchers cancel in-flight frame access;
+server credentials cannot use desktop routes. Graceful browser close preserves
+profile state. Reconnect retains forms; dead-browser restart is supported.
+
+Unit tests cover CSRF, exact-cookie binding, credentials/roles, expiry and logout
+during an in-flight frame, queue interruption/retention and input restrictions.
+Actual portable Chrome standalone UI acceptance passed input, tabs, reconnect,
+logout and desktop/mobile sizes. Visual review found a stale-tab close race,
+fixed by server-side current-tab selection; repeat native acceptance is pending.
+QA-only CDP/DOM reads are test oracles; production browser control still has no
+DOM, selectors, scripts or host desktop tools. Fixtures are under the single
+C:/Projects/.cache/web-search-20261106 root, never primary data. Artifact root
+is I:/Projects/tooling/web-search-remote-20261106. The earlier test-root error
+was a harness creating temp files inside a required-empty app data folder;
+its layout was fixed. No production install was used for testing.
+
+All-package tests/vet session54016 is pending. Next: final native UI and managed
+fresh/120-to2 independent upgrade, real local-model handoff/queue resume, rollback,
+then ordinary complete121 build/release with Android18 and protected WebSearch-only
+primary update retaining manager120 and all unrelated apps. No121 publication,
+channel promotion or primary WebSearch2 installation has occurred yet.
