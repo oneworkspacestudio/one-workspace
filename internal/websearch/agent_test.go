@@ -44,6 +44,14 @@ func TestFaraNativeDisplayContract(t *testing.T) {
 		t.Fatal("Fara signed scroll contract", a)
 	}
 }
+func TestBrowserChromeShortcutsBlocked(t *testing.T) {
+	for _, keys := range [][]string{{"ctrl", "l"}, {"ctrl", "shift", "c"}, {"alt", "enter"}, {"ctrl", "c"}} {
+		if e := (&Browser{}).Key(context.Background(), keys); e == nil {
+			t.Fatalf("browser chrome shortcut accepted: %v", keys)
+		}
+	}
+}
+
 func TestPortableRealBrowserAndModel(t *testing.T) {
 	if os.Getenv("WEBSEARCH_NATIVE_ACCEPTANCE") != "1" {
 		t.Skip("explicit native runtime acceptance only")

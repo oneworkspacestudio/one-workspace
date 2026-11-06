@@ -269,6 +269,11 @@ func (b *Browser) Key(ctx context.Context, keys []string) error {
 	if key == "" {
 		return errors.New("missing browser key")
 	}
+	// Content input only: address-bar, developer-tools and OS/clipboard shortcuts
+	// must never let the pilot escape the checked HTTPS navigation primitive.
+	if modifiers != 0 && !(modifiers == 2 && key == "a") && !(modifiers == 8 && key == "Tab") {
+		return errors.New("browser chrome shortcuts are unavailable; use visit_url for HTTPS navigation")
+	}
 	p := map[string]any{"type": "rawKeyDown", "key": key, "code": code, "modifiers": modifiers, "windowsVirtualKeyCode": vk}
 	if e := b.Call(ctx, "Input.dispatchKeyEvent", p, nil); e != nil {
 		return e
