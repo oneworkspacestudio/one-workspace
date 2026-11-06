@@ -81,3 +81,13 @@ Sanitized provider receipts are in the app docs/evidence. All task runtimes stop
 Provider follow-up cleanup completed: task-only synthetic NTFS fixtures and
 managed program roots removed after absolute-boundary, process and reparse checks.
 Source, delivery packages and sanitized receipts remain; owner state was untouched.
+
+
+## Authorized publication
+User requested publish/install. App preview2 is public from7a6d1c6 with12 verified
+immutable assets and anonymous checksums, Actions disabled. Pinned its verified
+public archive, rebased suite integration onto origin/main5985ae6 retaining the
+new Commute2 pin and complete-history channel fix. Preparing ordinary122 build
+with signed Android19 and exact installer acceptance before owner deployment.
+Use normal protected workspace,podcasts update on primary; never borrow provider
+credentials or use owner model/news/audio generation as a test fixture.

@@ -246,5 +246,12 @@
     "asset": "my-survival-0.1.0-preview.1-windows-amd64.zip",
     "sha256": "7aa0cdeaef898faf03cbd76379ca4a112001ef61ab672f172defac10a59c077c",
     "size": 5954801
+  },
+  "myPodcasts": {
+    "repository": "oneworkspacestudio/my-podcasts",
+    "tag": "v0.1.0-preview.2",
+    "asset": "MyPodcasts-windows-amd64.zip",
+    "sha256": "ad3cb9e43c728b96522547af78d024ddb09c64c9ca0cf5f75705a4db2a8ab861",
+    "size": 5902462
   }
 }
