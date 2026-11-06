@@ -207,3 +207,32 @@ mandatory signed-Android17 publisher, anonymous installer check and protected
 primary120 deployment scripts are under that task artifact root. Publication,
 public channel promotion and owner119-to120 installation remain the next steps;
 do not report these as completed merely from this source/acceptance checkpoint.
+
+## Public120 and primary installation completed
+
+The previous pending-publication checkpoint is superseded. Mandatory local signed
+Android publication completed for v0.3.0-preview.120, source7645119, Android17;
+all890 immutable assets, anonymous APK and public channel verified. Channel source
+promotion commit75f3ae6. The ordinary unauthenticated installer downloaded and
+verified public120/WebSearch1 using its supported check-updates path.
+
+Primary119-to120 protected update selected workspace,websearch only. WebSearch1
+and all345 owned payloads plus manager match the accepted public release. Existing
+app contracts/bytes, identities, credentials, AI Service settings/clients, paths
+and recovery copies were retained. Transaction complete; normal cleanup receipt
+checked. Installed served HTML/JS/CSS/branding match source, native/public private
+APIs deny anonymous calls, and the exact remote route uses native key auth.
+
+Supported install-model CLI imported and verified Fara1.5-4B Q4_K_M and vision
+projector (3,383,083,424 bytes) into primary private models. Activation remains OFF,
+with no owner API key or job created. Owner opens /websearch/, chooses Turn on,
+then creates a named server credential. This is deliberate first-use policy,
+not unfinished installation. No owner inference was used as a development fixture.
+
+All synthetic runtimes stopped and private test data removed after evidence
+retention. Docker is not a service dependency and no task Docker process remains.
+No other PC, physical phone or reboot acceptance is claimed. Public summary is
+docs/evidence/web-search/delivery.json; primary private receipts remain in the
+task artifact root. Release assets are immutable; final delivery receipts belong
+in source, not replacement release uploads. Source worktree is the dedicated
+codex/web-search-service branch in I:/Projects/workspace-web-search.
