@@ -20,7 +20,7 @@ func Categories() []Category {
 func CategoryFor(id string) Category {
 	index := 0
 	switch id {
-	case "aiservice", "authenticator", "remote", "accounts", "backups", "monitor", "shield", "updates", "app-status":
+	case "websearch", "aiservice", "authenticator", "remote", "accounts", "backups", "monitor", "shield", "updates", "app-status":
 		index = 1
 	case "voice", "gitea", "hosting", "myai", "my3d", "studio", "create", "slicer", "push":
 		index = 2
@@ -28,7 +28,7 @@ func CategoryFor(id string) Category {
 	return Categories()[index]
 }
 
-func DefaultInstall(id string) bool { return id != "commute" && CategoryFor(id).DefaultInstall }
+func DefaultInstall(id string) bool { return id != "websearch" && id != "commute" && CategoryFor(id).DefaultInstall }
 
 // WantedApps preserves existing opt-ins/exclusions while adding only new defaults.
 // Used both when an older installer fetches a newer catalog and during updates.

@@ -29,6 +29,7 @@ type UpdateMetadataPolicy struct {
 // credentials, keys, schema files and settings remain in the recovery copy.
 // Keep this policy stable for old recovery records; new layouts need a new version.
 var preservedUpdateDataV1 = []string{
+	"websearch/models", "websearch/browser-code-cache",
 	"accounts/uploads", "accounts/logs", "drive/cache", "drive/.filebrowser-history", "photos/cache", "photos/logs",
 	"gitea/repositories", "gitea/data/attachments", "gitea/data/lfs", "gitea/data/packages", "gitea/data/repo-archive", "gitea/data/avatars", "gitea/data/repo-avatars", "gitea/log",
 	"music/cache", "music/logs", "mail/runtime", "mail/blobs", "mail/logs", "shared/bin", "shared/blobs", "shared/logs",
@@ -157,7 +158,7 @@ func validateUpdateMetadata(c Config, p *UpdateMetadataPolicy) error {
 }
 
 func knownUpdateStorageProfile(id string) bool {
-	if id == "aiservice" || id == "survival" || id == "commute" || id == "news" || id == "books" || id == "voice" || id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
+	if id == "websearch" || id == "aiservice" || id == "survival" || id == "commute" || id == "news" || id == "books" || id == "voice" || id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
 		return true
 	}
 	switch id {

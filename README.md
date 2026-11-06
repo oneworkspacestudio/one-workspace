@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-a1846ff2.png)
+![The complete One Workspace app collection](docs/branding/app-suite-3fa10273.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -241,6 +241,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td><a href="https://github.com/oneworkspacestudio/my-ai"><strong>AI Service</strong></a></td>
       <td>Keep a local AI model ready and share a private request queue across users and apps.</td>
     </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/web_search.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/WEB_SEARCH.md"><strong>Web Search</strong></a></td>
+      <td>Give your LLM a private browser and a queued web research API.</td>
+    </tr>
   </tbody>
 </table>
 <!-- app-directory:end -->
@@ -265,7 +270,7 @@ Updates keep the apps you already selected.
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
 same MyAccounts sign-in. Download the signed APK from the
-[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.104/OneWorkspace-Android-0.1.0-preview.10.apk).
+[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.120/OneWorkspace-Android-0.1.0-preview.17.apk).
 Enter your remote Workspace address once; Chat is found automatically, or you can
 choose a separate Chat server. Your addresses and valid sign-in are remembered.
 It includes a saved app launcher and native Chat notification/background integration. Alerts require the

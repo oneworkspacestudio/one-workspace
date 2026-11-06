@@ -299,5 +299,12 @@
     "name": "AI Service",
     "description": "Keep a local AI model ready and share a private request queue across users and apps.",
     "url": "https://github.com/oneworkspacestudio/my-ai"
+  },
+  {
+    "id": "websearch",
+    "icon": "web_search",
+    "name": "Web Search",
+    "description": "Give your LLM a private browser and a queued web research API.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/WEB_SEARCH.md"
   }
 ]

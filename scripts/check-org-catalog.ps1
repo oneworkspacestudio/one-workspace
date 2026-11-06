@@ -1,7 +1,9 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 12){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 13){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+$websearch=$cat.apps|Where-Object id -CEQ 'websearch'
+if(-not $websearch.oidc -or $websearch.route -cne '/websearch' -or $websearch.port -ne 9043 -or $cat.packages.websearch.file -cne 'WebSearch.exe' -or -not $cat.packages.'websearch-contract' -or @($cat.packages.PSObject.Properties.Name|Where-Object {$_ -like 'websearch-runtime-*'}).Count -lt 20){throw 'Web Search portable runtime contract is incomplete'}
 $survival=$cat.apps|Where-Object id -CEQ 'survival'
 if(-not $survival.oidc -or $survival.route -cne '/survival' -or $survival.callback -cne '/survival/auth/callback' -or $survival.port -ne 9041 -or $cat.packages.survival.file -cne 'MySurvival.exe' -or -not $cat.packages.'survival-contract' -or -not $cat.packages.'survival-manifest'){throw 'My Survival managed contract is incomplete'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json

@@ -410,6 +410,16 @@
       "foundation": true,
       "updateGroup": "myai",
       "recovery": "app"
+    },
+    {
+      "id": "websearch",
+      "name": "Web Search",
+      "route": "/websearch",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "websearch",
+      "recovery": "app"
     }
   ]
 }

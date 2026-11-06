@@ -1,0 +1,61 @@
+Page Console
+  Row
+    Heading level=1 "Web Search"
+    Spacer
+    Link href=$workspace variant=apps "Apps"
+  Text "Private browser research for your LLMs"
+  If condition=$signedOut
+    Card
+      Heading level=2 "Connect your account"
+      Text "Use your Workspace owner account to manage Web Search."
+      Link href=$login "Continue with MyAccounts"
+  Else
+    Card
+      Row
+        Heading level=2 "Browser service"
+        Badge $state
+      Text "Fara 1.5 4B · Local model · Private browser profile"
+      Text $queueLabel
+      Text $setupLabel
+      Button action=install disabled=$installDisabled "Install local model (3.4 GB)"
+      Row
+        Button action=enable disabled=$enableDisabled "Turn on"
+        Button action=disable disabled=$disabled "Turn off"
+      Alert $notice
+    Grid
+      Card
+        Heading level=2 "Ask a question"
+        Input name=query label="Research question" type=textarea placeholder="What would you like to find on the web?"
+        Button action=search disabled=$notReady "Queue research"
+        For each=$jobs
+          Card
+            Row
+              Text $item.query
+              Badge $item.status
+            Text $item.error
+            Text $item.answer
+            For each=$item.sources
+              Link href=$item.url "$item.title"
+              Text $item.excerpt
+            Button action=cancel item=$item.id "Cancel request"
+      Card
+        Heading level=2 "API access"
+        Text "Credentials grant trusted server apps access to this browser profile. Keep them on your server."
+        Input name=name label="Credential name" placeholder="My research agent"
+        Button action=create "Create credential"
+        If condition=$token
+          Alert "Copy this credential now. It is shown once."
+          Text variant=pre $token
+          Button action=dismiss "I have saved it"
+        Text variant=pre $apiExample
+        For each=$grants
+          Row
+            Text $item.name
+            Button action=revoke item=$item.hash "Revoke"
+    Card
+      Heading level=2 "Browser preview"
+      Text "The browser keeps its own cookies and sessions. Live research controls it one request at a time."
+      Button action=preview disabled=$notReady "Refresh preview"
+      If condition=$preview
+        Image src=$preview alt="Private research browser screenshot"
+    Text "Requests and results expire after 24 hours. Sign-in challenges pause research."

@@ -59,7 +59,7 @@ var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
 // Version12 adds AI Service identity, shared inference credentials and private storage.
 // Older controllers hand off before applying a catalog whose registry they lack.
-const InstallerIntegration = 12
+const InstallerIntegration = 13
 
 func (c Catalog) Validate() error {
 	if c.InstallerIntegration < 0 || c.InstallerIntegration > InstallerIntegration {

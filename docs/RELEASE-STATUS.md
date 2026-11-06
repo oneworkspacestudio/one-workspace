@@ -1,5 +1,9 @@
 # One Workspace release status
 
+## Preview120: portable browser Web Search
+
+Optional owner-operated Web Search provides a private browser, local Fara1.5-4B model and bounded API queue. Portable executable packages require no Docker, WSL, Python or external model daemon. Explicit owner setup installs verified weights into private storage. Installer integration13 owns its runtime namespace. See [Web Search](WEB_SEARCH.md); native lifecycle acceptance and deployment are recorded separately.
+
 ## Preview119: remote AI Service clients
 
 Adds an exact capability-authenticated AI Service POST route for hosted apps such as WonderPal. Owners explicitly issue remote server credentials; existing local and managed My AI credentials remain local only. Remote clients share the same resident model, FIFO queue, bounds and revocation controls. Browser and administrative routes retain MyAccounts/CSRF. Requires My AI26; source and release acceptance are recorded in the compact handoff.
