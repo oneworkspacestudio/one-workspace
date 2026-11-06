@@ -1459,3 +1459,7 @@ Adds Actual-backed household budgeting, OneAccount owner/member budget sharing, 
 
 ## My Commute integration116
 Adds optional My Commute with live London arrivals, connection estimates and private saved journeys. Combined catalog retains News and the latest Finance/Voice/MyAI/Tube/Slicer pins. Installer integration10 requires older controllers to hand off before applying the new runtime contract. App-native and prior candidate managed acceptance passed; exact release-installer acceptance and owner deployment are recorded separately when verified. No physical-phone or credentialed Darwin acceptance is claimed.
+
+
+## Workspace118 preparation: shared AI Service
+Adds AI Service from My AI25: owner model/activation controls, persistent residency and a bounded authenticated inference queue. Managed My AI local chat/code use the service; existing standalone and cloud settings remain supported. Installer integration12 adds identity, private storage, recovery and coupled-update ownership. Host Ollama remains an explicit external prerequisite. See [AI Service](AI_SERVICE.md). Exact native lifecycle, release and deployment evidence is recorded separately.

@@ -400,6 +400,16 @@
       "foundation": true,
       "updateGroup": "commute",
       "recovery": "app"
+    },
+    {
+      "id": "aiservice",
+      "name": "AI Service",
+      "route": "/aiservice",
+      "repository": "oneworkspacestudio/my-ai",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "myai",
+      "recovery": "app"
     }
   ]
 }

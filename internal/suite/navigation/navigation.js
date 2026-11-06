@@ -30,7 +30,7 @@
   }
   const links = make('nav','','apps'); links.setAttribute('aria-label','Installed apps'); const entries=[];
   for(const category of [{id:'general',name:'General'},{id:'administration',name:'Administration'},{id:'development',name:'Creative & Development'}]) {
-   const apps=catalog.apps.filter(app=>(app.CategoryID || (['accounts','backups','monitor','shield','remote'].includes(app.ID)?'administration':['gitea','hosting','myai','my3d','studio','create','slicer','push'].includes(app.ID)?'development':'general'))===category.id);
+   const apps=catalog.apps.filter(app=>(app.CategoryID || (['aiservice','accounts','backups','monitor','shield','remote'].includes(app.ID)?'administration':['gitea','hosting','myai','my3d','studio','create','slicer','push'].includes(app.ID)?'development':'general'))===category.id);
    if(!apps.length)continue;const section=make('section','','app-category');section.append(make('h2',category.name));const items=make('div','','category-items');section.append(items);links.append(section);
    for(const app of apps) {
    const a=make('a'); a.href=app.URL; a.title=app.Description || app.Name;

@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"aiservice", "AI Service", "/aiservice", "/api/me", "/aiservice/auth/login", "/aiservice/auth/logout", []string{"aiservice_session"}},
 	{"news", "My News", "/news", "/api/me", "/news/auth/login", "/news/auth/logout", []string{"news_session"}},
 	{"commute", "My Commute", "/commute", "/api/me", "/commute/auth/login", "/commute/auth/logout", []string{"commute_session"}},
 	{"books", "My Books", "/books", "/api/me", "/books/auth/login", "/books/auth/logout", []string{"books_session"}},

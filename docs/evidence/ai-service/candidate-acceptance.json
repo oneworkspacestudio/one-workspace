@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "passed": true,
+  "installerSHA256": "d61f23674d2c5469d46256e6a03398cae0689d6b2272569112ff114d41cfacc7",
+  "bundleSHA256": "bc71381333b45e205c7cc01a7c7b0d7fbc2ddc5ec0f6e06682775388a12f1df1",
+  "upgradeFrom": "0.3.0-preview.117",
+  "checks": [
+    {
+      "label": "setup-selection",
+      "aiServiceOfferedByDefault": true
+    },
+    {
+      "label": "fresh",
+      "workspace": "0.3.0-preview.118",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true,
+      "evidence": "managed-candidate-r2.log"
+    },
+    {
+      "label": "restart",
+      "workspace": "0.3.0-preview.118",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true,
+      "evidence": "managed-candidate-r2.log"
+    },
+    {
+      "label": "independent-update",
+      "workspace": "0.3.0-preview.118",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true,
+      "evidence": "managed-candidate-r2.log"
+    },
+    {
+      "label": "rollback",
+      "workspace": "0.3.0-preview.118",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true,
+      "evidence": "managed-candidate-r2.log"
+    },
+    {
+      "label": "omitted",
+      "runtimeNamespaceOmitted": true,
+      "requiredLicencesRetained": true
+    },
+    {
+      "label": "upgrade-default-discovery",
+      "workspace": "0.3.0-preview.118",
+      "service": "0.1.0-preview.25",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true
+    }
+  ],
+  "managedMyAILocalInferenceUsesService": true,
+  "modelCalls": 0,
+  "oldControllerRejectsBeforeMutation": true,
+  "ownerDataUsed": false,
+  "physicalPhone": false,
+  "reboot": false
+}

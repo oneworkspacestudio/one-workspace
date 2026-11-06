@@ -157,7 +157,7 @@ func validateUpdateMetadata(c Config, p *UpdateMetadataPolicy) error {
 }
 
 func knownUpdateStorageProfile(id string) bool {
-	if id == "survival" || id == "commute" || id == "news" || id == "books" || id == "voice" || id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
+	if id == "aiservice" || id == "survival" || id == "commute" || id == "news" || id == "books" || id == "voice" || id == "authenticator" || id == "finance" || id == "remote" || id == "tickets" {
 		return true
 	}
 	switch id {

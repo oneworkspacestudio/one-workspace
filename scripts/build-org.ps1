@@ -1,6 +1,6 @@
 param(
  [string]$Go='go',
- [string]$Version='0.3.0-preview.117',
+ [string]$Version='0.3.0-preview.118',
  [string]$Out='',
  [string]$Cache='',
  [string]$SeedArchive='',
@@ -14,7 +14,7 @@ param(
  [string]$MyVoiceCandidate='',
  [string]$MyBooksCandidate='',
  [string]$MyNewsCandidate='',
- [string]$MySurvivalCandidate='',[string]$MyCommuteCandidate=''
+ [string]$MySurvivalCandidate='',[string]$MyCommuteCandidate='',[string]$MyAICandidate=''
 )
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
@@ -24,6 +24,7 @@ if($lock.managedSeed){
  if($MyPushPackage -or $MyFormsPackage -or $MyShieldPackage -or $MyFinancePackage){throw 'Publish and pin component updates when using the managed seed build'}
  if(-not $Out){$Out=Join-Path $root 'dist'}
  $buildArgs=@((Join-Path $PSScriptRoot 'build-managed-seed.py'),'--go',$Go,'--version',$Version,'--cache',$Cache,'--out',$Out)
+ if($MyAICandidate){$buildArgs+=@('--myai-candidate',$MyAICandidate)}
  if($SeedArchive){$buildArgs+=@('--seed-archive',$SeedArchive)}
  if($MyTicketsCandidate){$buildArgs+=@('--tickets-candidate',$MyTicketsCandidate)}
  if($MyAuthenticatorCandidate){$buildArgs+=@('--authenticator-candidate',$MyAuthenticatorCandidate)}

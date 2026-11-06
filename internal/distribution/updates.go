@@ -105,7 +105,7 @@ var updateGroups = []updateGroup{
 	{"push", "My Push", "my-push", []string{"push"}},
 	{"maps", "My Maps", "my-maps", []string{"maps"}},
 	{"cinema", "My Cinema", "my-cinema", []string{"cinema"}},
-	{"myai", "My AI", "my-ai", []string{"myai"}},
+	{"myai", "My AI & AI Service", "my-ai", []string{"myai", "aiservice"}},
 	{"my3d", "My 3D", "my-3d", []string{"my3d"}},
 	{"create", "My Create", "my-create", []string{"create"}},
 	{"meet", "My Meet", "my-meet", []string{"meet"}},
@@ -295,6 +295,9 @@ func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	return groups
 }
 func updatePackageOwner(id string) string {
+	if id == "aiservice" || strings.HasPrefix(id, "aiservice-") {
+		return "myai"
+	}
 	if id == "survival" || strings.HasPrefix(id, "survival-") {
 		return "survival"
 	}
@@ -760,7 +763,7 @@ func manifestChoice(g updateGroup, current catalog.Catalog, repo string, r Relea
 			}
 			omitted := false
 			for _, a := range m.Apps {
-				if a.ID == id && a.Package == id && a.Executable == p.File && a.Kind == "process" {
+				if (id == a.Package || strings.HasPrefix(id, a.Package+"-")) && a.Package != "" && a.Kind == "process" {
 					if _, installed := current.Find(a.ID); !installed {
 						omitted = true
 					}

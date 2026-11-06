@@ -12,10 +12,10 @@ class PublisherWindowsArguments(unittest.TestCase):
     def test_books_publisher_requires_current_complete_inventory(self):
         registry=json.loads((publisher.ROOT/'internal/catalog/managed-apps.json').read_text())['apps']
         apps=[dict(id=a['id'],name=a['name'],route=a['route'],oidc=a['oidc'],source='https://github.com/'+a['repository']+'/releases/tag/test') for a in registry]
-        publisher.validate_managed_catalog(dict(installerIntegration=11,apps=apps))
+        publisher.validate_managed_catalog(dict(installerIntegration=12,apps=apps))
         with self.assertRaises(RuntimeError):publisher.validate_managed_catalog(dict(installerIntegration=9,apps=apps))
-        with self.assertRaises(RuntimeError):publisher.validate_managed_catalog(dict(installerIntegration=11,apps=[a for a in apps if a['id']!='books']))
-        with self.assertRaises(RuntimeError):publisher.validate_managed_catalog(dict(installerIntegration=11,apps=[a for a in apps if a['id']!='survival']))
+        with self.assertRaises(RuntimeError):publisher.validate_managed_catalog(dict(installerIntegration=12,apps=[a for a in apps if a['id']!='books']))
+        with self.assertRaises(RuntimeError):publisher.validate_managed_catalog(dict(installerIntegration=12,apps=[a for a in apps if a['id']!='aiservice']))
     def test_large_catalog_uploads_every_asset_once_with_bounded_utf16_commands(self):
         paths = ['C:/Synthetic staging folder \U0001f4e6/' + 'x'*100 + '/workspace-package-' + str(n) + '.bin' for n in range(600)]
         commands = list(publisher.upload_commands('v0.3.0-preview.104', paths))

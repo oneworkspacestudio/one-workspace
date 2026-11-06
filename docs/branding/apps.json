@@ -292,5 +292,12 @@
     "name": "My Survival",
     "description": "Prepare for power cuts and emergencies with offline guidance and a private household plan.",
     "url": "https://github.com/oneworkspacestudio/my-survival"
+  },
+  {
+    "id": "aiservice",
+    "icon": "ai_service",
+    "name": "AI Service",
+    "description": "Keep a local AI model ready and share a private request queue across users and apps.",
+    "url": "https://github.com/oneworkspacestudio/my-ai"
   }
 ]

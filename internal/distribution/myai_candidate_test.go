@@ -63,7 +63,7 @@ func TestMyAIPrepublicationManifestContract(t *testing.T) {
 		if err = RequireManager(&candidate, current.Version, nil); err != nil {
 			t.Fatal(err)
 		}
-		g := updateGroup{"myai", "My AI", "my-ai", []string{"myai"}}
+		g := updateGroup{"myai", "My AI", "my-ai", []string{"myai", "aiservice"}}
 		choice, e := manifestChoice(g, current, manifest.Repository, release, raw)
 		if e != nil {
 			t.Fatalf("candidate rejected before publication (minimal=%v): %v", minimal, e)
@@ -76,12 +76,12 @@ func TestMyAIPrepublicationManifestContract(t *testing.T) {
 		}
 		for _, app := range current.Apps {
 			next, ok := target.Find(app.ID)
-			if !ok || (app.ID != "myai" && !reflect.DeepEqual(app, next)) {
+			if !ok || (app.ID != "myai" && app.ID != "aiservice" && !reflect.DeepEqual(app, next)) {
 				t.Fatal("unrelated app changed", app.ID)
 			}
 		}
 		for id, p := range current.Packages {
-			if id != "myai" && !strings.HasPrefix(id, "myai-") && target.Packages[id] != p {
+			if id != "myai" && !strings.HasPrefix(id, "myai-") && id != "aiservice" && !strings.HasPrefix(id, "aiservice-") && target.Packages[id] != p {
 				t.Fatal("unrelated payload changed", id)
 			}
 		}
