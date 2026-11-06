@@ -91,3 +91,23 @@ new Commute2 pin and complete-history channel fix. Preparing ordinary122 build
 with signed Android19 and exact installer acceptance before owner deployment.
 Use normal protected workspace,podcasts update on primary; never borrow provider
 credentials or use owner model/news/audio generation as a test fixture.
+
+
+## Exact public-pin122 acceptance
+Ordinary complete public-pin build contains43apps/918packages and48Podcasts
+payloads, app2 hash680775e054a7c3e9a2a0e1460a5717fe20abafe25a5a9ca1a2f0ddecbaece2fa.
+Installer 9e419278dcdae3ddda837fe921d3897140aeb8d907210a2a2e2f619cf56e0ace;
+bundle f6528838c851e58f9ffcc72a3221f51def034995806e8c32497ef478e6af75f1. All zip member sizes/hashes and public app manifest
+match. Relative to121, existing launch contracts remain; Commute2 public pin is
+retained and only Web Search source provenance moves to122. Seven exact native
+checks pass: fresh opt-in/restart/opt-out, old integration rejection without
+mutation,121-to122 upgrade, independent synthetic app update and rollback.
+MyAccounts identity/settings, shared picker, auth/logout, Accounts bytes and
+desktop/mobile presentation pass. Synthetic accounts only; runtimes stopped.
+All suite Go tests/vet and component/publisher/channel tests pass. Initial checks
+used exFAT and one raced the bundle writer; these were not counted as passing.
+Go1.27 testing.TempDir uses GOTMPDIR directly, so the final launcher sets it to
+the dedicated NTFS fixture root only in test processes, retaining large compiler
+objects on I. Final checks ran after the bundle closed, using no owner data.
+Public suite publication/channel and protected primary installation follow; use
+mandatory signed Android19 publisher and preserve immutable assets/recovery.

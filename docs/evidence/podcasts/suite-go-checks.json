@@ -1,0 +1,8 @@
+{
+  "goVersion": "1.27.3",
+  "tests": "go test ./...",
+  "vet": "go vet ./...",
+  "schema": 1,
+  "passed": true,
+  "fixtures": "synthetic NTFS; build cache exFAT"
+}

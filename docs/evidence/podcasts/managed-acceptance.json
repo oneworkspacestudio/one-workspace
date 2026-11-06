@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "passed": true,
+  "checks": [
+    {
+      "label": "fresh",
+      "workspace": "0.3.0-preview.122",
+      "podcasts": "0.1.0-preview.2",
+      "oidc": true,
+      "sharedPicker": true,
+      "anonymousDenied": true,
+      "logoutRevokes": true
+    },
+    {
+      "label": "fresh-restart",
+      "workspace": "0.3.0-preview.122",
+      "podcasts": "0.1.0-preview.2",
+      "oidc": true,
+      "sharedPicker": true,
+      "anonymousDenied": true,
+      "logoutRevokes": true
+    },
+    {
+      "label": "fresh-opt-out",
+      "appOmitted": true
+    },
+    {
+      "label": "old-installer-rejects-new-integration",
+      "configurationUnchanged": true
+    },
+    {
+      "label": "upgrade-from-121",
+      "workspace": "0.3.0-preview.122",
+      "podcasts": "0.1.0-preview.2",
+      "oidc": true,
+      "sharedPicker": true,
+      "anonymousDenied": true,
+      "logoutRevokes": true
+    },
+    {
+      "label": "independent-app-update",
+      "workspace": "0.3.0-preview.122",
+      "podcasts": "0.1.0-preview.2-test",
+      "oidc": true,
+      "sharedPicker": true,
+      "anonymousDenied": true,
+      "logoutRevokes": true
+    },
+    {
+      "label": "independent-app-rollback",
+      "workspace": "0.3.0-preview.122",
+      "podcasts": "0.1.0-preview.2",
+      "oidc": true,
+      "sharedPicker": true,
+      "anonymousDenied": true,
+      "logoutRevokes": true
+    }
+  ],
+  "installerSHA256": "9e419278dcdae3ddda837fe921d3897140aeb8d907210a2a2e2f619cf56e0ace",
+  "bundleSHA256": "f6528838c851e58f9ffcc72a3221f51def034995806e8c32497ef478e6af75f1",
+  "appSHA256": "680775e054a7c3e9a2a0e1460a5717fe20abafe25a5a9ca1a2f0ddecbaece2fa",
+  "scope": "synthetic isolated NTFS supported fresh/upgrade/update/recovery",
+  "realPaidGeneration": false,
+  "publicRelease": false,
+  "ownerInstallation": false,
+  "physicalPhone": false
+}

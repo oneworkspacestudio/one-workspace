@@ -1,4 +1,4 @@
-# My Podcasts integration candidate
+# My Podcasts integration
 
 App source is a separate `my-podcasts` repository. This integration worktree adds
 an optional Creative & Development app, ID `podcasts`, `/podcasts`,
@@ -11,18 +11,21 @@ Managed inventory, complete builder, strict package namespace, shared picker,
 content-addressed branding, logout cookies, update discovery and independent
 recovery storage are registered. Installer integration 14/minimum manager 122
 prevents old managers silently dropping the app contract. Complete-catalog and
-publisher checks reject omission. No public component pin is invented.
+publisher checks reject omission. The builder pins the verified public preview.2 archive.
 
 The normal builder supports `-MyPodcastsCandidate <archive>` for isolated local
 acceptance. Its manifest remains candidate=true and publication rejects it.
-Once publication is explicitly requested, create/publish the actual organization
-repository and immutable app release, pin verified SHA-256/size, reconcile current
-suite main and select a new available suite version. Use only the mandatory
-signed-Android suite publisher, keep Actions disabled and verify the public
-channel and each authorized installed PC. Never replace public assets.
+Public releases must use the verified component pin and mandatory signed-Android
+suite publisher. Keep Actions disabled and verify the public channel and each
+authorized installed PC. Never replace public assets.
 
-The app's research/speech need a supplied OpenAI key; direct X timelines require
-an optional developer token. There are no public feed or private API exemptions.
+Choose OpenAI, DeepSeek or the existing AI Service/Ollama as writer. DeepSeek or
+OpenAI can supply web research; local automatic research uses selected RSS/direct
+X. AI Service requires an owner-issued local app credential for `podcasts`, its
+loopback address and an active model selected in the service. No model/grant is
+automatically activated. OpenAI speech is separate; reviewed scripts can wait
+for voices. Direct X timelines require an optional developer token. Private
+APIs remain protected by MyAccounts, native owner authorization and CSRF.
 Background schedules survive tab closure and sign-out by design; Cancel stops
 authorized production. Owner deployments and paid-provider quality are separate
 acceptance stages, not inferred from local tests.

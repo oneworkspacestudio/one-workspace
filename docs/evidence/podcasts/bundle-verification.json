@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "passed": true,
+  "candidate": false,
+  "apps": 43,
+  "packages": 918,
+  "podcastsPackages": 48,
+  "allPackageMembersVerified": true,
+  "installerSHA256": "9e419278dcdae3ddda837fe921d3897140aeb8d907210a2a2e2f619cf56e0ace",
+  "bundleSHA256": "f6528838c851e58f9ffcc72a3221f51def034995806e8c32497ef478e6af75f1",
+  "appSHA256": "680775e054a7c3e9a2a0e1460a5717fe20abafe25a5a9ca1a2f0ddecbaece2fa",
+  "baselineVersion": "0.3.0-preview.121",
+  "changedPriorAppFields": {
+    "websearch": [
+      "source"
+    ],
+    "commute": [
+      "source",
+      "version"
+    ]
+  },
+  "changedPriorPackages": [
+    "manager",
+    "commute-contract",
+    "commute-doc-5f77d9b61138bdc8",
+    "commute-doc-6c2dc15903fbd16a",
+    "commute-doc-2605206b7e64be69",
+    "commute-manifest",
+    "commute",
+    "commute-doc-b335630551682c19"
+  ],
+  "ownerDataUsedAsFixture": false
+}
