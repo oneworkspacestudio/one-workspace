@@ -301,3 +301,34 @@ public channel and supported anonymous installer check, then protected primary
 Web Search-only update retaining manager120 and all owner state; verify served
 assets/native/public auth, record delivery and clean synthetic private fixtures.
 Do not report publication or installed2 until those steps actually pass.
+
+
+## Remote browser121 public and primary delivery completed
+
+The previous pending remote-control checkpoint is superseded. Mandatory local
+signed Android18 publication completed for v0.3.0-preview.121, source
+24280e54760cee3261dbfe6a3812b1300f052e03. All891 immutable assets, public channel and supported
+anonymous full installer download/verification passed; Actions remains disabled.
+Primary Web Search-only protected update installed2 while retaining manager120,
+unselected app contracts/bytes, identity/credentials, Search settings/users/grants,
+AI Service settings/clients, model-library bytes and storage paths. All345 search
+payloads match the public release. Normal transaction, recovery and cleanup pass.
+Served UI/branding bytes and anonymous native/public authorization checks passed.
+No owner remote-control session, credential or research job was created as QA.
+Owner opens https://workspace.m8e.co.uk/websearch/#remote-browser and chooses
+Open remote browser; model activation or installation is unnecessary for control.
+The view controls the dedicated browser, not the host desktop. Release resumes
+research when enabled. Exact owner session/role/expiry revoke frame/input access.
+Synthetic private fixtures and processes were removed after retaining receipts;
+physical phone, reboot and other-PC acceptance remain unclaimed. Evidence is
+in docs/evidence/web-search/remote-delivery.json. Preserve immutable release121
+assets; any future code change needs a new version and managed acceptance.
+
+The mandatory publisher completed signed APK/anonymous APK and all891 digest
+checks, then its channel push was rejected because concurrent My Commute2 and
+complete-history pagination commits had advanced main. Only the local channel
+commit was rebased; the updated generator recreated the index, with an assertion
+that all prior public tags plus My Commute2 and all891 suite121 assets remained.
+Promotion e0c8a24 was pushed and the exact raw-main installer index verified.
+The published121 source tag/assets were retained without replacement. A failed
+channel push after publication is not grounds to rerun the immutable publisher.
