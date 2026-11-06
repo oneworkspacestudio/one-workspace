@@ -420,6 +420,16 @@
       "foundation": true,
       "updateGroup": "websearch",
       "recovery": "app"
+    },
+    {
+      "id": "podcasts",
+      "name": "My Podcasts",
+      "route": "/podcasts",
+      "repository": "oneworkspacestudio/my-podcasts",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "podcasts",
+      "recovery": "app"
     }
   ]
 }

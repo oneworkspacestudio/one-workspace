@@ -75,6 +75,7 @@ func Icon(app string) string {
 		"websearch":     "web_search",
 		"aiservice":     "ai_service",
 		"survival":      "my_survival",
+		"podcasts":      "my_podcasts",
 		"commute":       "my_commute",
 		"books":         "my_books",
 		"news":          "my_news",

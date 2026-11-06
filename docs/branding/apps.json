@@ -306,5 +306,12 @@
     "name": "Web Search",
     "description": "Give your LLM a private browser and a queued web research API.",
     "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/WEB_SEARCH.md"
+  },
+  {
+    "id": "podcasts",
+    "icon": "my_podcasts",
+    "name": "My Podcasts",
+    "description": "Create source-linked technology podcasts and generate new episodes in the background.",
+    "url": "https://github.com/oneworkspacestudio/my-podcasts"
   }
 ]

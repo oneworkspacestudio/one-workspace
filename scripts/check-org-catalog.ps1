@@ -1,7 +1,9 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 13){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 14){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+$podcasts=$cat.apps|Where-Object id -CEQ 'podcasts'
+if(-not $podcasts.oidc -or $podcasts.route -cne '/podcasts' -or $podcasts.callback -cne '/podcasts/auth/callback' -or $podcasts.port -ne 9044 -or $cat.packages.podcasts.file -cne 'MyPodcasts.exe' -or -not $cat.packages.'podcasts-contract' -or -not $cat.packages.'podcasts-manifest'){throw 'Podcasts managed contract incomplete'}
 $websearch=$cat.apps|Where-Object id -CEQ 'websearch'
 if(-not $websearch.oidc -or $websearch.route -cne '/websearch' -or $websearch.port -ne 9043 -or $cat.packages.websearch.file -cne 'WebSearch.exe' -or -not $cat.packages.'websearch-contract' -or @($cat.packages.PSObject.Properties.Name|Where-Object {$_ -like 'websearch-runtime-*'}).Count -lt 20){throw 'Web Search portable runtime contract is incomplete'}
 $survival=$cat.apps|Where-Object id -CEQ 'survival'

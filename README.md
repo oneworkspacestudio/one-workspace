@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-3fa10273.png)
+![The complete One Workspace app collection](docs/branding/app-suite-8f7aba78.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -245,6 +245,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/web_search.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/WEB_SEARCH.md"><strong>Web Search</strong></a></td>
       <td>Give your LLM a private browser and a queued web research API.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_podcasts.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/my-podcasts"><strong>My Podcasts</strong></a></td>
+      <td>Create source-linked technology podcasts and generate new episodes in the background.</td>
     </tr>
   </tbody>
 </table>
