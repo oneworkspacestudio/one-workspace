@@ -8,7 +8,7 @@ def myai_replacements(catalog,stage,pin):
  b=json.loads((root/'build-info.json').read_text(encoding='utf-8-sig'))
  assert pin['repository']=='oneworkspacestudio/my-ai' and pin['tag']=='v'+c['version']
  assert c['schema']==1 and c['id']=='myai' and c['route']=='/myai' and c['executable']=='MyAI.exe' and c['health']=='/healthz' and c['oidc'] is True and c['embeddedFrontend'] is True
- assert c['workspaceInstallerIntegration']==12 and c['minimumWorkspaceVersion']=='0.3.0-preview.118'
+ assert c['workspaceInstallerIntegration']==12 and c['minimumWorkspaceVersion']=='0.3.0-preview.119'
  assert b['schema']==1 and b['version']==c['version'] and b['sourceDirty'] is False and b['githubActionsUsed'] is False and re.fullmatch('[a-f0-9]{40}',b['commit'])
  assert b['exeSHA256']==hashlib.sha256((root/'MyAI.exe').read_bytes()).hexdigest()
  app=next(a for a in catalog['apps'] if a['id']=='myai')

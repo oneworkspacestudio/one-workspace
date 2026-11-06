@@ -1,7 +1,7 @@
 """Synthetic app-only update archive; never publish."""
 from pathlib import Path
 import json,sys,hashlib,zipfile
-config,exe,myai,out=map(Path,sys.argv[1:]);c=json.loads(config.read_text(encoding='utf-8'));cat=c['catalog'];v='0.1.0-preview.26-test'
+config,exe,myai,out=map(Path,sys.argv[1:]);c=json.loads(config.read_text(encoding='utf-8'));cat=c['catalog'];v='0.1.0-preview.27-test'
 for app in cat['apps']:
  if app['id'] in ['aiservice','myai']:app.update(version=v,source='https://github.com/oneworkspacestudio/my-ai/releases/tag/v'+v)
 blobs={}

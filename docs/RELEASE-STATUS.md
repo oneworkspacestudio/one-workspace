@@ -1,5 +1,9 @@
 # One Workspace release status
 
+## Preview119: remote AI Service clients
+
+Adds an exact capability-authenticated AI Service POST route for hosted apps such as WonderPal. Owners explicitly issue remote server credentials; existing local and managed My AI credentials remain local only. Remote clients share the same resident model, FIFO queue, bounds and revocation controls. Browser and administrative routes retain MyAccounts/CSRF. Requires My AI26; source and release acceptance are recorded in the compact handoff.
+
 ## Preview117: My Survival offline emergency companion
 
 Adds My Survival to General apps and default setup, with 23 source-linked UK
