@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "passed": true,
+  "installerSHA256": "5be52387bb3fdd2bcc0f3949b2ef36ecee5de3ccff1bf11c3704885b309302f6",
+  "bundleSHA256": "2bdc5e4b6135c6212902304447ff3259e1b3a7cead2977fdc44687a32e28418d",
+  "upgradeFrom": "0.3.0-preview.119",
+  "checks": [
+    {
+      "label": "setup-selection",
+      "optional": true
+    },
+    {
+      "label": "native-primary-workflow",
+      "verifiedModelDownload": true,
+      "realLocalModel": true,
+      "realBrowser": true,
+      "remoteApiThroughManager": true,
+      "credentialIsolation": true,
+      "revocation": true,
+      "answer": "Collected source text from the browser. Use the source evidence to answer the research question.",
+      "sources": [
+        {
+          "url": "https://example.com/",
+          "title": "Example Domain",
+          "text": "This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes. .01 \u00c3\u00a4?l.2Jl 6.4.j9iJl pl-I.\u00c2\u00b1.i.u.JM.J ua...a..% &Lh.iJl .\u00c3\u00a44.\u00c3\u00b6lpJls 01.4.i3\\Jl leu.' '...i*.j u...?\u00c3\u2026 ,a.oJ3 890 L'usage de ce domaine est r\u00c3\u00a9serv\u00c3\u00a9 des exemples de documentation, sans autorisation pr\u00c3\u00a9alable. 11 ne s'agit pas d'un service ; son utilisation des fins de test ou de surveillance est \u00c3\u00a5 \u00c3\u00a9viter. AaHHbM AOMeH npeAHa3HaqeH AJIR VICTIOJ1b30BaHVIR B nphMepax AOK).'MeHTaUVW1 6e3 He06XOAVIMOCTV1 nonyueHhfi npeABapMTeJ1bHoro pa3peweHhfi. 3T0 He cepwc,\u00e2\u20ac\u00a2 He peKOMeuyeTCR ero ncn0J1b30BaHme reCTVIPOBaHV1fi VI MOHMTOPhHra. Este dominio est\u00c3\u00a5 destinado al uso en ejemplos de documentaci\u00c3\u00b6n sin necesidad de permiso. Esto no es un servicio; evitar utilizarlo para realizar pruebas o monitoreos. Learn more\n"
+        }
+      ]
+    },
+    {
+      "label": "fresh",
+      "workspace": "0.3.0-preview.120",
+      "service": "0.1.0-preview.1",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "runtimePayloads": true
+    },
+    {
+      "label": "restart",
+      "workspace": "0.3.0-preview.120",
+      "service": "0.1.0-preview.1",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "runtimePayloads": true
+    },
+    {
+      "label": "independent-update",
+      "workspace": "0.3.0-preview.120",
+      "service": "0.1.0-preview.2-test",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "runtimePayloads": true
+    },
+    {
+      "label": "rollback",
+      "workspace": "0.3.0-preview.120",
+      "service": "0.1.0-preview.1",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "runtimePayloads": true
+    },
+    {
+      "label": "omission",
+      "completeRuntimeOmitted": true
+    },
+    {
+      "label": "upgrade-optional-selection",
+      "workspace": "0.3.0-preview.120",
+      "service": "0.1.0-preview.1",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "runtimePayloads": true
+    }
+  ],
+  "oldControllerRejectsBeforeMutation": true,
+  "ownerDataUsed": false,
+  "physicalPhone": false,
+  "reboot": false,
+  "postRollbackModelPinsVerified": true,
+  "browserProfileRetained": true,
+  "allSearchPayloadsVerifiedFreshAndUpgrade": 345
+}

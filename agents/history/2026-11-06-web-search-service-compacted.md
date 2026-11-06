@@ -177,3 +177,33 @@ using the existing DPAPI signing loader; not executed. C fixture model copies
 were removed after process-reference checks, originals retained verified on I;
 this frees space for fresh managed first-use model setup. No public120 release,
 channel promotion or owner Web Search installation has occurred.
+
+## Managed acceptance completed
+
+Source was rebased on public119 and pushed through c30e410. Browser keyboard
+input now excludes address-bar, developer-tools, clipboard and OS shortcuts;
+only page input, Ctrl+A and Shift+Tab are allowed. The ordinary complete120
+build was repeated after this change. All-package Go tests and vet pass, plus
+the new shortcut regression, four publisher tests and npm audit (zero findings).
+The earlier all-package attempt used exFAT temporary data and overlapped a bundle
+write: its filesystem/embed failures were corrected by isolated NTFS test temp
+and sequential packaging; they were not suppressed or treated as passing.
+
+Exact final120 native managed acceptance PASSED: optional setup inventory;
+fresh Accounts/Drive/WebSearch; MyAccounts owner binding, shared picker and
+anonymous denial; explicit supervised verified model download; real Fara/browser
+retrieval through manager server API; credential ownership/revocation; restart;
+independent app update and rollback; omission;119-to120 optional selection;
+old integration12 controller rejects13 before mutation. Desktop/mobile screens
+were visually reviewed. Evidence is docs/evidence/web-search/managed-acceptance.json.
+Model pins and browser profile were checked after rollback, then disposable C
+model fixture copies were deleted to preserve free space for later test phases.
+All search-owned runtime payloads are additionally verified in both fresh and
+upgraded installs. This cleanup changes no owner installation. Physical phone,
+reboot, owner activation and owner inference remain unclaimed.
+
+Frozen artifacts are tooling/web-search-20261106/final120. Private preparation,
+mandatory signed-Android17 publisher, anonymous installer check and protected
+primary120 deployment scripts are under that task artifact root. Publication,
+public channel promotion and owner119-to120 installation remain the next steps;
+do not report these as completed merely from this source/acceptance checkpoint.
