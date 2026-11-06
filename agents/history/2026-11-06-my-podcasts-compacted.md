@@ -111,3 +111,18 @@ the dedicated NTFS fixture root only in test processes, retaining large compiler
 objects on I. Final checks ran after the bundle closed, using no owner data.
 Public suite publication/channel and protected primary installation follow; use
 mandatory signed Android19 publisher and preserve immutable assets/recovery.
+
+
+## Recovery audit follow-up
+Primary122/Podcasts2 installed and all48app/850old canonical payloads, served UI,
+identity/credentials/settings and immutable model hashes passed. Local audit
+scripts had JSON-order and Workspace-owned release-notice classification errors.
+Readonly SQLite inspection then changed SHM cache files inside the new recovery
+copy; DB and WAL bytes remain original. Do not query original recovery databases.
+Exact cache reconstruction attempts were in memory only and wrote nothing. A
+proposed Maps compatibility-only update was refused as unavailable before any
+mutation. Preparing Podcasts3 security guidance/provider description maintenance
+release and a synthetic regression test proving that descriptor updates create
+full Workspace metadata recovery. Apply only the real public maintenance update
+and verify the new backup using file hashes, never SQLite. Original122 assets and
+provider app2 release remain immutable. Old test-root deletion was auto-rejected.
