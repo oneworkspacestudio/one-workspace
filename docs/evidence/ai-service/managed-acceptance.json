@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "passed": true,
+  "installerSHA256": "0269e3a38b63a6b2b4ff83f8bab1563153e2a6deb657d591323852a5d7e29355",
+  "bundleSHA256": "32d54d277083e504968138d3601635d9aaeaf0d76e0d04f1356a1daf7a7da82d",
+  "upgradeFrom": "0.3.0-preview.117",
+  "checks": [
+    {
+      "label": "setup-selection",
+      "aiServiceOfferedByDefault": true
+    },
+    {
+      "label": "fresh",
+      "workspace": "0.3.0-preview.118",
+      "service": "0.1.0-preview.25",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true
+    },
+    {
+      "label": "restart",
+      "workspace": "0.3.0-preview.118",
+      "service": "0.1.0-preview.25",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true
+    },
+    {
+      "label": "independent-update",
+      "workspace": "0.3.0-preview.118",
+      "service": "0.1.0-preview.26-test",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true
+    },
+    {
+      "label": "rollback",
+      "workspace": "0.3.0-preview.118",
+      "service": "0.1.0-preview.25",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true
+    },
+    {
+      "label": "omitted",
+      "runtimeNamespaceOmitted": true,
+      "requiredLicencesRetained": true
+    },
+    {
+      "label": "upgrade-default-discovery",
+      "workspace": "0.3.0-preview.118",
+      "service": "0.1.0-preview.25",
+      "oidc": true,
+      "ownerBinding": true,
+      "sharedPicker": true,
+      "privateApiDenied": true,
+      "settingsRetained": true
+    }
+  ],
+  "managedMyAILocalInferenceUsesService": true,
+  "modelCalls": 1,
+  "oldControllerRejectsBeforeMutation": true,
+  "ownerDataUsed": false,
+  "physicalPhone": false,
+  "reboot": false
+}
