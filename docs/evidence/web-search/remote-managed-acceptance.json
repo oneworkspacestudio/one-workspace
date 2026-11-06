@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "passed": true,
+  "installerSHA256": "75f16cd6d8dc7cb882a230f9db38f1ddb83d5c40fd3e0b3e8a0f4c7d33e3d605",
+  "bundleSHA256": "eb5c4e06eab11172655061962f425e09bae58b88f26154e5d2083f4317ffa505",
+  "upgradeFrom": "0.1.0-preview.1",
+  "service": "0.1.0-preview.2",
+  "checks": [
+    {
+      "label": "fresh121",
+      "workspace": "0.3.0-preview.121",
+      "webSearch": "0.1.0-preview.2",
+      "realBrowser": true,
+      "modelNotRequired": true,
+      "actualMyAccountsOwner": true,
+      "anonymousDenied": true,
+      "textAndPointerInput": true,
+      "reconnectPreservesForm": true,
+      "all345Payloads": true
+    },
+    {
+      "label": "independent-upgrade-and-handoff",
+      "workspaceRetained": "0.3.0-preview.120",
+      "managerBytesRetained": true,
+      "unrelatedContractsAndPayloadsRetained": true,
+      "profileAndFilesRetained": true,
+      "modelPinsVerified": true,
+      "testWeightsReadOnlyOnI": true,
+      "realLocalModel": true,
+      "sameBrowserAndFormHandoff": true,
+      "modelStopsForManualControl": true,
+      "queuePausesAndResumes": true,
+      "realResearchAfterRelease": true,
+      "profileStorageSurvivesBrowserRestart": true,
+      "sources": [
+        {
+          "url": "https://example.com/",
+          "title": "Example Domain",
+          "text": "This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes. .01 ä?l.2Jl 6.4.j9iJl pl-I.±.i.u.JM.J ua...a..% &Lh.iJl .ä4.ölpJls 01.4.i3\\Jl leu.' '...i*.j u...?Å ,a.oJ3 890 L'usage de ce domaine est réservé des exemples de documentation, sans autorisation préalable. 11 ne s'agit pas d'un service ; son utilisation des fins de test ou de surveillance est å éviter. AaHHbM AOMeH npeAHa3HaqeH AJIR VICTIOJ1b30BaHVIR B nphMepax AOK).'MeHTaUVW1 6e3 He06XOAVIMOCTV1 nonyueHhfi npeABapMTeJ1bHoro pa3peweHhfi. 3T0 He cepwc,• He peKOMeuyeTCR ero ncn0J1b30BaHme reCTVIPOBaHV1fi VI MOHMTOPhHra. Este dominio estå destinado al uso en ejemplos de documentaciön sin necesidad de permiso. Esto no es un servicio; evitar utilizarlo para realizar pruebas o monitoreos. Learn more\n"
+        }
+      ]
+    },
+    {
+      "label": "rollback",
+      "originalServiceBytesRestored": true,
+      "managerBytesRetained": true,
+      "modelLibraryPreserved": true,
+      "profilePreserved": true
+    }
+  ],
+  "ownerDataUsed": false,
+  "physicalPhone": false,
+  "reboot": false
+}

@@ -265,3 +265,39 @@ fresh/120-to2 independent upgrade, real local-model handoff/queue resume, rollba
 then ordinary complete121 build/release with Android18 and protected WebSearch-only
 primary update retaining manager120 and all unrelated apps. No121 publication,
 channel promotion or primary WebSearch2 installation has occurred yet.
+
+
+## Remote browser121 acceptance completed
+
+Source51d35f7 adds Web Search2 and the complete121 catalog with Android18.
+All-package Go tests/vet and npm audit pass. Final standalone native UI R4
+passes real pointer/text/keyboard, tabs, reconnect/form preservation, logout
+pixel/text clearing and browser termination, desktop/mobile without overflow or
+JavaScript errors. Both layouts were visually reviewed. The stale-tab close
+race was fixed server-side before the final build and test.
+
+Exact final121 installer/bundle managed R4 acceptance passes fresh MyAccounts
+owner setup, anonymous denial, model-free control, all345 owned payload hashes,
+120-to2 independent update retaining manager120 and unrelated contracts/bytes,
+profile/files/model-library retention, real local Fara same-browser/form handoff,
+model stop, queued request pause/resume and successful screenshot OCR retrieval,
+persistent browser local storage, then supported rollback to old service bytes.
+Evidence: docs/evidence/web-search/remote-managed-acceptance.json and
+remote-console-acceptance.json. QA-only CDP/DOM reads remain test oracles.
+
+Earlier managed R1 had a transient missing frame, R2 ran out of NTFS space while
+copying model weights, and R3 was stopped by the disk-reserve monitor during
+handoff. No failed attempt was counted as passing. R4 reuses exact verified public
+model weights read-only on I, keeps all private state on NTFS, and removes the
+completed fresh fixture before the model phase. It passes the full workflow;
+model memory can temporarily increase Windows pagefile pressure. No owner app,
+model, credentials, pagefile or unrelated data was modified for testing.
+
+Ordinary complete121 artifacts at tooling/web-search-remote-20261106/final121
+validate42 apps/870 packages, integration13. Product code and packaged guide
+remain51d35f7; this checkpoint adds acceptance scripts/receipts/history only.
+Next: immutable public121 release through mandatory signed Android publisher,
+public channel and supported anonymous installer check, then protected primary
+Web Search-only update retaining manager120 and all owner state; verify served
+assets/native/public auth, record delivery and clean synthetic private fixtures.
+Do not report publication or installed2 until those steps actually pass.

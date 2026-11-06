@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "realPortableBrowser": true,
+  "modelNotRequired": true,
+  "pointerInput": true,
+  "textInput": true,
+  "keyboardInput": true,
+  "tabCreationAndClose": true,
+  "reconnectPreservesPageAndForm": true,
+  "logoutClearsPixelsAndPrivateText": true,
+  "logoutTerminatesBrowser": true,
+  "viewports": [
+    "1280x1000",
+    "390x844"
+  ],
+  "pageErrors": [],
+  "ownerDataUsed": false
+}
