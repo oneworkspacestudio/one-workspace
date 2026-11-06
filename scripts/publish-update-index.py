@@ -15,6 +15,23 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 ORG = 'oneworkspacestudio'
 
+
+def repository_releases(repo, token, opener=urllib.request.urlopen):
+    releases = []
+    for page in range(1, 101):
+        req = urllib.request.Request(
+            f'https://api.github.com/repos/{repo}/releases?per_page=100&page={page}',
+            headers={'Authorization': 'Bearer ' + token, 'User-Agent': 'OneWorkspaceChannelPublisher',
+                     'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
+        with opener(req, timeout=60) as response:
+            batch = json.load(response)
+        if not isinstance(batch, list):
+            raise ValueError('GitHub release list was not an array')
+        releases.extend(batch)
+        if len(batch) < 100:
+            return releases
+    raise ValueError('Release pagination exceeded its safety bound; channel was not written')
+
 def withheld_releases():
     data = json.loads((ROOT / 'updates/withheld-releases.json').read_text(encoding='utf-8'))
     assert data['schema'] == 1
@@ -55,11 +72,7 @@ def main():
             repositories[repo] = []
             print(repo, 'private source; distributed through Workspace bundles', flush=True)
             continue
-        req = urllib.request.Request('https://api.github.com/repos/' + repo + '/releases?per_page=100',
-            headers={'Authorization': 'Bearer ' + token, 'User-Agent': 'OneWorkspaceChannelPublisher',
-                'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
-        with urllib.request.urlopen(req, timeout=60) as response:
-            releases = json.load(response)
+        releases = repository_releases(repo, token)
         public = []
         for release in releases:
             if release['draft'] or not release['published_at'] or (repo, release['tag_name']) in withheld:
