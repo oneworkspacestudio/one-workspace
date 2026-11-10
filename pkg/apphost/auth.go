@@ -346,3 +346,9 @@ func (h *Host) localUser(w http.ResponseWriter, r *http.Request) {
 	}
 	JSON(w, 201, u)
 }
+
+// SessionActive revalidates the original browser session after long-running work.
+func (h *Host) SessionActive(r *http.Request, account string) bool {
+	s, ok := h.session(r)
+	return ok && s.User.ID == account
+}

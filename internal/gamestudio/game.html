@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="{{.Policy}}">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{.Title}}</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#f5f7ff;background:#101732;font:16px system-ui;text-align:center}main{max-width:680px;margin:auto;padding:18px}h1{margin:.25em 0;font-size:clamp(25px,6vw,48px)}p{margin:9px auto;line-height:1.45}canvas{width:100%;height:auto;border:2px solid #879ed8;border-radius:18px;display:block;margin:14px auto;touch-action:none}.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}button{font:inherit;font-weight:750;padding:9px 14px;color:#162150;background:#dce8ff;border:2px solid transparent;border-radius:10px;min-height:44px}button:focus-visible{outline:3px solid #89f3d0;outline-offset:3px}#status{min-height:2.8em;font-weight:650}
+</style>
+</head>
+<body data-spec="{{.Spec}}">
+<main>
+<h1>{{.Title}}</h1>
+<p id="help"></p>
+<canvas width="600" height="360" aria-label="Game board"></canvas>
+<div class="controls" id="controls"><button id="start">Start game</button></div>
+<p id="status" role="status">Ready to play!</p>
+</main>
+<script>{{.Engine}}</script>
+</body></html>

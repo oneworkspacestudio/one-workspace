@@ -1,0 +1,103 @@
+Page Studio
+  Row variant=topbar
+    Row variant=brand
+      Image src=$icon alt=""
+      Text "Game Studio"
+    Row variant=nav
+      Link variant=apps href=$workspace "Apps"
+      If condition=$session
+        Button variant=quiet action=signOut "Sign out"
+  If condition=$loading
+    Text "Opening Game Studio…"
+  If condition=$signedOut
+    Card variant=welcome
+      Badge variant=eyebrow "ONE WORKSPACE"
+      Heading level=1 "Dream it. Play it."
+      Text "Turn a game idea into something you can play."
+      If condition=$oidc
+        Link variant=primary href="./auth/login" "Continue with MyAccounts"
+      Else
+        Input name=loginName label="Email" limit=254
+        Input name=password label="Password" type=password limit=200
+        If condition=$setup
+          Input name=setupCode label="Setup code" type=password limit=200
+        Button action=localLogin "Sign in"
+  If condition=$waiting
+    Card variant=welcome
+      Heading level=1 "You’re almost ready"
+      Text "Give this account code to your grown-up. They can approve it from Game Studio settings."
+      Text variant=code $account
+  Alert $notice
+  If condition=$allowed
+    Row variant=layout
+      Stack variant=primaryColumn
+        Card variant=hero
+          Badge variant=eyebrow "THE GAME WORKSHOP"
+          Heading level=1 "Dream it. Play it."
+          Text "Tell DeepSeek what you want to play. Keep changing your idea until it feels like your game."
+          Row variant=chips
+            Button variant=chip action=catch "✦ Treasure catcher"
+            Button variant=chip action=maze "◇ Maze adventure"
+            Button variant=chip action=runner "↗ Jump & run"
+            Button variant=chip action=memory "▦ Matching cards"
+        Card variant=chat
+          Row variant=sectionHeader
+            Heading level=2 $chatTitle
+            Button variant=quiet action=newGame disabled=$busy "New idea"
+          If condition=$cloud
+            Text variant=helper "DeepSeek Cloud receives your game ideas. Leave out names, addresses and other private details."
+          Else
+            Text variant=helper "Describe your game without names, addresses or other private details."
+          For each=$messages
+            Card variant=$item.style
+              Badge $item.author
+              Text $item.text
+          If condition=$lastPlay
+            Link variant=primary target=_blank href=$lastPlay "Play latest build ↗"
+          Input name=prompt type=textarea label="Your game idea" placeholder="A frog catches stars in an ocean world…" limit=600
+          Button action=send disabled=$sendDisabled $sendLabel
+          If condition=$paused
+            Text variant=helper "Ask the Workspace owner to turn on a DeepSeek model."
+      Stack variant=sidebar
+        Card variant=library
+          Badge variant=eyebrow "YOUR ARCADE"
+          Heading level=2 "Games"
+          If condition=$empty
+            Text "Your games will appear here after you build them."
+          For each=$games
+            Card variant=game
+              Heading level=3 $item.spec.title
+              Text variant=helper $item.type
+              Row variant=gameActions
+                Link target=_blank href=$item.play "Play ↗"
+                If condition=$item.editable
+                  Button variant=quiet action=edit item=$item.id disabled=$busy "Edit"
+                If condition=$owner
+                  Button variant=quiet action=publish item=$item.id disabled=$busy "Publish"
+        If condition=$owner
+          Card variant=settings
+            Heading level=2 "Grown-up settings"
+            Text variant=helper "Approve one MyAccounts account code. Clear it to revoke access."
+            Input name=child label="Child account code" limit=64
+            Select name=provider label="DeepSeek mode"
+            Input name=localModel label="Local Ollama model" placeholder="deepseek-r1:8b" limit=80
+            Input name=cloudKey type=password label="DeepSeek API key" limit=250
+            Checkbox name=cloudConsent label="I consent to sending game ideas to DeepSeek Cloud."
+            Checkbox name=clearCloud label="Remove saved DeepSeek API key"
+            Divider
+            Input name=gitRepo label="Private My Git repository" placeholder="owner/game-builds" limit=161
+            Input name=gitKey type=password label="My Git repository token" limit=250
+            Checkbox name=clearGit label="Remove saved My Git token"
+            Button action=saveSettings disabled=$busy "Save settings"
+            Link variant=quiet href=$workspace "Back to Workspace"
+          If condition=$publishing
+            Card variant=publish id=publishPanel
+              Heading level=2 $publishTitle
+              Text "The game will go to My Git and My Hosting. A publicly configured Hosting site is visible to anyone with its link."
+              Link href=$hostingOpen target=_blank "Open My Hosting to sign in ↗"
+              Button action=confirmPublish disabled=$busy "Save and deploy"
+              Button variant=quiet action=cancelPublish disabled=$busy "Cancel"
+          If condition=$hosted
+            Card variant=publish
+              Heading level=2 "Published game"
+              Link href=$hosted target=_blank "Open hosted game ↗"

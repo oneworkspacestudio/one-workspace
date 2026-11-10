@@ -313,5 +313,12 @@
     "name": "My Podcasts",
     "description": "Create source-linked technology podcasts and generate new episodes in the background.",
     "url": "https://github.com/oneworkspacestudio/my-podcasts"
+  },
+  {
+    "id": "gamestudio",
+    "icon": "game_studio",
+    "name": "Game Studio",
+    "description": "Describe a game, make it with DeepSeek and open it in a new tab.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/GAME_STUDIO.md"
   }
 ]

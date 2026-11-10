@@ -464,7 +464,8 @@ func proxy(target, origin, prefix string, strip, cookies bool) http.Handler {
 				resp.Header.Add("Set-Cookie", c.String())
 			}
 		}
-		if prefix == "/authenticator" || prefix == "/survival" {
+		if prefix == "/authenticator" || prefix == "/survival" ||
+			prefix == "/gamestudio" && strings.HasPrefix(resp.Request.URL.Path, "/play/") {
 			return nil
 		}
 		if resp.StatusCode != 200 || !strings.Contains(resp.Header.Get("Content-Type"), "text/html") || resp.Header.Get("Content-Encoding") != "" {

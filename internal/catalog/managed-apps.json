@@ -422,6 +422,16 @@
       "recovery": "app"
     },
     {
+      "id": "gamestudio",
+      "name": "Game Studio",
+      "route": "/gamestudio",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "gamestudio",
+      "recovery": "app"
+    },
+    {
       "id": "podcasts",
       "name": "My Podcasts",
       "route": "/podcasts",
