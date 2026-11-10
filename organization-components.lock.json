@@ -235,10 +235,10 @@
   },
   "myCommute": {
     "repository": "oneworkspacestudio/my-commute",
-    "tag": "v0.1.0-preview.3",
+    "tag": "v0.1.0-preview.4",
     "asset": "MyCommute-windows-amd64.zip",
-    "sha256": "fcb63a06f4d1e3e5661897f8c483d636bc1316a4ecf61ed30fb336de6dfbeae2",
-    "size": 5864707
+    "sha256": "76c151ebebc9657c2c3b94ec32c43631f309625235a4700a100cc7747ab55a7b",
+    "size": 5869734
   },
   "mySurvival": {
     "repository": "oneworkspacestudio/my-survival",
