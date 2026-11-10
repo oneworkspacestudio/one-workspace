@@ -196,3 +196,12 @@ Six native browser scenarios and Go tests/vet passed. The background regression
 created manual and scheduled WAVs without a browser session using synthetic
 provider data. No real billed provider generation or owner installation was
 used. The owner's installation requires a separate installation request.
+
+Preview.4 publication verified. The anonymous channel at suite37bfef1 selected
+the 48 expected Podcast payloads from preview.3 using the ordinary Workspace122
+installer. The public package and metadata digests matched. The installer applied
+the public update to an isolated synthetic NTFS installation, verified the
+payloads and preserved manager, Accounts, MyAccounts identity, show settings,
+schedule and credentials. Supported rollback and service stop passed. See
+`docs/evidence` for the sanitized production-repair delivery receipt. The user
+installation was not updated and actual paid provider calls were not exercised.
