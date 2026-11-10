@@ -14,3 +14,12 @@ The public channel promotion uses the standard index publisher's new Commute
 entry and preserves every prior entry. Only the Commute component pin advances.
 This is an independent app release using the existing manager integration.
 No owner installation was requested for this release.
+
+The normal public-pin rebuild verified all 43 apps and 918 payloads, including
+all 47 Commute files. Channel commit `febedef` preserved 286 prior release
+entries. The verified public preview.122 installer set up a fresh isolated
+preview.2 fixture, discovered preview.3 anonymously and applied its five changed
+members. All 47 installed Commute hashes, healthy services, retained Accounts and
+manager binaries, and the completed recovery receipt were verified. The local
+QA bundle was not published. Both isolated acceptance fixtures were stopped
+and cleaned.
