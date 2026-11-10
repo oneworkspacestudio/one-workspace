@@ -42,3 +42,22 @@ Public Workspace preview.122 was current when publication started. Rebased onto
 the public My Commute preview.4 pin and channel updates. The ordinary preview.123
 release build uses those public pins and Android companion preview.20. Publish
 through the signed Android entry point and check the anonymous update path.
+
+## Public release verified
+
+Workspace preview.123 is public from source 0c3cb52395735656e9d47a9761d88cb7c252d7bc.
+It contains Game Studio preview.1, 44 apps and 923 packages. The supported
+publisher verified all 943 uploaded assets, signed Android preview.20 with the
+pinned certificate, and verified the anonymous Android download.
+
+Other managed releases advanced main during upload. Recovered channel
+promotion through the documented index generator on current main, retaining
+every prior entry and its asset metadata. Public channel commit 9956623 adds
+preview.123. The anonymous installer selected and downloaded that bundle,
+verified it and listed Game Studio preview.1. The exact published installer
+also passed isolated native setup, restart, omission, older-installer guard,
+preview.122 upgrade, app-only update and rollback. Synthetic processes stopped
+and the private NTFS test fixture was removed. The owner installation and
+live provider setup remain pending.
+
+Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.123
