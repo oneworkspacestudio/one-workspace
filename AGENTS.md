@@ -2,6 +2,12 @@
 
 ## Managed app delivery
 
+All agents must release completed One Workspace app or suite changes. The user
+authorizes committing, pushing, publishing, and promoting the change through
+its supported release process. Verify the public update before reporting
+completion. Follow explicit local-only or draft requests and report any
+blocked release stage. Install on the user's machines when requested.
+
 Follow [docs/APP-LIFECYCLE.md](docs/APP-LIFECYCLE.md) for creating, maintaining,
 releasing or repairing an app. Register every intended managed app in
 `internal/catalog/managed-apps.json` and complete catalog/build, runtime/storage,
