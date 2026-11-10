@@ -175,3 +175,24 @@ No further implementation or publication needed for this request. Configure
 DeepSeek or owner-issued AI Service connection in UI and separate OpenAI voices
 before real generation. Future suite release must use mandatory signed Android
 entry point; independent compatible app releases retain their normal workflow.
+
+## 2026-11-10 production repair release
+
+My Podcasts preview.4 repairs incomplete research, persisted credential
+removal and unattended scheduling. App source is 82f7f9a085a0e2ecc9a0966ed05a8dd5722a3a52.
+The app-only package retains the 48-file Podcasts namespace, minimum manager
+preview.122, native-podcasts-v1, route, identity, storage and recovery contract.
+The ordinary component factory and update manifest generator verified the
+package. The public source release contains ten immutable verified assets.
+The full package SHA256 is
+1270af7c03be20229f769872cdfb36cee45fbd4ace4d8ccbcf93de73a0677a6e.
+The channel promotion preserves existing release entries and advances the
+myPodcasts pin for future full builds.
+
+Fresh synthetic Workspace122 with Accounts and Podcasts installed normally.
+Preview.3 to preview.4 and rollback preserved MyAccounts identity, manager,
+Accounts bytes, saved show settings, daily schedule and encrypted credentials.
+Six native browser scenarios and Go tests/vet passed. The background regression
+created manual and scheduled WAVs without a browser session using synthetic
+provider data. No real billed provider generation or owner installation was
+used. The owner's installation requires a separate installation request.
