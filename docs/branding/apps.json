@@ -327,5 +327,12 @@
     "name": "Pet",
     "description": "Visit a virtual pet in a living 3D woodland and see what it makes.",
     "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/PET.md"
+  },
+  {
+    "id": "sunnymoon",
+    "icon": "sunny_moon",
+    "name": "Sunny & Moon",
+    "description": "Follow a gentle daily routine for toilet trips and bedtime.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/SUNNY_MOON.md"
   }
 ]

@@ -14,6 +14,7 @@ from survival_component import survival_component
 from myai_component import myai_replacements
 from websearch_component import websearch_component
 from gamestudio_component import gamestudio_component
+from sunnymoon_component import sunnymoon_component
 from pet_component import pet_component
 from tube_component import tube_replacements
 from slicer_component import slicer_replacements
@@ -101,12 +102,12 @@ def main():
  else:raise ValueError('Publish and pin My Podcasts or pass --podcasts-candidate for local acceptance')
  podcasts_stage=Path(tempfile.mkdtemp(prefix='podcasts-',dir=cache));extract(podcasts,podcasts_stage)
  podcasts_contract=podcasts_component(podcasts_stage,allow_candidate=bool(a.podcasts_candidate))
- contracts=[pet_component(ROOT,a.go,cache/'pet'),gamestudio_component(ROOT,a.go,cache/'gamestudio','0.3.0-preview.123'),podcasts_contract,websearch_component(ROOT,a.go,cache/'websearch',a.version),survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
+ contracts=[sunnymoon_component(ROOT,a.go,cache/'sunnymoon',a.version),pet_component(ROOT,a.go,cache/'pet'),gamestudio_component(ROOT,a.go,cache/'gamestudio','0.3.0-preview.123'),podcasts_contract,websearch_component(ROOT,a.go,cache/'websearch',a.version),survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=16
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=17
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:

@@ -450,6 +450,16 @@
       "foundation": true,
       "updateGroup": "podcasts",
       "recovery": "app"
+    },
+    {
+      "id": "sunnymoon",
+      "name": "Sunny & Moon",
+      "route": "/sunnymoon",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "sunnymoon",
+      "recovery": "app"
     }
   ]
 }
