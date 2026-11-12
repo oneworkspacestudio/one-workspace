@@ -1,0 +1,77 @@
+import { HabitatView, Needs, Portrait, DecisionForm, ArtThumb } from "../ui"
+Page Pet
+  Row variant=topbar
+    Row variant=wordmark
+      Image src="./icon.svg" alt=""
+      Text "Pet"
+      Text variant=workspaceLabel "One Workspace"
+    Row variant=nav
+      Link variant=apps href=$workspace "Apps"
+      If condition=$session
+        Button variant=quiet action=logout "Sign out"
+  Alert $notice
+  If condition=$loading
+    Card variant=welcome
+      Heading level=1 "Opening the hollow…"
+  If condition=$signedOut
+    Card variant=welcome
+      Heading level=1 "Clover Hollow"
+      Text "Visit a little woodland world and see what your pet is up to."
+      If condition=$oidc
+        Link variant=primary href="./auth/login" "Continue with MyAccounts"
+  If condition=$unadopted
+    Card variant=welcome
+      Heading level=1 "Make yourself at home"
+      If condition=$owner
+        Text "Name the pet who will live in Clover Hollow."
+        Input label="Pet name" name=name limit=22 placeholder="Pip"
+        Button variant=primary action=adopt disabled=$busy "Welcome your pet"
+      Else
+        Text "The Workspace owner can welcome the first pet."
+  If condition=$world
+    Row variant=titlebar
+      Stack
+        Heading level=1 "Clover Hollow"
+        Text variant=location $weather
+      Row variant=worldclock
+        Text variant=clockIcon $sun
+        Stack
+          Text variant=clockValue $clock
+          Text variant=clockDay $day
+    Row variant=layout
+      Stack variant=mainColumn
+        Card variant=worldCard
+          HabitatView state=$world
+        Row variant=viewNote
+          Text variant=active $status
+        Card variant=journal
+          Row variant=sectionTop
+            Heading level=2 "Field notes"
+            Text variant=smallLabel $journalDay
+          For each=$events
+            Row variant=event
+              Text variant=eventIcon $item.icon
+              Text $item.text
+              Text variant=eventTime $item.time
+      Stack variant=sideColumn
+        Card variant=petCard
+          Row variant=petIdentity
+            Portrait mood=$world.mood
+            Stack
+              Heading level=2 $world.name
+              Badge variant=mood $world.mood
+          Text variant=activity $activity
+          Needs state=$world
+          Button variant=treat action=treat disabled=$treatDisabled $treatLabel
+        Card variant=gallery
+          Row variant=sectionTop
+            Heading level=2 "Made in the hollow"
+            Text variant=smallLabel $galleryCount
+          If condition=$emptyGallery
+            Text variant=muted "Paintings and sculptures will appear here as your pet makes them."
+          Row variant=galleryItems
+            For each=$creations
+              ArtThumb item=$item
+        If condition=$owner
+          Card variant=brainCard
+            DecisionForm state=$settings

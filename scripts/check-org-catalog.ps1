@@ -1,9 +1,11 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 15){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 16){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
 $podcasts=$cat.apps|Where-Object id -CEQ 'podcasts'
 if(-not $podcasts.oidc -or $podcasts.route -cne '/podcasts' -or $podcasts.callback -cne '/podcasts/auth/callback' -or $podcasts.port -ne 9044 -or $cat.packages.podcasts.file -cne 'MyPodcasts.exe' -or -not $cat.packages.'podcasts-contract' -or -not $cat.packages.'podcasts-manifest'){throw 'Podcasts managed contract incomplete'}
+$pet=$cat.apps|Where-Object id -CEQ 'pet'
+if(-not $pet.oidc -or -not $pet.stripPrefix -or $pet.route -cne '/pet' -or $pet.callback -cne '/pet/auth/callback' -or $pet.port -ne 9046 -or $cat.packages.pet.file -cne 'Pet.exe' -or -not $cat.packages.'pet-contract' -or -not $cat.packages.'pet-notices'){throw 'Pet managed runtime contract is incomplete'}
 $gameStudio=$cat.apps|Where-Object id -CEQ 'gamestudio'
 if(-not $gameStudio.oidc -or $gameStudio.route -cne '/gamestudio' -or $gameStudio.port -ne 9045 -or $cat.packages.gamestudio.file -cne 'GameStudio.exe' -or -not $cat.packages.'gamestudio-contract'){throw 'Game Studio runtime contract is incomplete'}
 $websearch=$cat.apps|Where-Object id -CEQ 'websearch'

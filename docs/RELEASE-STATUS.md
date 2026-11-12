@@ -1,5 +1,13 @@
 # One Workspace release status
 
+## Preview124: Pet
+
+Pet adds a persistent woodland habitat in Creative & Development. The owner
+names the pet, and signed-in Workspace members can visit in first person and
+give treats. Instincts run continuously. Optional local Ollama and AI Service
+connections suggest activities. Installer integration 16 includes the Pet
+runtime, MyAccounts, setup selection and private data recovery. See [Pet](PET.md).
+
 ## Preview121: Web Search remote browser
 
 Web Search2 adds owner-only live browser control for sign-in prompts and troubleshooting. Mouse, drag, keyboard, text paste, navigation, tabs and full-screen view use the existing private browser/profile. The queue pauses during takeover; the local model is not required for manual control. Exact-session leases revoke access on logout/expiry and close unreachable sessions after90seconds. Search API credentials cannot view or control the browser. No RDP/VNC service or Docker is introduced. Managed acceptance and each deployment are recorded separately in the compact handoff.

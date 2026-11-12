@@ -422,6 +422,16 @@
       "recovery": "app"
     },
     {
+      "id": "pet",
+      "name": "Pet",
+      "route": "/pet",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "pet",
+      "recovery": "app"
+    },
+    {
       "id": "gamestudio",
       "name": "Game Studio",
       "route": "/gamestudio",

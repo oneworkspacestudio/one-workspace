@@ -220,6 +220,10 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 				cmd.Env = append(cmd.Env, "AISERVICE_MYAI_TOKEN="+myaiCapability("ai-service:"+myai.Secret))
 			}
 		}
+		if app.ID == "pet" {
+			service, _ := c.Catalog.Find("aiservice")
+			cmd.Env = append(cmd.Env, "PET_AI_SERVICE_PORT="+strconv.Itoa(service.Port))
+		}
 		if app.ID == "myai" {
 			if service, ok := c.Catalog.Find("aiservice"); ok {
 				cmd.Env = append(cmd.Env, fmt.Sprintf("MYAI_SERVICE_URL=http://127.0.0.1:%d", service.Port), "MYAI_SERVICE_TOKEN="+myaiCapability("ai-service:"+client.Secret))

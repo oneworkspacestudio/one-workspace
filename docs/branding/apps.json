@@ -320,5 +320,12 @@
     "name": "Game Studio",
     "description": "Describe a game, make it with DeepSeek and open it in a new tab.",
     "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/GAME_STUDIO.md"
+  },
+  {
+    "id": "pet",
+    "icon": "pet",
+    "name": "Pet",
+    "description": "Visit a virtual pet in a living 3D woodland and see what it makes.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/PET.md"
   }
 ]

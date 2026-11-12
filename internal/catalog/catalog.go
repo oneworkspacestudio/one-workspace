@@ -57,9 +57,9 @@ type AppSelection struct {
 var idPattern = regexp.MustCompile(`^[a-z][a-z0-9-]{0,39}$`)
 var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 
-// Version12 adds AI Service identity, shared inference credentials and private storage.
+// Version 16 adds Pet identity, supervised simulation and private storage.
 // Older controllers hand off before applying a catalog whose registry they lack.
-const InstallerIntegration = 15
+const InstallerIntegration = 16
 
 func (c Catalog) Validate() error {
 	if c.InstallerIntegration < 0 || c.InstallerIntegration > InstallerIntegration {

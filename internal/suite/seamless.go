@@ -24,6 +24,7 @@ var suiteSignIns = []appSignIn{
 	{"websearch", "Web Search", "/websearch", "/api/me", "/websearch/auth/login", "/websearch/auth/logout", []string{"websearch_session"}},
 	{"aiservice", "AI Service", "/aiservice", "/api/me", "/aiservice/auth/login", "/aiservice/auth/logout", []string{"aiservice_session"}},
 	{"news", "My News", "/news", "/api/me", "/news/auth/login", "/news/auth/logout", []string{"news_session"}},
+	{"pet", "Pet", "/pet", "/api/me", "/pet/auth/login", "/pet/auth/logout", []string{"pet_session"}},
 	{"gamestudio", "Game Studio", "/gamestudio", "/api/me", "/gamestudio/auth/login", "/gamestudio/auth/logout", []string{"gamestudio_session"}},
 	{"podcasts", "My Podcasts", "/podcasts", "/api/me", "/podcasts/auth/login", "/podcasts/auth/logout", []string{"podcasts_session"}},
 	{"commute", "My Commute", "/commute", "/api/me", "/commute/auth/login", "/commute/auth/logout", []string{"commute_session"}},
