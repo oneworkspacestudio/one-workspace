@@ -217,9 +217,10 @@
   },
   "myVoice": {
     "repository": "oneworkspacestudio/my-voice",
-    "tag": "v0.1.0-preview.8",
-    "asset": "my-voice-0.1.0-preview.8-windows-amd64.zip",
-    "sha256": "13e39a503efbdc9166ed06eacb9150b28111ac52ec3bcfdf045e15d85cf3044e"
+    "tag": "v0.1.0-preview.9",
+    "asset": "my-voice-0.1.0-preview.9-windows-amd64.zip",
+    "sha256": "9b548c31ad772af942f29dc6d1f2a37588a215f08126283c6f9450987faada99",
+    "size": 81726879
   },
   "myBooks": {
     "repository": "oneworkspacestudio/my-books",
@@ -249,9 +250,9 @@
   },
   "myPodcasts": {
     "repository": "oneworkspacestudio/my-podcasts",
-    "tag": "v0.1.0-preview.5",
+    "tag": "v0.1.0-preview.6",
     "asset": "MyPodcasts-windows-amd64.zip",
-    "sha256": "32d5420cbb0a0c8fbf9608ac363946f3dd37d88ac8dd792dd69088cea8324361",
-    "size": 11540337
+    "sha256": "07d90f1f67844046297d7e602bb01d74756fad1f60e207db6516d3849df248aa",
+    "size": 11559545
   }
 }
