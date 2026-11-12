@@ -19,3 +19,11 @@ Pocket narration and synthetic text/research. Official Workspace preview.123
 fresh setup, candidate two-app upgrade, OIDC, pairing, model readiness and
 rollback were checked. The second PC and its provider credentials were not
 used as test fixtures. New owner-PC deployment was outside this delivery.
+
+The public channel at 772d068 contains both immutable releases and component
+pins. Anonymous release metadata, archives and checksums matched. After the
+cached public index refreshed, the unmodified Workspace preview.123 updater
+offered and installed Voice 8→9 and Podcasts 5→6 together. It verified all 164
+payloads, existing DeepSeek settings and cadence, managed pairing and installed
+Pocket readiness without an OpenAI key. The protected rollback returned both
+apps to their prior versions and retained the manager and Accounts binaries.
