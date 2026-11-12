@@ -1,5 +1,13 @@
 # One Workspace release status
 
+## Preview125: Sunny & Moon
+
+Sunny & Moon is an optional General app for children's toilet and bedtime
+routines. Each MyAccounts account has private settings and check-ins. The
+animated face winds down in the evening and starts each morning happy.
+Installer integration 17 includes the app, its owned packages and private
+data recovery. See [Sunny & Moon](SUNNY_MOON.md).
+
 ## Preview124: Pet
 
 Pet adds a persistent woodland habitat in Creative & Development. The owner
