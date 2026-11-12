@@ -223,3 +223,13 @@ Workspace122 setup, preview.4 to preview.5 and rollback passed on synthetic
 NTFS data with MyAccounts, manager bytes, show settings and credentials kept.
 Channel promotion changes the Podcasts row and future component pin. No
 owner installation was requested for this release.
+
+Preview.5 published and verified. Channel commit da36c4a selects the ten
+published assets and pins the verified archive for future builds. The older
+preview.122 installer correctly requests a newer installer after Workspace123
+raised the installer integration level. The exact published preview.123 installer selected
+and applied the 48 Podcasts payloads anonymously to a synthetic installation
+running manager122 and Podcasts4. The update preserved manager and Accounts
+bytes, identity, settings, schedule and provider connections. Rollback to
+Podcasts4 and shutdown passed. The sanitized three-daily delivery receipt is
+under docs/evidence. No owner installation or billed provider test was run.
