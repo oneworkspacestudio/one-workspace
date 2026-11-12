@@ -19,3 +19,10 @@ passed with synthetic account/research inputs. The protected installer
 verified both updates, all 164 payloads, managed pairing, track upload,
 and rollback on NTFS. Supplied tracks remain private and are omitted
 from public releases. Owner installation and private upload are pending.
+
+Channel commit 2cf7689 promotes both immutable releases and pins. The normal
+anonymous Workspace preview.123 updater offered and applied Podcasts 6→7
+and Voice 9→10, verified all 164 files, and preserved DeepSeek settings and
+cadence. A signed-in browser uploaded two synthetic MP3s through the managed
+route. The protected rollback restored both previous versions and kept
+manager and Accounts binaries unchanged.
