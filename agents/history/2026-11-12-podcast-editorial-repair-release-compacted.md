@@ -19,3 +19,9 @@ unresolved issues before speech and repaired it manually at the episode limit.
 The official Workspace preview.123 updater applied the 48-file candidate
 to Podcasts preview.7 and successfully rolled it back. The fixture retained
 its schedule, My Voice pairing, and private intro track settings.
+
+Public channel commit 154c528 promotes the verified preview.8 release.
+The normal anonymous Workspace preview.123 updater offered, applied and
+verified all 48 payloads from the published channel. The isolated fixture
+retained its settings and rolled back to preview.7 through protected recovery.
+The owner installation and its actual episode were outside the test.
