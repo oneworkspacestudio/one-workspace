@@ -205,3 +205,21 @@ payloads and preserved manager, Accounts, MyAccounts identity, show settings,
 schedule and credentials. Supported rollback and service stop passed. See
 `docs/evidence` for the sanitized production-repair delivery receipt. The user
 installation was not updated and actual paid provider calls were not exercised.
+
+## 2026-11-12 preview.5 release
+
+The app release fixes the 27% script-duration interruption with one correction
+and a viable draft fallback before editorial review. The opt-in schedule has
+three daily slots eight hours apart. The signed-out worker test produced three
+playable WAVs with synthetic providers, including a shorter reviewed draft and
+an overlong draft corrected before recording. Seven native browser scenarios
+passed, including mobile display and persistence of the three scheduled times.
+
+Source 2ec386dedd9dad5aae94672611ff8e2ccb565df0. Ten verified immutable release
+assets. ZIP SHA256 32d5420cbb0a0c8fbf9608ac363946f3dd37d88ac8dd792dd69088cea8324361.
+The independent update retains all 48 namespace files, minimum manager122
+and native-podcasts-v1. The factory and manifest validation passed. Fresh
+Workspace122 setup, preview.4 to preview.5 and rollback passed on synthetic
+NTFS data with MyAccounts, manager bytes, show settings and credentials kept.
+Channel promotion changes the Podcasts row and future component pin. No
+owner installation was requested for this release.

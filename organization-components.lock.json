@@ -249,9 +249,9 @@
   },
   "myPodcasts": {
     "repository": "oneworkspacestudio/my-podcasts",
-    "tag": "v0.1.0-preview.4",
+    "tag": "v0.1.0-preview.5",
     "asset": "MyPodcasts-windows-amd64.zip",
-    "sha256": "1270af7c03be20229f769872cdfb36cee45fbd4ace4d8ccbcf93de73a0677a6e",
-    "size": 11537525
+    "sha256": "32d5420cbb0a0c8fbf9608ac363946f3dd37d88ac8dd792dd69088cea8324361",
+    "size": 11540337
   }
 }
