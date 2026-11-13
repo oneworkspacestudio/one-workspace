@@ -26,6 +26,27 @@ and bounded collections. Standalone browser verification passed first-person
 movement, mobile touch controls, camera follow, treat and cooldown at phone
 and desktop widths. Go vet, publisher tests and npm production audit passed.
 
-Artifacts are in `I:/Projects/tooling/pet-20261112`. Native managed acceptance
-and public release use the ordinary organization build and signed Android
-publication pipeline. No owner installation was requested.
+## Managed and public acceptance
+
+Workspace preview.124 released from b2487a0 with Pet preview.1, 45 apps,
+928 catalog packages and signed Android preview.20. The supported publisher
+verified 949 release assets and anonymously downloaded the signed APK. The
+initial channel push raced with Sunny & Moon. Current main promotion 0af3589
+already contains the exact preview.124 entry and the newer preview.125 entry.
+The latest anonymous installer verified the preview.125 bundle and offered Pet
+preview.1. Both public Pet packages downloaded and matched their catalog
+hashes. The preview.125 Pet build has the same embedded viewer assets. The
+preview.124 installer correctly rejected the newer integration-17 catalog.
+
+Exact preview.124 installer passed synthetic native fresh setup, restart,
+optional omission, preview.123 upgrade with identity retained, old-installer
+guard, Pet-only update and rollback. MyAccounts, shared picker, unsigned
+request and split-session denial, app sign-out, all five owned payloads and
+AI Service credential revocation passed. The real AI Service used a synthetic
+Ollama endpoint. Phone-width visual checks also covered night, rain, paintings
+and sculptures. Test services stopped and the isolated fixtures were removed.
+No owner installation, physical phone, reboot or live model quality test.
+
+Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.124
+Artifacts: `I:/Projects/tooling/pet-20261112`. Public acceptance receipts and
+checksums are attached to preview.124.
