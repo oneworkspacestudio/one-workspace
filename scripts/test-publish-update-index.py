@@ -1,4 +1,5 @@
 import importlib.util
+import datetime
 import io
 import json
 from pathlib import Path
@@ -24,6 +25,17 @@ class ReleasePaginationTests(unittest.TestCase):
         self.assertEqual(len(releases), 101)
         self.assertEqual(releases[-1]['tag_name'], 'historical-public-release')
         self.assertTrue(calls[1].endswith('&page=2'))
+
+    def test_channel_caps_newest_public_releases_after_filtering(self):
+        repo = 'example/repository'
+        start = datetime.date(2025, 1, 1)
+        releases = [dict(tag_name=f'v{i}', draft=i == 101, assets=[],
+                         published_at=(start + datetime.timedelta(days=i)).isoformat() + 'T00:00:00Z')
+                    for i in range(103)]
+        public = publisher.channel_releases(repo, releases, {(repo, 'v100')})
+        self.assertEqual(len(public), 100)
+        self.assertEqual([r['tag_name'] for r in public[:3]], ['v102', 'v99', 'v98'])
+        self.assertEqual(public[-1]['tag_name'], 'v1')
 
     def test_failed_later_page_is_not_a_successful_partial_index(self):
         calls = 0

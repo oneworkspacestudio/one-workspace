@@ -14,6 +14,8 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 ORG = 'oneworkspacestudio'
+# Released v1 clients reject repositories with more than this many entries.
+MAX_PUBLIC_RELEASES = 100
 
 
 def repository_releases(repo, token, opener=urllib.request.urlopen):
@@ -41,6 +43,19 @@ def withheld_releases():
         result.add((row['repository'], row['tag']))
     return result
 
+
+
+def channel_releases(repo, releases, withheld):
+    public = [release for release in releases
+              if not release['draft'] and release['published_at']
+              and (repo, release['tag_name']) not in withheld]
+    public.sort(key=lambda release: release['published_at'], reverse=True)
+    return [{
+        'tag_name': release['tag_name'], 'draft': False, 'published_at': release['published_at'],
+        'assets': [{key: a.get(key) for key in
+            ('name', 'browser_download_url', 'url', 'state', 'digest', 'size')}
+            for a in release['assets']]
+    } for release in public[:MAX_PUBLIC_RELEASES]]
 
 
 def main():
@@ -73,16 +88,7 @@ def main():
             print(repo, 'private source; distributed through Workspace bundles', flush=True)
             continue
         releases = repository_releases(repo, token)
-        public = []
-        for release in releases:
-            if release['draft'] or not release['published_at'] or (repo, release['tag_name']) in withheld:
-                continue
-            public.append({
-                'tag_name': release['tag_name'], 'draft': False, 'published_at': release['published_at'],
-                'assets': [{key: a.get(key) for key in
-                    ('name', 'browser_download_url', 'url', 'state', 'digest', 'size')}
-                    for a in release['assets']]
-            })
+        public = channel_releases(repo, releases, withheld)
         repositories[repo] = public
         print(repo, len(public), 'published releases', flush=True)
     output = {'schema': 1,
