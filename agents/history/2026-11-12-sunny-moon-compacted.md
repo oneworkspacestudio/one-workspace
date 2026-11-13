@@ -53,3 +53,17 @@ authentication and the installer integration contract remain compatible.
 
 The vertical demo uses synthetic check-ins and captures the app animations.
 The video project stays outside the source worktree.
+
+Preview.2 shipped in One Workspace preview.126 from source 7718ad7. Public
+channel commit 8ef25bc promotes 954 verified assets and the signed Android
+companion. The anonymous installer downloaded and verified preview.126 and
+listed Sunny & Moon preview.2. The exact installer passed fresh setup and
+restart. An isolated preview.125 install applied the app-only update and
+rolled back, preserving its settings, account, files and manager binary.
+Synthetic fixtures were removed. The owner installation was outside this test.
+
+The 35-second 1080 × 1920 demo and cover were updated in place in Google Drive.
+The demo shows the afternoon wiggle, relief, eyelid progression, evening
+reminder, yawn and morning reset using the actual app animations.
+
+Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.126
