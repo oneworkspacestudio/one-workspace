@@ -65,3 +65,19 @@ and focus restoration at 320×568, 390×844, 844×390 and 1440×900, including l
 orientation changes. Go tests for Pet, catalog, distribution and suite, plus
 the publisher tests passed. Test and release artifacts are in
 `I:/Projects/tooling/pet-fullscreen-20261113`.
+
+Pet preview.2 is public in Workspace preview.127 from source 6921a67.
+The signed publisher verified 956 assets. The ordinary catalog retains all
+unrelated app contracts and payloads except the suite manager and release
+notes. The exact installer passed fresh setup, restart, Pet-only upgrade
+and rollback. Existing habitat seed, journal, MyAccounts identity, manager
+and ordinary files were retained. Served JS/CSS match the rebuilt assets.
+
+The public index briefly reached 101 suite releases and was rejected by
+existing clients. Commit dc011ea caps each repository at its 100 newest
+eligible releases after filtering and sorting. Only the preview.15 index
+entry aged out, with its GitHub release untouched. Regression tests passed.
+After the raw main cache refreshed, the anonymous updater selected and
+applied Pet preview.2 on synthetic Workspace preview.126 and all five owned
+payload hashes and the running version matched. No owner installation or
+physical phone test was performed.
