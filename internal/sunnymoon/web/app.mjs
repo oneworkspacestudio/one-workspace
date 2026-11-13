@@ -1,5 +1,5 @@
 import { MINUTE, validSettings, routineAt, belongsToRoutine, timeInput,
-  earlierTime, metersAt, sleepLabel } from './routine.mjs';
+  earlierTime, metersAt, toiletCue, sleepLabel } from './routine.mjs';
 
 const element = id => document.getElementById(id);
 const clock = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -16,8 +16,10 @@ const visitButtons = [element('visit'), bedtimeVisit, element('open-earlier'), e
   settingsForm.querySelector('[type=submit]'), earlierForm.querySelector('[type=submit]')];
 const faces = {
   happy: ['Sunny is happy!', 'Let’s take today one step at a time.'],
-  'winding-down': ['Sunny is slowing down', 'Time to get a little cosy.'],
+  'winding-down': ['Sunny is slowing down', 'Those eyelids are getting heavy.'],
   sleepy: ['Sunny is sleepy', 'A fresh, happy start in the morning.'],
+  toilet: ['Sunny needs a toilet break', 'Does your body need a break too?'],
+  relieved: ['Sunny feels better!', 'Thanks for checking in.'],
 };
 
 let state;
@@ -25,7 +27,7 @@ let csrf;
 let account;
 let busy = false;
 let displayedMorning;
-let celebration;
+let reliefTimer;
 
 function setText(id, value) {
   const target = element(id);
@@ -37,6 +39,8 @@ function displayTime(date) {
 }
 
 function showSession(message, signIn = false) {
+  clearTimeout(reliefTimer);
+  reliefTimer = undefined;
   state = undefined;
   account = undefined;
   csrf = undefined;
@@ -92,6 +96,8 @@ function render(now = new Date()) {
   const { lastVisit, nightVisit } = withCurrentVisits(state, routine, now);
   if (displayedMorning !== start.getTime()) {
     displayedMorning = start.getTime();
+    clearTimeout(reliefTimer);
+    reliefTimer = undefined;
     feedback.textContent = '';
   }
   const afterBedtime = now >= bedtime;
@@ -99,9 +105,14 @@ function render(now = new Date()) {
   const checked = nightVisit !== 0;
   setText('today', weekday.format(start));
   setText('greeting', mood === 'happy' ? 'Hello, sunshine!' : 'Let’s get cosy');
+  const meters = metersAt(now, routine, lastVisit || null);
+  const cue = reliefTimer ? 'relieved' : toiletCue(now, routine, meters, checked) ? 'toilet' : 'none';
   sunCard.dataset.mood = mood;
-  setText('sun-message', faces[mood][0]);
-  setText('sun-note', faces[mood][1]);
+  sunCard.dataset.cue = cue;
+  sunCard.style.setProperty('--eye-opening', (1 - .72 * routine.drowsiness).toFixed(3));
+  const [message, note] = faces[cue === 'none' ? mood : cue];
+  setText('sun-message', message);
+  setText('sun-note', note);
   setText('bedtime', displayTime(bedtime));
   element('bedtime-status').hidden = !afterBedtime;
   setText('sleep-estimate', sleepLabel(remaining));
@@ -110,7 +121,7 @@ function render(now = new Date()) {
   setText('reminder-note', checked ? 'All set for bedtime.' : reminderDue ? 'One quick stop before bed.' : `A toilet trip at ${displayTime(reminder)}`);
   bedtimeVisit.hidden = checked || !reminderDue;
 
-  for (const [id, value] of Object.entries(metersAt(now, routine, lastVisit || null))) {
+  for (const [id, value] of Object.entries(meters)) {
     element(id).value = value;
   }
   return routine;
@@ -186,12 +197,14 @@ async function recordVisit({ bedtimeCheck = false, earlier = false } = {}) {
   if (earlier) earlierDialog.close();
   if (bedtimeCheck) element('reminder-title').focus({ preventScroll: true });
   feedback.textContent = message;
-  clearTimeout(celebration);
-  sunCard.classList.remove('is-celebrating');
-  requestAnimationFrame(() => {
-    sunCard.classList.add('is-celebrating');
-    celebration = setTimeout(() => sunCard.classList.remove('is-celebrating'), 560);
-  });
+  if (!earlier) {
+    clearTimeout(reliefTimer);
+    reliefTimer = setTimeout(() => {
+      reliefTimer = undefined;
+      render();
+    }, 2100);
+    render();
+  }
 }
 
 element('visit').addEventListener('click', () => recordVisit());

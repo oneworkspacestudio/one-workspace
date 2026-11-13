@@ -36,7 +36,8 @@ export function routineAt(now, settings) {
   const sleepy = new Date(Math.max(start.getTime(), bedtime.getTime() - 60 * MINUTE));
   const mood = now <= start ? 'happy' : now >= sleepy ? 'sleepy' : now >= windingDown ? 'winding-down' : 'happy';
   const remaining = (nextWake - Math.max(now.getTime(), bedtime.getTime())) / MINUTE;
-  return { start, nextWake, bedtime, reminder, mood, remaining };
+  const drowsiness = Math.min(1, Math.max(0, (now - windingDown) / Math.max(MINUTE, sleepy - windingDown)));
+  return { start, nextWake, bedtime, reminder, mood, remaining, drowsiness };
 }
 
 export function belongsToRoutine(timestamp, routine, now) {
@@ -57,6 +58,12 @@ export function metersAt(now, routine, lastVisit) {
     bowel: fill(sinceVisit, 480 * MINUTE),
     tiredness: fill(now - routine.start, routine.bedtime - routine.start),
   };
+}
+
+export function toiletCue(now, routine, meters, bedtimeChecked) {
+  if (now <= routine.start || bedtimeChecked) return false;
+  if (now >= routine.reminder) return true;
+  return Math.max(meters.bladder, meters.bowel) >= 75;
 }
 
 export function sleepLabel(minutes) {

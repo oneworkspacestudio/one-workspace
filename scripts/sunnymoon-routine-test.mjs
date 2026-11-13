@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { DEFAULTS, MINUTE, earlierTime, metersAt, routineAt, sleepLabel, validSettings } from '../internal/sunnymoon/web/routine.mjs';
+import { DEFAULTS, MINUTE, earlierTime, metersAt, routineAt, sleepLabel, toiletCue, validSettings } from '../internal/sunnymoon/web/routine.mjs';
 
 process.env.TZ = 'Europe/London';
 const at = (day, hour, minute = 0) => new Date(2026, 10, day, hour, minute);
@@ -39,4 +39,16 @@ assert.equal(afterMidnight.remaining, 480);
 
 const spring = routine(new Date(2026, 2, 28, 20));
 assert.equal((spring.nextWake - spring.bedtime) / MINUTE, 540);
-console.log('Passed routine timing, check-ins, rollover, custom settings and DST.');
+assert.equal(routine(at(12, 19, 15)).drowsiness, 0);
+assert.equal(routine(at(12, 19, 30)).drowsiness, 1 / 3);
+assert.equal(routine(at(12, 19, 45)).drowsiness, 2 / 3);
+assert.equal(routine(at(12, 20)).drowsiness, 1);
+assert.equal(routine(at(13, 7)).drowsiness, 0);
+const reminder = at(12, 20);
+assert.ok(toiletCue(afternoon, afterSchool, { bladder: 75, bowel: 37 }, false));
+assert.ok(toiletCue(afternoon, afterSchool, { bladder: 74, bowel: 75 }, false));
+assert.equal(toiletCue(afternoon, afterSchool, { bladder: 74, bowel: 37 }, false), false);
+assert.ok(toiletCue(reminder, routine(reminder), { bladder: 0, bowel: 0 }, false));
+assert.equal(toiletCue(reminder, routine(reminder), { bladder: 80, bowel: 50 }, true), false);
+assert.equal(toiletCue(at(13, 7), routine(at(13, 7)), { bladder: 0, bowel: 0 }, false), false);
+console.log('Passed routine timing, check-ins, expression cues, rollover, custom settings and DST.');

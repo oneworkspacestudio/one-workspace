@@ -92,6 +92,7 @@ h1 {
   box-shadow: var(--shadow);
 }
 .sun-card {
+  --eye-opening: 1;
   --scene-light: #fff0c3;
   --scene-dark: #ffdda4;
   display: flex;
@@ -213,73 +214,195 @@ h1 {
   background: radial-gradient(circle at 35% 27%, #fff1a8 0, #ffdc73 51%, #ffbe51 100%);
   box-shadow: inset 0 -6px 0 #ef9e2d36, inset 0 5px 0 #fff5bb96, 0 10px 28px #c473282b;
 }
-.eye, .cheek, .mouth { position: absolute; }
+.eye, .cheek, .mouth, .brow, .arm { position: absolute; }
 .eye {
-  top: 40%;
-  width: 10px;
-  height: 15px;
-  border-radius: 12px;
-  background: #533044;
-  animation: blink 6s linear infinite;
+  top: 39%;
+  width: 15px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff8da;
+  box-shadow: 0 0 0 2px #68434e;
+  overflow: hidden;
+  scale: 1 var(--eye-opening);
+  transition: scale .65s ease, translate .4s ease;
 }
-.eye-left { left: 28%; }
-.eye-right { right: 28%; }
-.cheek {
-  top: 56%;
-  width: 17px;
+.eye i {
+  display: block;
+  width: 10px;
+  height: 17px;
+  margin: 3px auto 0;
+  border-radius: 50%;
+  background: #533044;
+  transition: translate .35s ease;
+}
+.eye i::before {
+  content: "";
+  display: block;
+  margin: 2px 0 0 2px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fffaf0;
+}
+.eye-left { left: 25%; }
+.eye-right { right: 25%; }
+.brow {
+  top: 29%;
+  width: 19px;
   height: 9px;
+  border-top: 3px solid #724049;
+  border-radius: 50%;
+  transition: transform .45s ease;
+}
+.brow-left { left: 23%; rotate: -10deg; }
+.brow-right { right: 23%; rotate: 10deg; }
+.cheek {
+  top: 57%;
+  width: 19px;
+  height: 10px;
   border-radius: 50%;
   background: #f7986c;
 }
-.cheek-left { left: 15%; rotate: 8deg; }
-.cheek-right { right: 15%; rotate: -8deg; }
+.cheek-left { left: 13%; rotate: 8deg; }
+.cheek-right { right: 13%; rotate: -8deg; }
 .mouth {
-  top: 55%;
+  top: 62%;
   left: 50%;
-  width: 25px;
-  height: 13px;
+  width: 31px;
+  height: 17px;
   translate: -50%;
   background: #533044;
-  border-radius: 3px 3px 15px 15px;
+  border-radius: 3px 3px 18px 18px;
+  box-shadow: inset 0 -4px #ed8c83;
+  transition: width .38s ease, height .38s ease, border-radius .38s ease;
 }
-[data-mood="winding-down"] .eye, [data-mood="sleepy"] .eye {
-  top: 45%;
-  width: 18px;
-  height: 7px;
-  background: transparent;
-  border-bottom: 3px solid #533044;
-  border-radius: 0 0 65% 65%;
-  animation: none;
+.arm {
+  bottom: 11%;
+  width: 34px;
+  height: 15px;
+  border: 2px solid #dc8c3c;
+  border-radius: 14px;
+  background: #ffe185;
+  opacity: 0;
+  transition: opacity .2s ease, transform .35s ease;
 }
+.arm-left { left: 7%; rotate: 25deg; }
+.arm-right { right: 7%; rotate: -25deg; }
+
+[data-mood="happy"][data-cue="none"] .eye i { animation: blink 5s linear infinite; }
+[data-mood="winding-down"] .eye { translate: 0 3px; }
+[data-mood="winding-down"] .brow { transform: translateY(5px) rotate(8deg); }
 [data-mood="winding-down"] .mouth {
-  background: transparent;
-  border-bottom: 3px solid #533044;
-  top: 53%;
-}
-[data-mood="sleepy"] .mouth {
-  width: 13px;
+  width: 19px;
   height: 12px;
-  top: 60%;
+  border-radius: 5px 5px 12px 12px;
+}
+[data-mood="sleepy"] .sun { animation: nod-off 5.5s ease-in-out infinite; }
+[data-mood="sleepy"] .eye {
+  translate: 0 4px;
+  scale: 1 .23;
+  background: #533044;
+}
+[data-mood="sleepy"] .brow { transform: translateY(7px); }
+[data-mood="sleepy"] .mouth {
+  width: 12px;
+  height: 9px;
   border-radius: 50%;
+  animation: yawn 5.5s ease-in-out infinite;
+}
+.sleep-mark, .toilet-mark, .relief-mark {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 .sleep-mark {
-  display: none;
-  position: absolute;
-  top: -10px;
-  right: -25px;
-  color: #7a526a;
-  font-size: 24px;
+  top: -16px;
+  right: -24px;
+  color: #694870;
+  font-size: 26px;
   font-weight: 800;
   rotate: 12deg;
-  animation: twinkle 4.8s ease-in-out infinite;
 }
-.sleep-mark-small { top: -22px; right: -34px; font-size: 16px; animation-delay: -1s; }
-[data-mood="sleepy"] .sleep-mark { display: block; }
-.is-celebrating .face { animation: celebrate .55s ease-out; }
+.sleep-mark-small { top: -32px; right: -38px; font-size: 17px; }
+[data-mood="sleepy"][data-cue="none"] .sleep-mark {
+  opacity: 1;
+  animation: drift 2.8s ease-in-out infinite;
+}
+[data-mood="sleepy"][data-cue="none"] .sleep-mark-small { animation-delay: -.7s; }
+.toilet-mark {
+  top: -19px;
+  right: -55px;
+  display: grid;
+  width: 46px;
+  height: 41px;
+  place-items: center;
+  border: 2px solid #e8ca9c;
+  border-radius: 15px;
+  background: #fffaf1;
+  box-shadow: 0 4px 12px #70412922;
+}
+[data-cue="toilet"] .sun { animation: toilet-wiggle 4.8s ease-in-out infinite; }
+[data-cue="toilet"] .toilet-mark { opacity: 1; }
+[data-cue="toilet"] .eye { scale: 1 .86; translate: 0 0; background: #fff8da; }
+[data-cue="toilet"] .eye i { translate: 2px 0; }
+[data-cue="toilet"] .brow-left { transform: translateY(-3px) rotate(-23deg); }
+[data-cue="toilet"] .brow-right { transform: translateY(-3px) rotate(23deg); }
+[data-cue="toilet"] .mouth {
+  top: 61%;
+  width: 19px;
+  height: 8px;
+  border-radius: 65% 65% 36% 36%;
+  box-shadow: none;
+  animation: none;
+}
+[data-cue="toilet"] .arm { opacity: 1; }
+[data-cue="toilet"] .arm-left { transform: translateX(7px); }
+[data-cue="toilet"] .arm-right { transform: translateX(-7px); }
+[data-cue="relieved"] .sun { animation: relief-bounce .85s ease-out both; }
+[data-cue="relieved"] .eye { scale: 1 .43; translate: 0 0; background: #533044; }
+[data-cue="relieved"] .brow { transform: translateY(-4px); }
+[data-cue="relieved"] .mouth {
+  width: 36px;
+  height: 21px;
+  border-radius: 4px 4px 19px 19px;
+  animation: none;
+}
+.relief-mark { top: 2px; right: -45px; color: #805327; font-size: 30px; }
+.relief-mark-small { top: 49px; left: -37px; right: auto; font-size: 22px; }
+[data-cue="relieved"] .relief-mark { opacity: 1; animation: relief-spark 1.1s ease-out; }
 @keyframes float { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-5px); } }
 @keyframes twinkle { 0%, 100% { transform: scale(.91); opacity: .76; } 50% { transform: scale(1.1); opacity: 1; } }
 @keyframes blink { 0%, 54%, 59%, 100% { scale: 1 1; } 56%, 57% { scale: 1 .16; } }
-@keyframes celebrate { 30% { scale: 1.1 .94; } 65% { scale: .98 1.07; } }
+@keyframes nod-off {
+  0%, 26%, 100% { transform: translateY(2px) rotate(-3deg); }
+  46% { transform: translateY(11px) rotate(9deg); }
+  61% { transform: translateY(6px) rotate(4deg); }
+}
+@keyframes yawn {
+  0%, 7%, 53%, 100% { scale: 1 1; }
+  23%, 30% { scale: 1.95 2.65; }
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 5px); opacity: .7; }
+  55% { transform: translate(3px, -9px); opacity: 1; }
+}
+@keyframes toilet-wiggle {
+  0%, 32%, 100% { transform: translateY(1px) rotate(0deg); }
+  6%, 19% { transform: translate(-5px, -2px) rotate(-8deg); }
+  12%, 25% { transform: translate(5px, -5px) rotate(8deg); }
+}
+@keyframes relief-bounce {
+  0% { transform: translateY(2px) scale(1); }
+  24% { transform: translateY(5px) scale(1.09, .91); }
+  50% { transform: translateY(-11px) scale(.97, 1.07); }
+  77% { transform: translateY(2px) scale(1.04, .97); }
+  100% { transform: translateY(1px) scale(1); }
+}
+@keyframes relief-spark {
+  0% { transform: scale(.3); opacity: 0; }
+  35% { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
 .night-card {
   display: flex;

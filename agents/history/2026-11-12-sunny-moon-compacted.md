@@ -41,3 +41,15 @@ passed at 320px, 390px and desktop widths. The synthetic fixtures were stopped
 and removed. No physical phone or owner installation was tested.
 
 Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.125
+
+## Preview.2 expressions
+
+Sunny gradually droops the eyelids from winding-down time to the sleepy
+state, then yawns and nods. The toilet cue follows the clock-based bars and the
+evening reminder. It adds a short wiggle, clasped arms and a toilet icon.
+A successful immediate check-in shows a temporary relieved smile and bounce.
+Reduced motion keeps the static cues and labels. Settings, check-in storage,
+authentication and the installer integration contract remain compatible.
+
+The vertical demo uses synthetic check-ins and captures the app animations.
+The video project stays outside the source worktree.
