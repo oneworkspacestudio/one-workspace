@@ -21,7 +21,25 @@ export const Link = (p: Props & {href: string}) => h('a', {
   href:p.href, className:p.variant, 'data-workspace-apps-trigger':p.variant==='apps'?'true':undefined,
 }, p.children);
 export const Button = (p: Props & {onClick: () => void; disabled?: boolean}) =>
-  h('button', {type:'button', className:p.variant, disabled:p.disabled, onClick:p.onClick}, p.children);
+  h('button', {type:'button', className:p.variant, disabled:p.disabled, onClick:p.onClick,
+    'aria-haspopup':p.variant==='journalButton'?'dialog':undefined,
+    'aria-controls':p.variant==='journalButton'?'field-journal':undefined,
+  }, p.children);
+
+export function FieldJournal({open,onClose,children}:{open:boolean;onClose:()=>void;children:ReactNode}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const panel = dialog.current!;
+    if (open && !panel.open) panel.showModal();
+    if (!open && panel.open) panel.close();
+  }, [open]);
+  return h('dialog', {id:'field-journal', ref:dialog, className:'fieldJournal',
+      'aria-labelledby':'journal-title', onClose},
+    h('div', {className:'journalHeader'},
+      h('h2', {id:'journal-title'}, 'Clover Hollow journal'),
+      h('button', {type:'button', className:'secondary', autoFocus:true, onClick:() => dialog.current?.close()}, 'Close')),
+    h('div', {className:'journalBody'}, children));
+}
 type FormData = {mode:string; model:string; key:string; clearKey:boolean};
 export const Fields = createContext({name:'', setName:(_value:string) => {}, save:async (_value:FormData) => {}});
 export const Input = (p: {label: string; limit: number; placeholder: string}) => {
@@ -89,13 +107,15 @@ export function HabitatView({state}:{state:World}) {
     failed ? h('div',{className:'viewFallback'},h(Portrait,{mood:state.mood}),
       h('p',{},'3D view needs WebGL 2. Your pet is still active.'),h('p',{},'Follow along in Field notes.')) :
       h('div',{className:'overlay'},
-        h('div',{className:'viewHeading'},h('span',{className:'liveDot'}),tracking?'Watching '+state.name:'First-person view'),
-        h('button',{type:'button',className:'focusPet','aria-pressed':tracking,onClick:() => driver.current?.follow()},'◎  Find '+state.name),
+        h('div',{className:'viewHeading'},h('span',{className:'liveDot'}),tracking?'Following pet':'First-person view'),
+        h('button',{type:'button',className:'focusPet','aria-pressed':tracking,'aria-label':'Find '+state.name,
+          onClick:() => driver.current?.follow()},'◎  Find pet'),
         touch ? h('div',{className:'dpad',role:'group','aria-label':'Walk'},
           ...([['up','↑','Move forward'],['left','←','Move left'],['down','↓','Move back'],['right','→','Move right']] as const)
             .map(([dir, icon, label]) => h('button',{key:dir,type:'button',className:dir,'aria-label':label,
               onPointerDown:(e:any) => {e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);driver.current?.move(dir,true);},
               onLostPointerCapture:() => driver.current?.move(dir,false),
+              onPointerCancel:() => driver.current?.move(dir,false),
               onPointerUp:() => driver.current?.move(dir,false),
               onKeyDown:(e:any) => {if(e.key===' '||e.key==='Enter'){e.preventDefault();driver.current?.move(dir,true);}},
               onKeyUp:() => driver.current?.move(dir,false),

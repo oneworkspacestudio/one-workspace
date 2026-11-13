@@ -79,8 +79,7 @@ main {
 .titlebar,
 .worldclock,
 .petIdentity,
-.sectionTop,
-.viewNote {
+.sectionTop {
   display: flex;
   align-items: center;
 }
@@ -157,28 +156,197 @@ main {
   font-weight: 800;
   letter-spacing: 0.12em;
 }
-.layout {
-  display: grid;
-  gap: 13px;
-}
-.mainColumn,
-.sideColumn {
-  display: contents;
-}
-.worldCard {
-  order: 0;
-  background: #395a40;
-  border: 1px solid #aebdb0;
-  border-radius: 17px;
+html:has(.playing),
+body:has(.playing) {
   overflow: hidden;
-  box-shadow: 0 9px 24px #183c3016;
+  overscroll-behavior: none;
 }
-.viewport {
-  position: relative;
-  height: clamp(285px, 47vh, 470px);
+main.playing {
+  --edge-left: max(12px, env(safe-area-inset-left));
+  --edge-right: max(12px, env(safe-area-inset-right));
+  --edge-top: max(12px, env(safe-area-inset-top));
+  --edge-bottom: max(12px, env(safe-area-inset-bottom));
+  --hud-bg: #102d26ed;
+  --hud-border: #def8e650;
+  --hud-text: #f4ffef;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
   isolation: isolate;
+  background: #395a40;
 }
+.playing .viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.playing .topbar {
+  position: absolute;
+  top: var(--edge-top);
+  left: var(--edge-left);
+  right: var(--edge-right);
+  z-index: 2;
+  min-height: 44px;
+  border: 0;
+  pointer-events: none;
+}
+.playing .wordmark {
+  gap: 6px;
+  color: var(--hud-text);
+  text-shadow: 0 1px 5px #081f19;
+}
+.playing .wordmark img {
+  width: 30px;
+  height: 30px;
+}
+.playing .wordmark .workspaceLabel {
+  display: none;
+}
+.playing .nav {
+  gap: 5px;
+  pointer-events: auto;
+}
+.playing .nav > * {
+  min-height: 44px;
+  padding: 6px 9px;
+  color: var(--hud-text);
+  background: var(--hud-bg);
+  border-color: var(--hud-border);
+  font-size: .75rem;
+}
+.playing .nav > *:hover,
+.playing .focusPet:hover {
+  background: #265c45;
+}
+.playing .titlebar {
+  position: absolute;
+  top: calc(var(--edge-top) + 54px);
+  left: var(--edge-left);
+  right: var(--edge-right);
+  z-index: 1;
+  padding: 0;
+  align-items: start;
+  pointer-events: none;
+}
+.playing .titlebar h1 {
+  margin-top: 1px;
+  color: white;
+  text-shadow: 0 1px 3px #132d24, 0 1px 10px #132d24;
+  font-size: clamp(1.55rem, 4.8vw, 2.6rem);
+  line-height: 1;
+}
+.playing .worldclock,
+.playing .petCard {
+  color: var(--hud-text);
+  background: var(--hud-bg);
+  border-color: var(--hud-border);
+}
+.playing .worldclock {
+  padding: 6px 8px;
+}
+.playing .worldclock .location,
+.playing .clockDay {
+  color: #dce7d1;
+}
+.playing .worldclock .location {
+  margin-top: 2px;
+  font-size: .63rem;
+}
+.playing .clockIcon {
+  color: #e1eca5;
+}
+.playing .petCard {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--edge-top) + 86px);
+  left: var(--edge-left);
+  width: min(185px, 60%);
+  padding: 8px 9px;
+  border-radius: 12px;
+  pointer-events: none;
+}
+.playing .petIdentity {
+  gap: 7px;
+}
+.playing .petIdentity > div:last-child {
+  min-width: 0;
+}
+.playing .petIdentity h2 {
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.playing .petIdentity .portrait {
+  zoom: .52;
+}
+.playing .mood {
+  margin-top: 3px;
+  padding: 1px 5px;
+  font-size: .66rem;
+  color: #d9ee9f;
+  background: #2c4932;
+}
+.playing .activity {
+  margin: 5px 0 7px;
+  font-size: .68rem;
+  color: #e1ecd9;
+}
+.playing .meters {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 7px;
+}
+.playing .meterLabel {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px;
+  font-size: .61rem;
+  color: var(--hud-text);
+}
+.playing .meterLabel > span:first-child {
+  display: none;
+}
+.playing .meterLabel label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.playing .meter progress {
+  height: 4px;
+  margin-top: 2px;
+  background: #385447;
+}
+.playing .meter progress::-webkit-progress-bar {
+  background: #385447;
+}
+.playing .treat {
+  position: absolute;
+  bottom: var(--edge-bottom);
+  right: var(--edge-right);
+  z-index: 1;
+  width: auto;
+  min-width: 117px;
+  min-height: 46px;
+  margin: 0;
+  padding: 6px 10px;
+  font-size: .79rem;
+}
+.playing .notice {
+  position: absolute;
+  z-index: 2;
+  right: var(--edge-right);
+  bottom: calc(var(--edge-bottom) + 144px);
+  width: max-content;
+  max-width: min(250px, 75%);
+  margin: 0;
+  pointer-events: none;
+}
+
 .surface,
 .surface canvas,
 .overlay {
@@ -206,37 +374,30 @@ main {
 .focusPet,
 .viewHelp {
   position: absolute;
-  font-size: 0.72rem;
-  font-weight: 760;
-  letter-spacing: 0.015em;
-  color: #f4ffef;
-  background: #153c32e8;
-  border: 1px solid #def8e64a;
+  color: var(--hud-text);
+  background: var(--hud-bg);
+  border: 1px solid var(--hud-border);
   border-radius: 9px;
+  font-size: .72rem;
+  font-weight: 760;
 }
 .viewHeading {
-  left: 10px;
-  top: 10px;
-  padding: 9px 10px;
+  left: var(--edge-left);
+  bottom: calc(var(--edge-bottom) + 106px);
   display: flex;
   align-items: center;
-  gap: 7px;
-  max-width: 57%;
+  gap: 6px;
+  max-width: 50%;
+  padding: 6px 8px;
   overflow: hidden;
   white-space: nowrap;
 }
 .focusPet {
-  right: 10px;
-  top: 10px;
-  min-height: 42px;
+  right: var(--edge-right);
+  bottom: calc(var(--edge-bottom) + 53px);
+  min-height: 44px;
+  min-width: 98px;
   padding: 5px 9px;
-  max-width: 40%;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.focusPet:hover {
-  background: #265c45;
 }
 .liveDot {
   flex: none;
@@ -244,23 +405,26 @@ main {
   height: 7px;
   border-radius: 50%;
   background: #c6f778;
-  box-shadow: 0 0 9px #ccfa7a75;
 }
 .viewHelp {
-  right: 10px;
-  bottom: 11px;
+  left: var(--edge-left);
+  bottom: calc(var(--edge-bottom) + 67px);
   padding: 6px 9px;
+}
+.dpad ~ .viewHelp {
+  display: none;
 }
 .dpad {
   position: absolute;
-  left: 11px;
-  bottom: 11px;
+  left: var(--edge-left);
+  bottom: var(--edge-bottom);
   display: grid;
-  grid-template-columns: repeat(3, 42px);
-  grid-template-rows: repeat(2, 42px);
-  gap: 2px;
+  grid-template-columns: repeat(3, 46px);
+  grid-template-rows: repeat(2, 46px);
+  gap: 3px;
   touch-action: none;
 }
+
 .dpad button {
   border: 1px solid #def8e655;
   border-radius: 10px;
@@ -299,29 +463,6 @@ main {
   text-align: center;
   background: linear-gradient(145deg, #294d38, #527043);
 }
-.viewNote {
-  order: 1;
-  justify-content: flex-end;
-  gap: 10px;
-  font-size: 0.74rem;
-  color: var(--muted);
-  margin-top: -4px;
-  padding: 0 3px;
-}
-.active {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 760;
-  white-space: nowrap;
-}
-.active::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  background: #628641;
-  border-radius: 50%;
-}
 .petCard,
 .journal,
 .gallery,
@@ -331,26 +472,6 @@ main {
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 16px;
-}
-.petCard {
-  order: 2;
-  display: flex;
-  flex-direction: column;
-}
-.petCard .meters {
-  order: 1;
-}
-.petCard .treat {
-  margin: 0 0 14px;
-}
-.journal {
-  order: 3;
-}
-.gallery {
-  order: 4;
-}
-.brainCard {
-  order: 5;
 }
 .petIdentity {
   gap: 13px;
@@ -506,10 +627,6 @@ main {
 .secondary:hover {
   background: #cbe785;
 }
-.treat {
-  width: 100%;
-  margin-top: 18px;
-}
 .treat:disabled {
   background: #eff2e7;
   color: #536450;
@@ -628,88 +745,114 @@ main {
   border-radius: 9px;
   font-size: 0.83rem;
 }
+.fieldJournal {
+  width: min(470px, calc(100% - var(--edge-left) - var(--edge-right)));
+  max-width: none;
+  max-height: calc(100dvh - var(--edge-top) - var(--edge-bottom));
+  margin: auto var(--edge-right) var(--edge-bottom) auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  color: var(--ink);
+  background: #f6f7f1;
+  box-shadow: 0 15px 60px #061e1b55;
+  overscroll-behavior: contain;
+}
+.fieldJournal::backdrop {
+  background: #0b211c85;
+}
+.journalHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #f6f7f1;
+}
+.journalHeader h2 {
+  font-size: 1.15rem;
+}
+.journalBody {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+.journal h2 {
+  margin-bottom: 10px;
+}
 @media (min-width: 660px) {
-  main {
+  main:not(.playing) {
     padding: 0 24px 48px;
   }
-  .wordmark .workspaceLabel {
+  main:not(.playing) .workspaceLabel {
     display: block;
     border-left: 1px solid var(--line);
     padding-left: 12px;
-    margin-left: 3px;
     color: var(--muted);
-    font:
-      650 0.83rem "DM Sans Variable",
-      sans-serif;
-  }
-  .titlebar {
-    padding: 27px 0 21px;
-  }
-  .viewHeading,
-  .focusPet {
-    top: 14px;
-  }
-  .viewHeading {
-    left: 14px;
-  }
-  .focusPet {
-    right: 14px;
+    font: 650 .83rem "DM Sans Variable", sans-serif;
   }
 }
-@media (min-width: 900px) {
-  main {
-    padding-inline: clamp(28px, 4.6vw, 72px);
+@media (min-width: 900px) and (min-height: 521px) {
+  main.playing {
+    --edge-left: max(22px, env(safe-area-inset-left));
+    --edge-right: max(22px, env(safe-area-inset-right));
+    --edge-top: max(18px, env(safe-area-inset-top));
+    --edge-bottom: max(18px, env(safe-area-inset-bottom));
   }
-  .layout {
-    grid-template-columns: minmax(0, 1fr) minmax(285px, 320px);
-    gap: 18px;
-    align-items: start;
+  .playing .titlebar {
+    top: calc(var(--edge-top) + 61px);
   }
-  .mainColumn,
-  .sideColumn {
-    display: grid;
-    gap: 13px;
-    min-width: 0;
+  .playing .petCard {
+    top: calc(var(--edge-top) + 114px);
+    width: 208px;
+    padding: 11px 12px;
   }
-  .worldCard,
-  .petCard,
-  .journal,
-  .gallery,
-  .brainCard,
-  .viewNote {
-    order: initial;
+  .playing .meterLabel,
+  .playing .activity {
+    font-size: .73rem;
   }
-  .viewport {
-    height: clamp(460px, 61vh, 690px);
+  .playing .nav > * {
+    padding-inline: 13px;
   }
-  .petCard,
-  .journal,
-  .gallery,
-  .brainCard {
-    padding: 19px;
+  .playing .treat {
+    min-width: 142px;
+    font-size: .88rem;
   }
-  .petCard .meters {
-    order: 0;
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .playing .petCard {
+    top: calc(var(--edge-top) + 53px);
+    left: auto;
+    right: var(--edge-right);
   }
-  .petCard .treat {
-    margin: 18px 0 0;
+  .playing .worldclock {
+    position: absolute;
+    top: calc(clamp(1.55rem, 4.8vw, 2.6rem) + 7px);
+    left: 0;
   }
-  .topbar {
-    min-height: 73px;
+  .playing .notice {
+    right: 50%;
+    bottom: calc(var(--edge-bottom) + 12px);
+    transform: translateX(50%);
+    max-width: 40%;
   }
 }
 @media (max-width: 360px) {
-  main {
-    padding-inline: 10px;
+  .playing .wordmark img {
+    width: 25px;
+    height: 25px;
   }
-  .nav a,
-  .nav button {
-    padding-inline: 8px;
+  .playing .wordmark > p {
+    font-size: 1rem;
   }
-  .titlebar h1 {
-    font-size: 2rem;
+  .playing .nav > * {
+    padding-inline: 7px;
   }
-  .viewHeading {
-    font-size: 0.66rem;
+  .playing .meterLabel {
+    font-size: .58rem;
   }
 }

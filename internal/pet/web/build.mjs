@@ -14,7 +14,7 @@ await build({
   entryPoints: ['main.ts'], bundle: true, minify: true, format: 'esm', outdir: 'dist',
   assetNames: '[name]', loader: {'.woff2': 'file'}, jsx: 'automatic',
 });
-await writeFile('dist/index.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="./icon.svg"><title>Pet · One Workspace</title><link rel="stylesheet" href="./main.css"><script type="module" src="./main.js"></script></head><body><div id="root"></div></body></html>');
+await writeFile('dist/index.html', '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content"><link rel="icon" href="./icon.svg"><title>Pet · One Workspace</title><link rel="stylesheet" href="./main.css"><script type="module" src="./main.js"></script></head><body><div id="root"></div></body></html>');
 const licenses = [
   ['Three.js', 'three/LICENSE'],
   ['React', 'react/LICENSE'],

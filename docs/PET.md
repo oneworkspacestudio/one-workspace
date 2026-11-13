@@ -11,8 +11,9 @@ The first-person view initially follows the pet. Drag to look around, then use
 the on-screen arrows on a phone or focus the view and press WASD or the arrow
 keys. **Find** brings the camera back to your pet. Field notes show what the pet
 has been doing, and the gallery shows its recent paintings and sculptures.
-WebGL 2 is required for the 3D view. The pet card, gallery and journal also work
-when the 3D view is unavailable.
+Open **Journal** to see both. The view fills the screen, with the pet’s needs,
+clock, movement and treats over the scene. WebGL 2 is required for the 3D view.
+The indicators and journal remain available when the 3D view is unavailable.
 
 The pet forages for food that appears in the meadow, plays with a ball, explores,
 rests in its burrow, draws and builds. Daylight, rain and its needs affect its
@@ -24,7 +25,7 @@ sculptures can evolve.
 
 ## Choosing how Pet decides
 
-Open **Decision settings** as the Workspace owner.
+Open **Journal**, then **Decision settings**, as the Workspace owner.
 
 - **Instincts** runs the whole simulation immediately.
 - **Local Ollama model** adds structured decisions from an installed model on
@@ -40,7 +41,8 @@ counts of nearby resources and creations. They choose from available play,
 exploration and creative actions. Pet handles eating and sleeping itself and
 continues using instincts if a model is disabled, busy or unreachable.
 
-Pet preview.1 ships in Workspace preview.124. The supervised executable listens
+Pet preview.2 ships in Workspace preview.127 and supports Pet-only updates
+on Workspace preview.124 or newer. The supervised executable listens
 on loopback at the Workspace port plus 56. Public requests go through the
 Workspace proxy at `/pet/` with MyAccounts. World and session data are stored in
 the private Pet SQLite database. Decision settings and credentials use

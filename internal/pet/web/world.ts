@@ -513,7 +513,8 @@ export function renderHabitat(
     ballBand.position.y=ball.position.y;
 
     if(tracking) {
-      cameraTarget.set(pet.position.x+2.45,1.71,pet.position.z+5.15);
+      const distance = camera.aspect < .67 ? 1.25 : 1;
+      cameraTarget.set(pet.position.x+2.45*distance,1.71,pet.position.z+5.15*distance);
       camera.position.lerp(cameraTarget,1-Math.exp(-dt*3.3));
       lookAt.set(pet.position.x,.99,pet.position.z);
       camera.lookAt(lookAt);

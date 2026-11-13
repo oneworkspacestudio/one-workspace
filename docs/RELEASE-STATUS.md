@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview127: Pet full-screen view
+
+Pet preview.2 fills the viewport. The pet's mood, needs, clock and game controls
+sit over the habitat. Open Journal to see field notes, creations and decision
+settings. Pet-only updates retain the existing habitat.
+
 ## Preview125: Sunny & Moon
 
 Sunny & Moon is an optional General app for children's toilet and bedtime

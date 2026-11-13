@@ -50,3 +50,18 @@ No owner installation, physical phone, reboot or live model quality test.
 Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.124
 Artifacts: `I:/Projects/tooling/pet-20261112`. Public acceptance receipts and
 checksums are attached to preview.124.
+
+## Preview.2 full-screen view
+
+User requested a full-viewport game view with no mobile page scroll. Pet uses
+one responsive canvas with safe-area-aware needs, clock, navigation, movement
+and treat overlays. Journal opens a native dialog for notes, creations and
+owner settings. A compact follow camera keeps the pet clear of the indicators.
+The app launch contract and SQLite schema are unchanged. Pet-only updates
+continue to support Workspace preview.124 and newer.
+
+Chromium verified exact viewport fit, touch movement, follow, treat, dialog
+and focus restoration at 320×568, 390×844, 844×390 and 1440×900, including live
+orientation changes. Go tests for Pet, catalog, distribution and suite, plus
+the publisher tests passed. Test and release artifacts are in
+`I:/Projects/tooling/pet-fullscreen-20261113`.

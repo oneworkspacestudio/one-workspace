@@ -102,7 +102,7 @@ def main():
  else:raise ValueError('Publish and pin My Podcasts or pass --podcasts-candidate for local acceptance')
  podcasts_stage=Path(tempfile.mkdtemp(prefix='podcasts-',dir=cache));extract(podcasts,podcasts_stage)
  podcasts_contract=podcasts_component(podcasts_stage,allow_candidate=bool(a.podcasts_candidate))
- contracts=[sunnymoon_component(ROOT,a.go,cache/'sunnymoon',a.version),pet_component(ROOT,a.go,cache/'pet'),gamestudio_component(ROOT,a.go,cache/'gamestudio','0.3.0-preview.123'),podcasts_contract,websearch_component(ROOT,a.go,cache/'websearch',a.version),survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
+ contracts=[sunnymoon_component(ROOT,a.go,cache/'sunnymoon','0.3.0-preview.126'),pet_component(ROOT,a.go,cache/'pet'),gamestudio_component(ROOT,a.go,cache/'gamestudio','0.3.0-preview.123'),podcasts_contract,websearch_component(ROOT,a.go,cache/'websearch','0.3.0-preview.126'),survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')

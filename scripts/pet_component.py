@@ -30,7 +30,7 @@ def pet_component(root, go, output):
             'depends': ['accounts'], 'oidc': True, 'callback': '/pet/auth/callback',
             'args': ['--data', '${DATA}/pet', '--listen', '127.0.0.1:${PORT}',
                      '--origin', '${ORIGIN}/pet', '--no-browser'],
-            'source': 'https://github.com/oneworkspacestudio/one-workspace/releases/tag/v' + minimum,
+            'source': 'https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.127',
         },
         'inputs': {
             'pet': {'source': str(binary), 'file': 'Pet.exe'},

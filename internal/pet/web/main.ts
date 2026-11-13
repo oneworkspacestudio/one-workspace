@@ -31,6 +31,7 @@ function App() {
   const [offline, setOffline] = useState(false);
   const [busy, setBusy] = useState(false);
   const [name, setName] = useState('');
+  const [journalOpen, setJournalOpen] = useState(false);
   useEffect(() => {
     let active = true;
     const ctl = new AbortController();
@@ -73,6 +74,7 @@ function App() {
         if (e.status === 401 || e.status === 409) {
           setSession(undefined);
           setState(undefined);
+          setJournalOpen(false);
           setExpired(true);
           setNotice('Your session changed. Continue with MyAccounts to return to the hollow.');
           return;
@@ -95,6 +97,7 @@ function App() {
       if (e.status === 401) {
         setSession(undefined);
         setState(undefined);
+        setJournalOpen(false);
         setExpired(true);
       }
       throw e;
@@ -113,12 +116,17 @@ function App() {
   const world = state?.world;
   const cooldown = Math.max(0, (world?.treatAfter || 0) - (world?.saved || 0));
   const action = async (kind: string) => {
+    if (kind === 'journal') {
+      setJournalOpen(true);
+      return;
+    }
     if (busy) return;
     setBusy(true);
     setNotice('');
     try {
       if (kind === 'logout') {
         await write('./auth/logout', 'POST');
+        setJournalOpen(false);
         setState(undefined);
         setSession(undefined);
       }
@@ -144,7 +152,7 @@ function App() {
       owner: session?.user.role === 'owner', notice: notice || (offline ? 'Connection interrupted. Reconnecting to the hollow…' : ''),
       busy, world, weather: world?.weather === 'Rain' ? 'Rain in the meadow' : dark ? 'A clear night' : 'Clear skies',
       sun: dark ? '☾' : world?.weather === 'Rain' ? '☂' : '☀', clock: times(clock), day: 'DAY '+(world?.day || 1),
-      status: offline ? 'Reconnecting' : 'Habitat live', journalDay: 'Latest activity',
+      pageStyle: world ? 'playing' : undefined, journalOpen, closeJournal: () => setJournalOpen(false),
       activity: world ? (world.mood === 'Dreaming' ? 'Asleep in the burrow' : verbs[world.action]) : '',
       events: (world?.journal ?? []).slice(-6).reverse().map(event => ({
         ...event, icon: signs[event.kind] || '·', time: times((event.tick*2+510)%1440),
