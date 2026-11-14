@@ -18,5 +18,12 @@ Caddy answered separately on 127.0.0.1:9080. The fixture used fresh NTFS
 private and Drive paths and was stopped after the check.
 
 Suite, catalog, distribution, Froststock and apphost tests and vet passed.
-Full installer, signed publication, update-channel promotion and live
-installation still need verification.
+The normal desktop build verified all 47 apps and 939 packages. Fresh
+offline setup and two launches passed on isolated NTFS data with the IPv4
+port occupied. Accounts, Drive and Froststock reported healthy, and the
+portal still required authentication. All fixture listeners were stopped.
+
+The signed publisher stopped because the approved Android signing
+credentials were unavailable. No public release was created or promoted.
+The live offline upgrade could not acquire the update lock while the
+existing maintenance controller was downloading a repair installer.
