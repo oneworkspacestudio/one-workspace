@@ -1,6 +1,7 @@
 package suite
 
 import (
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -14,7 +15,7 @@ import (
 
 func signInFixture(t *testing.T, app appSignIn, status int) *Portal {
 	t.Helper()
-	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	up := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if app.id == "mail" && r.URL.Path == "/api/status" {
 			w.Write([]byte(`{"mainMailURL":""}`))
 			return
@@ -53,6 +54,15 @@ func signInFixture(t *testing.T, app appSignIn, status int) *Portal {
 			w.Write([]byte(`{"mode":"managed","setup":false,"user":{"id":"fixture-user"}}`))
 		}
 	}))
+	if app.id == "froststock" {
+		_ = up.Listener.Close()
+		listener, err := net.Listen("tcp6", "[::1]:0")
+		if err != nil {
+			t.Fatal(err)
+		}
+		up.Listener = listener
+	}
+	up.Start()
 	t.Cleanup(up.Close)
 	u, _ := url.Parse(up.URL)
 	port, _ := strconv.Atoi(u.Port())

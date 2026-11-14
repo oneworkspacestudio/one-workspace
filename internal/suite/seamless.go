@@ -98,7 +98,7 @@ func (p *Portal) appSessionStatus(r *http.Request, app appSignIn) int {
 	}
 	ctx, cancel := context.WithTimeout(r.Context(), 6*time.Second)
 	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("http://127.0.0.1:%d%s", installed.Port, app.probe), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://"+appLoopbackAddress(installed, "127.0.0.1")+app.probe, nil)
 	if err != nil {
 		return 0
 	}

@@ -325,7 +325,7 @@ func (p *Portal) Handler(control string) http.Handler {
 			continue
 		}
 		route := strings.TrimRight(a.Route, "/")
-		h := proxy(fmt.Sprintf("http://127.0.0.1:%d", a.Port), p.rt.Config.Origin, route, a.StripPrefix, false)
+		h := proxy("http://"+appLoopbackAddress(a, "127.0.0.1"), p.rt.Config.Origin, route, a.StripPrefix, false)
 		mux.Handle(route+"/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if _, ok := p.user(r); !ok && a.ID != "gitea" && a.ID != "music" && !p.hostingWebhook(r) && !p.publicMonitor(r) && !p.nativePushRequest(r) && !nativeSocialRequest(r) && !publicFormsRequest(r) && !publicRemoteRequest(r) && !nativeTicketsRequest(r) && !publicAuthenticatorRequest(r) && !publicSurvivalRequest(r) && !remoteAIServiceRequest(r) && !remoteWebSearchRequest(r) {
 				http.Redirect(w, r, "/auth/login?"+url.Values{"returnTo": {r.URL.RequestURI()}}.Encode(), 302)

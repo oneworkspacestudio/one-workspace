@@ -6,7 +6,6 @@ import (
 	"crypto/subtle"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"net"
@@ -49,7 +48,7 @@ func (p *Portal) monitorRegistry(mux *http.ServeMux) {
 			if a.Kind != "process" || a.Health == "" {
 				continue
 			}
-			apps = append(apps, map[string]string{"ID": a.ID, "Name": a.Name, "URL": fmt.Sprintf("http://127.0.0.1:%d%s", a.Port, a.Health), "State": states[a.ID]})
+			apps = append(apps, map[string]string{"ID": a.ID, "Name": a.Name, "URL": "http://" + appLoopbackAddress(a, "127.0.0.1") + a.Health, "State": states[a.ID]})
 		}
 		update := "Idle"
 		var journal UpdateJournal
@@ -112,7 +111,7 @@ func (p *Portal) closeFoundationSessions(r *http.Request) {
 			continue
 		}
 		ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
-		req, e := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("http://127.0.0.1:%d/auth/logout", a.Port), nil)
+		req, e := http.NewRequestWithContext(ctx, "POST", "http://"+appLoopbackAddress(a, "127.0.0.1")+"/auth/logout", nil)
 		if e == nil {
 			req.Header.Set("Origin", p.rt.Config.Origin)
 			req.AddCookie(&http.Cookie{Name: id + "_session", Value: token})
