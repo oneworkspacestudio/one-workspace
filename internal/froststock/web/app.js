@@ -397,7 +397,7 @@ function photoBlob(image, width, height, closeup) {
       else if (blob.size <= 3 * 1024 * 1024) resolve(blob);
       else if (quality > .5) encode(quality - .15);
       else reject(new Error('This photo is too large to save. Try a closer crop.'));
-    }, .89);
+    }, 'image/jpeg', quality);
     encode(.89);
   });
 }
