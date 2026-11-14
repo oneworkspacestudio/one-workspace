@@ -99,3 +99,21 @@ verified long-press, default entrance, follow and journal at three viewport size
 A synthetic AI Service protocol test supplied original strokes and the real Pet
 service executed and journaled the resulting painting. Artifacts are in
 `I:/Projects/tooling/pet-autonomy-20261114`.
+
+Pet preview.3 is public in Workspace preview.129 from 88541cd, which includes
+implementation f86a3eb. The signed publisher verified 961 assets and downloaded
+the signed Android preview.20 anonymously. The exact 47-app bundle preserves
+the Froststock preview.128 baseline outside Pet, the manager and release notes.
+Fresh setup, service restart, upgrade from Pet preview.2 and rollback passed.
+The older habitat and retained journal entries survived their migration.
+
+Channel commit 41b2da8 uses the upgraded publisher from 68c8975 to stay within
+the installed clients' 8 MiB read limit. It keeps all 961 current assets and
+uses bundle fallback for older suite entries. The anonymous main index measured
+8,264,790 bytes with 100 suite records. The public installer offered and
+applied only Pet to the synthetic fixture, verified all five owned payloads
+and the running service, and retained the manager and account identity.
+Fixtures were stopped and removed. No owner installation, physical Android
+device test or live model quality check was performed.
+
+Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.129
