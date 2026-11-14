@@ -15,8 +15,9 @@ API path and display rate-limit retry guidance if GitHub refuses a request.
 
 Private-source applications distributed inside a public Workspace bundle have
 an empty repository entry in this public index. Public repositories list up to
-100 releases, ordered by publication date. Older release assets remain on
-GitHub. Private release metadata
+100 releases, ordered by publication date. If the index approaches the
+installed clients' size limit, older Workspace releases retain their verified
+bundle links while individual package downloads stay on GitHub. Private release metadata
 and private asset URLs are omitted; the verified Workspace bundle remains the
 normal public installation and update path for those applications.
 

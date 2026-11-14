@@ -59,6 +59,28 @@ def channel_releases(repo, releases, withheld):
     } for release in public[:MAX_PUBLIC_RELEASES]]
 
 
+
+def encode_channel(output, max_bytes=8 << 20):
+    def encode():
+        return (json.dumps(output, separators=(',', ':'), ensure_ascii=True) + '\n').encode('utf-8')
+
+    data = encode()
+    # Historical suite releases can use their verified bundle. Keep direct
+    # package downloads on the latest bundle and retain all release tags.
+    workspace = output['repositories'][ORG + '/one-workspace']
+    for release in reversed(workspace[1:]):
+        if len(data) <= max_bytes:
+            break
+        assets = release['assets']
+        reduced = [asset for asset in assets if not asset['name'].startswith('workspace-package-')]
+        if len(reduced) != len(assets):
+            release['assets'] = reduced
+            data = encode()
+    if len(data) > max_bytes:
+        raise ValueError('Public update channel exceeds the installed client size limit')
+    return data
+
+
 def main():
     token = os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN')
     if not token:
@@ -95,8 +117,7 @@ def main():
     output = {'schema': 1,
         'publishedAt': datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00', 'Z'),
         'repositories': repositories}
-    data = (json.dumps(output, separators=(',', ':'), ensure_ascii=True) + '\n').encode('utf-8')
-    assert len(data) <= 8 << 20
+    data = encode_channel(output)
     dest = ROOT / 'updates/releases-v1.json'
     dest.parent.mkdir(exist_ok=True)
     temporary = dest.with_suffix('.tmp')

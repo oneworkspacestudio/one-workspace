@@ -48,6 +48,22 @@ class ReleasePaginationTests(unittest.TestCase):
         self.assertEqual([r['tag_name'] for r in public[:3]], ['v102', 'v99', 'v98'])
         self.assertEqual(public[-1]['tag_name'], 'v1')
 
+    def test_oversize_index_keeps_newest_packages_and_older_bundle(self):
+        repo = 'oneworkspacestudio/one-workspace'
+        releases = [
+            dict(tag_name=f'v{i}', assets=[
+                dict(name='workspace-bundle.zip'),
+                dict(name='workspace-package-example.bin', digest='a' * 400),
+            ]) for i in (3, 2, 1)
+        ]
+        output = dict(repositories={repo: releases})
+        data = publisher.encode_channel(output, max_bytes=1150)
+        self.assertLessEqual(len(data), 1150)
+        self.assertEqual([a['name'] for a in releases[0]['assets']],
+                         ['workspace-bundle.zip', 'workspace-package-example.bin'])
+        self.assertEqual([a['name'] for a in releases[-1]['assets']], ['workspace-bundle.zip'])
+        self.assertEqual([r['tag_name'] for r in releases], ['v3', 'v2', 'v1'])
+
     def test_failed_later_page_is_not_a_successful_partial_index(self):
         calls = 0
 
