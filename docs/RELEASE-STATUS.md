@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview128: Froststock
+
+Froststock is an optional General app for scanning freezer items and their date
+labels. It saves the photos and expiry records in My Drive and reads labels on
+the scanning device. Installer integration 18 adds its managed service and
+app-owned packages. See [Froststock](FROSTSTOCK.md).
+
 ## Preview127: Pet full-screen view
 
 Pet preview.2 fills the viewport. The pet's mood, needs, clock and game controls

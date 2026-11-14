@@ -1,0 +1,24 @@
+Froststock
+Copyright One Workspace Studio
+
+Browser OCR uses Tesseract.js 7.0.0, tesseract.js-core, and English traineddata
+from @tesseract.js-data/eng 1.0.0. Apache License 2.0.
+https://github.com/naptha/tesseract.js
+https://github.com/naptha/tesseract.js-core
+https://github.com/naptha/tessdata
+
+Browser vision uses Transformers.js 3.8.1 and its bundled ONNX Runtime Web.
+Apache License 2.0 and MIT, respectively. The optional SmolVLM-256M-Instruct
+model weights are distributed separately by Hugging Face under Apache 2.0.
+https://github.com/huggingface/transformers.js/tree/3.8.1
+https://github.com/microsoft/onnxruntime
+https://huggingface.co/HuggingFaceTB/SmolVLM-256M-Instruct
+
+Lucide icons are available under the ISC license. Inter and Manrope are
+available under the SIL Open Font License. The license texts are bundled
+with their respective assets.
+https://github.com/lucide-icons/lucide
+https://github.com/rsms/inter
+https://github.com/sharanda/manrope
+
+The Froststock freezer and sample food photographs were generated for this app.

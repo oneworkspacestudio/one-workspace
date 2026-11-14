@@ -26,6 +26,7 @@ var suiteSignIns = []appSignIn{
 	{"news", "My News", "/news", "/api/me", "/news/auth/login", "/news/auth/logout", []string{"news_session"}},
 	{"pet", "Pet", "/pet", "/api/me", "/pet/auth/login", "/pet/auth/logout", []string{"pet_session"}},
 	{"sunnymoon", "Sunny & Moon", "/sunnymoon", "/api/me", "/sunnymoon/auth/login", "/sunnymoon/auth/logout", []string{"sunnymoon_session"}},
+	{"froststock", "Froststock", "/froststock", "/api/me", "/froststock/auth/login", "/froststock/auth/logout", []string{"froststock_session"}},
 	{"gamestudio", "Game Studio", "/gamestudio", "/api/me", "/gamestudio/auth/login", "/gamestudio/auth/logout", []string{"gamestudio_session"}},
 	{"podcasts", "My Podcasts", "/podcasts", "/api/me", "/podcasts/auth/login", "/podcasts/auth/logout", []string{"podcasts_session"}},
 	{"commute", "My Commute", "/commute", "/api/me", "/commute/auth/login", "/commute/auth/logout", []string{"commute_session"}},

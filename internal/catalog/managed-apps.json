@@ -460,6 +460,16 @@
       "foundation": true,
       "updateGroup": "sunnymoon",
       "recovery": "app"
+    },
+    {
+      "id": "froststock",
+      "name": "Froststock",
+      "route": "/froststock",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "froststock",
+      "recovery": "app"
     }
   ]
 }

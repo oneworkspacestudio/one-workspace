@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-5fb7630f.png)
+![The complete One Workspace app collection](docs/branding/app-suite-a0ee0de7.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -265,6 +265,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td align="center" width="56"><img src="internal/branding/icons/sunny_moon.svg" alt="" width="40" height="40"></td>
       <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/SUNNY_MOON.md"><strong>Sunny &amp; Moon</strong></a></td>
       <td>Follow a gentle daily routine for toilet trips and bedtime.</td>
+    </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/froststock.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/FROSTSTOCK.md"><strong>Froststock</strong></a></td>
+      <td>Scan freezer items and expiry labels, and keep the inventory in My Drive.</td>
     </tr>
   </tbody>
 </table>

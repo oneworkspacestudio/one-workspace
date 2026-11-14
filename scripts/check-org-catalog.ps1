@@ -1,7 +1,9 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -ne 17){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ne 18){throw 'Missing current installer compatibility guard for complete app-owned runtimes'}
+$froststock=$cat.apps|Where-Object id -CEQ 'froststock'
+if(-not $froststock.oidc -or -not $froststock.stripPrefix -or $froststock.route -cne '/froststock' -or $froststock.callback -cne '/froststock/auth/callback' -or $froststock.port -ne 9048 -or 'drive' -cnotin $froststock.depends -or $cat.packages.froststock.file -cne 'Froststock.exe' -or -not $cat.packages.'froststock-contract'){throw 'Froststock managed contract is incomplete'}
 $podcasts=$cat.apps|Where-Object id -CEQ 'podcasts'
 if(-not $podcasts.oidc -or $podcasts.route -cne '/podcasts' -or $podcasts.callback -cne '/podcasts/auth/callback' -or $podcasts.port -ne 9044 -or $cat.packages.podcasts.file -cne 'MyPodcasts.exe' -or -not $cat.packages.'podcasts-contract' -or -not $cat.packages.'podcasts-manifest'){throw 'Podcasts managed contract incomplete'}
 $pet=$cat.apps|Where-Object id -CEQ 'pet'

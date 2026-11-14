@@ -419,7 +419,7 @@ func (h *Host) Handler() http.Handler {
 			w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
 		}
 		scripts := "'self'"
-		if h.Config.ID == "pdf" || h.Config.ID == "my3d" {
+		if h.Config.ID == "pdf" || h.Config.ID == "my3d" || h.Config.ID == "froststock" {
 			scripts += " 'wasm-unsafe-eval'"
 		}
 		// OpenCascade's generated Embind glue constructs bindings with Function.
@@ -436,6 +436,9 @@ func (h *Host) Handler() http.Handler {
 			}
 		}
 		connect := "'self'"
+		if h.Config.ID == "froststock" && (r.URL.Path == "/vision.js" || r.URL.Path == h.Base+"/vision.js") {
+			connect += " https://huggingface.co https://*.hf.co https://*.huggingface.co"
+		}
 		if h.Config.Realtime {
 			scheme := "wss"
 			if u.Scheme == "http" {

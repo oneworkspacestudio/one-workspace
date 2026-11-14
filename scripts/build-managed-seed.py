@@ -16,6 +16,7 @@ from websearch_component import websearch_component
 from gamestudio_component import gamestudio_component
 from sunnymoon_component import sunnymoon_component
 from pet_component import pet_component
+from froststock_component import froststock_component
 from tube_component import tube_replacements
 from slicer_component import slicer_replacements
 from finance_component import finance_replacements
@@ -44,11 +45,69 @@ def extract(z,target):
    assert not m.filename.startswith(('/', '\\')) and '\\' not in m.filename and ':' not in m.filename and '..' not in Path(m.filename).parts
    assert (m.external_attr>>16)&0o170000!=0o120000
   src.extractall(target)
+
+def integrated_build(args, pin, seed, cache, out):
+ env = dict(os.environ, CGO_ENABLED='0', GOTOOLCHAIN='local')
+ def go(*values):
+  subprocess.run([args.go, *values], cwd=ROOT, env=env, check=True)
+ froststock = froststock_component(ROOT, args.go, cache / 'froststock', args.version)
+ manager = out / 'Workspace.exe'
+ go('build', '-buildvcs=false', '-trimpath', '-ldflags', f'-s -w -X main.version={args.version}',
+    '-o', str(manager), './cmd/workspace')
+ payload = ROOT / 'internal/payload/bundle/payload.zip'
+ payload.parent.mkdir(parents=True, exist_ok=True)
+ with zipfile.ZipFile(seed) as base:
+  cat = json.loads(base.read('catalog.json'))
+  cat.update(version=args.version, installerIntegration=18)
+  cat['apps'].append(froststock['app'])
+  replacements = {'manager': manager, 'notice-Workspace-release-status.md': ROOT / 'docs/RELEASE-STATUS.md'}
+  for key, replacement in replacements.items():
+   cat['packages'][key].update(size=replacement.stat().st_size, sha256=sha(replacement))
+  for key, item in froststock['inputs'].items():
+   file = Path(item['source'])
+   cat['packages'][key] = dict(file=item['file'], size=file.stat().st_size, sha256=sha(file))
+  registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text())['apps']
+  assert {app['id'] for app in registry} == {app['id'] for app in cat['apps']}
+  catalog = json.dumps(cat, indent=2)
+  (out / 'catalog.json').write_text(catalog, encoding='utf-8')
+  go('run', '-buildvcs=false', './cmd/catalogcheck', str(out / 'catalog.json'))
+  with zipfile.ZipFile(payload, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as dest:
+   dest.writestr('catalog.json', catalog)
+   for key, package in cat['packages'].items():
+    file = package['file']
+    if key in replacements:
+     dest.write(replacements[key], file)
+    elif key in froststock['inputs']:
+     dest.write(froststock['inputs'][key]['source'], file)
+    else:
+     h = hashlib.sha256()
+     size = 0
+     with base.open(file) as source, dest.open(file, 'w', force_zip64=True) as target:
+      while block := source.read(4194304):
+       size += len(block)
+       h.update(block)
+       target.write(block)
+     assert size == package['size'] and h.hexdigest() == package['sha256'], key
+ shutil.copyfile(payload, out / 'workspace-bundle.zip')
+ go('build', '-buildvcs=false', '-trimpath', '-ldflags',
+    '-s -w -X github.com/oneworkspacestudio/one-workspace/internal/distribution.Repository=oneworkspacestudio/one-workspace',
+    '-o', str(out / 'WorkspaceSetup-windows-amd64.exe'), './cmd/setup')
+ (out / 'managed-build.json').write_text(json.dumps({
+  'schema': 1, 'version': args.version, 'seed': pin, 'candidate': False,
+  'completeInventory': len(cat['apps']), 'builder': 'scripts/build-managed-seed.py',
+ }, indent=2), encoding='utf-8')
+ print('Verified managed bundle:', len(cat['apps']), 'apps;', len(cat['packages']), 'packages', flush=True)
+
 def main():
  p=argparse.ArgumentParser();p.add_argument('--go',default='go');p.add_argument('--version',required=True);p.add_argument('--cache',required=True);p.add_argument('--out',required=True);p.add_argument('--seed-archive');p.add_argument('--myai-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--tickets-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--authenticator-candidate',help='Local acceptance only');p.add_argument('--accounts-candidate',help='Local acceptance only');p.add_argument('--books-candidate',help='Local My Books acceptance archive; not a public pin');p.add_argument('--voice-candidate',help='Local acceptance only; publisher rejects candidate builds');p.add_argument('--news-candidate',help='Local My News acceptance archive; not a public pin');p.add_argument('--commute-candidate',help='Local My Commute acceptance only; never publish');p.add_argument('--survival-candidate',help='Local My Survival acceptance only');p.add_argument('--podcasts-candidate',help='Local My Podcasts acceptance only; never publish');a=p.parse_args()
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
- seed=asset(lock['managedSeed'],cache,a.seed_archive);remote=asset(lock['myRemote'],cache)
+ candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if lock.get('integratedSeed') and a.version == '0.3.0-preview.128' and not candidate:
+  pin = lock['integratedSeed']
+  return integrated_build(a, pin, asset(pin, cache, a.seed_archive), cache, out)
+ seed=asset(lock['managedSeed'],cache,a.seed_archive)
+ remote=asset(lock['myRemote'],cache)
  hosting=asset(lock['myHosting'],cache)
  hosting_stage=Path(tempfile.mkdtemp(prefix='hosting-',dir=cache));extract(hosting,hosting_stage)
  myai=Path(a.myai_candidate).resolve() if a.myai_candidate else asset(lock['myAI'],cache)
@@ -103,11 +162,12 @@ def main():
  podcasts_stage=Path(tempfile.mkdtemp(prefix='podcasts-',dir=cache));extract(podcasts,podcasts_stage)
  podcasts_contract=podcasts_component(podcasts_stage,allow_candidate=bool(a.podcasts_candidate))
  contracts=[sunnymoon_component(ROOT,a.go,cache/'sunnymoon','0.3.0-preview.126'),pet_component(ROOT,a.go,cache/'pet'),gamestudio_component(ROOT,a.go,cache/'gamestudio','0.3.0-preview.123'),podcasts_contract,websearch_component(ROOT,a.go,cache/'websearch','0.3.0-preview.126'),survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
+ contracts.append(froststock_component(ROOT,a.go,cache/'froststock',a.version))
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=17
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=18
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:

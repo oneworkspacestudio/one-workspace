@@ -334,5 +334,12 @@
     "name": "Sunny & Moon",
     "description": "Follow a gentle daily routine for toilet trips and bedtime.",
     "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/SUNNY_MOON.md"
+  },
+  {
+    "id": "froststock",
+    "icon": "froststock",
+    "name": "Froststock",
+    "description": "Scan freezer items and expiry labels, and keep the inventory in My Drive.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/FROSTSTOCK.md"
   }
 ]

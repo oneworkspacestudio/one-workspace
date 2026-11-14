@@ -195,7 +195,13 @@
     "repository": "oneworkspacestudio/one-workspace",
     "tag": "v0.3.0-preview.103",
     "asset": "workspace-bundle.zip",
-    "sha256": "cc61e4bf4f12ed0a7062d8af9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
+    "sha256": "cc61e4bf4f12ed0a7062d8ad9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
+  },
+  "integratedSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.127",
+    "asset": "workspace-bundle.zip",
+    "sha256": "51b8f9ad3f8e7693cf855e4f2d0fa4ee25687385802df828d1085fa02dc27573"
   },
   "myRemote": {
     "repository": "oneworkspacestudio/my-remote",

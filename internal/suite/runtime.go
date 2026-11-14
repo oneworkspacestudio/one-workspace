@@ -203,6 +203,9 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 		if app.ID == "finance" {
 			cmd.Env = append(cmd.Env, "MYFINANCE_BACKUP_DIR="+filepath.Join(c.Files, "One Workspace Backups", "My Finance"))
 		}
+		if app.ID == "froststock" {
+			cmd.Env = append(cmd.Env, "FROSTSTOCK_DRIVE_ROOT="+filepath.Join(c.Files, "Froststock"))
+		}
 		if foundationApp(app.ID) {
 			cmd.Env = append(cmd.Env, "WORKSPACE_OWNER_SUBJECT="+c.Owner, "WORKSPACE_HOME_URL="+c.Origin)
 			if app.ID == "push" {

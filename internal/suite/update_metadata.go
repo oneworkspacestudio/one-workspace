@@ -162,7 +162,7 @@ func knownUpdateStorageProfile(id string) bool {
 		return true
 	}
 	switch id {
-	case "accounts", "drive", "docs", "photos", "studio", "gitea", "music", "mail", "calendar", "contacts", "notes", "my-tube", "chat", "hosting", "vault", "slicer", "tasks", "pdf", "monitor", "search", "maps", "meet", "create", "my3d", "cinema", "myai", "clips", "social", "push", "shield", "forms":
+	case "froststock", "accounts", "drive", "docs", "photos", "studio", "gitea", "music", "mail", "calendar", "contacts", "notes", "my-tube", "chat", "hosting", "vault", "slicer", "tasks", "pdf", "monitor", "search", "maps", "meet", "create", "my3d", "cinema", "myai", "clips", "social", "push", "shield", "forms":
 		return true
 	}
 	return false
