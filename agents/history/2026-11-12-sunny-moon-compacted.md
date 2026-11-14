@@ -83,3 +83,25 @@ from 320×320 to 1440×900. Settings fit those sizes, orientation changes keep
 the game in view, and the bedtime cue, check-in, relief and morning reset pass.
 Development and release artifacts live in
 `I:/Projects/tooling/sunny-moon-game-20261114`.
+
+One Workspace preview.130 published Sunny & Moon preview.3 from source
+`3cb1ab7` and public channel commit `c344921`. The exact preview.129 seed
+preserves the concurrent Pet and Froststock releases. The catalog contains
+47 apps and 939 packages. GitHub lists 959 public assets, including the
+signed Android preview.20. The anonymous update index matched the installer,
+catalog, bundle, APK and Sunny & Moon package digests. The anonymous installer
+downloaded and verified preview.130 and reported Sunny & Moon preview.3.
+
+The exact managed installer passed fresh setup and restart on isolated NTFS
+data. A preview.129 fixture passed the app-only update and rollback, preserving
+the manager, account, files and settings. Synthetic installation data was
+removed. Browser emulation covered the layout sizes above. No owner install
+or physical device test was performed.
+
+The publisher requests fewer releases per GitHub API page and fits the update
+index by omitting historic individual suite-package rows when necessary.
+The latest direct packages and historic bundle URLs remain available. The
+publisher recovered an interrupted staging operation with the original signed
+APK and byte-identical installer and bundle, then promoted the public release.
+
+Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.130
