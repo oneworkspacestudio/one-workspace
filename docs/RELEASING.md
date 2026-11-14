@@ -45,7 +45,10 @@ For an Android-only release:
 ```
 
 For a desktop Workspace release, pass its `v...` tag, matching catalog version
-and prepared desktop asset directory to the same command. Do not omit Android.
+and prepared desktop asset directory to the same command. The owner approved
+`-DesktopOnly` for `v0.3.0-preview.132` alone. This release leaves the previous
+signed Android companion available. The publisher rejects the flag for every
+other tag.
 The APK stays a separate release download; it does not require adding another
 desktop application bundle download to an Android-only update.
 

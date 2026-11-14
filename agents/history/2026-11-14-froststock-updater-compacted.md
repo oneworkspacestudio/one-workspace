@@ -25,6 +25,7 @@ Froststock route requires sign-in. The public update check shows Froststock,
 Game Studio and Web Search as current and still offers the separate Sunny & Moon
 update. Synthetic services and roots were removed.
 
-The public publisher stopped in its required Android signing step because this
-machine has no configured release signer. No preview.132 release was published
-or promoted.
+The signed publication attempt stopped before creating a draft because the
+Android release signer is on another PC. The owner approved a Windows-only
+exception for preview.132. The standard publisher restricts that mode to this
+tag and verifies the public catalog and update index.

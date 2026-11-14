@@ -15,6 +15,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'oneworkspacestudio/one-workspace'
 INDEX_URL = 'https://raw.githubusercontent.com/' + REPO + '/main/updates/releases-v1.json'
+WINDOWS_ONLY_EXCEPTION = 'v0.3.0-preview.132'
 
 
 def run(args, **kwargs):
@@ -55,7 +56,7 @@ def verify_assets(release, files):
             raise RuntimeError('GitHub size/digest verification failed: ' + local.name)
 
 
-def public_apk(url, expected):
+def verify_public_download(url, expected):
     request = urllib.request.Request(url, headers={'User-Agent': 'OneWorkspacePublicReleaseCheck'})
     digest = hashlib.sha256()
     size = 0
@@ -64,7 +65,17 @@ def public_apk(url, expected):
             digest.update(chunk)
             size += len(chunk)
     if size != expected.stat().st_size or 'sha256:' + digest.hexdigest() != sha(expected):
-        raise RuntimeError('Anonymous APK download did not match the signed local APK')
+        raise RuntimeError('Anonymous download did not match ' + expected.name)
+
+
+def validate_release_mode(tag, desktop_only, out):
+    if not desktop_only:
+        return
+    if tag != WINDOWS_ONLY_EXCEPTION:
+        raise RuntimeError('The Windows-only exception is limited to preview.132')
+    if any(p.suffix.lower() == '.apk' or
+           p.name.lower().startswith(('android', 'oneworkspace-android')) for p in out.iterdir()):
+        raise RuntimeError('Remove Android artifacts from the Windows-only staging directory')
 
 
 def validate_managed_catalog(catalog):
@@ -113,38 +124,21 @@ def prepare_package_assets(out):
             if dest.stat().st_size != package['size'] or sha(dest) != 'sha256:' + package['sha256']:
                 raise RuntimeError('Independent package checksum mismatch: ' + key)
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--tag', required=True)
-    parser.add_argument('--assets', type=Path, required=True)
-    parser.add_argument('--notes', type=Path, required=True)
-    parser.add_argument('--title', default='')
-    parser.add_argument('--sdk', type=Path, required=True)
-    args = parser.parse_args()
-    if not re.fullmatch(r'(android-)?v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?', args.tag):
-        raise RuntimeError('Use an Android or Workspace version tag')
-    if git('status', '--porcelain'):
-        raise RuntimeError('Release source must be committed and clean')
-    source = git('rev-parse', 'HEAD')
+def prepare_android_assets(out, sdk, tag, source):
     tree = git('rev-parse', 'HEAD:android')
-    tag_ref = 'refs/tags/' + args.tag
-    refs = dict((line.split()[1], line.split()[0]) for line in git('ls-remote', 'origin', tag_ref, tag_ref + '^{}').splitlines())
-    if refs and refs.get(tag_ref + '^{}', refs.get(tag_ref)) != source:
-        raise RuntimeError('Existing tag points to different source; use a new release tag')
     policy = json.loads((ROOT / 'android/release-policy.json').read_text(encoding='utf-8'))
     assert policy['schema'] == 1 and policy['requireAPKForEveryRelease'] is True
     version_file = (ROOT / 'android/app/build.gradle').read_text(encoding='utf-8')
     version = re.search(r"versionName\s+'([^']+)'", version_file).group(1)
     code = int(re.search(r'versionCode\s+(\d+)', version_file).group(1))
-    if args.tag.startswith('android-') and args.tag != 'android-v' + version:
+    if tag.startswith('android-') and tag != 'android-v' + version:
         raise RuntimeError('Android release tag must match versionName')
-    out = args.assets.resolve()
     apk = out / ('OneWorkspace-Android-' + version + '.apk')
     if not apk.is_file():
         raise RuntimeError('Required signed companion APK is missing')
     if any(p.suffix == '.apk' and p != apk for p in out.iterdir()):
         raise RuntimeError('Remove stale/different APKs from this public staging directory')
-    tools = sorted((p for p in (args.sdk / 'build-tools').iterdir() if re.fullmatch(r'\d+\.\d+\.\d+', p.name)), key=lambda p: tuple(map(int, p.name.split('.'))))[-1]
+    tools = sorted((p for p in (sdk / 'build-tools').iterdir() if re.fullmatch(r'\d+\.\d+\.\d+', p.name)), key=lambda p: tuple(map(int, p.name.split('.'))))[-1]
     signature = run([tools / ('apksigner.bat' if sys.platform == 'win32' else 'apksigner'), 'verify', '--verbose', '--print-certs', apk])
     certs = re.findall(r'Signer #\d+ certificate SHA-256 digest:\s*([a-f0-9]{64})', signature)
     if certs != [policy['certificateSHA256']]:
@@ -158,6 +152,35 @@ def main():
             raise RuntimeError('APK provenance does not match the committed release source')
         for name in ['assets/licenses/APACHE-2.0.txt', 'assets/licenses/THIRD-PARTY-NOTICES.txt']:
             archive.getinfo(name)
+    run(['git', '-c', 'safe.directory=' + ROOT.as_posix(), '-C', ROOT, 'archive', '--format=zip', '--prefix=one-workspace-android/', '--output=' + str(out / 'OneWorkspace-Android-source.zip'), source, 'android', 'scripts/build-android.ps1', 'LICENSE', 'NOTICE'])
+    for src, name in [('android/README.md', 'ANDROID.md'), ('android/app/src/main/assets/licenses/THIRD-PARTY-NOTICES.txt', 'ANDROID-NOTICES.txt'), ('LICENSE', 'ANDROID-LICENSE.txt')]:
+        shutil.copyfile(ROOT / src, out / name)
+    (out / 'ANDROID-SIGNATURE.txt').write_text(signature + '\n', encoding='utf-8')
+    manifest = {'schema': 1, 'applicationId': policy['applicationId'], 'versionName': version, 'versionCode': code, 'sourceCommit': source, 'androidTree': tree, 'apk': apk.name, 'apkSHA256': sha(apk)[7:], 'certificateSHA256': certs[0], 'builtLocally': True, 'githubActionsUsed': False, 'checks': ['signature', 'package/version', 'embedded-source-provenance', 'embedded-licenses']}
+    (out / 'ANDROID-BUILD.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+    return apk
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--tag', required=True)
+    parser.add_argument('--assets', type=Path, required=True)
+    parser.add_argument('--notes', type=Path, required=True)
+    parser.add_argument('--title', default='')
+    parser.add_argument('--sdk', type=Path, required=True)
+    parser.add_argument('--desktop-only', action='store_true')
+    args = parser.parse_args()
+    if not re.fullmatch(r'(android-)?v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?', args.tag):
+        raise RuntimeError('Use an Android or Workspace version tag')
+    if git('status', '--porcelain'):
+        raise RuntimeError('Release source must be committed and clean')
+    source = git('rev-parse', 'HEAD')
+    tag_ref = 'refs/tags/' + args.tag
+    refs = dict((line.split()[1], line.split()[0]) for line in git('ls-remote', 'origin', tag_ref, tag_ref + '^{}').splitlines())
+    if refs and refs.get(tag_ref + '^{}', refs.get(tag_ref)) != source:
+        raise RuntimeError('Existing tag points to different source; use a new release tag')
+    out = args.assets.resolve()
+    validate_release_mode(args.tag, args.desktop_only, out)
     if not args.tag.startswith('android-'):
         build_metadata = out / 'managed-build.json'
         if build_metadata.exists() and json.loads(build_metadata.read_text()).get('candidate'):
@@ -184,12 +207,7 @@ def main():
             break
     if existing and (not existing[0]['draft'] or existing[0]['target_commitish'] != source):
         raise RuntimeError('Published releases are immutable; choose a new tag. A draft must match this source.')
-    run(['git', '-c', 'safe.directory=' + ROOT.as_posix(), '-C', ROOT, 'archive', '--format=zip', '--prefix=one-workspace-android/', '--output=' + str(out / 'OneWorkspace-Android-source.zip'), source, 'android', 'scripts/build-android.ps1', 'LICENSE', 'NOTICE'])
-    for src, name in [('android/README.md', 'ANDROID.md'), ('android/app/src/main/assets/licenses/THIRD-PARTY-NOTICES.txt', 'ANDROID-NOTICES.txt'), ('LICENSE', 'ANDROID-LICENSE.txt')]:
-        shutil.copyfile(ROOT / src, out / name)
-    (out / 'ANDROID-SIGNATURE.txt').write_text(signature + '\n', encoding='utf-8')
-    manifest = {'schema': 1, 'applicationId': policy['applicationId'], 'versionName': version, 'versionCode': code, 'sourceCommit': source, 'androidTree': tree, 'apk': apk.name, 'apkSHA256': sha(apk)[7:], 'certificateSHA256': certs[0], 'builtLocally': True, 'githubActionsUsed': False, 'checks': ['signature', 'package/version', 'embedded-source-provenance', 'embedded-licenses']}
-    (out / 'ANDROID-BUILD.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+    public_asset = out / 'catalog.json' if args.desktop_only else prepare_android_assets(out, args.sdk, args.tag, source)
     if not args.tag.startswith('android-'):
         prepare_package_assets(out)
     files = sorted(p for p in out.iterdir() if p.is_file() and p.name not in ['SHA256SUMS', 'SHA256SUMS.txt'])
@@ -222,13 +240,13 @@ def main():
     release = api('releases/' + str(release['id']), {'draft': False})
     if api('commits/' + args.tag)['sha'] != source:
         raise RuntimeError('Published tag does not resolve to the intended source')
-    public_apk('https://github.com/' + REPO + '/releases/download/' + args.tag + '/' + apk.name, apk)
+    verify_public_download('https://github.com/' + REPO + '/releases/download/' + args.tag + '/' + public_asset.name, public_asset)
     # Promotion is part of the supported publication flow. Do not move the source tag.
     subprocess.run([sys.executable, str(ROOT / 'scripts/publish-update-index.py')], cwd=str(ROOT), check=True)
     git('add', 'updates/releases-v1.json')
     changed = subprocess.run(['git', '-c', 'safe.directory=' + ROOT.as_posix(), '-C', str(ROOT), 'diff', '--cached', '--quiet', '--', 'updates/releases-v1.json']).returncode
     if changed == 1:
-        git('commit', '-m', 'Promote ' + args.tag + ' with required signed Android APK [skip ci]', '--', 'updates/releases-v1.json')
+        git('commit', '-m', 'Promote ' + args.tag + ' [skip ci]', '--', 'updates/releases-v1.json')
         print(git('push', 'origin', 'HEAD:main'), flush=True)
     elif changed != 0:
         raise RuntimeError('Cannot inspect channel promotion')
@@ -236,9 +254,14 @@ def main():
     with urllib.request.urlopen(urllib.request.Request(INDEX_URL, headers={'User-Agent': 'OneWorkspacePublicReleaseCheck'}), timeout=60) as response:
         promoted = json.load(response)
     rows = promoted['repositories'][REPO]
-    if not any(r['tag_name'] == args.tag and any(a['name'] == apk.name and a['digest'] == sha(apk) for a in r['assets']) for r in rows):
+    if not any(r['tag_name'] == args.tag and any(a['name'] == public_asset.name and a['digest'] == sha(public_asset) for a in r['assets']) for r in rows):
         raise RuntimeError('Release is published and index pushed; public CDN is still propagating. Verify the exact public index URL before announcing delivery.')
-    print(json.dumps({'url': release['html_url'], 'apk': apk.name, 'assetsVerified': len(files), 'anonymousAPKVerified': True, 'publicChannelVerified': True}))
+    result = {'url': release['html_url'], 'assetsVerified': len(files), 'publicChannelVerified': True}
+    if args.desktop_only:
+        result['anonymousAssetVerified'] = public_asset.name
+    else:
+        result.update(apk=public_asset.name, anonymousAPKVerified=True)
+    print(json.dumps(result))
 
 
 if __name__ == '__main__':

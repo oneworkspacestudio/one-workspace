@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import subprocess
+import tempfile
 import unittest
 import json
 
@@ -33,6 +34,25 @@ class PublisherWindowsArguments(unittest.TestCase):
     def test_single_overlong_path_is_refused_before_upload(self):
         with self.assertRaises(RuntimeError):
             list(publisher.upload_commands('v1', ['x'*30000]))
+
+    def test_windows_only_exception_is_limited_to_preview132(self):
+        with tempfile.TemporaryDirectory() as stage:
+            out = Path(stage)
+            publisher.validate_release_mode('v0.3.0-preview.132', True, out)
+            for tag in ['android-v0.1.0-preview.20', 'v0.3.0-preview.133']:
+                with self.assertRaisesRegex(RuntimeError, 'limited to preview.132'):
+                    publisher.validate_release_mode(tag, True, out)
+                publisher.validate_release_mode(tag, False, out)
+
+    def test_windows_only_staging_rejects_android_assets(self):
+        with tempfile.TemporaryDirectory() as stage:
+            out = Path(stage)
+            for name in ['companion.APK', 'ANDROID-BUILD.json', 'OneWorkspace-Android-source.zip']:
+                asset = out / name
+                asset.touch()
+                with self.assertRaisesRegex(RuntimeError, 'Remove Android artifacts'):
+                    publisher.validate_release_mode('v0.3.0-preview.132', True, out)
+                asset.unlink()
 
 if __name__ == '__main__':
     unittest.main()
