@@ -1,5 +1,19 @@
 # One Workspace release status
 
+## Preview132 with Froststock preview.2
+
+Froststock uses a private IPv6 loopback listener so it can share its port
+number with My Hosting on IPv4. The updated installer carries Froststock
+forward with the compatible Workspace manager when it is already installed.
+The update screen reads releases for bundled apps from the verified Workspace
+catalog and stops showing the suite's release as a standalone app update.
+
+## Preview131 with Sunny & Moon evening tiredness
+
+Sunny & Moon preview.4 fills the tiredness bar faster in the evening.
+Sunny’s eyelids start drooping three hours before bedtime and stay drooped
+while the toilet reminder is visible.
+
 ## Preview130: Sunny & Moon game screen
 
 Sunny & Moon uses a single full-viewport scene. Toilet and tiredness meters
@@ -12,12 +26,6 @@ Pet preview.3 fixes long-press control selection. Visits start at the trailhead.
 The journal stores timestamped days and construction learns new designs through
 practice. Optional models plan from the habitat map and can compose paintings,
 choose waypoints and direct multi-stage construction. See [Pet](PET.md).
-
-## Froststock port isolation
-
-Managed Froststock uses IPv6 loopback for its private listener. It can start
-alongside My Hosting when Caddy binds the same port on IPv4. The Workspace
-update applies this to existing installations using their saved port.
 
 ## Preview128: Froststock
 

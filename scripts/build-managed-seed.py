@@ -46,7 +46,7 @@ def extract(z,target):
    assert (m.external_attr>>16)&0o170000!=0o120000
   src.extractall(target)
 
-def integrated_build(args, pin, seed, cache, out, components):
+def integrated_build(args, pin, seed, cache, out, components, integration=18):
  env = dict(os.environ, CGO_ENABLED='0', GOTOOLCHAIN='local')
  def go(*values):
   subprocess.run([args.go, *values], cwd=ROOT, env=env, check=True)
@@ -58,7 +58,7 @@ def integrated_build(args, pin, seed, cache, out, components):
  payload.parent.mkdir(parents=True, exist_ok=True)
  with zipfile.ZipFile(seed) as base:
   cat = json.loads(base.read('catalog.json'))
-  cat.update(version=args.version, installerIntegration=18)
+  cat.update(version=args.version, installerIntegration=integration)
   apps = {app['id']: app for app in cat['apps']}
   apps.update((c['app']['id'], c['app']) for c in components)
   cat['apps'] = list(apps.values())
@@ -105,11 +105,11 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
- if a.version == '0.3.0-preview.131' and not candidate:
+ if a.version == '0.3.0-preview.132' and not candidate:
   pin = lock['froststockPortSeed']
   base = asset(pin, cache, a.seed_archive)
-  return integrated_build(a, pin, base, cache, out, [])
- if a.version == '0.3.0-preview.130' and not candidate:
+  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)], integration=19)
+ if a.version == '0.3.0-preview.131' and not candidate:
   pin = lock['sunnyMoonSeed']
   base = asset(pin, cache, a.seed_archive)
   return integrated_build(a, pin, base, cache, out, [sunnymoon_component(ROOT,a.go,cache/'sunnymoon',a.version)])
@@ -120,7 +120,7 @@ def main():
  if lock.get('integratedSeed') and a.version == '0.3.0-preview.128' and not candidate:
   pin = lock['integratedSeed']
   base = asset(pin, cache, a.seed_archive)
-  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)])
+  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)], integration=19)
  seed=asset(lock['managedSeed'],cache,a.seed_archive)
  remote=asset(lock['myRemote'],cache)
  hosting=asset(lock['myHosting'],cache)
@@ -182,7 +182,7 @@ def main():
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=18
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=19
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:

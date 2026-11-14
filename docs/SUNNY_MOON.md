@@ -16,9 +16,9 @@ portrait and beside it in landscape.
   they feel the need.
 - The default routine is bedtime at **9 pm**, a toilet reminder at **8 pm** and
   wake-up at **7 am**. Adjust all three in **Settings**. The sleep figure shows
-  the time available until wake-up. Sunny gets sleepy as bedtime approaches and
-  starts each morning happy, regardless of the previous evening. Sunny’s
-  eyelids droop gradually, then Sunny yawns and nods off.
+  the time available until wake-up. The tiredness bar fills faster during the
+  last three hours before bedtime, as Sunny’s eyelids droop. Sunny yawns and
+  nods in the last hour and starts each morning happy.
 - Sunny does a short toilet wiggle when a timer bar reaches three quarters or
   the evening reminder is due. A check-in brings a relieved smile. The
   expression and toilet icon stay visible with reduced motion enabled.

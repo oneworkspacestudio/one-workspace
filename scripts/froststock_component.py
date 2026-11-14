@@ -13,8 +13,8 @@ def froststock_component(root, go, output, suite_version):
     version = subprocess.check_output([str(binary), '--version'], text=True).strip()
     contract = output / 'compatibility.json'
     contract.write_text(json.dumps({
-        'schema': 1, 'id': 'froststock', 'version': version, 'workspaceInstallerIntegration': 18,
-        'minimumWorkspaceVersion': '0.3.0-preview.128', 'route': '/froststock', 'oidc': True,
+        'schema': 1, 'id': 'froststock', 'version': version, 'workspaceInstallerIntegration': 19,
+        'minimumWorkspaceVersion': '0.3.0-preview.132', 'route': '/froststock', 'oidc': True,
         'executable': 'Froststock.exe', 'health': '/healthz', 'storage': 'my-drive-froststock-v1',
     }, indent=2), encoding='utf-8')
     return {

@@ -169,3 +169,44 @@ func TestRepairCatalogRetainsIndependentAppsAndExclusions(t *testing.T) {
 		}
 	}
 }
+
+func TestRepairCatalogCarriesInstalledFroststockThroughLoopbackUpgrade(t *testing.T) {
+	for _, version := range []string{"0.1.0-preview.1", "0.1.0-preview.3", ""} {
+		t.Run(version, func(t *testing.T) {
+			c, _ := updateFixture(t)
+			current := c.Catalog
+			current.Version = "0.3.0-preview.131"
+			current.InstallerIntegration = 18
+			app := catalog.App{ID: "froststock", Name: "Froststock", Kind: "process", Package: "froststock",
+				Executable: "Froststock.exe", Route: "/froststock", Port: 9048, Version: version}
+			if version != "" {
+				current.Apps = append(current.Apps, app)
+				current.Packages["froststock"] = updatePackage(app.Executable, "installed Froststock")
+			}
+			incoming := current
+			incoming.Version = "0.3.0-preview.132"
+			incoming.InstallerIntegration = catalog.FroststockLoopbackIntegration
+			incoming.Apps = append([]catalog.App(nil), current.Apps[:1]...)
+			app.Version = "0.1.0-preview.2"
+			incoming.Apps = append(incoming.Apps, app)
+			incoming.Packages = map[string]catalog.Package{
+				"manager":    updatePackage("Workspace.exe", "new manager"),
+				"froststock": updatePackage(app.Executable, "new Froststock"),
+				"notes":      current.Packages["notes"],
+			}
+
+			got, err := repairCatalog(current, incoming)
+			if err != nil || got.Version != incoming.Version || got.InstallerIntegration != incoming.InstallerIntegration {
+				t.Fatalf("manager upgrade failed: %v, %v", got.Version, err)
+			}
+			want := version
+			if version == "0.1.0-preview.1" {
+				want = app.Version
+			}
+			installed, present := got.Find("froststock")
+			if present != (want != "") || installed.Version != want {
+				t.Fatalf("Froststock after reinstall = %q, want %q", installed.Version, want)
+			}
+		})
+	}
+}

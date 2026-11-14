@@ -135,6 +135,65 @@ func TestDiscoverSelectAndStageIndependentAppAndWorkspace(t *testing.T) {
 	}
 }
 
+func TestBundledAppUpdatesUseWorkspaceCatalog(t *testing.T) {
+	for _, upgraded := range []bool{false, true} {
+		t.Run(fmt.Sprintf("froststockUpgraded=%v", upgraded), func(t *testing.T) {
+			current, tr, _ := setupUpdateTransport(t, false)
+			endpoint := "https://api.github.com/repos/" + Repository + "/releases?per_page=100"
+			var releases []Release
+			if err := json.Unmarshal(tr[endpoint], &releases); err != nil {
+				t.Fatal(err)
+			}
+			var latest catalog.Catalog
+			oldAsset := releases[0].Assets[0]
+			if err := json.Unmarshal(tr[oldAsset.APIURL], &latest); err != nil {
+				t.Fatal(err)
+			}
+			releaseURL := "https://github.com/" + Repository + "/releases/tag/"
+			app := catalog.App{ID: "froststock", Name: "Froststock", Kind: "process", Package: "froststock",
+				Executable: "Froststock.exe", Route: "/froststock", Port: 9048,
+				Version: "0.1.0-preview.1", Source: releaseURL + releases[1].Tag}
+			current.Apps = append(current.Apps, app)
+			current.Packages[app.Package] = fixturePackage(app.Executable, []byte("old-froststock"))
+			latest.Packages[app.Package] = current.Packages[app.Package]
+			if upgraded {
+				app.Source = releaseURL + releases[0].Tag
+				app.Version = "0.1.0-preview.2"
+				latest.Packages[app.Package] = fixturePackage(app.Executable, []byte("new-froststock"))
+			}
+			latest.Apps = append(latest.Apps, app)
+			raw, _ := json.Marshal(latest)
+			releases[0].Assets[0] = fixtureAsset(Repository, releases[0].Tag, "catalog.json", "1", raw)
+			tr[oldAsset.APIURL] = raw
+			tr[endpoint], _ = json.Marshal(releases)
+
+			plan, err := CheckUpdates(context.Background(), current)
+			if err != nil {
+				t.Fatal(err)
+			}
+			choices := map[string]UpdateChoice{}
+			for _, choice := range plan.Choices {
+				choices[choice.ID] = choice
+			}
+			froststock, found := choices["froststock"]
+			if !found || froststock.Available != upgraded || froststock.Version != app.Version ||
+				froststock.Reason != "" || froststock.ReviewURL != "" {
+				t.Fatalf("unexpected Froststock choice: %+v", froststock)
+			}
+			if choices["notes"].ReviewURL == "" || choices["notes"].Available {
+				t.Fatalf("standalone Notes release lost its review status: %+v", choices["notes"])
+			}
+			if upgraded {
+				target, downloads, err := SelectUpdates(current, plan, []string{"froststock"})
+				pin, _ := target.Find("froststock")
+				if err != nil || pin.Version != app.Version || downloads["froststock"].Member != app.Executable {
+					t.Fatalf("could not select the bundled Froststock update: %+v, %v", pin, err)
+				}
+			}
+		})
+	}
+}
+
 func TestInstalledAppAbsentFromPublishedSuiteKeepsIndependentBaseline(t *testing.T) {
 	for _, newer := range []bool{false, true} {
 		t.Run(fmt.Sprintf("newerRelease=%v", newer), func(t *testing.T) {

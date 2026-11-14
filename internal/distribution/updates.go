@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -615,11 +616,16 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 				ch.Version = ch.Current
 				ch.Source = oldApps[0].Source
 			}
-			appReleases, e = releasesFor(ctx, h, token, repo)
-			if e != nil {
-				ch.Reason = e.Error()
-				plan.Choices = append(plan.Choices, ch)
-				continue
+			if repo == Repository {
+				appReleases = rs
+			} else {
+				var err error
+				appReleases, err = releasesFor(ctx, h, token, repo)
+				if err != nil {
+					ch.Reason = err.Error()
+					plan.Choices = append(plan.Choices, ch)
+					continue
+				}
 			}
 			if len(ch.Apps) > 0 {
 				ch.Version = ch.Apps[0].Version
@@ -666,6 +672,10 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 				d = UpdateDownload{Asset: a, Repository: Repository, Tag: suiteRelease.Tag}
 			}
 			ch.Downloads[id] = d
+		}
+		// Apps published only in the Workspace catalog have no standalone feed.
+		if repo == Repository {
+			appReleases = nil
 		}
 		// An explicit component contract also supplies smaller download assets
 		// when its tag equals the suite pin. In that case retain the suite target
@@ -1043,6 +1053,15 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 		return current, errors.New("use rollback to restore an older Workspace version")
 	}
 	plan := UpdatePlan{BaseCatalogSHA256: catalogIdentity(current)}
+	// The loopback change requires the manager and the new Froststock pin to
+	// land together. Include Froststock in the installer handoff if installed.
+	froststockHandoff := current.InstallerIntegration < catalog.FroststockLoopbackIntegration &&
+		incoming.InstallerIntegration >= catalog.FroststockLoopbackIntegration &&
+		newerWorkspace(incoming.Version, current.Version)
+	selected = slices.Clone(selected)
+	if froststockHandoff && slices.Contains(selected, "froststock") && !slices.Contains(selected, "workspace") {
+		selected = append(selected, "workspace")
+	}
 	for _, g := range suiteUpdateGroups(incoming) {
 		ch := UpdateChoice{ID: g.id, Name: g.name, Version: incoming.Version, Packages: groupPackages(g, incoming), Apps: groupApps(g, incoming)}
 		if g.id == "workspace" {
@@ -1060,6 +1079,16 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 		}
 		ch = scopeUpdateChoice(current, ch)
 		ch.Available = choiceChanged(g, current, ch)
+		if froststockHandoff && g.id == "froststock" {
+			if installed, ok := current.Find("froststock"); ok {
+				if !newerWorkspace(ch.Version, installed.Version) {
+					continue
+				}
+				if ch.Available && slices.Contains(selected, "workspace") && !slices.Contains(selected, ch.ID) {
+					selected = append(selected, ch.ID)
+				}
+			}
+		}
 		plan.Choices = append(plan.Choices, ch)
 	}
 	if len(selected) == 0 {
