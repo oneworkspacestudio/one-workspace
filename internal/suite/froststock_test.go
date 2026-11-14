@@ -20,23 +20,18 @@ func TestFroststockAndHostingCanSharePort(t *testing.T) {
 	t.Cleanup(func() { _ = hosting.Close() })
 	port := hosting.Addr().(*net.TCPAddr).Port
 
-	manager, err := net.Listen("tcp4", "127.0.0.1:0")
-	if err != nil {
-		t.Fatal(err)
-	}
-	base := manager.Addr().(*net.TCPAddr).Port
-	_ = manager.Close()
-
 	app := catalog.App{
 		ID: "froststock", Kind: "process", Port: port,
 		Route: "/froststock", StripPrefix: true, Health: "/healthz",
 		Args: []string{"--listen", "127.0.0.1:${PORT}"},
 	}
-	c := Config{Origin: "https://workspace.example.test", Port: base,
-		Catalog: catalog.Catalog{Apps: []catalog.App{app}}}
+	request := Request{Port: port - 58, Mode: "local"}
+	c := NewConfig(request, catalog.Catalog{Apps: []catalog.App{app}})
 	if err := CheckPorts(c); err != nil {
-		t.Fatal("existing installation with Caddy on Froststock's saved port:", err)
+		t.Fatal("fresh installation with Caddy on Froststock's assigned port:", err)
 	}
+	// A preview.130 installation stores the same numeric port and listen flag.
+	c.Origin = "https://workspace.example.test"
 
 	rt := &Runtime{Config: c}
 	address := fmt.Sprintf("[::1]:%d", port)
