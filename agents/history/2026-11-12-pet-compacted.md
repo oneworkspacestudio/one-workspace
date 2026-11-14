@@ -81,3 +81,21 @@ After the raw main cache refreshed, the anonymous updater selected and
 applied Pet preview.2 on synthetic Workspace preview.126 and all five owned
 payload hashes and the running version matched. No owner installation or
 physical phone test was performed.
+
+## Preview.3 autonomy
+
+Mobile movement arrows suppress native text selection and context menus.
+Visits start at the trail entrance with manual follow. Pet observes landmarks,
+obstacles, resources, food, current work and its recent activity. Models choose
+bounded travel plans, compositions and staged projects. Instincts sample varied
+routes and art. Construction learns arch, shelter and lookout designs through
+completed work. Pet SQLite stores the full activity timeline by habitat day,
+imports the previous rolling entries once and commits new entries atomically
+with each world update.
+
+Synthetic tests verify navigation, art novelty, material and daylight rules,
+learning, legacy journal migration and full-day reads. Android Chrome emulation
+verified long-press, default entrance, follow and journal at three viewport sizes.
+A synthetic AI Service protocol test supplied original strokes and the real Pet
+service executed and journaled the resulting painting. Artifacts are in
+`I:/Projects/tooling/pet-autonomy-20261114`.

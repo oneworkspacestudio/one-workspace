@@ -46,11 +46,11 @@ def extract(z,target):
    assert (m.external_attr>>16)&0o170000!=0o120000
   src.extractall(target)
 
-def integrated_build(args, pin, seed, cache, out):
+def integrated_build(args, pin, seed, cache, out, components):
  env = dict(os.environ, CGO_ENABLED='0', GOTOOLCHAIN='local')
  def go(*values):
   subprocess.run([args.go, *values], cwd=ROOT, env=env, check=True)
- froststock = froststock_component(ROOT, args.go, cache / 'froststock', args.version)
+ inputs = {key: item for component in components for key, item in component['inputs'].items()}
  manager = out / 'Workspace.exe'
  go('build', '-buildvcs=false', '-trimpath', '-ldflags', f'-s -w -X main.version={args.version}',
     '-o', str(manager), './cmd/workspace')
@@ -59,11 +59,13 @@ def integrated_build(args, pin, seed, cache, out):
  with zipfile.ZipFile(seed) as base:
   cat = json.loads(base.read('catalog.json'))
   cat.update(version=args.version, installerIntegration=18)
-  cat['apps'].append(froststock['app'])
+  apps = {app['id']: app for app in cat['apps']}
+  apps.update((c['app']['id'], c['app']) for c in components)
+  cat['apps'] = list(apps.values())
   replacements = {'manager': manager, 'notice-Workspace-release-status.md': ROOT / 'docs/RELEASE-STATUS.md'}
   for key, replacement in replacements.items():
    cat['packages'][key].update(size=replacement.stat().st_size, sha256=sha(replacement))
-  for key, item in froststock['inputs'].items():
+  for key, item in inputs.items():
    file = Path(item['source'])
    cat['packages'][key] = dict(file=item['file'], size=file.stat().st_size, sha256=sha(file))
   registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text())['apps']
@@ -77,8 +79,8 @@ def integrated_build(args, pin, seed, cache, out):
     file = package['file']
     if key in replacements:
      dest.write(replacements[key], file)
-    elif key in froststock['inputs']:
-     dest.write(froststock['inputs'][key]['source'], file)
+    elif key in inputs:
+     dest.write(inputs[key]['source'], file)
     else:
      h = hashlib.sha256()
      size = 0
@@ -103,9 +105,14 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if lock.get('petSeed') and a.version != '0.3.0-preview.128' and not candidate:
+  pin = lock['petSeed']
+  base = asset(pin, cache, a.seed_archive)
+  return integrated_build(a, pin, base, cache, out, [pet_component(ROOT,a.go,cache/'pet')])
  if lock.get('integratedSeed') and a.version == '0.3.0-preview.128' and not candidate:
   pin = lock['integratedSeed']
-  return integrated_build(a, pin, asset(pin, cache, a.seed_archive), cache, out)
+  base = asset(pin, cache, a.seed_archive)
+  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)])
  seed=asset(lock['managedSeed'],cache,a.seed_archive)
  remote=asset(lock['myRemote'],cache)
  hosting=asset(lock['myHosting'],cache)

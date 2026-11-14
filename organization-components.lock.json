@@ -197,6 +197,12 @@
     "asset": "workspace-bundle.zip",
     "sha256": "cc61e4bf4f12ed0a7062d8ad9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
   },
+  "petSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.128",
+    "asset": "workspace-bundle.zip",
+    "sha256": "50e1cf51b68f980e57679431167e92fd9debc200f027ee9a985a3934357f5125"
+  },
   "integratedSeed": {
     "repository": "oneworkspacestudio/one-workspace",
     "tag": "v0.3.0-preview.127",

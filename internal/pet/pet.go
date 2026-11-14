@@ -20,7 +20,7 @@ import (
 	"github.com/oneworkspacestudio/one-workspace/pkg/apphost"
 )
 
-const Version = "0.1.0-preview.2"
+const Version = "0.1.0-preview.3"
 
 //go:embed web/dist
 var web embed.FS
@@ -65,8 +65,27 @@ func New(h *apphost.Host) (*Habitat, error) {
 	if err := platform.LoadSecret(p.settingsPath(), &p.settings); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return nil, errors.New("could not open Pet decision settings")
 	}
+	if err := p.openJournal(); err != nil {
+		return nil, err
+	}
+	if p.world != nil && p.world.Place == "" {
+		w := p.world
+		remaining := w.Until
+		if w.Action == "build" {
+			w.beginIdea(w.fallback("build"))
+		} else {
+			w.start(w.Action, w.FocusStyle, w.Source)
+			if w.Action == "sleep" || w.Action == "draw" {
+				w.Until = remaining
+			}
+		}
+		if err := p.save(context.Background(), *w); err != nil {
+			return nil, err
+		}
+	}
 	h.BackupPaths = append(h.BackupPaths, "decisions")
 	h.Mux.HandleFunc("GET /api/world", h.Require(p.state))
+	h.Mux.HandleFunc("GET /api/history", h.Require(p.history))
 	h.Mux.HandleFunc("POST /api/adopt", h.Owner(p.adopt))
 	h.Mux.HandleFunc("POST /api/treat", h.Require(p.treat))
 	h.Mux.HandleFunc("PUT /api/decisions", h.Owner(p.configure))
@@ -80,9 +99,21 @@ func (p *Habitat) save(ctx context.Context, w World) error {
 	if err != nil {
 		return err
 	}
-	if _, err = p.host.DB.ExecContext(ctx, `INSERT INTO pet_world VALUES(1,?) ON CONFLICT(id) DO UPDATE SET snapshot=excluded.snapshot`, raw); err != nil {
+	tx, err := p.host.DB.BeginTx(ctx, nil)
+	if err != nil {
 		return err
 	}
+	defer tx.Rollback()
+	if _, err = tx.ExecContext(ctx, `INSERT INTO pet_world VALUES(1,?) ON CONFLICT(id) DO UPDATE SET snapshot=excluded.snapshot`, raw); err != nil {
+		return err
+	}
+	if err = appendJournal(ctx, tx, w.events); err != nil {
+		return err
+	}
+	if err = tx.Commit(); err != nil {
+		return err
+	}
+	w.events = nil
 	p.world = &w
 	return nil
 }
@@ -113,7 +144,7 @@ func (p *Habitat) advance(ctx context.Context, now time.Time) error {
 	for i := int64(0); i < count; i++ {
 		next.advance(&pending)
 	}
-	next.Saved += elapsed * seconds
+	next.catchUp(now, elapsed, count)
 	if err := p.save(ctx, next); err != nil {
 		return err
 	}

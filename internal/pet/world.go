@@ -16,9 +16,12 @@ type Point struct {
 type Item struct {
 	ID int64 `json:"id"`
 	Point
-	Kind  string `json:"kind"`
-	Style int    `json:"style"`
-	Level int    `json:"level,omitempty"`
+	Kind     string    `json:"kind"`
+	Style    int       `json:"style"`
+	Level    int       `json:"level,omitempty"`
+	Painting *Painting `json:"painting,omitempty"`
+	Design   string    `json:"design,omitempty"`
+	Material string    `json:"material,omitempty"`
 }
 
 type Event struct {
@@ -28,37 +31,43 @@ type Event struct {
 }
 
 type World struct {
-	Name       string  `json:"name"`
-	Seed       uint64  `json:"seed,string"`
-	Tick       int64   `json:"tick"`
-	Saved      int64   `json:"saved"`
-	Position   Point   `json:"position"`
-	Target     Point   `json:"target"`
-	Action     string  `json:"action"`
-	Until      int64   `json:"until"`
-	Focus      int64   `json:"focus"`
-	FocusStyle int     `json:"focusStyle"`
-	Mood       string  `json:"mood"`
-	Energy     float64 `json:"energy"`
-	Fullness   float64 `json:"fullness"`
-	Happiness  float64 `json:"happiness"`
-	Curiosity  float64 `json:"curiosity"`
-	Minute     int     `json:"minute"`
-	Day        int     `json:"day"`
-	Weather    string  `json:"weather"`
-	Source     string  `json:"source"`
-	TreatAfter int64   `json:"treatAfter"`
-	Food       []Item  `json:"food"`
-	Creations  []Item  `json:"creations"`
-	Journal    []Event `json:"journal"`
+	Name       string    `json:"name"`
+	Seed       uint64    `json:"seed,string"`
+	Tick       int64     `json:"tick"`
+	Saved      int64     `json:"saved"`
+	Position   Point     `json:"position"`
+	Target     Point     `json:"target"`
+	Action     string    `json:"action"`
+	Until      int64     `json:"until"`
+	Focus      int64     `json:"focus"`
+	FocusStyle int       `json:"focusStyle"`
+	Mood       string    `json:"mood"`
+	Energy     float64   `json:"energy"`
+	Fullness   float64   `json:"fullness"`
+	Happiness  float64   `json:"happiness"`
+	Curiosity  float64   `json:"curiosity"`
+	Minute     int       `json:"minute"`
+	Day        int       `json:"day"`
+	Weather    string    `json:"weather"`
+	Source     string    `json:"source"`
+	TreatAfter int64     `json:"treatAfter"`
+	Food       []Item    `json:"food"`
+	Creations  []Item    `json:"creations"`
+	Journal    []Event   `json:"journal"`
+	Place      string    `json:"place,omitempty"`
+	Route      []Point   `json:"-"`
+	Painting   *Painting `json:"painting,omitempty"`
+	BuildXP    int       `json:"buildXP"`
+	Project    *Project  `json:"project,omitempty"`
+	VisitTrail []string  `json:"visitTrail,omitempty"`
+	events     []Event
 }
 
 var (
-	nest       = Point{9, -8}
+	nest       = Point{9, -6.85}
 	easel      = Point{7, 4}
 	playground = Point{-6, 5}
 	pond       = Point{-15, -9}
-	buildSites = []Point{{13, 7}, {15, 2}, {13, -3}, {5, -14}, {-3, -14}, {-8, -9}}
 )
 
 func newWorld(name string, now time.Time) World {
@@ -75,12 +84,10 @@ func newWorld(name string, now time.Time) World {
 	return w
 }
 
-func (w *World) rng() *rand.Rand {
-	return rand.New(rand.NewPCG(w.Seed, uint64(w.Tick)))
-}
-
 func (w *World) note(kind, text string) {
-	w.Journal = append(w.Journal, Event{w.Tick, kind, text})
+	event := Event{w.Tick, kind, text}
+	w.Journal = append(w.Journal, event)
+	w.events = append(w.events, event)
 	if len(w.Journal) > 80 {
 		w.Journal = append([]Event(nil), w.Journal[len(w.Journal)-80:]...)
 	}
@@ -88,10 +95,11 @@ func (w *World) note(kind, text string) {
 
 func distance(a, b Point) float64 { return math.Hypot(a.X-b.X, a.Z-b.Z) }
 
-func (w *World) meadowPoint(r *rand.Rand) Point {
+func (w *World) meadowPoint() Point {
+	blocks := w.barriers()
 	for {
-		p := Point{float64(r.IntN(33) - 16), float64(r.IntN(29) - 14)}
-		if distance(p, pond) > 5.5 && distance(p, nest) > 3 && distance(p, easel) > 1.5 {
+		p := Point{float64(rand.IntN(33) - 16), float64(rand.IntN(29) - 14)}
+		if clearSegment(p, p, blocks) && distance(p, pond) > 5.5 && distance(p, nest) > 3 && distance(p, easel) > 1.5 {
 			return p
 		}
 	}
@@ -100,7 +108,11 @@ func (w *World) meadowPoint(r *rand.Rand) Point {
 func (w *World) nearestFood() (Item, bool) {
 	var best Item
 	dist := math.Inf(1)
+	blocks := w.barriers()
 	for _, item := range w.Food {
+		if !clearSegment(item.Point, item.Point, blocks) {
+			continue
+		}
 		if d := distance(item.Point, w.Position); d < dist {
 			best, dist = item, d
 		}
@@ -110,21 +122,21 @@ func (w *World) nearestFood() (Item, bool) {
 
 func (w *World) start(action string, style int, source string) {
 	w.Action, w.Source, w.Focus, w.FocusStyle = action, source, 0, style
-	w.Until = 0
+	w.Until, w.Route, w.Painting = 0, nil, nil
 	switch action {
 	case "sleep":
-		w.Target = nest
+		w.Target, w.Place = nest, "the burrow"
 	case "eat":
 		food, _ := w.nearestFood()
-		w.Focus, w.Target = food.ID, food.Point
+		w.Focus, w.Target, w.Place = food.ID, food.Point, "a "+food.Kind
 	case "play":
-		w.Target = playground
+		w.Target, w.Place = playground, "the meadow ball"
 	case "draw":
-		w.Target = easel
+		w.Target, w.Place = Point{easel.X, 4.7}, "the easel"
 	case "build":
-		w.Target = buildSites[w.rng().IntN(len(buildSites))]
+		w.Target, w.Place = w.meadowPoint(), "the meadow"
 	default:
-		w.Target = w.meadowPoint(w.rng())
+		w.Target, w.Place = w.meadowPoint(), "the meadow"
 	}
 }
 
@@ -172,7 +184,7 @@ func (w World) urgent() string {
 
 func (w World) allows(action string) bool {
 	switch action {
-	case "draw", "build":
+	case "draw", "build", "gather":
 		return !w.dark() && w.Weather != "Rain" && w.Energy >= 45 && w.Fullness >= 50
 	case "play":
 		return w.Energy >= 38 && w.Fullness >= 45
@@ -184,9 +196,14 @@ func (w World) allows(action string) bool {
 }
 
 type Decision struct {
-	Action string `json:"action"`
-	Style  int    `json:"style"`
-	Source string `json:"-"`
+	Action   string    `json:"action"`
+	Style    int       `json:"style"`
+	Place    string    `json:"place,omitempty"`
+	Via      string    `json:"via,omitempty"`
+	Design   string    `json:"design,omitempty"`
+	Material string    `json:"material,omitempty"`
+	Painting *Painting `json:"painting,omitempty"`
+	Source   string    `json:"-"`
 }
 
 func (w *World) choose(idea Decision) {
@@ -194,58 +211,33 @@ func (w *World) choose(idea Decision) {
 		w.start(need, 0, "Instincts")
 		return
 	}
-	if w.allows(idea.Action) && idea.Style >= 0 && idea.Style < 4 {
-		w.start(idea.Action, idea.Style, idea.Source)
+	if w.validIdea(idea) {
+		w.beginIdea(idea)
 		return
 	}
-	r := w.rng()
 	actions := []string{"explore", "play", "draw", "build"}
-	weights := []int{5 + int(w.Curiosity/18), 6 + int((100-w.Happiness)/12), 5, 4}
+	weights := []int{5 + int(w.Curiosity/18), 4 + int((100-w.Happiness)/12), 6, 9}
+	if w.Project != nil {
+		weights[3] = 18
+	}
 	total := 0
 	for i, action := range actions {
-		if !w.allows(action) || action == w.Action {
+		if !w.allows(action) || action == w.Action && action != "build" || action == "build" && w.Project == nil && len(w.buildOptions()) == 0 {
 			weights[i] = 0
 		}
 		total += weights[i]
 	}
 	if total > 0 {
-		pick := r.IntN(total)
+		pick := rand.IntN(total)
 		for i, weight := range weights {
 			pick -= weight
 			if pick < 0 {
-				w.start(actions[i], r.IntN(4), "Instincts")
+				w.beginIdea(w.fallback(actions[i]))
 				return
 			}
 		}
 	}
 	w.start("explore", 0, "Instincts")
-}
-
-func (w *World) move() bool {
-	dest := w.Target
-	p := w.Position
-	d := distance(p, dest)
-	if d < 1.5 {
-		w.Position = dest
-		return true
-	}
-	pace := 1.45
-	if w.Action == "play" {
-		pace = 1.85
-	}
-	next := Point{p.X + (dest.X-p.X)*pace/d, p.Z + (dest.Z-p.Z)*pace/d}
-	if distance(next, pond) < 4.65 {
-		// Move around the shore instead of crossing the pond.
-		px, pz := p.X-pond.X, p.Z-pond.Z
-		sign := 1.0
-		if px*(dest.Z-pond.Z)-pz*(dest.X-pond.X) < 0 {
-			sign = -1
-		}
-		radius := math.Atan2(pz, px) + sign*0.29
-		next = Point{pond.X + 4.85*math.Cos(radius), pond.Z + 4.85*math.Sin(radius)}
-	}
-	w.Position = next
-	return false
 }
 
 func (w *World) complete() {
@@ -268,40 +260,17 @@ func (w *World) complete() {
 	case "explore":
 		w.Happiness += 4
 		w.Curiosity -= 17
-		w.note("explore", "Explored a new corner of the hollow")
+		w.note("explore", "Explored "+w.Place)
+		w.VisitTrail = append(append([]string{}, w.VisitTrail...), w.Place)
+		if len(w.VisitTrail) > 6 {
+			w.VisitTrail = w.VisitTrail[1:]
+		}
 	case "draw":
-		names := []string{"Sun over Clover Hill", "Moonlit Pond", "Wildflower Study", "After the Rain"}
-		count := 0
-		for _, item := range w.Creations {
-			if item.Kind == "art" {
-				count++
-			}
-		}
-		w.Creations = append(w.Creations, Item{ID: w.Tick, Point: easel, Kind: "art", Style: w.FocusStyle, Level: count + 1})
-		if count >= 23 {
-			for i, item := range w.Creations {
-				if item.Kind == "art" {
-					w.Creations = append(w.Creations[:i], w.Creations[i+1:]...)
-					break
-				}
-			}
-		}
-		w.Happiness += 12
-		w.note("art", "Painted “"+names[w.FocusStyle]+"”")
+		w.finishPainting()
+	case "gather":
+		w.gather()
 	case "build":
-		for i := range w.Creations {
-			item := &w.Creations[i]
-			if item.Kind == "build" && item.Point == w.Target {
-				item.Level = min(3, item.Level+1)
-				item.Style = w.FocusStyle
-				w.Happiness += 8
-				w.note("build", "Reworked a meadow sculpture")
-				return
-			}
-		}
-		w.Creations = append(w.Creations, Item{ID: w.Tick, Point: w.Target, Kind: "build", Style: w.FocusStyle, Level: 1})
-		w.Happiness += 10
-		w.note("build", "Built a new meadow sculpture")
+		w.build()
 	}
 }
 
@@ -309,9 +278,8 @@ func (w *World) advance(idea *Decision) {
 	w.Tick++
 	w.updateEnvironment()
 	if w.Tick%27 == 0 && len(w.Food) < 9 {
-		r := w.rng()
-		kind := []string{"berry", "fruit", "mushroom"}[r.IntN(3)]
-		w.Food = append(w.Food, Item{ID: -w.Tick - 2, Point: w.meadowPoint(r), Kind: kind})
+		kind := []string{"berry", "fruit", "mushroom"}[rand.IntN(3)]
+		w.Food = append(w.Food, Item{ID: -w.Tick - 2, Point: w.meadowPoint(), Kind: kind})
 	}
 	w.Fullness -= 0.36
 	w.Curiosity += 0.43
@@ -333,21 +301,35 @@ func (w *World) advance(idea *Decision) {
 	// Instincts interrupt recreational plans before care becomes critical.
 	if w.Action != "sleep" && w.Action != "eat" {
 		if need := w.urgent(); need != "" {
+			if w.Action == "build" || w.Action == "gather" {
+				w.note("build", "Set the project aside to tend to basic needs")
+			}
 			w.start(need, 0, "Instincts")
 		}
 	}
+	if (w.Action == "build" || w.Action == "gather") && (w.dark() || w.Weather == "Rain") {
+		w.note("build", "Paused the project until daylight and clear skies")
+		w.choose(Decision{})
+	}
 	if w.Until == 0 && w.move() {
-		duration := map[string]int64{"explore": 5, "play": 12, "draw": 16, "build": 19, "eat": 4, "sleep": 28}
+		duration := map[string]int64{"explore": 5, "play": 12, "draw": 16, "build": 12, "gather": 5, "eat": 4, "sleep": 28}
 		w.Until = w.Tick + duration[w.Action]
 		if w.Action == "sleep" {
 			w.note("sleep", "Curled up in the burrow")
+		} else if w.Action == "build" {
+			w.note("build", "Started work at the "+w.Place)
+		} else if w.Action == "draw" {
+			w.note("art", "Started a painting at the easel")
 		}
 	}
 	if w.Until > 0 && w.Tick >= w.Until {
 		w.complete()
 		next := Decision{}
 		if idea != nil && w.urgent() == "" {
-			next, *idea = *idea, Decision{}
+			next = *idea
+		}
+		if idea != nil {
+			*idea = Decision{}
 		}
 		w.choose(next)
 	}

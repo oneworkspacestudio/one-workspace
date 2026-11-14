@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview129: Pet routes, art and construction
+
+Pet preview.3 fixes long-press control selection. Visits start at the trailhead.
+The journal stores timestamped days and construction learns new designs through
+practice. Optional models plan from the habitat map and can compose paintings,
+choose waypoints and direct multi-stage construction. See [Pet](PET.md).
+
 ## Preview128: Froststock
 
 Froststock is an optional General app for scanning freezer items and their date

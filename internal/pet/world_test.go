@@ -47,7 +47,7 @@ func TestHabitatEvolvesWithoutVisitors(t *testing.T) {
 			builds++
 		}
 	}
-	if art == 0 || art > 24 || builds == 0 || builds > len(buildSites) || len(w.Journal) > 80 || len(w.Food) > 9 {
+	if art == 0 || art > 24 || builds == 0 || builds > len(sites)+6 || len(w.Journal) > 80 || len(w.Food) > 9 {
 		t.Fatalf("unexpected persisted collection sizes: art=%d builds=%d events=%d food=%d", art, builds, len(w.Journal), len(w.Food))
 	}
 }
@@ -102,6 +102,7 @@ func TestSavedHabitatSurvivesRestartAndCatchesUp(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	w.events = nil
 	if !reflect.DeepEqual(*p.world, w) {
 		t.Fatal("snapshot changed after reload")
 	}

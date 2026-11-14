@@ -9,7 +9,41 @@ const palettes = [
 ];
 const stoneColors = ['#e1b07e','#91b0b5','#bf9fbd','#c8cd83'];
 
+const paintColors:Record<string,string> = {
+  peach:'#f5c1a1', gold:'#ecad4a', rose:'#cf6890', mint:'#acdbb2', fern:'#39734e',
+  blue:'#719abb', violet:'#987db1', cream:'#ffebbb', navy:'#334972', clay:'#aa5b4a',
+};
+
 export function paint(ctx: CanvasRenderingContext2D, item: Item, width: number, height: number) {
+  if (item.painting) {
+    ctx.fillStyle=paintColors[item.painting.sky];
+    ctx.fillRect(0,0,width,height);
+    for (const stroke of item.painting.strokes) {
+      const [cx,cy,w,h]=stroke.box;
+      const x=cx*width/100,y=cy*height/100,rx=w*width/200,ry=h*height/200;
+      ctx.fillStyle=paintColors[stroke.color];
+      ctx.beginPath();
+      switch(stroke.shape) {
+        case 'oval':
+          ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+          break;
+        case 'leaf':
+          ctx.moveTo(x-rx,y+ry);
+          ctx.quadraticCurveTo(x-rx,y-ry,x+rx,y-ry);
+          ctx.quadraticCurveTo(x+rx,y+ry,x-rx,y+ry);
+          break;
+        case 'triangle':
+          ctx.moveTo(x,y-ry);
+          ctx.lineTo(x+rx,y+ry);
+          ctx.lineTo(x-rx,y+ry);
+          break;
+        default:
+          ctx.rect(x-rx,y-ry,rx*2,ry*2);
+      }
+      ctx.fill();
+    }
+    return;
+  }
   const [sky, sun, hill, grass] = palettes[item.style];
   ctx.fillStyle = sky;
   ctx.fillRect(0,0,width,height);
@@ -302,6 +336,7 @@ export function renderHabitat(
   mesh('globe',cream,0,.43,-.73,.23,.24,.25,tail);
   const paws=[[-.44,.17,.36],[.44,.17,.36],[-.40,.16,-.54],[.40,.16,-.54]].map(([x,y,z])=>
     mesh('globe','#b3623b',x,y,z,.21,.24,.32,creature));
+  const carried = mesh('rock','#ad8864',0,.34,.90,.24,.21,.21,creature);
   const stars=new T.Group();
   scene.add(stars);
   const starMat=new T.MeshBasicMaterial({color:'#fff2c8'});
@@ -331,7 +366,35 @@ export function renderHabitat(
     if(item.kind==='build') {
       shade(0,0,1.28,.89,group);
       const levels=(item.level||1)+2;
-      if(item.style===1) {
+      if(item.design) {
+        const stage=item.level||1;
+        const color=item.material==='wood'?'#936742':item.material==='reed'?'#a7b661':'#9faaaa';
+        mesh('block',color,0,.12,0,1.85,.23,1.45,group);
+        if(item.design==='cairn') {
+          for(let i=0;i<stage+1;i++) {
+            const width=.68-i*.11;
+            mesh('rock',color,Math.sin(i*2)*.12,.25+i*.28,0,width,.25,width,group).rotation.y=i;
+          }
+        } else {
+          const height=stage*.48;
+          for(const side of [-1,1]) {
+            mesh('block',color,side*.63,height/2,.18,.23,height,.29,group);
+            if(item.design!=='arch') mesh('block',color,side*.63,height/2,-.52,.23,height,.24,group);
+          }
+          if(stage===3) {
+            if(item.design==='shelter') mesh('pine','#698743',0,height+.24,-.12,1.23,.68,1.04,group);
+            else if(item.design==='arch') {
+              for(let i=0;i<7;i++) {
+                const angle=Math.PI*i/6;
+                mesh('rock',color,.63*Math.cos(angle),height+.64*Math.sin(angle),.18,.22,.27,.22,group);
+              }
+            } else {
+              mesh('block',color,0,height+.1,-.16,1.84,.2,1.36,group);
+              for(const side of [-1,1]) mesh('block',color,side*.78,height+.37,-.16,.13,.44,1.36,group);
+            }
+          }
+        }
+      } else if(item.style===1) {
         for(let i=0;i<8;i++) {
           const a=Math.PI-i*Math.PI/7;
           mesh('rock',stoneColors[i%2?1:3],Math.cos(a)*.96,.24+Math.sin(a)*(.98+levels*.12),0,.34,.39,.36,group).rotation.z=a;
@@ -369,7 +432,7 @@ export function renderHabitat(
       if(!ids.has(id)) { scene.remove(entry.group); objects.delete(id); }
     }
     for(const item of items) {
-      const key=item.kind+item.style+item.level;
+      const key=[item.kind,item.style,item.level,item.design,item.material].join(':');
       const existing=objects.get(item.id);
       if(existing?.key===key) continue;
       if(existing) scene.remove(existing.group);
@@ -387,7 +450,7 @@ export function renderHabitat(
         pictureCtx.beginPath();
         pictureCtx.rect(0,0,192*progress,144);
         pictureCtx.clip();
-        paint(pictureCtx,working?{kind:'art',style:w.focusStyle,id:0,x:0,z:0}:painting!,192,144);
+        paint(pictureCtx,working?{kind:'art',style:w.focusStyle,id:0,x:0,z:0,painting:w.painting}:painting!,192,144);
         pictureCtx.restore();
       }
       artwork.needsUpdate=true;
@@ -395,7 +458,7 @@ export function renderHabitat(
     }
   };
 
-  let tracking=true, yaw=0, pitch=0, pointer:number|null=null, lastX=0, lastY=0;
+  let tracking=false, yaw=0, pitch=0, pointer:number|null=null, lastX=0, lastY=0;
   const keys=new Set<string>();
   const touchKeys=new Set<string>();
   const directions:Record<string,string>={w:'up',a:'left',s:'down',d:'right',ArrowUp:'up',ArrowLeft:'left',ArrowDown:'down',ArrowRight:'right'};
@@ -432,9 +495,13 @@ export function renderHabitat(
   };
   const release=(e:PointerEvent) => { if(e.pointerId===pointer) pointer=null; };
   const lose=(e:Event) => { e.preventDefault(); failed(); renderer.setAnimationLoop(null); };
+  const suppressNativeGesture = (event:Event) => event.preventDefault();
+  canvas.addEventListener('contextmenu',suppressNativeGesture);
+  canvas.addEventListener('selectstart',suppressNativeGesture);
   canvas.addEventListener('pointerdown',down);
   canvas.addEventListener('pointermove',look);
   canvas.addEventListener('lostpointercapture',release);
+  canvas.addEventListener('pointercancel',release);
   canvas.addEventListener('keydown',keydown);
   canvas.addEventListener('keyup',keyup);
   canvas.addEventListener('blur',clearKeyboard);
@@ -463,7 +530,10 @@ export function renderHabitat(
   };
   const first=state().position;
   pet.position.set(first.x,0,first.z);
-  camera.position.set(first.x+2.6,1.74,first.z+5.6);
+  camera.position.set(3.7,1.74,15);
+  camera.lookAt(2,.85,2);
+  yaw=camera.rotation.y;
+  pitch=camera.rotation.x;
   let previous=0;
   let lastFrame=0;
   renderer.setAnimationLoop((ms:number) => {
@@ -489,8 +559,7 @@ export function renderHabitat(
     target.set(w.position.x,0,w.position.z);
     const walking=pet.position.distanceTo(target)>.035;
     const mix=1-Math.exp(-dt*(walking?2.65:7));
-    const heading=walking ? Math.atan2(target.x-pet.position.x,target.z-pet.position.z) :
-      tracking ? Math.atan2(camera.position.x-pet.position.x,camera.position.z-pet.position.z) : pet.rotation.y;
+    const heading = walking ? Math.atan2(target.x-pet.position.x,target.z-pet.position.z) : pet.rotation.y;
     pet.rotation.y += Math.atan2(Math.sin(heading-pet.rotation.y),Math.cos(heading-pet.rotation.y))*(1-Math.exp(-dt*5));
     pet.position.lerp(target,mix);
     shadow.position.copy(pet.position);
@@ -501,20 +570,25 @@ export function renderHabitat(
     torso.rotation.x=sleeping?.15:0;
     tail.rotation.y=Math.sin(time*(w.happiness>76?8:4))*(sleeping?.08:.40);
     face.rotation.z=Math.sin(time*2)*.08;
-    face.rotation.x=active&&(w.action==='draw'||w.action==='eat')?Math.sin(time*5)*.17:0;
+    face.rotation.x=active&&['draw','eat','build','gather'].includes(w.action)?Math.sin(time*5)*.17:0;
+    carried.visible = w.action==='build' && !!w.project?.stock;
+    carried.rotation.z=Math.sin(time*3)*.12;
     const blink=sleeping || Math.sin(time*1.42)>.996;
     for(let i=0;i<2;i++) {
       eyes[i].scale.y=blink?.021:.10;
       ears[i].rotation.x=Math.sin(time*2.3+i*2)*.12;
     }
     for(let i=0;i<4;i++) paws[i].position.y=.17+(walking?Math.max(0,Math.sin(time*9+i*Math.PI/2))*.18:0);
-    const playing=w.action==='play'&&active;
+    const playing=w.action==='play'&&active && Math.hypot(w.position.x+6,w.position.z-5)<1.5;
     ball.position.y=.34+(playing?Math.abs(Math.sin(time*5))*.75:0);
     ballBand.position.y=ball.position.y;
 
     if(tracking) {
       const distance = camera.aspect < .67 ? 1.25 : 1;
-      cameraTarget.set(pet.position.x+2.45*distance,1.71,pet.position.z+5.15*distance);
+      cameraTarget.set(pet.position.x+2.45*distance,2.25,pet.position.z+5.15*distance);
+      // Keep the follow camera above the burrow and out of nearby crowns.
+      const nearBurrow=Math.hypot(cameraTarget.x-9,cameraTarget.z+9)<3.5;
+      if(nearBurrow) cameraTarget.y=5.0;
       camera.position.lerp(cameraTarget,1-Math.exp(-dt*3.3));
       lookAt.set(pet.position.x,.99,pet.position.z);
       camera.lookAt(lookAt);

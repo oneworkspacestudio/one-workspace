@@ -103,7 +103,7 @@ func (p *Habitat) schedule(ctx context.Context, workers *sync.WaitGroup, now tim
 	}
 	shared := cfg.Mode == "service" || cfg.Mode == "both" && p.sharedNext
 	p.sharedNext = !p.sharedNext
-	p.nextTurn = now.Add(90 * time.Second)
+	p.nextTurn = now.Add(24 * time.Second)
 	turn, cancel := context.WithCancel(ctx)
 	p.cancel = cancel
 	gen := p.generation
@@ -120,7 +120,12 @@ func (p *Habitat) schedule(ctx context.Context, workers *sync.WaitGroup, now tim
 			return
 		}
 		if err != nil {
-			p.modelStatus = "Model unavailable · instincts active"
+			p.modelStatus = "Model unavailable or plan unusable · instincts active"
+			p.nextTurn = time.Now().Add(60 * time.Second)
+			return
+		}
+		if p.world.Tick-world.Tick > 36 || !p.world.validIdea(idea) {
+			p.modelStatus = "Habitat changed while planning"
 			return
 		}
 		p.pending = idea
@@ -129,25 +134,19 @@ func (p *Habitat) schedule(ctx context.Context, workers *sync.WaitGroup, now tim
 }
 
 func (b brain) decide(ctx context.Context, cfg Settings, w World, shared bool) (Decision, error) {
-	available := []string{}
-	for _, action := range []string{"explore", "play", "draw", "build"} {
-		if w.allows(action) {
-			available = append(available, action)
-		}
-	}
-	snapshot, err := json.Marshal(map[string]any{
-		"actions": available, "currentAction": w.Action, "mood": w.Mood, "minuteOfDay": w.Minute,
-		"weather": w.Weather, "energy": int(w.Energy), "fullness": int(w.Fullness),
-		"happiness": int(w.Happiness), "curiosity": int(w.Curiosity), "food": len(w.Food), "creations": len(w.Creations),
-	})
+	snapshot, err := json.Marshal(w.observation())
 	if err != nil {
 		return Decision{}, err
 	}
 	body := map[string]any{
-		"model": cfg.Model, "stream": false, "format": "json", "keep_alive": "0s",
-		"options": map[string]any{"num_ctx": 2048, "num_predict": 256, "temperature": 0.55},
+		"model": cfg.Model, "stream": false, "format": "json", "keep_alive": "0s", "think": false,
+		"options": map[string]any{"num_ctx": 4096, "num_predict": 900, "temperature": 0.85},
 		"messages": []map[string]string{
-			{"role": "system", "content": `You choose the next activity for a curious woodland pet. Use only an action listed in actions and return exactly {"action":"explore","style":0}. Pick an integer style 0–3 for art or structures. Prefer variety and play when happiness is low. Do not output prose or extra fields.`},
+			{"role": "system", "content": `You decide what a curious woodland pet does next. Return one compact JSON object from the options below. Use the current position, daylight, weather, obstacles, reachable places, nearby food, recent visits and existing work. Try new places and mix activities. Finish active projects during clear daylight when practical. Only choose an action listed in actions.
+Explore or play: {"action":"explore","place":"pond bank","via":"clover trail"}. Use exact reached place names from reachablePlaces. Omit via for a direct route.
+Build: {"action":"build","place":"south meadow","design":"cairn","material":"stone"}. Choose a buildSites id (sites can be rebuilt when the meadow is full), a learned buildingDesigns entry and a material from resourceSites. If a project already exists reply {"action":"build"} to gather or add its next stage. The pet learns new designs after completing projects.
+Draw: {"action":"draw","painting":{"title":"Sunlit reeds","sky":"peach","strokes":[{"shape":"oval","color":"gold","box":[70,23,12,12]},{"shape":"leaf","color":"fern","box":[22,75,22,30]},{"shape":"line","color":"blue","box":[10,70,80,6]}]}}. Invent a composition inspired by what the pet can see. Include 3 to 12 strokes and a short distinct title. Shapes: oval, leaf, line, triangle. Colors: peach, gold, rose, mint, fern, blue, violet, cream, navy, clay. Box: center x, center y, width, height as integers from 0 to 100, with width and height at least 2.
+Use only the above fields. No prose outside JSON.`},
 			{"role": "user", "content": string(snapshot)},
 		},
 	}
@@ -190,8 +189,8 @@ func (b brain) decide(ctx context.Context, cfg Settings, w World, shared bool) (
 	var idea Decision
 	d := json.NewDecoder(strings.NewReader(reply.Message.Content))
 	d.DisallowUnknownFields()
-	if len(reply.Message.Content) > 512 || d.Decode(&idea) != nil || d.Decode(new(any)) != io.EOF ||
-		!w.allows(idea.Action) || idea.Style < 0 || idea.Style > 3 {
+	if len(reply.Message.Content) > 5000 || d.Decode(&idea) != nil || d.Decode(new(any)) != io.EOF ||
+		!w.validIdea(idea) {
 		return Decision{}, errors.New("unsupported habitat decision")
 	}
 	idea.Source = source

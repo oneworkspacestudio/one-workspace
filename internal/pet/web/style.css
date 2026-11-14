@@ -370,6 +370,56 @@ main.playing {
 .overlay button {
   pointer-events: auto;
 }
+.surface canvas,
+.dpad,
+.dpad button,
+.overlay button,
+.playing .treat {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.dpad button span {
+  pointer-events: none;
+}
+.playing .decisionSource {
+  color: #d9eea7;
+  font-size: .6rem;
+  margin: -3px 0 6px;
+}
+.projectStatus {
+  font-size: .8rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.dayControls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.dayControls form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dayControls button {
+  min-width: 44px;
+  padding-inline: 8px;
+}
+.dayControls input {
+  width: 5.5ch;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  text-align: center;
+}
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 .viewHeading,
 .focusPet,
 .viewHelp {

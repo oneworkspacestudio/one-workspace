@@ -1,13 +1,16 @@
 import {createElement as h, createContext, useContext, useEffect, useRef, useState, type ReactNode} from 'react';
 import {renderHabitat, paint} from './world';
+export {DayHistory} from './history';
 
 export type Point = {x: number; z: number};
-export type Item = Point & {id: number; kind: string; style: number; level?: number};
+export type Painting = {title:string; sky:string; strokes:{shape:string; color:string; box:number[]}[]};
+export type Item = Point & {id:number; kind:string; style:number; level?:number; painting?:Painting; design?:string; material?:string};
 export type World = {
   name: string; seed: string; tick: number; saved: number; position: Point; target: Point; action: string; until: number;
   focusStyle: number; mood: string; energy: number; fullness: number; happiness: number; curiosity: number;
   minute: number; day: number; weather: string; source: string; treatAfter: number;
-  food: Item[]; creations: Item[]; journal: {tick: number; kind: string; text: string}[];
+  food: Item[]; creations: Item[]; painting?:Painting;
+  project?:{site:string; design:string; material:string; stock:number; stage:number};
 };
 export type SettingsState = {mode: string; modelStatus: string; localModel: string; paired: boolean; hasService: boolean};
 export type PetState = Partial<SettingsState> & {world: World | null};
@@ -74,7 +77,7 @@ export function ArtThumb({item}:{item:Item}) {
     const ctx = el.current?.getContext('2d');
     if (ctx) paint(ctx, item, 156, 108);
   }, [item.id, item.kind, item.style, item.level]);
-  const title = (item.kind==='art'?artTitles:buildTitles)[item.style];
+  const title = item.painting?.title || (item.design ? item.material+' '+item.design : (item.kind==='art'?artTitles:buildTitles)[item.style]);
   return h('figure',{className:'thumb'},h('canvas',{ref:el,width:156,height:108,'aria-hidden':true}),
     h('figcaption',{},title));
 }
@@ -85,7 +88,7 @@ export function HabitatView({state}:{state:World}) {
   const latest = useRef(state);
   latest.current = state;
   const [failed,setFailed] = useState(false);
-  const [tracking,setTracking] = useState(true);
+  const [tracking,setTracking] = useState(false);
   const [touch,setTouch] = useState(() => navigator.maxTouchPoints > 0 || matchMedia('(pointer: coarse)').matches);
   useEffect(() => {
     const query = matchMedia('(pointer: coarse)');
@@ -110,7 +113,8 @@ export function HabitatView({state}:{state:World}) {
         h('div',{className:'viewHeading'},h('span',{className:'liveDot'}),tracking?'Following pet':'First-person view'),
         h('button',{type:'button',className:'focusPet','aria-pressed':tracking,'aria-label':'Find '+state.name,
           onClick:() => driver.current?.follow()},'◎  Find pet'),
-        touch ? h('div',{className:'dpad',role:'group','aria-label':'Walk'},
+        touch ? h('div',{className:'dpad',role:'group','aria-label':'Walk',
+          onContextMenu:(e:any)=>e.preventDefault(), onDragStart:(e:any)=>e.preventDefault()},
           ...([['up','↑','Move forward'],['left','←','Move left'],['down','↓','Move back'],['right','→','Move right']] as const)
             .map(([dir, icon, label]) => h('button',{key:dir,type:'button',className:dir,'aria-label':label,
               onPointerDown:(e:any) => {e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);driver.current?.move(dir,true);},
@@ -120,7 +124,7 @@ export function HabitatView({state}:{state:World}) {
               onKeyDown:(e:any) => {if(e.key===' '||e.key==='Enter'){e.preventDefault();driver.current?.move(dir,true);}},
               onKeyUp:() => driver.current?.move(dir,false),
               onBlur:() => driver.current?.move(dir,false),
-            },icon))) : null,
+            },h('span',{'aria-hidden':true},icon)))) : null,
         h('span',{className:'viewHelp'},touch?'Drag to look':'Drag to look · WASD to walk')));
 }
 
@@ -151,7 +155,7 @@ export function DecisionForm({state}:{state:SettingsState}) {
   return h('details', {},
     h('summary',{}, 'Decision settings'),
     h('form',{onSubmit:submit},
-      h('p',{className:'muted'},'Models can suggest activities. Instincts handle food, sleep and outages.'),
+      h('p',{className:'muted'},'Models can choose routes, design paintings and plan construction. Instincts handle care and outages.'),
       h('label',{},'Decision mode',h('select',{value:mode,onChange:(e:any)=>setMode(e.target.value)},
         h('option',{value:'instincts'},'Instincts'),
         h('option',{value:'local'},'Local Ollama model'),

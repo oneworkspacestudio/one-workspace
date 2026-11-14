@@ -1,4 +1,4 @@
-import { HabitatView, Needs, Portrait, DecisionForm, ArtThumb, FieldJournal } from "../ui"
+import { HabitatView, Needs, Portrait, DecisionForm, ArtThumb, FieldJournal, DayHistory } from "../ui"
 Page Pet variant=$pageStyle
   Row variant=topbar
     Row variant=wordmark
@@ -47,17 +47,15 @@ Page Pet variant=$pageStyle
           Heading level=2 $world.name
           Badge variant=mood $world.mood
       Text variant=activity $activity
+      Text variant=decisionSource $world.source
       Needs state=$world
     Button variant=treat action=treat disabled=$treatDisabled $treatLabel
     FieldJournal open=$journalOpen onClose=$closeJournal
-      Card variant=journal
-        Heading level=2 "Field notes"
-        For each=$events
-          Row variant=event
-            Text variant=eventIcon $item.icon
-            Text $item.text
-            Text variant=eventTime $item.time
+      If condition=$journalOpen
+        DayHistory account=$account currentDay=$world.day tick=$world.tick
       Card variant=gallery
+        If condition=$world.project
+          Text variant=projectStatus $projectSummary
         Row variant=sectionTop
           Heading level=2 "Made in the hollow"
           Text variant=smallLabel $galleryCount

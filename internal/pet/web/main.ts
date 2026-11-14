@@ -9,10 +9,7 @@ type Bootstrap = {oidc: boolean; workspace: string};
 const times = (minute: number) => String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
 const verbs: Record<string, string> = {
   explore: 'Exploring the meadow', sleep: 'At the burrow', eat: 'Foraging for a snack',
-  play: 'Playing in the meadow', draw: 'Working on a painting', build: 'Building a sculpture',
-};
-const signs: Record<string, string> = {
-  explore: '✧', home: '⌂', treat: '✿', sleep: '☾', play: '◈', art: '◒', build: '▦', eat: '●',
+  play: 'Playing in the meadow', draw: 'Working on a painting', build: 'Working on a project', gather: 'Collecting building materials',
 };
 async function json(path: string, options?: RequestInit) {
   const response = await fetch(path, {cache: 'no-store', ...options});
@@ -153,10 +150,8 @@ function App() {
       busy, world, weather: world?.weather === 'Rain' ? 'Rain in the meadow' : dark ? 'A clear night' : 'Clear skies',
       sun: dark ? '☾' : world?.weather === 'Rain' ? '☂' : '☀', clock: times(clock), day: 'DAY '+(world?.day || 1),
       pageStyle: world ? 'playing' : undefined, journalOpen, closeJournal: () => setJournalOpen(false),
-      activity: world ? (world.mood === 'Dreaming' ? 'Asleep in the burrow' : verbs[world.action]) : '',
-      events: (world?.journal ?? []).slice(-6).reverse().map(event => ({
-        ...event, icon: signs[event.kind] || '·', time: times((event.tick*2+510)%1440),
-      })),
+      activity: world ? (world.mood === 'Dreaming' ? 'Asleep in the burrow' : verbs[world.action] || 'Exploring the hollow') : '',
+      account, projectSummary: world?.project ? 'In progress · '+world.project.material+' '+world.project.design+' · '+world.project.stage+'/3 stages' : '',
       creations, galleryCount: String(creations.length), emptyGallery: !creations.length,
       treatDisabled: busy || offline || cooldown > 0, treatLabel: cooldown ? 'Next treat in '+cooldown+'s' : 'Give a clover treat',
       settings,
