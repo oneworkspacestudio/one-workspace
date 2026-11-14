@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview133: Froststock label recognition
+
+Froststock preview.3 prioritizes prominent food titles and retries hard-to-read
+expiry labels with adjusted contrast, close crops and rotated copies. It flags
+unclear digits and conflicting dates for review. Existing items can use
+**Read labels again** from their saved photos. See [Froststock](FROSTSTOCK.md).
+
 ## Preview131 with Sunny & Moon evening tiredness
 
 Sunny & Moon preview.4 fills the tiredness bar faster in the evening.

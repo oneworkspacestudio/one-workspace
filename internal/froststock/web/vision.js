@@ -23,8 +23,8 @@ self.onmessage = async ({ data: { blob, purpose } }) => {
     const { processor, model, RawImage } = await engine;
     const image = await RawImage.fromBlob(blob);
     const instruction = purpose === 'date'
-      ? 'Transcribe the exact printed expiry or best before date in the image. Reply with the printed text only. If illegible reply UNKNOWN.'
-      : 'Read the food product name printed on the package. Reply with the exact name only. If illegible reply UNKNOWN.';
+      ? 'Copy the exact printed expiry or best before date. Include the year only if it is visible. Reply with the printed text only. If illegible reply UNKNOWN.'
+      : 'Copy the name of the food printed in the largest text on the package. If there is no readable text, suggest the food name only if clearly recognisable. Otherwise reply UNKNOWN. Use one short line.';
     const prompt = processor.apply_chat_template([{ role: 'user', content: [{ type: 'image' }, { type: 'text', text: instruction }] }], { add_generation_prompt: true });
     inputs = await processor(prompt, [image], { do_image_splitting: false });
     generated = await model.generate({ ...inputs, max_new_tokens: 32, do_sample: false });
