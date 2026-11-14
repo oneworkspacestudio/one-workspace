@@ -290,12 +290,17 @@ func availableInstallConfig(r Request, cat catalog.Catalog) (Config, error) {
 
 func CheckPorts(c Config) error {
 	ports := []int{c.Port}
+	var froststockAddress string
 	mediaUDP := []int{}
 	if SharedEnabled(c) && !sharedOwnsPort(c) {
 		ports = append(ports, c.Port+11)
 	}
 	for _, a := range c.Catalog.Apps {
 		if a.Kind == "process" {
+			if a.ID == "froststock" {
+				froststockAddress = appLoopbackAddress(a, "127.0.0.1")
+				continue
+			}
 			ports = append(ports, a.Port)
 			if a.ID == "remote" {
 				if a.Port > 65300 {
@@ -331,6 +336,13 @@ func CheckPorts(c Config) error {
 		l, e := net.Listen("tcp4", fmt.Sprintf("127.0.0.1:%d", p))
 		if e != nil {
 			return fmt.Errorf("TCP port %d is unavailable: %w", p, e)
+		}
+		listeners = append(listeners, l)
+	}
+	if froststockAddress != "" {
+		l, e := net.Listen("tcp6", froststockAddress)
+		if e != nil {
+			return fmt.Errorf("Froststock address %s is unavailable: %w", froststockAddress, e)
 		}
 		listeners = append(listeners, l)
 	}

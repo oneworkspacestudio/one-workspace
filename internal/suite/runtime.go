@@ -165,11 +165,24 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	_ = server.Shutdown(stop)
 	return nil
 }
+func appLoopbackAddress(app catalog.App, host string) string {
+	if app.ID == "froststock" {
+		// My Hosting's Caddy binds to IPv4, independently of the catalog.
+		// Keep Froststock's saved port while isolating its private listener.
+		host = "::1"
+	}
+	return net.JoinHostPort(host, strconv.Itoa(app.Port))
+}
+
 func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 	c, s := rt.Config, rt.Secrets
 	vars := strings.NewReplacer("${DATA}", c.Data, "${FILES}", c.Files, "${ORIGIN}", c.Origin, "${ISSUER}", c.Issuer, "${PORT}", strconv.Itoa(app.Port), "${ROUTE}", app.Route)
 	args := []string{}
 	for _, v := range app.Args {
+		if app.ID == "froststock" && v == "127.0.0.1:${PORT}" {
+			args = append(args, appLoopbackAddress(app, "127.0.0.1"))
+			continue
+		}
 		args = append(args, vars.Replace(v))
 	}
 	if app.ID == "chat" {
@@ -438,7 +451,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 	if app.ID == "gitea" || app.ID == "mail" || app.ID == "chat" {
 		startupTimeout = 3 * time.Minute
 	}
-	if e = WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
+	if e = WaitHTTPDetailed(ctx, "http://"+appLoopbackAddress(app, "localhost")+health, startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
 		return e
 	}
 	rt.set(app.ID, "running")
@@ -494,7 +507,7 @@ func (rt *Runtime) start(ctx context.Context, app catalog.App) (startErr error) 
 			if delay < 30*time.Second {
 				delay *= 2
 			}
-			if e := WaitHTTPDetailed(ctx, fmt.Sprintf("http://localhost:%d%s", app.Port, health), startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
+			if e := WaitHTTPDetailed(ctx, "http://"+appLoopbackAddress(app, "localhost")+health, startupTimeout, done, func(detail string) { rt.progress.Step(app.ID, "running", detail) }); e != nil {
 				if ctx.Err() == nil {
 					rt.appFailed(app, e)
 				}

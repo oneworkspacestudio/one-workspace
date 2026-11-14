@@ -197,6 +197,12 @@
     "asset": "workspace-bundle.zip",
     "sha256": "cc61e4bf4f12ed0a7062d8ad9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
   },
+  "froststockPortSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.130",
+    "asset": "workspace-bundle.zip",
+    "sha256": "319a8bb0a0eb26a2afedc7d4eefb8f5fd338c59d67f7dc49ac7ab6a27cf9b0f5"
+  },
   "sunnyMoonSeed": {
     "repository": "oneworkspacestudio/one-workspace",
     "tag": "v0.3.0-preview.129",

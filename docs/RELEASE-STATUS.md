@@ -13,6 +13,12 @@ The journal stores timestamped days and construction learns new designs through
 practice. Optional models plan from the habitat map and can compose paintings,
 choose waypoints and direct multi-stage construction. See [Pet](PET.md).
 
+## Froststock port isolation
+
+Managed Froststock uses IPv6 loopback for its private listener. It can start
+alongside My Hosting when Caddy binds the same port on IPv4. The Workspace
+update applies this to existing installations using their saved port.
+
 ## Preview128: Froststock
 
 Froststock is an optional General app for scanning freezer items and their date
