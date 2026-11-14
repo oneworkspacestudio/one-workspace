@@ -476,7 +476,7 @@ progress::-moz-progress-bar { background: linear-gradient(180deg, var(--shine), 
 }
 [data-cue="toilet"] .sun { animation: toilet-wiggle 4.8s ease-in-out infinite; }
 [data-cue="toilet"] .toilet-mark { opacity: 1; }
-[data-cue="toilet"] .eye { scale: 1 .86; translate: 0 0; background: #fff8da; }
+[data-mood="happy"][data-cue="toilet"] .eye { scale: 1 .86; }
 [data-cue="toilet"] .eye i { translate: 0.0157em 0; }
 [data-cue="toilet"] .brow-left { transform: translateY(-0.0236em) rotate(-23deg); }
 [data-cue="toilet"] .brow-right { transform: translateY(-0.0236em) rotate(23deg); }

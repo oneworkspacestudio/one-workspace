@@ -32,7 +32,7 @@ export function routineAt(now, settings) {
   const crossesMidnight = minutesOfDay(settings.bedtime) < minutesOfDay(settings.wake);
   const bedtime = atTime(now, settings.bedtime, offset + Number(crossesMidnight));
   const reminder = new Date(Math.max(start.getTime(), bedtime.getTime() - settings.lead * MINUTE));
-  const windingDown = new Date(Math.max(start.getTime(), bedtime.getTime() - 105 * MINUTE));
+  const windingDown = new Date(Math.max(start.getTime(), bedtime.getTime() - 180 * MINUTE));
   const sleepy = new Date(Math.max(start.getTime(), bedtime.getTime() - 60 * MINUTE));
   const mood = now <= start ? 'happy' : now >= sleepy ? 'sleepy' : now >= windingDown ? 'winding-down' : 'happy';
   const remaining = (nextWake - Math.max(now.getTime(), bedtime.getTime())) / MINUTE;
@@ -53,10 +53,12 @@ export function earlierTime(time, routine, now) {
 export function metersAt(now, routine, lastVisit) {
   const sinceVisit = now - (lastVisit ?? routine.start.getTime());
   const fill = (elapsed, interval) => Math.min(100, Math.max(0, Math.floor(100 * elapsed / interval)));
+  const awakeProgress = Math.min(1, Math.max(0, (now - routine.start) / (routine.bedtime - routine.start)));
+  const eveningBoost = (1 - awakeProgress) * routine.drowsiness * 0.85;
   return {
     bladder: fill(sinceVisit, 240 * MINUTE),
     bowel: fill(sinceVisit, 480 * MINUTE),
-    tiredness: fill(now - routine.start, routine.bedtime - routine.start),
+    tiredness: Math.floor(100 * (awakeProgress + eveningBoost)),
   };
 }
 

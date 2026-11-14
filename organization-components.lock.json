@@ -199,9 +199,9 @@
   },
   "sunnyMoonSeed": {
     "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.129",
+    "tag": "v0.3.0-preview.130",
     "asset": "workspace-bundle.zip",
-    "sha256": "cceace83c0a3dc270a61172a8b426c0ca13d1856e04ea3a69e92cf4b80fe276d"
+    "sha256": "319a8bb0a0eb26a2afedc7d4eefb8f5fd338c59d67f7dc49ac7ab6a27cf9b0f5"
   },
   "petSeed": {
     "repository": "oneworkspacestudio/one-workspace",

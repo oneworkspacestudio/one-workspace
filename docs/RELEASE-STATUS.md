@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview131 with Sunny & Moon evening tiredness
+
+Sunny & Moon preview.4 fills the tiredness bar faster in the evening.
+Sunny’s eyelids start drooping three hours before bedtime and stay drooped
+while the toilet reminder is visible.
+
 ## Preview130: Sunny & Moon game screen
 
 Sunny & Moon uses a single full-viewport scene. Toilet and tiredness meters
