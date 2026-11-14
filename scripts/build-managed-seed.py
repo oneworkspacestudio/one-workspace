@@ -105,6 +105,10 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if a.version == '0.3.0-preview.130' and not candidate:
+  pin = lock['sunnyMoonSeed']
+  base = asset(pin, cache, a.seed_archive)
+  return integrated_build(a, pin, base, cache, out, [sunnymoon_component(ROOT,a.go,cache/'sunnymoon',a.version)])
  if lock.get('petSeed') and a.version != '0.3.0-preview.128' and not candidate:
   pin = lock['petSeed']
   base = asset(pin, cache, a.seed_archive)

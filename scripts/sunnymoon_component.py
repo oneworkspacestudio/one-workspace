@@ -14,7 +14,7 @@ def sunnymoon_component(root, go, output, suite_version):
     contract = output / 'compatibility.json'
     contract.write_text(json.dumps({
         'schema': 1, 'id': 'sunnymoon', 'version': version,
-        'workspaceInstallerIntegration': 17, 'minimumWorkspaceVersion': suite_version,
+        'workspaceInstallerIntegration': 17, 'minimumWorkspaceVersion': '0.3.0-preview.125',
         'route': '/sunnymoon', 'oidc': True, 'executable': 'SunnyMoon.exe',
         'health': '/healthz', 'storage': 'private-sunnymoon-v1',
     }, indent=2), encoding='utf-8')

@@ -67,3 +67,19 @@ The demo shows the afternoon wiggle, relief, eyelid progression, evening
 reminder, yawn and morning reset using the actual app animations.
 
 Release: https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.126
+
+## Preview.3 full-screen game
+
+The game uses one safe-area-aware viewport with a large responsive Sunny rig,
+day, dusk and night scenery, floating bladder/bowel/tiredness bars, and a
+side overlay showing bedtime, countdown, sleep opportunity and toilet cue.
+The evening action replaces the daytime check-in while due. Earlier logging
+and settings remain on dialogs. The app contract, storage and minimum
+manager integration remain compatible.
+
+The desktop and phone browser matrix checked zero page scroll and contained
+character, overlays and controls in 11 portrait, landscape and short sizes
+from 320×320 to 1440×900. Settings fit those sizes, orientation changes keep
+the game in view, and the bedtime cue, check-in, relief and morning reset pass.
+Development and release artifacts live in
+`I:/Projects/tooling/sunny-moon-game-20261114`.

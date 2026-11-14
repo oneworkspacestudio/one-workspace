@@ -12,7 +12,7 @@ import (
 	"github.com/oneworkspacestudio/one-workspace/pkg/apphost"
 )
 
-const Version = "0.1.0-preview.2"
+const Version = "0.1.0-preview.3"
 
 //go:embed web
 var web embed.FS

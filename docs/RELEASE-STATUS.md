@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview130: Sunny & Moon game screen
+
+Sunny & Moon uses a single full-viewport scene. Toilet and tiredness meters
+float on the left, and the live bedtime countdown floats on the right.
+The sky changes from day to night. See [Sunny & Moon](SUNNY_MOON.md).
+
 ## Preview129: Pet routes, art and construction
 
 Pet preview.3 fixes long-press control selection. Visits start at the trailhead.

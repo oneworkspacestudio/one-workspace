@@ -13,113 +13,95 @@
 </head>
 <body>
   <div class="shell">
+    <div class="landscape" aria-hidden="true">
+      <div class="sky-glow"></div>
+      <div class="sky-stars"></div>
+      <div class="sky-cloud sky-cloud-west"></div>
+      <div class="sky-cloud sky-cloud-east"></div>
+      <div class="hill hill-west"></div>
+      <div class="hill hill-east"></div>
+      <div class="hill hill-near"></div>
+    </div>
     <header class="topbar">
       <div class="brand">
-        <img src="./assets/icon-192.png" width="42" height="42" alt="">
-        <span>Sunny <span class="amp">&amp;</span> Moon</span>
+        <img src="./assets/icon-192.png" width="30" height="30" alt="">
+        <span>Sunny &amp; Moon</span>
       </div>
-      <nav class="header-actions" aria-label="App controls"><a class="settings-button" href="/" data-workspace-apps-trigger>Apps</a>
-      <button hidden class="settings-button" type="button" id="open-settings">
-        <img src="./assets/settings.png" width="19" height="19" alt=""> Settings
-      </button>
+      <nav class="header-actions" aria-label="App controls">
+        <a class="utility" href="/" data-workspace-apps-trigger>Apps</a>
+        <button hidden class="utility" type="button" id="open-settings" aria-label="Settings" title="Settings">
+          <img src="./assets/settings.png" width="21" height="21" alt="">
+        </button>
       </nav>
     </header>
 
-    <section class="body-card session-panel" id="session-panel" aria-live="polite">
+    <section class="session-panel" id="session-panel" aria-live="polite">
       <h1 id="session-message">Opening your routine…</h1>
       <a class="primary-button" id="sign-in" href="./auth/login" hidden>Continue with MyAccounts</a>
       <button class="primary-button" id="retry" type="button" hidden>Try again</button>
     </section>
-    <main id="routine" hidden>
-      <div class="welcome">
-        <p id="today"></p>
-        <h1 id="greeting">Hello, sunshine!</h1>
-      </div>
 
-      <div class="hero">
-        <section class="sun-card" id="sun-card" data-mood="happy" data-cue="none" aria-labelledby="sun-message">
-          <div class="scene" aria-hidden="true">
-            <div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
-            <div class="cloud cloud-left"></div><div class="cloud cloud-right"></div>
-            <span class="twinkle twinkle-left">✦</span><span class="twinkle twinkle-right">✧</span>
-            <span class="twinkle twinkle-low">✦</span>
-            <div class="sun" id="sun">
-              <div class="rays">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-              </div>
-              <div class="face">
-                <span class="brow brow-left"></span><span class="brow brow-right"></span>
-                <span class="eye eye-left"><i></i></span><span class="eye eye-right"><i></i></span>
-                <span class="cheek cheek-left"></span><span class="cheek cheek-right"></span>
-                <span class="mouth"></span>
-                <span class="arm arm-left"></span><span class="arm arm-right"></span>
-              </div>
-              <span class="sleep-mark">z</span><span class="sleep-mark sleep-mark-small">z</span>
-              <span class="toilet-mark"><img src="./assets/toilet.png" width="24" height="24" alt=""></span>
-              <span class="relief-mark">✦</span><span class="relief-mark relief-mark-small">✧</span>
-            </div>
-          </div>
-          <h2 id="sun-message" aria-live="polite">Sunny is happy!</h2>
-          <p id="sun-note">Let’s take today one step at a time.</p>
-        </section>
-
-        <section class="night-card" aria-labelledby="bedtime-heading">
-          <div class="night-heading">
-            <div class="icon-bubble moon-icon"><img src="./assets/moon.png" width="25" height="25" alt=""></div>
-            <h2 id="bedtime-heading">Bedtime</h2>
-          </div>
-          <div class="bedtime-row">
-            <strong id="bedtime">9:00 pm</strong>
-            <span id="bedtime-status" class="time-tag" hidden>Time for bed</span>
-          </div>
-          <div class="sleep-row">
-            <img src="./assets/sparkle.png" width="20" height="20" alt="">
-            <div>
-              <strong id="sleep-estimate">10 hours of sleep</strong>
-              <span id="sleep-note">If you go to bed on time</span>
-            </div>
-          </div>
-          <div class="reminder">
-            <div class="reminder-row">
-              <img src="./assets/toilet.png" width="21" height="21" alt="">
-              <div>
-                <strong id="reminder-title" tabindex="-1" aria-live="polite">Toilet before bed</strong>
-                <span id="reminder-note">A toilet trip at 8:00 pm</span>
-              </div>
-            </div>
-            <button type="button" class="night-button" id="bedtime-visit" hidden>I went before bed</button>
-          </div>
-        </section>
-      </div>
-
-      <section class="body-card" aria-labelledby="body-heading">
-        <div class="body-heading">
-          <h2 id="body-heading">Body check-in</h2>
-          <p id="meter-description">Bars follow the clock. Go when your body says it’s time.</p>
+    <main id="routine" class="game" aria-label="Sunny &amp; Moon" hidden>
+      <section class="meters" aria-label="Body check-in">
+        <p class="sr-only" id="meter-description">Bars follow the clock. Go when your body says it’s time.</p>
+        <div class="meter meter-water">
+          <div class="meter-label"><img src="./assets/drop.png" width="17" height="17" alt=""><label for="bladder">Bladder</label></div>
+          <progress id="bladder" max="100" value="0" aria-describedby="meter-description"></progress>
         </div>
-        <div class="meters">
-          <div class="meter meter-water">
-            <div class="meter-label"><img src="./assets/drop.png" width="20" height="20" alt=""><label for="bladder">Bladder</label></div>
-            <progress id="bladder" max="100" value="0" aria-describedby="meter-description"></progress>
-          </div>
-          <div class="meter meter-peach">
-            <div class="meter-label"><img src="./assets/bowel.png" width="20" height="20" alt=""><label for="bowel">Bowel</label></div>
-            <progress id="bowel" max="100" value="0" aria-describedby="meter-description"></progress>
-          </div>
-          <div class="meter meter-lilac">
-            <div class="meter-label"><img src="./assets/rest.png" width="20" height="20" alt=""><label for="tiredness">Tiredness</label></div>
-            <progress id="tiredness" max="100" value="0" aria-describedby="meter-description"></progress>
-          </div>
+        <div class="meter meter-peach">
+          <div class="meter-label"><img src="./assets/bowel.png" width="17" height="17" alt=""><label for="bowel">Bowel</label></div>
+          <progress id="bowel" max="100" value="0" aria-describedby="meter-description"></progress>
         </div>
-        <div class="check-actions">
-          <button type="button" class="primary-button" id="visit"><img src="./assets/check.png" width="21" height="21" alt=""> I went to the toilet</button>
-          <button type="button" class="text-button" id="open-earlier">Log an earlier visit</button>
+        <div class="meter meter-lilac">
+          <div class="meter-label"><img src="./assets/rest.png" width="17" height="17" alt=""><label for="tiredness">Tiredness</label></div>
+          <progress id="tiredness" max="100" value="0" aria-describedby="meter-description"></progress>
         </div>
-        <p class="check-feedback" id="feedback" role="status"></p>
       </section>
-    </main>
 
-    <footer><img src="./assets/heart.png" width="16" height="16" alt=""> A fresh start every morning</footer>
+      <section class="bedtime" aria-labelledby="bedtime-heading">
+        <h2 id="bedtime-heading"><img src="./assets/moon.png" width="18" height="18" alt=""> Bedtime</h2>
+        <strong id="bedtime">9:00 pm</strong>
+        <span id="bedtime-status" class="countdown"></span>
+        <span id="sleep-estimate" class="sleep-estimate" title="Estimated sleep until wake-up"></span>
+        <span id="reminder-title" class="reminder" aria-live="polite"></span>
+      </section>
+
+      <section class="sun-card" id="sun-card" data-mood="happy" data-cue="none" aria-labelledby="sun-message">
+        <div class="scene" aria-hidden="true">
+          <div class="halo"></div>
+          <div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
+          <span class="twinkle twinkle-left">✦</span><span class="twinkle twinkle-right">✧</span>
+          <span class="twinkle twinkle-low">✦</span>
+          <div class="sun" id="sun">
+            <div class="rays">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="face">
+              <span class="brow brow-left"></span><span class="brow brow-right"></span>
+              <span class="eye eye-left"><i></i></span><span class="eye eye-right"><i></i></span>
+              <span class="cheek cheek-left"></span><span class="cheek cheek-right"></span>
+              <span class="mouth"></span>
+              <span class="arm arm-left"></span><span class="arm arm-right"></span>
+            </div>
+            <span class="sleep-mark"></span><span class="sleep-mark sleep-mark-small"></span>
+            <span class="toilet-mark"><img src="./assets/toilet.png" width="24" height="24" alt=""></span>
+            <span class="relief-mark"></span><span class="relief-mark relief-mark-small"></span>
+          </div>
+        </div>
+        <h2 id="sun-message" aria-live="polite">Sunny is happy!</h2>
+      </section>
+
+      <div class="check-actions">
+        <p class="check-feedback" id="feedback" role="status"></p>
+        <button type="button" class="primary-button" id="visit">
+          <img src="./assets/check.png" width="21" height="21" alt=""> I went to the toilet
+        </button>
+        <button type="button" class="primary-button" id="bedtime-visit" hidden>
+          <img src="./assets/check.png" width="21" height="21" alt=""> I went before bed
+        </button>
+        <button type="button" class="text-button" id="open-earlier">Log an earlier visit</button>
+      </div>
+    </main>
   </div>
 
   <dialog id="settings-dialog" aria-labelledby="settings-title">

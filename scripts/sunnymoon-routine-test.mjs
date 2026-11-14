@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { DEFAULTS, MINUTE, earlierTime, metersAt, routineAt, sleepLabel, toiletCue, validSettings } from '../internal/sunnymoon/web/routine.mjs';
+import { DEFAULTS, MINUTE, bedtimeCountdown, earlierTime, metersAt, routineAt, sleepLabel, toiletCue, validSettings } from '../internal/sunnymoon/web/routine.mjs';
 
 process.env.TZ = 'Europe/London';
 const at = (day, hour, minute = 0) => new Date(2026, 10, day, hour, minute);
@@ -51,4 +51,10 @@ assert.equal(toiletCue(afternoon, afterSchool, { bladder: 74, bowel: 37 }, false
 assert.ok(toiletCue(reminder, routine(reminder), { bladder: 0, bowel: 0 }, false));
 assert.equal(toiletCue(reminder, routine(reminder), { bladder: 80, bowel: 50 }, true), false);
 assert.equal(toiletCue(at(13, 7), routine(at(13, 7)), { bladder: 0, bowel: 0 }, false), false);
+assert.equal(bedtimeCountdown(at(12, 15, 30), at(12, 21)), '5 hr 30 min to bed');
+assert.equal(bedtimeCountdown(at(12, 20, 59), at(12, 21)), '1 min to bed');
+assert.equal(bedtimeCountdown(new Date(at(12, 21) - 1), at(12, 21)), '1 min to bed');
+assert.equal(bedtimeCountdown(at(12, 21), at(12, 21)), 'Time for bed');
+assert.equal(bedtimeCountdown(at(12, 22), at(12, 21)), 'Time for bed');
+assert.equal(bedtimeCountdown(at(13, 0), afterMidnight.bedtime), '30 min to bed');
 console.log('Passed routine timing, check-ins, expression cues, rollover, custom settings and DST.');

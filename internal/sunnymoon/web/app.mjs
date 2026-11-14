@@ -1,11 +1,13 @@
 import { MINUTE, validSettings, routineAt, belongsToRoutine, timeInput,
-  earlierTime, metersAt, toiletCue, sleepLabel } from './routine.mjs';
+  earlierTime, metersAt, toiletCue, sleepLabel, bedtimeCountdown } from './routine.mjs';
 
 const element = id => document.getElementById(id);
 const clock = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
 const weekday = new Intl.DateTimeFormat('en-GB', { weekday: 'long' });
 const sunCard = element('sun-card');
 const bedtimeVisit = element('bedtime-visit');
+const visit = element('visit');
+const game = element('routine');
 const settingsForm = element('settings-form');
 const earlierForm = element('earlier-form');
 const settingsDialog = element('settings-dialog');
@@ -15,11 +17,11 @@ const sessionPanel = element('session-panel');
 const visitButtons = [element('visit'), bedtimeVisit, element('open-earlier'), element('open-settings'),
   settingsForm.querySelector('[type=submit]'), earlierForm.querySelector('[type=submit]')];
 const faces = {
-  happy: ['Sunny is happy!', 'Let’s take today one step at a time.'],
-  'winding-down': ['Sunny is slowing down', 'Those eyelids are getting heavy.'],
-  sleepy: ['Sunny is sleepy', 'A fresh, happy start in the morning.'],
-  toilet: ['Sunny needs a toilet break', 'Does your body need a break too?'],
-  relieved: ['Sunny feels better!', 'Thanks for checking in.'],
+  happy: 'Sunny is happy!',
+  'winding-down': 'Sunny is slowing down',
+  sleepy: 'Sunny is sleepy',
+  toilet: 'Sunny needs a toilet break',
+  relieved: 'Sunny feels better!',
 };
 
 let state;
@@ -100,26 +102,26 @@ function render(now = new Date()) {
     reliefTimer = undefined;
     feedback.textContent = '';
   }
-  const afterBedtime = now >= bedtime;
   const reminderDue = now >= reminder;
   const checked = nightVisit !== 0;
-  setText('today', weekday.format(start));
-  setText('greeting', mood === 'happy' ? 'Hello, sunshine!' : 'Let’s get cosy');
   const meters = metersAt(now, routine, lastVisit || null);
   const cue = reliefTimer ? 'relieved' : toiletCue(now, routine, meters, checked) ? 'toilet' : 'none';
+  document.documentElement.dataset.phase = mood;
   sunCard.dataset.mood = mood;
   sunCard.dataset.cue = cue;
   sunCard.style.setProperty('--eye-opening', (1 - .72 * routine.drowsiness).toFixed(3));
-  const [message, note] = faces[cue === 'none' ? mood : cue];
-  setText('sun-message', message);
-  setText('sun-note', note);
+  setText('sun-message', faces[cue === 'none' ? mood : cue]);
   setText('bedtime', displayTime(bedtime));
-  element('bedtime-status').hidden = !afterBedtime;
+  setText('bedtime-status', bedtimeCountdown(now, bedtime));
   setText('sleep-estimate', sleepLabel(remaining));
-  setText('sleep-note', afterBedtime ? 'If you get cosy now' : 'If you go to bed on time');
-  setText('reminder-title', checked ? 'Toilet trip done!' : reminderDue ? 'Time for a toilet trip' : 'Toilet before bed');
-  setText('reminder-note', checked ? 'All set for bedtime.' : reminderDue ? 'One quick stop before bed.' : `A toilet trip at ${displayTime(reminder)}`);
-  bedtimeVisit.hidden = checked || !reminderDue;
+  const reminderLabel = checked ? 'Toilet trip done!' : reminderDue ? 'Toilet break now' : `Toilet at ${displayTime(reminder)}`;
+  setText('reminder-title', reminderLabel);
+  game.dataset.reminder = checked ? 'done' : reminderDue ? 'due' : 'upcoming';
+  const eveningAction = reminderDue && !checked;
+  const focusAction = document.activeElement === visit || document.activeElement === bedtimeVisit;
+  bedtimeVisit.hidden = !eveningAction;
+  visit.hidden = eveningAction;
+  if (focusAction) (eveningAction ? bedtimeVisit : visit).focus({ preventScroll: true });
 
   for (const [id, value] of Object.entries(meters)) {
     element(id).value = value;
@@ -195,19 +197,20 @@ async function recordVisit({ bedtimeCheck = false, earlier = false } = {}) {
   }, error);
   if (!saved) return;
   if (earlier) earlierDialog.close();
-  if (bedtimeCheck) element('reminder-title').focus({ preventScroll: true });
+  if (bedtimeCheck) visit.focus({ preventScroll: true });
   feedback.textContent = message;
   if (!earlier) {
     clearTimeout(reliefTimer);
     reliefTimer = setTimeout(() => {
       reliefTimer = undefined;
+      if (feedback.textContent === message) feedback.textContent = '';
       render();
     }, 2100);
     render();
   }
 }
 
-element('visit').addEventListener('click', () => recordVisit());
+visit.addEventListener('click', () => recordVisit());
 bedtimeVisit.addEventListener('click', () => recordVisit({ bedtimeCheck: true }));
 element('retry').addEventListener('click', refresh);
 

@@ -75,3 +75,12 @@ export function sleepLabel(minutes) {
   if (!extra) return `${hours} ${hours === 1 ? 'hour' : 'hours'} of sleep`;
   return `${hours} hr ${extra} min of sleep`;
 }
+
+export function bedtimeCountdown(now, bedtime) {
+  const minutes = Math.ceil((bedtime - now) / MINUTE);
+  if (minutes <= 0) return 'Time for bed';
+  if (minutes < 60) return `${minutes} min to bed`;
+  const hours = Math.floor(minutes / 60);
+  const extra = minutes % 60;
+  return extra ? `${hours} hr ${extra} min to bed` : `${hours} hr to bed`;
+}
