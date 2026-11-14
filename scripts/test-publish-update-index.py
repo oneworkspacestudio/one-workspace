@@ -26,6 +26,17 @@ class ReleasePaginationTests(unittest.TestCase):
         self.assertEqual(releases[-1]['tag_name'], 'historical-public-release')
         self.assertTrue(calls[1].endswith('&page=2'))
 
+    def test_workspace_pages_keep_asset_heavy_responses_small(self):
+        calls = []
+
+        def opener(req, timeout):
+            calls.append(req.full_url)
+            return io.StringIO(json.dumps([{}] * (20 if len(calls) == 1 else 1)))
+
+        releases = publisher.repository_releases('oneworkspacestudio/one-workspace', 'synthetic', opener)
+        self.assertEqual(len(releases), 21)
+        self.assertTrue(all('per_page=20&' in url for url in calls))
+
     def test_channel_caps_newest_public_releases_after_filtering(self):
         repo = 'example/repository'
         start = datetime.date(2025, 1, 1)

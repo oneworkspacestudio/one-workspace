@@ -174,8 +174,14 @@ def main():
     notes = args.notes.read_text(encoding='utf-8').strip()
     if not notes:
         raise RuntimeError('Release notes are required')
-    releases = api('releases?per_page=100')
-    existing = [r for r in releases if r['tag_name'] == args.tag]
+    existing = []
+    # Smaller pages keep the API response bounded as suite asset counts grow.
+    # Drafts appear in the list, including drafts that have no public Git tag.
+    for page in range(1, 6):
+        releases = api(f'releases?per_page=20&page={page}')
+        existing = [r for r in releases if r['tag_name'] == args.tag]
+        if existing or len(releases) < 20:
+            break
     if existing and (not existing[0]['draft'] or existing[0]['target_commitish'] != source):
         raise RuntimeError('Published releases are immutable; choose a new tag. A draft must match this source.')
     run(['git', '-c', 'safe.directory=' + ROOT.as_posix(), '-C', ROOT, 'archive', '--format=zip', '--prefix=one-workspace-android/', '--output=' + str(out / 'OneWorkspace-Android-source.zip'), source, 'android', 'scripts/build-android.ps1', 'LICENSE', 'NOTICE'])

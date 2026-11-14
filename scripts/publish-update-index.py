@@ -20,9 +20,10 @@ MAX_PUBLIC_RELEASES = 100
 
 def repository_releases(repo, token, opener=urllib.request.urlopen):
     releases = []
+    page_size = 20 if repo == ORG + '/one-workspace' else 100
     for page in range(1, 101):
         req = urllib.request.Request(
-            f'https://api.github.com/repos/{repo}/releases?per_page=100&page={page}',
+            f'https://api.github.com/repos/{repo}/releases?per_page={page_size}&page={page}',
             headers={'Authorization': 'Bearer ' + token, 'User-Agent': 'OneWorkspaceChannelPublisher',
                      'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
         with opener(req, timeout=60) as response:
@@ -30,7 +31,7 @@ def repository_releases(repo, token, opener=urllib.request.urlopen):
         if not isinstance(batch, list):
             raise ValueError('GitHub release list was not an array')
         releases.extend(batch)
-        if len(batch) < 100:
+        if len(batch) < page_size:
             return releases
     raise ValueError('Release pagination exceeded its safety bound; channel was not written')
 
