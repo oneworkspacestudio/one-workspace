@@ -28,3 +28,19 @@ the standard signed companion release process.
 The first managed package exposed dynamic JavaScript in the OpenCV
 bindings. Replaced it with closures in four helpers. A browser fixture
 with the same CSP as the managed app passed before the installer rebuild.
+
+The shipping installer verified all 47 apps and 939 package hashes on the
+preview.133 baseline. Fresh managed setup passed touch crop at a mobile
+viewport and ran PaddleOCR through the authenticated Froststock proxy.
+App-only update, saved-photo date-only recognition, and rollback passed
+on an isolated preview.133 fixture. Title and original Drive photo bytes
+were retained. Go tests and the recognition and publisher checks passed.
+The isolated services were stopped and their private fixture roots removed.
+No physical phone or owner inventory was used.
+
+Workspace preview.134 shipped from `02658a6` with 960 verified release assets
+and the signed Android companion. Promotion `f2b9e3a` became visible on the
+normal public index after cache propagation. The anonymous preview.133
+installer offered Froststock preview.4 and selected all five expected
+package hashes. Anonymous catalog and package downloads matched.
+The owner installation was outside this update.
