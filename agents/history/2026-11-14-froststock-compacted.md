@@ -78,3 +78,18 @@ then shipped the listener and updater fixes. Stopped preview.133 preparation
 before it created a draft and advanced to the published preview.132 seed.
 Preview.133 retains the IPv6 listener and installer integration and requires
 the standard signed Android companion.
+
+The released preview.133 source is `5c322c7`. The builder verified 47 apps
+and 939 packages against the published preview.132 catalog and bundle. The
+Froststock notice differs only in line endings. All unrelated app packages
+and installer integration 19 match the baseline. Windows fresh setup,
+app-only upgrade from preview.132, saved-photo recognition, and rollback
+passed with an independent IPv4 listener on the Froststock port. Tests used
+synthetic data and a mobile browser viewport. Test services and private
+fixtures were removed. The owner installation was outside this update.
+
+The signed publisher verified 960 release assets and anonymously fetched
+the APK. Channel promotion is `ed46e5d`. The standard anonymous update URL
+and preview.132 installer offered Froststock preview.3 and the expected
+five app packages after CDN propagation. An anonymous download of each
+package and the catalog matched the build digests.
