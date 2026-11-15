@@ -23,3 +23,14 @@ as preview.135. Both rebuild the manager and Froststock payloads.
 Go settings and mocked API tests and mobile browser checks with a mock upstream covered activation and removal,
 two-image scans, date-only crops, packing dates, missing years, and local
 fallback. A live DeepSeek scan requires an owner-provided key.
+
+The Windows build host ran out of temporary NTFS space and then linker memory
+while embedding the full bundle. The installer was cross-linked with the
+same Go 1.27.3 toolchain and flags in the existing WSL build environment.
+The bundle matched 47 catalog entries and 939 hashes. The unrelated package
+hashes also matched the preview.135 build.
+
+The exact installer passed isolated fresh setup with owner authentication,
+CSRF checks, protected secret storage, restart and key removal. App-only
+upgrade from preview.134 and rollback kept the existing Drive inventory,
+original photos and manager version. No owner installation was changed.
