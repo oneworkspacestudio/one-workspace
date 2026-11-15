@@ -34,3 +34,11 @@ The exact installer passed isolated fresh setup with owner authentication,
 CSRF checks, protected secret storage, restart and key removal. App-only
 upgrade from preview.134 and rollback kept the existing Drive inventory,
 original photos and manager version. No owner installation was changed.
+
+[Workspace preview.136](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.136)
+ships Froststock preview.6 from `6ba2528`. The signed publisher verified 960
+assets and the anonymous Android APK. A concurrent history commit advanced
+main. Rebased only the generated update index and pushed `bcf51a0`.
+The ordinary anonymous updater offered Froststock preview.6. The catalog
+and all five selected Froststock packages matched their public digests.
+Stopped isolated services and removed their fixture data and program roots.
