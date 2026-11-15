@@ -96,13 +96,16 @@ export async function syncPending() {
   if (failure) throw failure;
 }
 
+export async function loadPhoto(id, name) {
+  const response = await fetch(itemPhotoURL(id, name), { headers: { 'X-Workspace-Expected-Account': account } });
+  if (!response.ok) throw Object.assign(new Error('The saved photo could not be opened from My Drive.'), { status: response.status });
+  return response.blob();
+}
+
 export async function jobPhotos(item) {
   if (item.itemPhoto && item.datePhoto) return item;
-  const blobs = await Promise.all(['item.jpg', 'expiry.jpg'].map(async name => {
-    const response = await fetch(itemPhotoURL(item.id, name), { headers: { 'X-Workspace-Expected-Account': account } });
-    if (!response.ok) throw Object.assign(new Error('Both photos must be present in My Drive.'), { status: response.status });
-    return response.blob();
-  }));
+  if (item.dateOnly) return { ...item, datePhoto: await loadPhoto(item.id, 'expiry.jpg') };
+  const blobs = await Promise.all(['item.jpg', 'expiry.jpg'].map(name => loadPhoto(item.id, name)));
   return { ...item, itemPhoto: blobs[0], datePhoto: blobs[1] };
 }
 

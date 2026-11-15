@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview134 with Froststock preview.4
+
+Enable **Crop expiry photo after capture** to select the stamp before queueing.
+For existing items, choose **Crop & read again** beside the saved expiry photo.
+A small PaddleOCR model retries difficult dates on the device. See [Froststock](FROSTSTOCK.md).
+
 ## Preview133: Froststock label recognition
 
 Froststock preview.3 prioritizes prominent food titles and retries hard-to-read

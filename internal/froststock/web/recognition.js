@@ -1,10 +1,13 @@
 import { extractDate, extractName, readTitle } from './dates.js';
 import { labelVariants } from './label-image.js';
+import { cropLabelPhoto } from './expiry-crop.js';
+import { readPaddleLabels } from './paddle.js';
 
 const assetPath = new URL('./assets/ocr/', import.meta.url).href;
 let worker;
 let vision;
 let visionFailed = false;
+let paddleFailed = false;
 
 async function recognize(image, mode, blocks = false) {
   let timer;
@@ -56,18 +59,37 @@ async function readProduct(blob) {
   return { reading, title };
 }
 
-async function readExpiry(blob, order) {
+async function readExpiry(blob, order, cropped) {
   const reads = [];
-  async function read(image, mode) {
-    const reading = await recognize(image, mode);
+  function record(reading, minimum = 76) {
     const date = extractDate(reading.text, order);
     const score = (date.explicit ? 45 : 0) + (date.repaired ? 0 : 23) + reading.confidence;
     reads.push({ reading, date, score });
-    return date.value && date.explicit && !date.repaired && reading.confidence >= 76;
+    return date.value && date.explicit && !date.repaired && reading.confidence >= minimum &&
+      !reads.some(hit => hit.date.value && hit.date.value !== date.value);
   }
-  if (!await read(blob, '11')) {
+  async function read(image, mode) {
+    return record(await recognize(image, mode));
+  }
+  let certain = false;
+  try { certain = await read(blob, cropped ? '6' : '11'); }
+  catch (error) { console.warn('First expiry scan failed', error); }
+  if (!certain && !paddleFailed) {
     try {
-      for await (const { canvas, mode } of labelVariants(blob, 'date')) {
+      const lines = await readPaddleLabels(blob);
+      if (lines.length) {
+        const text = lines.map(line => line.text).join('\n');
+        const confidence = 100 * lines.reduce((sum, line) => sum + line.score, 0) / lines.length;
+        certain = record({ text, confidence }, 89);
+      }
+    } catch (error) {
+      paddleFailed = true;
+      console.warn('Local expiry model unavailable', error);
+    }
+  }
+  if (!certain) {
+    try {
+      for await (const { canvas, mode } of labelVariants(blob, 'date', cropped)) {
         if (await read(canvas, mode)) break;
       }
     } catch (error) {
@@ -109,45 +131,55 @@ export async function scanLabels(item, preferences, report, commit) {
   let date = extractDate('', preferences.dateOrder);
   let title = { name: '', confidence: 0 };
   let readFailed = false;
-  try { ({ reading: dateResult, date } = await readExpiry(item.datePhoto, preferences.dateOrder)); }
-  catch (error) { readFailed = true; console.warn('Expiry OCR failed', error); }
-  try { ({ reading: itemResult, title } = await readProduct(item.itemPhoto)); }
-  catch (error) { readFailed = true; console.warn('Item OCR failed', error); }
+  let datePhoto = item.datePhoto;
+  try {
+    datePhoto = await cropLabelPhoto(item.datePhoto, item.dateCrop);
+    const result = await readExpiry(datePhoto, preferences.dateOrder, datePhoto !== item.datePhoto);
+    if (!result) readFailed = true;
+    else ({ reading: dateResult, date } = result);
+  } catch (error) { readFailed = true; console.warn('Expiry OCR failed', error); }
+  if (!item.dateOnly) {
+    try { ({ reading: itemResult, title } = await readProduct(item.itemPhoto)); }
+    catch (error) { readFailed = true; console.warn('Item OCR failed', error); }
+  }
   const name = title.confidence >= 38 ? title.name : '';
   const otherDate = extractDate(itemResult.text, preferences.dateOrder);
-  const fromItem = !date.value && !date.ambiguous && otherDate.value && otherDate.explicit;
+  const fromItem = !item.dateCrop && !date.value && !date.ambiguous && otherDate.value && otherDate.explicit;
   const expiry = fromItem ? otherDate : date;
-  const review = Boolean(!expiry.value || fromItem || expiry.repaired || dateResult.confidence < 75 || !name || title.confidence < 65);
+  const nameReview = item.dateOnly ? !item.name : !name || title.confidence < 65;
+  const review = Boolean(!expiry.value || fromItem || expiry.repaired || dateResult.confidence < 75 || nameReview);
   const result = {
     name: name || item.name || '',
     expiry: expiry.value || item.expiry || '', dateType: expiry.value ? expiry.type : item.dateType || 'Expiry date',
-    rawItem: itemResult.text || item.rawItem || '', rawDate: dateResult.text || item.rawDate || '',
+    rawItem: itemResult.text || item.rawItem || '', rawDate: dateResult.text || (item.dateCrop ? '' : item.rawDate || ''),
+    visionDate: '',
     review,
-    reviewReason: date.ambiguous ? 'Several dates were found. Check the expiry photo.'
+    reviewReason: date.ambiguous ? 'Several dates were found. Crop around the expiry date or enter it.'
       : fromItem ? 'The date was read from the item photo. Check it against the expiry photo.'
       : expiry.repaired ? 'Some digits were unclear. Confirm the suggested date against the photo.'
       : readFailed ? 'Label reading was interrupted. Read the labels again or enter the details.'
-      : !expiry.value ? 'The expiry date could not be read. Check the close-up or enter the date.'
-      : !name ? 'The food title could not be read. Check the package photo or enter the name.' : '',
+      : !expiry.value ? 'The expiry date could not be read. Crop around the date or enter it.'
+      : nameReview && !name ? 'The food title could not be read. Check the package photo or enter the name.' : '',
     state: 'ready',
   };
+  const needsTitle = !item.dateOnly && !name;
   const tryVision = preferences.vision && navigator.gpu && !visionFailed &&
-    ((!expiry.value && !date.ambiguous) || !name);
+    ((!expiry.value && !date.ambiguous) || needsTitle);
   await commit(result, tryVision);
   if (!tryVision) return;
   report('Reading difficult labels with the local vision model…');
   try {
     if (!expiry.value && !date.ambiguous) {
-      const text = await readWithVision(item.datePhoto, 'date');
+      const text = await readWithVision(datePhoto, 'date');
       const suggestion = extractDate(text, preferences.dateOrder);
       result.visionDate = text;
-      if (suggestion.value) {
+      if (suggestion.value && !item.expiry) {
         result.expiry = suggestion.value;
         result.dateType = suggestion.type;
         result.reviewReason = 'The vision model suggested this date. Confirm it against the photo.';
       }
     }
-    if (!name) {
+    if (needsTitle) {
       const text = await readWithVision(item.itemPhoto, 'item');
       result.visionItem = text;
       if (!/\b(?:unknown|illegible|cannot read)\b/i.test(text)) result.name = extractName(text) || result.name;

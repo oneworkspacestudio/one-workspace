@@ -8,8 +8,10 @@ The dashboard shows items due within seven days, items past their printed date, 
 
 Your photos and inventory records live in **My Drive → Froststock**. A second device signed in to the same Workspace sees the same inventory. Each item folder holds `item.jpg`, `expiry.jpg`, and `item.json`. Keep those files together. My Drive access controls who can view the underlying Drive files. Froststock itself permits the Workspace owner.
 
-OCR runs in the browser using bundled English Tesseract. It retries difficult labels with adjusted contrast, cropping and rotation. The optional SmolVLM 256M model uses WebGPU and downloads about 200 MB of model weights from Hugging Face. Inference runs on the device. Check suggested dates against the original label. Change the numeric date order in **Settings**.
+On the expiry-photo step, select **Crop expiry photo after capture**. Move the box or drag its corners around the date and its “use by” or “best before” label, then tap **Use crop**. The scanner remembers your choice on this device. **Use full photo** queues the whole image. For saved items, use **Crop & read again** by the expiry photo. The original remains in My Drive, so you can adjust a crop later.
 
-Open a saved scan and choose **Read labels again** to retry with the current scanner. Confirm dates marked **Needs review** against the photo.
+Date recognition runs in the browser. Froststock uses bundled English Tesseract and retries difficult dates with the tiny PP-OCRv6 detection and recognition models, adjusted contrast and rotation. The optional SmolVLM 256M vision model uses WebGPU and downloads about 200 MB of weights from Hugging Face. The inference stays on the device. Confirm dates marked **Needs review** against the original photo. Change the numeric date order in **Settings**.
+
+Choose **Read labels again** on a saved scan to reread both labels with the current crop.
 
 For the standalone preview, export a backup in its Settings, then import it in Froststock under One Workspace. It writes each imported pair to My Drive. Managed app updates keep the Drive files. Use Workspace Backups to protect My Drive and the app’s private sign-in data.

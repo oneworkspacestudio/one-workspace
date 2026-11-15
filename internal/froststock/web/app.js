@@ -1,6 +1,7 @@
-import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, driveStatus } from './storage.js';
+import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, loadPhoto, driveStatus } from './storage.js';
 import { isDate, offsetDate, daysFromToday, formatDate, formatToday } from './dates.js';
 import { scanLabels } from './recognition.js';
+import { chooseExpiryCrop, validCrop } from './expiry-crop.js';
 
 const $ = selector => document.querySelector(selector);
 const icons = 'snowflake layout-grid boxes clock-3 history settings camera chevron-right scan-line search shield-check calendar-clock triangle-alert package image x check loader-circle clipboard-list gallery-horizontal-end calendar-days download list-filter check-circle-2 image-plus upload'.split(' ');
@@ -32,6 +33,9 @@ let firstPreview;
 let sessionCount = 0;
 let persistentRequested = false;
 let ownerReady = false;
+const cropOnCapture = $('#crop-on-capture');
+cropOnCapture.checked = localStorage.getItem('froststock-crop-expiry') === 'on';
+cropOnCapture.addEventListener('change', () => localStorage.setItem('froststock-crop-expiry', cropOnCapture.checked ? 'on' : 'off'));
 const thumbnailURLs = new Map();
 const detailURLs = new Set();
 const preferences = {
@@ -238,7 +242,7 @@ async function processQueue() {
       const token = job.job;
       const commit = async (reading, pending) => {
         await updateItem(job.id, stored => stored.job === token && stored.state === 'queued'
-          ? { ...stored, ...reading, state: pending ? 'queued' : 'ready' } : null);
+          ? { ...stored, ...reading, dateOnly: pending && stored.dateOnly, state: pending ? 'queued' : 'ready' } : null);
         await changed();
       };
       try {
@@ -305,6 +309,8 @@ function renderScanner() {
   $('#camera-hint').textContent = $('#camera-tip').textContent;
   $('#camera-hint').hidden = !stream;
   $('#retake').hidden = step === 1;
+  $('#crop-option').hidden = step === 1;
+  cropOnCapture.disabled = processingPhoto;
   $('#retake').disabled = processingPhoto;
   const thumb = $('#first-thumb');
   thumb.hidden = !firstPreview;
@@ -425,8 +431,10 @@ async function acceptPhoto(makeBlob) {
       itemPhoto = blob;
       firstPreview = URL.createObjectURL(blob);
     } else {
+      const dateCrop = cropOnCapture.checked ? await chooseExpiryCrop(blob) : null;
+      if (dateCrop === undefined) return;
       const record = {
-        id: id(), created: Date.now(), job: id(), state: 'queued', quantity: 1, itemPhoto, datePhoto: blob,
+        id: id(), created: Date.now(), job: id(), state: 'queued', quantity: 1, itemPhoto, datePhoto: blob, dateCrop,
       };
       await saveItem(record);
       clearFirst();
@@ -465,7 +473,9 @@ function showDetail(key) {
   details.innerHTML = '<div class="dialog-head"><div><p class="kicker">' + (item.demo ? 'SAMPLE ITEM' : 'ITEM DETAILS') +
     '</p><h2>' + esc(title) + '</h2></div><button type="button" class="icon-button" data-action="close-details" aria-label="Close item details">' + symbol('x') +
     '</button></div>' + (preview ? '<div class="detail-photos"><figure><img src="' + esc(preview) + '" alt="Food item"><figcaption>Item photo</figcaption></figure>' +
-    (dateURL ? '<figure><img src="' + esc(dateURL) + '" alt="Expiry label"><figcaption>Expiry photo</figcaption></figure>' : '') + '</div>' : '') +
+    (dateURL ? '<figure><img src="' + esc(dateURL) + '" alt="Expiry label"><figcaption>Expiry photo' +
+      (item.revision ? ' <button class="text-button date-crop-link" type="button" data-action="crop-date">' + (item.dateCrop ? 'Adjust crop' : 'Crop &amp; read again') + '</button>' : '') +
+      '</figcaption></figure>' : '') + '</div>' : '') +
     (item.demo ? '<p class="detail-note">' + esc(item.category) + ' · ' + esc(item.dateType) + ' ' + formatDate(item.expiry) + '</p>'
       : '<form id="item-form"><label>Item name<input name="name" maxlength="100" value="' + esc(item.name) + '" placeholder="Enter the product name" required></label>' +
       '<div class="detail-columns"><label>Category<select name="category"><option value="">Uncategorised</option>' + options(categories, item.category) +
@@ -545,6 +555,7 @@ async function importBackup(file) {
       id: record.id, created: Number.isFinite(record.created) ? record.created : Date.now(),
       used: Number.isFinite(record.used) ? record.used : undefined, state: queued ? 'queued' : 'ready', job: id(),
       itemPhoto, datePhoto, name: text(record.name, 100), category: categories.includes(record.category) ? record.category : '',
+      dateCrop: validCrop(record.dateCrop) ? record.dateCrop : null, dateOnly: Boolean(queued && record.dateOnly),
       quantity: Math.min(999, Math.max(1, Math.trunc(Number(record.quantity) || 1))),
       expiry: isDate(record.expiry) ? record.expiry : '', dateType: dateTypes.includes(record.dateType) ? record.dateType : 'Expiry date',
       review: Boolean(record.review), reviewReason: text(record.reviewReason, 300),
@@ -581,8 +592,18 @@ const actions = {
     await changed();
     if (result) notification(result.used ? 'Item moved to history.' : 'Item returned to the freezer.');
   },
+  'crop-date': async () => {
+    const item = items.find(record => record.id === currentDetail && record.revision);
+    if (!item) return;
+    const crop = await chooseExpiryCrop(await loadPhoto(item.id, 'expiry.jpg'), item.dateCrop);
+    if (crop === undefined || !details.open || currentDetail !== item.id) return;
+    await updateItem(item.id, stored => ({ ...stored, dateCrop: crop, dateOnly: true, state: 'queued', job: id(), reviewReason: '' }));
+    details.close();
+    await changed();
+    void processQueue();
+  },
   retry: async () => {
-    await updateItem(currentDetail, item => ({ ...item, state: 'queued', job: id(), reviewReason: '' }));
+    await updateItem(currentDetail, item => ({ ...item, dateOnly: false, state: 'queued', job: id(), reviewReason: '' }));
     details.close();
     await changed();
     void processQueue();
@@ -619,7 +640,7 @@ document.addEventListener('submit', async event => {
     await updateItem(currentDetail, item => ({
       ...item, name, category: fields.get('category'), quantity: Number(fields.get('quantity')),
       expiry: fields.get('expiry'), dateType: fields.get('dateType'), state: 'ready',
-      review: false, reviewReason: '', job: id(),
+      review: false, reviewReason: '', dateOnly: false, job: id(),
     }));
     details.close();
     await changed();
