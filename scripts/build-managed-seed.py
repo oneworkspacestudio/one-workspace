@@ -105,6 +105,10 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if a.version == '0.3.0-preview.134' and not candidate:
+  pin = lock['updateTunnelSeed']
+  base = asset(pin, cache, a.seed_archive)
+  return integrated_build(a, pin, base, cache, out, [], integration=20)
  if a.version == '0.3.0-preview.133' and not candidate:
   pin = lock['froststockRecognitionSeed']
   base = asset(pin, cache, a.seed_archive)
@@ -182,7 +186,7 @@ def main():
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=19
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=20
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:

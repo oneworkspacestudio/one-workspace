@@ -1,5 +1,13 @@
 # One Workspace release status
 
+## Preview134 with Cloudflare continuity during updates
+
+The Windows updater connects a second Cloudflare connector before it stops
+Workspace. The connector stays active through the backup, restart and any
+automatic rollback. Workspace serves a retryable maintenance response while
+the apps are offline. Installer integration 20 hands older updaters off to the
+new installer before entering maintenance.
+
 ## Preview133: Froststock label recognition
 
 Froststock preview.3 prioritizes prominent food titles and retries hard-to-read

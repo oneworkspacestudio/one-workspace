@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -100,6 +101,100 @@ func TestUpdateLaunchPreflightFailureLeavesRuntimeAndDataUntouched(t *testing.T)
 	got, _, err := Load(c.Data)
 	if err != nil || got.Version != c.Version {
 		t.Fatal("preflight changed installation", err)
+	}
+}
+
+func TestUpdateCloudflareReplicaFailureLeavesRuntimeRunning(t *testing.T) {
+	c, s := updateFixture(t)
+	target, stage := fixtureTarget(t, c)
+	replicaErr := errors.New("fixture connector is disconnected")
+	ops := updateOperations{
+		keepTunnel: func(context.Context, Config, Secrets, func(string)) (func(), error) {
+			return nil, replicaErr
+		},
+		stop: func(context.Context, Config) error {
+			t.Fatal("stopped Workspace without a connected replica")
+			return nil
+		},
+	}
+	err := applyStagedWith(context.Background(), c, s, target, stage, "", quietUpdate, ops)
+	if !errors.Is(err, replicaErr) || UpdatePending(c) {
+		t.Fatalf("failed replica did not leave the installation untouched: %v", err)
+	}
+}
+
+func TestUpdateKeepsReplicaThroughRestartAndServesMaintenance(t *testing.T) {
+	for _, failRestart := range []bool{false, true} {
+		name := "success"
+		if failRestart {
+			name = "rollback"
+		}
+		t.Run(name, func(t *testing.T) {
+			c, s := updateFixture(t)
+			c.Tunnel = true
+			c.Origin, c.Issuer = "https://workspace.example.test", "https://accounts.example.test"
+			address, err := cloudflareMetricsAddress()
+			if err != nil {
+				t.Fatal(err)
+			}
+			c.Port, err = strconv.Atoi(strings.TrimPrefix(address, "127.0.0.1:"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err = Save(c, s); err != nil {
+				t.Fatal(err)
+			}
+			target, stage := fixtureTarget(t, c)
+			client := &http.Client{Timeout: time.Second}
+			replicaOpen, maintenanceServed := false, false
+			preparations, starts := 0, 0
+			ops := updateOperations{
+				keepTunnel: func(context.Context, Config, Secrets, func(string)) (func(), error) {
+					preparations++
+					replicaOpen = true
+					return func() { replicaOpen = false }, nil
+				},
+				stop: func(context.Context, Config) error {
+					if !replicaOpen {
+						t.Fatal("stopped Workspace before its replacement connector was connected")
+					}
+					return nil
+				},
+				start: func(context.Context, Config, string) error {
+					starts++
+					if !replicaOpen {
+						t.Fatal("released the connector before Workspace restarted")
+					}
+					if response, err := client.Get("http://" + address + "/healthz"); err == nil {
+						response.Body.Close()
+						t.Fatal("maintenance page still owns the Workspace port")
+					}
+					if failRestart && starts == 1 {
+						return errors.New("fixture restart failed")
+					}
+					return nil
+				},
+			}
+			report := func(message string) {
+				if !strings.HasPrefix(message, "Installing verified program files") {
+					return
+				}
+				response, err := client.Get("http://" + address + "/healthz")
+				if err != nil {
+					t.Fatal(err)
+				}
+				defer response.Body.Close()
+				maintenanceServed = response.StatusCode == 503 && response.Header.Get("Retry-After") == "10"
+			}
+			err = applyStagedWith(context.Background(), c, s, target, stage, "", report, ops)
+			wantStarts := 1
+			if failRestart {
+				wantStarts = 2
+			}
+			if (err != nil) != failRestart || replicaOpen || preparations != 1 || starts != wantStarts || !maintenanceServed {
+				t.Fatalf("update err=%v replica=%t prepared=%d started=%d maintenance=%t", err, replicaOpen, preparations, starts, maintenanceServed)
+			}
+		})
 	}
 }
 

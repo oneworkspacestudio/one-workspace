@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -121,6 +122,18 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 	if e = platform.SaveSecret(filepath.Join(c.Data, "control.dpapi"), map[string]string{"token": token}); e != nil {
 		return e
 	}
+	var ready atomic.Pointer[http.Handler]
+	server, errc, e := workspaceOrigin(c.Port, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if handler := ready.Load(); handler != nil {
+			(*handler).ServeHTTP(w, r)
+			return
+		}
+		workspaceUnavailable(w, "Workspace is starting. Try again shortly.")
+	}))
+	if e != nil {
+		return e
+	}
+	defer server.Close()
 	if c.Tunnel {
 		rt.tunnelJob, e = platform.NewJob()
 		if e != nil {
@@ -141,13 +154,7 @@ func Run(ctx context.Context, c Config, s Secrets) (runErr error) {
 		return e
 	}
 	handler := portal.Handler(token)
-	listener, e := net.Listen("tcp4", fmt.Sprintf("127.0.0.1:%d", c.Port))
-	if e != nil {
-		return e
-	}
-	server := &http.Server{Handler: handler, ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 20}
-	errc := make(chan error, 1)
-	go func() { errc <- server.Serve(listener) }()
+	ready.Store(&handler)
 	progress.Step("portal", "done", "Workspace is listening and ready to open")
 	rt.finishStartup()
 	_ = platform.SaveJSON(filepath.Join(c.Data, "running.json"), map[string]any{"pid": os.Getpid(), "origin": c.Origin, "started": time.Now().UTC()})
@@ -536,9 +543,12 @@ func (rt *Runtime) startTunnel(ctx context.Context) error {
 		held.Close()
 		return e
 	}
-	cmd := exec.Command(filepath.Join(rt.Config.Programs, p.File), "tunnel", "--config", config, "--no-autoupdate", "run")
-	cmd.Env = append(os.Environ(), "TUNNEL_TOKEN="+rt.Secrets.TunnelToken, "TEMP="+runtimeTemp(rt.Config, "cloudflare"), "TMP="+runtimeTemp(rt.Config, "cloudflare"))
-	cmd.Dir = rt.Config.Data
+	metrics, e := cloudflareMetricsAddress()
+	if e != nil {
+		held.Close()
+		return e
+	}
+	cmd := cloudflareCommand(rt.Config, rt.Secrets, filepath.Join(rt.Config.Programs, p.File), config, metrics)
 	log := &platform.Log{Path: filepath.Join(rt.Config.Data, "logs", "cloudflare.log")}
 	_, _ = fmt.Fprintln(log, "Starting the dedicated Workspace secure connector")
 	cmd.Stdout = log
@@ -547,7 +557,6 @@ func (rt *Runtime) startTunnel(ctx context.Context) error {
 		held.Close()
 		return e
 	}
-	rt.set("cloudflare", "running")
 	go func() {
 		defer held.Close()
 		e := cmd.Wait()
@@ -555,6 +564,10 @@ func (rt *Runtime) startTunnel(ctx context.Context) error {
 		rt.tunnelExit <- e
 		rt.set("cloudflare", "stopped: see logs")
 	}()
+	if e = waitCloudflareReady(ctx, metrics, rt.tunnelExit); e != nil {
+		return fmt.Errorf("the Workspace Cloudflare connector did not connect: %w", e)
+	}
+	rt.set("cloudflare", "running")
 	return nil
 }
 func Stop(ctx context.Context, c Config) error {

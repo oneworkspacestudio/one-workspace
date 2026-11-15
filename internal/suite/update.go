@@ -249,11 +249,12 @@ type UpdateRequest struct {
 }
 
 type updateOperations struct {
-	repair    bool // Only the explicitly reviewed reinstall path enables this.
-	preflight func(context.Context, Config) error
-	stop      func(context.Context, Config) error
-	start     func(context.Context, Config, string) error
-	connect   func(context.Context, Config, *Secrets) error
+	repair     bool // Only the explicitly reviewed reinstall path enables this.
+	preflight  func(context.Context, Config) error
+	keepTunnel func(context.Context, Config, Secrets, func(string)) (func(), error)
+	stop       func(context.Context, Config) error
+	start      func(context.Context, Config, string) error
+	connect    func(context.Context, Config, *Secrets) error
 }
 
 // Check process creation from the updater itself before taking working apps
@@ -272,7 +273,7 @@ func preflightUpdateRestart(ctx context.Context, c Config) error {
 	return nil
 }
 
-var nativeUpdateOperations = updateOperations{preflight: preflightUpdateRestart, stop: stopUpdateRuntime, start: startUpdatedRuntime, connect: connectAddedApps}
+var nativeUpdateOperations = updateOperations{preflight: preflightUpdateRestart, keepTunnel: keepUpdateTunnel, stop: stopUpdateRuntime, start: startUpdatedRuntime, connect: connectAddedApps}
 
 func verifyInstalledPrograms(c Config) error {
 	if p, ok := c.Catalog.Packages["manager"]; !ok || p.File != "Workspace.exe" {
@@ -506,6 +507,16 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e != nil {
 		return e
 	}
+	showMaintenancePage := c.Tunnel && ops.keepTunnel != nil
+	if ops.keepTunnel != nil {
+		closeReplica, e := ops.keepTunnel(ctx, c, s, report)
+		if e != nil {
+			return fmt.Errorf("could not keep the Cloudflare tunnel connected; Workspace was not stopped: %w", e)
+		}
+		defer closeReplica()
+		// Automatic rollback runs under the same live replica.
+		ops.keepTunnel = nil
+	}
 	operationprogress.Report(ctx, "backup", "Stopping apps to create a consistent backup", 0, 0, "")
 	report("Stopping this Workspace and its apps for a consistent backup")
 	if e = ops.stop(ctx, c); e != nil {
@@ -534,6 +545,22 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	next.Catalog, next.Version = target, target.Version
 	if e = CheckPorts(next); e != nil {
 		return fmt.Errorf("new app ports are unavailable: %w", e)
+	}
+	if showMaintenancePage {
+		page, err := updateMaintenanceOrigin(c.Port)
+		if err != nil {
+			return fmt.Errorf("could not start the Workspace maintenance page: %w", err)
+		}
+		defer page.Close()
+		stop, start := ops.stop, ops.start
+		ops.stop = func(ctx context.Context, cfg Config) error {
+			_ = page.Close()
+			return stop(ctx, cfg)
+		}
+		ops.start = func(ctx context.Context, cfg Config, token string) error {
+			_ = page.Close()
+			return start(ctx, cfg, token)
+		}
 	}
 	purpose := "update"
 	scope := planAppUpdateScope(c, target)
@@ -727,6 +754,22 @@ func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report f
 	if j.Phase == "rollback-requested" {
 		if e = checkScopedRollback(c, snapshot); e != nil {
 			return e
+		}
+	}
+	if ops.keepTunnel != nil && c.Tunnel {
+		var s Secrets
+		err := platform.LoadSecret(filepath.Join(c.Data, "secrets.dpapi"), &s)
+		if err == nil {
+			var closeReplica func()
+			closeReplica, err = ops.keepTunnel(ctx, c, s, report)
+			if err == nil {
+				defer closeReplica()
+			}
+		}
+		if err != nil {
+			// Recovery still has to restore the installation if the connector
+			// or its credentials are among the damaged files.
+			report("Could not start a backup Cloudflare connector; continuing to restore Workspace")
 		}
 	}
 	if e := ops.stop(ctx, c); e != nil {

@@ -79,7 +79,7 @@ def validate_release_mode(tag, desktop_only, out):
 
 
 def validate_managed_catalog(catalog):
-    if catalog.get('installerIntegration') != 19:
+    if catalog.get('installerIntegration') != 20:
         raise RuntimeError('Use the current installer contract for complete app-owned runtimes')
     registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text(encoding='utf-8'))['apps']
     apps = {a['id']: a for a in catalog['apps']}
