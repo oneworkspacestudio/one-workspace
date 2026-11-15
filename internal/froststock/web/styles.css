@@ -210,3 +210,6 @@ h1{font-size:clamp(30px,3vw,43px);font-weight:800;letter-spacing:-1.75px;line-he
 .crop-actions .button{min-height:45px}
 @media(max-width:540px){.crop-actions .button{flex:1}}
 .date-crop-link{display:block;min-height:42px;padding:4px 0;text-align:left}
+.date-candidates{display:flex;flex-wrap:wrap;gap:7px;margin:0;padding:0;border:0}
+.date-candidates legend{margin-bottom:5px;color:var(--muted);font-size:12px}
+.date-candidates button{min-height:42px}

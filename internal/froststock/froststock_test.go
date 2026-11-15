@@ -71,6 +71,12 @@ func TestStorePhotoPairAndRevision(t *testing.T) {
 		t.Fatalf("invalid crop accepted: %d", w.Code)
 	}
 	item.DateCrop = &dateCrop{Left: .25, Top: .5, Right: .85, Bottom: .8}
+	item.DateCandidates = []string{"2027-02-29"}
+	invalid, _ = json.Marshal(item)
+	if w := call("PUT", invalid, "application/json", "", "", store.update); w.Code != 400 {
+		t.Fatalf("invalid candidate date accepted: %d", w.Code)
+	}
+	item.DateCandidates = []string{"2026-11-23", "2027-11-22"}
 	body, _ := json.Marshal(item)
 	if w := call("PUT", body, "application/json", "", "", store.update); w.Code != 200 {
 		t.Fatalf("update: %d %s", w.Code, w.Body.String())

@@ -74,7 +74,7 @@
         <div class="page-heading"><div><h1 id="settings-title">Settings</h1><p>Manage local scanning and inventory preferences.</p></div></div>
         <section class="settings-card"><h2><i class="icon" data-icon="scan-line"></i> Scanning</h2>
           <div class="setting-row"><div><strong>Date order</strong><p>Used for dates such as 04/06/27.</p></div><select id="date-order" aria-label="Date order"><option value="dmy">Day / Month / Year</option><option value="mdy">Month / Day / Year</option></select></div>
-          <div class="setting-row"><div><strong>On-device date recognition</strong><p>Printed expiry dates use Tesseract and a compact PaddleOCR model on difficult labels.</p></div></div>
+          <div class="setting-row"><div><strong>On-device date recognition</strong><p>Tesseract reads clear labels first. A compact PaddleOCR model retries difficult food names and dates.</p></div></div>
           <div class="setting-row"><div><strong>Vision model fallback</strong><p>Use SmolVLM 256M on this device when OCR can’t read a label. Downloads about 200 MB the first time and requires WebGPU.</p></div><label class="toggle"><input id="vision-enabled" type="checkbox" aria-label="Vision model fallback"><span></span></label></div>
         </section>
         <section class="settings-card"><h2><i class="icon" data-icon="shield-check"></i> Your data</h2>

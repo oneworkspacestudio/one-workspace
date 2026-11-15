@@ -485,6 +485,9 @@ function showDetail(key) {
       (item.state === 'queued' || item.review ? '<p class="detail-note">' + esc(item.state === 'queued'
         ? item.revision ? 'Reading labels. You can enter the details yourself and save them now.' : 'This pair will appear in My Drive after upload.'
         : item.reviewReason || 'Check the photos and confirm the label details. Leave the date blank if the label has no date.') + '</p>' : '') +
+      (item.review && item.dateCandidates?.length > 1 ? '<fieldset class="date-candidates"><legend>Dates read from the photo</legend>' +
+        item.dateCandidates.filter(isDate).map(date => '<button type="button" class="button subtle" data-action="select-date" data-value="' + esc(date) + '">' + esc(formatDate(date)) + '</button>').join('') +
+        '</fieldset>' : '') +
       '<details class="label-text"><summary>Extracted label text</summary><strong>Item photo</strong><pre>' + esc(item.rawItem || 'No text found') +
       '</pre><strong>Expiry photo</strong><pre>' + esc(item.rawDate || 'No text found') + '</pre>' +
       (item.visionItem || item.visionDate ? '<strong>Vision model</strong><pre>' + esc([item.visionItem, item.visionDate].filter(Boolean).join('\n')) + '</pre>' : '') +
@@ -556,6 +559,7 @@ async function importBackup(file) {
       used: Number.isFinite(record.used) ? record.used : undefined, state: queued ? 'queued' : 'ready', job: id(),
       itemPhoto, datePhoto, name: text(record.name, 100), category: categories.includes(record.category) ? record.category : '',
       dateCrop: validCrop(record.dateCrop) ? record.dateCrop : null, dateOnly: Boolean(queued && record.dateOnly),
+      dateCandidates: Array.isArray(record.dateCandidates) ? [...new Set(record.dateCandidates.filter(isDate))].slice(0, 6) : [],
       quantity: Math.min(999, Math.max(1, Math.trunc(Number(record.quantity) || 1))),
       expiry: isDate(record.expiry) ? record.expiry : '', dateType: dateTypes.includes(record.dateType) ? record.dateType : 'Expiry date',
       review: Boolean(record.review), reviewReason: text(record.reviewReason, 300),
@@ -602,6 +606,12 @@ const actions = {
     await changed();
     void processQueue();
   },
+  'select-date': date => {
+    const field = details.querySelector('input[name="expiry"]');
+    if (!field || !isDate(date)) return;
+    field.value = date;
+    field.focus();
+  },
   retry: async () => {
     await updateItem(currentDetail, item => ({ ...item, dateOnly: false, state: 'queued', job: id(), reviewReason: '' }));
     details.close();
@@ -640,7 +650,7 @@ document.addEventListener('submit', async event => {
     await updateItem(currentDetail, item => ({
       ...item, name, category: fields.get('category'), quantity: Number(fields.get('quantity')),
       expiry: fields.get('expiry'), dateType: fields.get('dateType'), state: 'ready',
-      review: false, reviewReason: '', dateOnly: false, job: id(),
+      review: false, reviewReason: '', dateCandidates: [], dateOnly: false, job: id(),
     }));
     details.close();
     await changed();

@@ -8,7 +8,7 @@ function send(type, payload, transfer = []) {
   const id = ++requestId;
   const engine = worker;
   return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => finish(reject, new Error('Local expiry OCR timed out')), 16000);
+    const timer = setTimeout(() => finish(reject, new Error('Local expiry OCR timed out')), type === 'init' ? 45000 : 16000);
     function finish(settle, value) {
       clearTimeout(timer);
       engine.removeEventListener('message', receive);
@@ -61,4 +61,21 @@ export async function readPaddleLabels(image) {
     ready = undefined;
     throw error;
   }
+}
+
+// Convert slanted detection boxes to the label's reading coordinates.
+export function paddleLayout(lines) {
+  const width = line => Math.hypot(line.poly[1][0] - line.poly[0][0], line.poly[1][1] - line.poly[0][1]);
+  const visible = lines.filter(line => line.poly?.length === 4);
+  const reference = visible.reduce((best, line) => !best || width(line) * line.score > width(best) * best.score ? line : best, null);
+  if (!reference) return [];
+  const [[x0, y0], [x1, y1]] = reference.poly;
+  const angle = Math.atan2(y1 - y0, x1 - x0);
+  const cos = Math.cos(angle), sin = Math.sin(angle);
+  return visible.map(line => {
+    const x = line.poly.map(([px, py]) => px * cos + py * sin);
+    const y = line.poly.map(([px, py]) => py * cos - px * sin);
+    return { text: line.text, confidence: line.score * 100,
+      bbox: { x0: Math.min(...x), x1: Math.max(...x), y0: Math.min(...y), y1: Math.max(...y) } };
+  });
 }

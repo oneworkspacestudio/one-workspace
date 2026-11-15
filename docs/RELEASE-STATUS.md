@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview135 with Froststock preview.5
+
+Froststock uses PaddleOCR to recover food names on angled packaging and repair
+missing separators on numeric stamps. It shows both dates when a stamp has
+two unlabelled lines, and marks the suggested expiry for confirmation.
+See [Froststock](FROSTSTOCK.md).
+
 ## Preview134 with Froststock preview.4
 
 Enable **Crop expiry photo after capture** to select the stamp before queueing.

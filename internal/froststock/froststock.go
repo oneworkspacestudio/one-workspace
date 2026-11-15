@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	Version  = "0.1.0-preview.4"
+	Version  = "0.1.0-preview.5"
 	photoMax = 3 << 20
 )
 
@@ -51,25 +51,26 @@ func (c *dateCrop) valid() bool {
 }
 
 type entry struct {
-	ID           string    `json:"id"`
-	Revision     int64     `json:"revision"`
-	Created      int64     `json:"created"`
-	Used         int64     `json:"used,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Category     string    `json:"category,omitempty"`
-	Quantity     int       `json:"quantity"`
-	Expiry       string    `json:"expiry,omitempty"`
-	DateCrop     *dateCrop `json:"dateCrop,omitempty"`
-	DateOnly     bool      `json:"dateOnly,omitempty"`
-	DateType     string    `json:"dateType,omitempty"`
-	Review       bool      `json:"review,omitempty"`
-	ReviewReason string    `json:"reviewReason,omitempty"`
-	RawItem      string    `json:"rawItem,omitempty"`
-	RawDate      string    `json:"rawDate,omitempty"`
-	VisionItem   string    `json:"visionItem,omitempty"`
-	VisionDate   string    `json:"visionDate,omitempty"`
-	State        string    `json:"state"`
-	Job          string    `json:"job"`
+	ID             string    `json:"id"`
+	Revision       int64     `json:"revision"`
+	Created        int64     `json:"created"`
+	Used           int64     `json:"used,omitempty"`
+	Name           string    `json:"name,omitempty"`
+	Category       string    `json:"category,omitempty"`
+	Quantity       int       `json:"quantity"`
+	Expiry         string    `json:"expiry,omitempty"`
+	DateCandidates []string  `json:"dateCandidates,omitempty"`
+	DateCrop       *dateCrop `json:"dateCrop,omitempty"`
+	DateOnly       bool      `json:"dateOnly,omitempty"`
+	DateType       string    `json:"dateType,omitempty"`
+	Review         bool      `json:"review,omitempty"`
+	ReviewReason   string    `json:"reviewReason,omitempty"`
+	RawItem        string    `json:"rawItem,omitempty"`
+	RawDate        string    `json:"rawDate,omitempty"`
+	VisionItem     string    `json:"visionItem,omitempty"`
+	VisionDate     string    `json:"visionDate,omitempty"`
+	State          string    `json:"state"`
+	Job            string    `json:"job"`
 }
 
 var identifier = regexp.MustCompile(`^[A-Za-z0-9_-]{12,80}$`)
@@ -84,15 +85,22 @@ func (e entry) valid() bool {
 		(e.State != "queued" && e.State != "ready") {
 		return false
 	}
-	if e.Expiry != "" {
-		date, err := time.Parse("2006-01-02", e.Expiry)
-		if err != nil || date.Year() < 1900 || date.Year() > 2199 {
+	if e.Expiry != "" && !validDate(e.Expiry) || len(e.DateCandidates) > 6 {
+		return false
+	}
+	for _, candidate := range e.DateCandidates {
+		if !validDate(candidate) {
 			return false
 		}
 	}
 	return len(e.Name) <= 400 && len(e.Category) <= 160 && len(e.DateType) <= 80 &&
 		len(e.ReviewReason) <= 1200 && len(e.RawItem) <= 20000 && len(e.RawDate) <= 20000 &&
 		len(e.VisionItem) <= 4000 && len(e.VisionDate) <= 4000
+}
+
+func validDate(value string) bool {
+	date, err := time.Parse("2006-01-02", value)
+	return err == nil && date.Year() >= 1900 && date.Year() <= 2199
 }
 
 type drive struct {

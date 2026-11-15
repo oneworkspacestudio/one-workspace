@@ -1,13 +1,13 @@
 import { extractDate, extractName, readTitle } from './dates.js';
 import { labelVariants } from './label-image.js';
 import { cropLabelPhoto } from './expiry-crop.js';
-import { readPaddleLabels } from './paddle.js';
+import { paddleLayout, readPaddleLabels } from './paddle.js';
 
 const assetPath = new URL('./assets/ocr/', import.meta.url).href;
 let worker;
 let vision;
 let visionFailed = false;
-let paddleFailed = false;
+let paddleRetryAfter = 0;
 
 async function recognize(image, mode, blocks = false) {
   let timer;
@@ -38,25 +38,71 @@ async function recognize(image, mode, blocks = false) {
 
 const emptyRead = { text: '', confidence: 0 };
 
+async function readPaddle(blob) {
+  if (Date.now() < paddleRetryAfter) return [];
+  try { return await readPaddleLabels(blob); }
+  catch (error) {
+    paddleRetryAfter = Date.now() + 60000;
+    console.warn('Local OCR model unavailable', error);
+    return [];
+  }
+}
+
 async function readProduct(blob) {
-  let reading = await recognize(blob, '11', true);
+  let reading = emptyRead;
+  try { reading = await recognize(blob, '11', true); }
+  catch (error) { console.warn('First title scan failed', error); }
   let title = readTitle(reading.text, reading.blocks, reading.confidence);
-  if (title.confidence >= 75 && title.name.includes(' ')) return { reading, title };
+  if (title.food && title.confidence >= 75 && title.name.includes(' ')) return { reading, title };
+
+  const quality = value => value.name ? value.confidence + (value.food ? 32 : 0) + (value.name.includes(' ') ? 12 : 0) : 0;
+  const paddle = paddleLayout(await readPaddle(blob));
+  if (paddle.length) {
+    const text = paddle.map(line => line.text).join('\n');
+    const alternative = readTitle(text, [{ paragraphs: [{ lines: paddle }] }]);
+    if (quality(alternative) > quality(title)) {
+      title = alternative;
+      reading = { text, confidence: title.confidence };
+    }
+    if (title.food && title.confidence >= 82 && title.name.includes(' ')) return { reading, title };
+  }
   try {
     for await (const { canvas, mode } of labelVariants(blob, 'item')) {
       const alternate = await recognize(canvas, mode, true);
       const found = readTitle(alternate.text, alternate.blocks, alternate.confidence);
-      const quality = value => (value.name ? value.confidence : 0) + (value.name.includes(' ') ? 12 : 0);
       if (quality(found) > quality(title)) {
         title = found;
         reading = alternate;
       }
-      if (title.confidence >= 82 && title.name.includes(' ')) break;
+      if (title.food && title.confidence >= 82 && title.name.includes(' ')) break;
     }
   } catch (error) {
     console.warn('Additional title scans stopped', error);
   }
   return { reading, title };
+}
+
+function stampDate(text, order) {
+  const joined = text.trim().match(/^([0-9oilsbz]{2})([0-9oilsbz]{2})((?:19|20|21)\d{2})$/i);
+  const date = extractDate(joined ? joined.slice(1).join('.') : text, order);
+  return joined ? { ...date, repaired: true } : date;
+}
+
+function dateStamp(lines, order) {
+  const rows = lines.filter(line => line.score >= .81 && /^[0-9oilsbz ./-]+$/i.test(line.text.trim()) &&
+    stampDate(line.text, order).value);
+  if (rows.length !== 2) return;
+  const [first, second] = paddleLayout(rows).sort((a, b) => a.bbox.y0 - b.bbox.y0);
+  if (!first || !second) return;
+  const a = first.bbox, b = second.bbox;
+  const height = Math.max(a.y1 - a.y0, b.y1 - b.y0);
+  const width = Math.min(a.x1 - a.x0, b.x1 - b.x0);
+  if (width <= 0 || b.y0 - a.y0 < height * .6 || b.y0 - a.y0 > height * 2.5 ||
+      Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0) < width * .78) return;
+  const earlier = stampDate(first.text, order);
+  const later = stampDate(second.text, order);
+  const days = (Date.parse(later.value) - Date.parse(earlier.value)) / 86400000;
+  if (days >= 30 && days <= 1830) return { ...later, suggested: true, candidates: [earlier, later] };
 }
 
 async function readExpiry(blob, order, cropped) {
@@ -74,17 +120,24 @@ async function readExpiry(blob, order, cropped) {
   let certain = false;
   try { certain = await read(blob, cropped ? '6' : '11'); }
   catch (error) { console.warn('First expiry scan failed', error); }
-  if (!certain && !paddleFailed) {
-    try {
-      const lines = await readPaddleLabels(blob);
-      if (lines.length) {
-        const text = lines.map(line => line.text).join('\n');
-        const confidence = 100 * lines.reduce((sum, line) => sum + line.score, 0) / lines.length;
-        certain = record({ text, confidence }, 89);
+  if (!certain) {
+    const lines = await readPaddle(blob);
+    if (lines.length) {
+      const text = lines.map(line => line.text).join('\n');
+      const confidence = 100 * lines.reduce((sum, line) => sum + line.score, 0) / lines.length;
+      const reading = { text, confidence };
+      certain = record(reading, 89);
+      const parsed = reads.at(-1).date;
+      const hasExplicit = reads.some(hit => hit.date.candidates.some(candidate => candidate.explicit));
+      if (parsed.candidates.length && !hasExplicit) {
+        const suggested = dateStamp(lines, order);
+        if (suggested) return { reading, date: suggested };
       }
-    } catch (error) {
-      paddleFailed = true;
-      console.warn('Local expiry model unavailable', error);
+      if (parsed.ambiguous && !hasExplicit) {
+        const clearDates = lines.filter(line => line.score >= .85).flatMap(line => extractDate(line.text, order).candidates);
+        const values = new Set(clearDates.map(candidate => candidate.value));
+        if (values.size >= 2) return { reading, date: parsed };
+      }
     }
   }
   if (!certain) {
@@ -99,9 +152,10 @@ async function readExpiry(blob, order, cropped) {
   const valid = reads.filter(hit => hit.date.value).sort((a, b) => b.score - a.score);
   const best = valid[0];
   if (best) {
-    const conflict = valid.some(hit => hit.date.value !== best.date.value && hit.score >= best.score - 18);
-    if (!conflict) return best;
-    return { reading: best.reading, date: { ...best.date, value: '', ambiguous: true } };
+    const conflicting = valid.filter(hit => hit.score >= best.score - 18 && hit.date.value !== best.date.value);
+    if (!conflicting.length) return best;
+    const choices = [...new Map([best, ...conflicting].map(hit => [hit.date.value, hit.date])).values()];
+    return { reading: best.reading, date: { ...best.date, value: '', ambiguous: true, candidates: choices } };
   }
   return reads.find(hit => hit.date.ambiguous) || reads.sort((a, b) => b.reading.confidence - a.reading.confidence)[0];
 }
@@ -146,15 +200,17 @@ export async function scanLabels(item, preferences, report, commit) {
   const otherDate = extractDate(itemResult.text, preferences.dateOrder);
   const fromItem = !item.dateCrop && !date.value && !date.ambiguous && otherDate.value && otherDate.explicit;
   const expiry = fromItem ? otherDate : date;
-  const nameReview = item.dateOnly ? !item.name : !name || title.confidence < 65;
-  const review = Boolean(!expiry.value || fromItem || expiry.repaired || dateResult.confidence < 75 || nameReview);
+  const nameReview = item.dateOnly ? !item.name : !name || title.confidence < 65 || !title.food && !name.includes(' ');
+  const review = Boolean(!expiry.value || fromItem || expiry.suggested || expiry.repaired || dateResult.confidence < 75 || nameReview);
   const result = {
     name: name || item.name || '',
-    expiry: expiry.value || item.expiry || '', dateType: expiry.value ? expiry.type : item.dateType || 'Expiry date',
+    expiry: expiry.value || (date.ambiguous && item.review ? '' : item.expiry || ''), dateType: expiry.value ? expiry.type : item.dateType || 'Expiry date',
     rawItem: itemResult.text || item.rawItem || '', rawDate: dateResult.text || (item.dateCrop ? '' : item.rawDate || ''),
     visionDate: '',
+    dateCandidates: expiry.candidates.length > 1 ? expiry.candidates.slice(0, 6).map(candidate => candidate.value) : [],
     review,
-    reviewReason: date.ambiguous ? 'Several dates were found. Crop around the expiry date or enter it.'
+    reviewReason: expiry.suggested ? 'Two dates were read from the stamp. The later date is suggested. Confirm it against the pack.'
+      : date.ambiguous ? 'Several dates were found. Choose the expiry date printed on the pack.'
       : fromItem ? 'The date was read from the item photo. Check it against the expiry photo.'
       : expiry.repaired ? 'Some digits were unclear. Confirm the suggested date against the photo.'
       : readFailed ? 'Label reading was interrupted. Read the labels again or enter the details.'
