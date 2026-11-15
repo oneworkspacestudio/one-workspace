@@ -32,6 +32,21 @@ export async function connect() {
   });
 }
 
+const recognitionSettings = new URL('./api/recognition/settings', import.meta.url);
+export const deepSeekStatus = () => request(recognitionSettings);
+export const configureDeepSeek = settings => request(recognitionSettings, {
+  method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings),
+});
+
+export async function readWithDeepSeek(itemPhoto, datePhoto, report) {
+  if (!(await deepSeekStatus()).configured) return null;
+  report('Reading labels with DeepSeek…');
+  const body = new FormData();
+  if (itemPhoto) body.set('item', itemPhoto, 'item.jpg');
+  body.set('expiry', datePhoto, 'expiry.jpg');
+  return request(new URL('./api/recognition/read', import.meta.url), { method: 'POST', body });
+}
+
 async function transaction(mode, operation) {
   const db = await database;
   return new Promise((resolve, reject) => {
@@ -96,13 +111,16 @@ export async function syncPending() {
   if (failure) throw failure;
 }
 
+export async function loadPhoto(id, name) {
+  const response = await fetch(itemPhotoURL(id, name), { headers: { 'X-Workspace-Expected-Account': account } });
+  if (!response.ok) throw Object.assign(new Error('The saved photo could not be opened from My Drive.'), { status: response.status });
+  return response.blob();
+}
+
 export async function jobPhotos(item) {
   if (item.itemPhoto && item.datePhoto) return item;
-  const blobs = await Promise.all(['item.jpg', 'expiry.jpg'].map(async name => {
-    const response = await fetch(itemPhotoURL(item.id, name), { headers: { 'X-Workspace-Expected-Account': account } });
-    if (!response.ok) throw Object.assign(new Error('Both photos must be present in My Drive.'), { status: response.status });
-    return response.blob();
-  }));
+  if (item.dateOnly) return { ...item, datePhoto: await loadPhoto(item.id, 'expiry.jpg') };
+  const blobs = await Promise.all(['item.jpg', 'expiry.jpg'].map(name => loadPhoto(item.id, name)));
   return { ...item, itemPhoto: blobs[0], datePhoto: blobs[1] };
 }
 

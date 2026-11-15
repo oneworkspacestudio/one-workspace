@@ -5,7 +5,7 @@ function canvasFor(width, height) {
   return canvas;
 }
 
-export async function* labelVariants(blob, kind) {
+export async function* labelVariants(blob, kind, cropped = false) {
   const image = await createImageBitmap(blob);
   try {
     const date = kind === 'date';
@@ -17,7 +17,8 @@ export async function* labelVariants(blob, kind) {
     enhance(ctx, source.width, source.height);
     yield { canvas: source, mode: '11' };
     if (date) {
-      yield { canvas: cropCentre(source), mode: '6' };
+      if (!cropped) yield { canvas: cropCentre(source), mode: '6' };
+      else yield { canvas: source, mode: '7' };
       for (const angle of [90, 270, 180]) yield { canvas: rotate(source, angle), mode: '11' };
     } else {
       for (const angle of [90, 270, 180]) yield { canvas: rotate(source, angle), mode: '11' };

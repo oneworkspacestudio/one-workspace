@@ -29,3 +29,15 @@ verified, the temporary connector closed, and the live portal, Froststock,
 and its primary Cloudflare connector are healthy. Test fixture roots were
 removed. The Windows installer is prepared for publication. The standard
 publisher stopped before a draft because this PC has no Android release signer.
+
+The user approved Windows-only publication after the public channel had
+already assigned preview.134 to a separate Froststock release and advanced
+through preview.136. The tunnel fix now targets preview.137 and uses the
+verified public preview.136 bundle, preserving Froststock preview.6.
+
+A preview.135 update on the private preview.134 installation copied an
+integration-19 manager into an installation that still required integration
+20. The restart log confirmed that the manager rejected that catalog. Recovery
+restored the existing preview.134 programs and data. Online and offline update
+selection now reject lower-integration replacement managers before taking the
+installation down. Valid independent app updates remain available.

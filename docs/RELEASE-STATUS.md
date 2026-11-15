@@ -1,12 +1,31 @@
 # One Workspace release status
 
-## Preview134 with Cloudflare continuity during updates
+## Preview137 with Cloudflare continuity during updates
 
 The Windows updater connects a second Cloudflare connector before it stops
-Workspace. The connector stays active through the backup, restart and any
-automatic rollback. Workspace serves a retryable maintenance response while
-the apps are offline. Installer integration 20 hands older updaters off to the
-new installer before entering maintenance.
+Workspace and keeps it connected through restart and automatic rollback.
+Workspace serves a retryable maintenance response while the apps are offline.
+The updater also blocks a replacement manager that cannot read the installed
+catalog. Installer integration 20 hands older updaters off to the new installer.
+
+## Preview136 with Froststock preview.6
+
+Save a DeepSeek API key in Froststock Settings to use DeepSeek Flash for reading
+food names and expiry labels. Froststock uses its device scanner when the
+cloud service cannot read a field. See [Froststock](FROSTSTOCK.md).
+
+## Preview135 with Froststock preview.5
+
+Froststock uses PaddleOCR to recover food names on angled packaging and repair
+missing separators on numeric stamps. It shows both dates when a stamp has
+two unlabelled lines, and marks the suggested expiry for confirmation.
+See [Froststock](FROSTSTOCK.md).
+
+## Preview134 with Froststock preview.4
+
+Enable **Crop expiry photo after capture** to select the stamp before queueing.
+For existing items, choose **Crop & read again** beside the saved expiry photo.
+A small PaddleOCR model retries difficult dates on the device. See [Froststock](FROSTSTOCK.md).
 
 ## Preview133: Froststock label recognition
 

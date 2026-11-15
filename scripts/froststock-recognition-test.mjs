@@ -11,6 +11,10 @@ test('finds the date tied to the expiry label and ignores packing dates', () => 
 });
 
 test('reads compact and faint-stamp transcriptions without inventing missing fields', () => {
+  assert.equal(extractDate('1806.2029').value, '2029-06-18');
+  assert.equal(extractDate('1806.2029').repaired, true);
+  assert.equal(extractDate('18062029').value, '');
+  assert.deepEqual(extractDate('19.06.2027\n18.06.2029').candidates.map(date => date.value), ['2027-06-19','2029-06-18']);
   assert.equal(extractDate('BBE 22·11·2027').value, '2027-11-22');
   assert.equal(extractDate('EXP241227').value, '2027-12-24');
   assert.equal(extractDate('L241227').value, '');
@@ -35,4 +39,15 @@ test('identifies prominent product titles ahead of a brand and directions', () =
   assert.equal(readTitle('', [{ paragraphs: [{ lines }] }]).name, 'Atlantic Salmon Fillets');
   assert.equal(readTitle('MARKET\nGREEN PEAS 800 g\nKEEP FROZEN').name, 'Green Peas');
   assert.equal(readTitle('NUTRITION\nBEST BEFORE 12 JAN 27').name, '');
+});
+
+test('keeps the food on a slanted package with a large brand and a short cut on the next line', () => {
+  const line = (text, x0, x1, y0, y1) => ({ text, confidence: 95, bbox: { x0, x1, y0, y1 } });
+  const lines = [
+    line('Brand', 40, 390, 410, 555), line('FROZEN TURKEY', 68, 365, 560, 625),
+    line('THIGH', 147, 275, 600, 657), line('PIECES', 160, 269, 668, 702),
+  ];
+  assert.equal(readTitle('', [{ paragraphs: [{ lines }] }]).name, 'Frozen Turkey Thigh');
+  assert.equal(readTitle('FROZEN\nBrand\nTURKEY WING').name, 'Turkey Wing');
+  assert.equal(readTitle('Icken Part)').name, '');
 });

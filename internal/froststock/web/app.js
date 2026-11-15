@@ -1,9 +1,10 @@
-import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, driveStatus } from './storage.js';
+import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, loadPhoto, driveStatus, deepSeekStatus, configureDeepSeek, readWithDeepSeek } from './storage.js';
 import { isDate, offsetDate, daysFromToday, formatDate, formatToday } from './dates.js';
 import { scanLabels } from './recognition.js';
+import { chooseExpiryCrop, validCrop } from './expiry-crop.js';
 
 const $ = selector => document.querySelector(selector);
-const icons = 'snowflake layout-grid boxes clock-3 history settings camera chevron-right scan-line search shield-check calendar-clock triangle-alert package image x check loader-circle clipboard-list gallery-horizontal-end calendar-days download list-filter check-circle-2 image-plus upload'.split(' ');
+const icons = 'snowflake layout-grid boxes clock-3 history settings camera chevron-right scan-line search shield-check calendar-clock triangle-alert package image x check loader-circle clipboard-list gallery-horizontal-end calendar-days download list-filter check-circle-2 image-plus upload sparkles'.split(' ');
 const symbol = name => '<i aria-hidden="true" class="icon" data-icon="' + name + '"></i>';
 const iconStyle = document.createElement('style');
 iconStyle.textContent = icons.map(name => '[data-icon="' + name + '"]{--icon:url("./assets/icons/' + name + '.svg")}').join('\n');
@@ -32,6 +33,9 @@ let firstPreview;
 let sessionCount = 0;
 let persistentRequested = false;
 let ownerReady = false;
+const cropOnCapture = $('#crop-on-capture');
+cropOnCapture.checked = localStorage.getItem('froststock-crop-expiry') === 'on';
+cropOnCapture.addEventListener('change', () => localStorage.setItem('froststock-crop-expiry', cropOnCapture.checked ? 'on' : 'off'));
 const thumbnailURLs = new Map();
 const detailURLs = new Set();
 const preferences = {
@@ -197,6 +201,7 @@ function applyRoute() {
   }
   $('#dashboard').hidden = activePage === 'settings';
   $('#settings').hidden = activePage !== 'settings';
+  if (activePage === 'settings' && ownerReady) void refreshDeepSeekSettings();
   $('#hero').hidden = activePage !== 'overview';
   $('#metrics').hidden = activePage !== 'overview';
   $('#view-inventory').hidden = activePage !== 'overview';
@@ -233,16 +238,19 @@ async function processQueue() {
     await loadItems();
     let job;
     while ((job = nextJob())) {
-      queueMessage = 'Reading labels on this device…';
+      queueMessage = 'Opening saved label photos…';
       renderScanner();
       const token = job.job;
       const commit = async (reading, pending) => {
         await updateItem(job.id, stored => stored.job === token && stored.state === 'queued'
-          ? { ...stored, ...reading, state: pending ? 'queued' : 'ready' } : null);
+          ? { ...stored, ...reading, dateOnly: pending && stored.dateOnly, state: pending ? 'queued' : 'ready' } : null);
         await changed();
       };
       try {
-        await scanLabels(await jobPhotos(job), preferences, message => { queueMessage = message; renderScanner(); }, commit);
+        await scanLabels(await jobPhotos(job), preferences, message => {
+          queueMessage = message;
+          renderScanner();
+        }, commit, readWithDeepSeek);
       } catch (error) {
         if ([401, 403, 409, 503].includes(error.status) || error instanceof TypeError) throw error;
         console.warn('Scan interrupted', error);
@@ -305,6 +313,8 @@ function renderScanner() {
   $('#camera-hint').textContent = $('#camera-tip').textContent;
   $('#camera-hint').hidden = !stream;
   $('#retake').hidden = step === 1;
+  $('#crop-option').hidden = step === 1;
+  cropOnCapture.disabled = processingPhoto;
   $('#retake').disabled = processingPhoto;
   const thumb = $('#first-thumb');
   thumb.hidden = !firstPreview;
@@ -425,8 +435,10 @@ async function acceptPhoto(makeBlob) {
       itemPhoto = blob;
       firstPreview = URL.createObjectURL(blob);
     } else {
+      const dateCrop = cropOnCapture.checked ? await chooseExpiryCrop(blob) : null;
+      if (dateCrop === undefined) return;
       const record = {
-        id: id(), created: Date.now(), job: id(), state: 'queued', quantity: 1, itemPhoto, datePhoto: blob,
+        id: id(), created: Date.now(), job: id(), state: 'queued', quantity: 1, itemPhoto, datePhoto: blob, dateCrop,
       };
       await saveItem(record);
       clearFirst();
@@ -465,7 +477,9 @@ function showDetail(key) {
   details.innerHTML = '<div class="dialog-head"><div><p class="kicker">' + (item.demo ? 'SAMPLE ITEM' : 'ITEM DETAILS') +
     '</p><h2>' + esc(title) + '</h2></div><button type="button" class="icon-button" data-action="close-details" aria-label="Close item details">' + symbol('x') +
     '</button></div>' + (preview ? '<div class="detail-photos"><figure><img src="' + esc(preview) + '" alt="Food item"><figcaption>Item photo</figcaption></figure>' +
-    (dateURL ? '<figure><img src="' + esc(dateURL) + '" alt="Expiry label"><figcaption>Expiry photo</figcaption></figure>' : '') + '</div>' : '') +
+    (dateURL ? '<figure><img src="' + esc(dateURL) + '" alt="Expiry label"><figcaption>Expiry photo' +
+      (item.revision ? ' <button class="text-button date-crop-link" type="button" data-action="crop-date">' + (item.dateCrop ? 'Adjust crop' : 'Crop &amp; read again') + '</button>' : '') +
+      '</figcaption></figure>' : '') + '</div>' : '') +
     (item.demo ? '<p class="detail-note">' + esc(item.category) + ' · ' + esc(item.dateType) + ' ' + formatDate(item.expiry) + '</p>'
       : '<form id="item-form"><label>Item name<input name="name" maxlength="100" value="' + esc(item.name) + '" placeholder="Enter the product name" required></label>' +
       '<div class="detail-columns"><label>Category<select name="category"><option value="">Uncategorised</option>' + options(categories, item.category) +
@@ -475,6 +489,9 @@ function showDetail(key) {
       (item.state === 'queued' || item.review ? '<p class="detail-note">' + esc(item.state === 'queued'
         ? item.revision ? 'Reading labels. You can enter the details yourself and save them now.' : 'This pair will appear in My Drive after upload.'
         : item.reviewReason || 'Check the photos and confirm the label details. Leave the date blank if the label has no date.') + '</p>' : '') +
+      (item.review && item.dateCandidates?.length > 1 ? '<fieldset class="date-candidates"><legend>Dates read from the photo</legend>' +
+        item.dateCandidates.filter(isDate).map(date => '<button type="button" class="button subtle" data-action="select-date" data-value="' + esc(date) + '">' + esc(formatDate(date)) + '</button>').join('') +
+        '</fieldset>' : '') +
       '<details class="label-text"><summary>Extracted label text</summary><strong>Item photo</strong><pre>' + esc(item.rawItem || 'No text found') +
       '</pre><strong>Expiry photo</strong><pre>' + esc(item.rawDate || 'No text found') + '</pre>' +
       (item.visionItem || item.visionDate ? '<strong>Vision model</strong><pre>' + esc([item.visionItem, item.visionDate].filter(Boolean).join('\n')) + '</pre>' : '') +
@@ -545,6 +562,8 @@ async function importBackup(file) {
       id: record.id, created: Number.isFinite(record.created) ? record.created : Date.now(),
       used: Number.isFinite(record.used) ? record.used : undefined, state: queued ? 'queued' : 'ready', job: id(),
       itemPhoto, datePhoto, name: text(record.name, 100), category: categories.includes(record.category) ? record.category : '',
+      dateCrop: validCrop(record.dateCrop) ? record.dateCrop : null, dateOnly: Boolean(queued && record.dateOnly),
+      dateCandidates: Array.isArray(record.dateCandidates) ? [...new Set(record.dateCandidates.filter(isDate))].slice(0, 6) : [],
       quantity: Math.min(999, Math.max(1, Math.trunc(Number(record.quantity) || 1))),
       expiry: isDate(record.expiry) ? record.expiry : '', dateType: dateTypes.includes(record.dateType) ? record.dateType : 'Expiry date',
       review: Boolean(record.review), reviewReason: text(record.reviewReason, 300),
@@ -581,8 +600,24 @@ const actions = {
     await changed();
     if (result) notification(result.used ? 'Item moved to history.' : 'Item returned to the freezer.');
   },
+  'crop-date': async () => {
+    const item = items.find(record => record.id === currentDetail && record.revision);
+    if (!item) return;
+    const crop = await chooseExpiryCrop(await loadPhoto(item.id, 'expiry.jpg'), item.dateCrop);
+    if (crop === undefined || !details.open || currentDetail !== item.id) return;
+    await updateItem(item.id, stored => ({ ...stored, dateCrop: crop, dateOnly: true, state: 'queued', job: id(), reviewReason: '' }));
+    details.close();
+    await changed();
+    void processQueue();
+  },
+  'select-date': date => {
+    const field = details.querySelector('input[name="expiry"]');
+    if (!field || !isDate(date)) return;
+    field.value = date;
+    field.focus();
+  },
   retry: async () => {
-    await updateItem(currentDetail, item => ({ ...item, state: 'queued', job: id(), reviewReason: '' }));
+    await updateItem(currentDetail, item => ({ ...item, dateOnly: false, state: 'queued', job: id(), reviewReason: '' }));
     details.close();
     await changed();
     void processQueue();
@@ -619,7 +654,7 @@ document.addEventListener('submit', async event => {
     await updateItem(currentDetail, item => ({
       ...item, name, category: fields.get('category'), quantity: Number(fields.get('quantity')),
       expiry: fields.get('expiry'), dateType: fields.get('dateType'), state: 'ready',
-      review: false, reviewReason: '', job: id(),
+      review: false, reviewReason: '', dateCandidates: [], dateOnly: false, job: id(),
     }));
     details.close();
     await changed();
@@ -647,6 +682,49 @@ $('#date-order').addEventListener('change', event => {
   preferences.dateOrder = event.target.value;
   localStorage.setItem('froststock-date-order', preferences.dateOrder);
 });
+const deepSeekForm = $('#deepseek-settings');
+const deepSeekKey = $('#deepseek-key');
+const deepSeekRemove = $('#deepseek-remove');
+const deepSeekMessage = $('#deepseek-status');
+let deepSeekSettingsBusy = false;
+
+function showDeepSeekStatus({ configured }) {
+  deepSeekRemove.hidden = !configured;
+  deepSeekMessage.textContent = configured ? 'DeepSeek is the default label reader.' : 'Local label reading is active.';
+}
+
+async function refreshDeepSeekSettings() {
+  try {
+    const status = await deepSeekStatus();
+    if (!deepSeekSettingsBusy) showDeepSeekStatus(status);
+  } catch {
+    if (!deepSeekSettingsBusy) deepSeekMessage.textContent = 'DeepSeek settings are unavailable. Try again.';
+  }
+}
+
+async function saveDeepSeekSettings(settings) {
+  deepSeekSettingsBusy = true;
+  const save = deepSeekForm.querySelector('button[type="submit"]');
+  save.disabled = deepSeekRemove.disabled = deepSeekKey.disabled = true;
+  try {
+    showDeepSeekStatus(await configureDeepSeek(settings));
+    deepSeekKey.value = '';
+  } catch (error) {
+    deepSeekMessage.textContent = error.message || 'DeepSeek settings could not be saved. Try again.';
+  } finally {
+    save.disabled = deepSeekRemove.disabled = deepSeekKey.disabled = false;
+    deepSeekSettingsBusy = false;
+  }
+}
+
+deepSeekForm.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!deepSeekSettingsBusy) void saveDeepSeekSettings({ key: deepSeekKey.value });
+});
+deepSeekRemove.addEventListener('click', () => {
+  if (!deepSeekSettingsBusy) void saveDeepSeekSettings({ remove: true });
+});
+
 $('#vision-enabled').checked = preferences.vision;
 $('#vision-enabled').addEventListener('change', async event => {
   if (event.target.checked && !await navigator.gpu?.requestAdapter().catch(() => null)) {
@@ -693,5 +771,6 @@ connect().then(() => {
   ownerReady = true;
   $('#main').hidden = false;
   $('#session-screen').hidden = true;
+  if (activePage === 'settings') void refreshDeepSeekSettings();
   return refresh();
 }).catch(storageError);

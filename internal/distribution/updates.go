@@ -519,6 +519,13 @@ func choiceChanged(g updateGroup, current catalog.Catalog, ch UpdateChoice) bool
 	return !reflect.DeepEqual(groupPackages(g, current), ch.Packages) || !reflect.DeepEqual(normalizedApps(groupApps(g, current)), normalizedApps(ch.Apps))
 }
 
+func checkManagerIntegration(current catalog.Catalog, ch UpdateChoice) error {
+	if ch.InstallerIntegration < current.InstallerIntegration {
+		return fmt.Errorf("Workspace %s supports installer integration %d, but this installation requires %d", ch.Version, ch.InstallerIntegration, current.InstallerIntegration)
+	}
+	return nil
+}
+
 // CheckUpdates downloads only small catalogs/manifests. An incomplete repository
 // check is reported and cannot silently substitute an older candidate.
 func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, error) {
@@ -735,6 +742,11 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		}
 		ch = scopeUpdateChoice(current, ch)
 		ch.Available = choiceChanged(g, current, ch)
+		if g.id == "workspace" && ch.Available {
+			if err := checkManagerIntegration(current, ch); err != nil {
+				ch.Available, ch.Reason = false, err.Error()
+			}
+		}
 		for _, p := range ch.Packages {
 			if p.SHA256 == withheldMusicSHA {
 				ch.Available = false
@@ -956,7 +968,15 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 				break
 			}
 		}
-		if ch == nil || !ch.Available {
+		if ch == nil {
+			return target, nil, fmt.Errorf("update %s is not available", id)
+		}
+		if id == "workspace" {
+			if err := checkManagerIntegration(current, *ch); err != nil {
+				return target, nil, err
+			}
+		}
+		if !ch.Available {
 			return target, nil, fmt.Errorf("update %s is not available", id)
 		}
 		if ch.MinimumManager != "" {
@@ -966,9 +986,7 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 		}
 		if id == "workspace" {
 			target.Version = ch.Version
-			if ch.InstallerIntegration > target.InstallerIntegration {
-				target.InstallerIntegration = ch.InstallerIntegration
-			}
+			target.InstallerIntegration = ch.InstallerIntegration
 		}
 		for pid, p := range ch.Packages {
 			if p.SHA256 == withheldMusicSHA {
@@ -1079,6 +1097,11 @@ func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (
 		}
 		ch = scopeUpdateChoice(current, ch)
 		ch.Available = choiceChanged(g, current, ch)
+		if g.id == "workspace" && ch.Available {
+			if err := checkManagerIntegration(current, ch); err != nil {
+				ch.Available, ch.Reason = false, err.Error()
+			}
+		}
 		if froststockHandoff && g.id == "froststock" {
 			if installed, ok := current.Find("froststock"); ok {
 				if !newerWorkspace(ch.Version, installed.Version) {

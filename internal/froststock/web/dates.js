@@ -24,11 +24,12 @@ export function extractDate(text, order = 'dmy') {
   const normalized = text.normalize('NFKC').replace(/[–—−]/g, '-').replace(/[·•]/g, '.').replace(/\r/g, '').trim();
   const lines = normalized.split('\n');
   const matches = new Map();
-  const add = (value, context, fields) => {
+  const add = (value, context, fields, missingSeparator = false) => {
     if (!value || context === 'production') return;
     const raw = fields.join('');
-    const repaired = /[a-z]/i.test(raw);
-    if (repaired && (!/\d/.test(raw) || raw.match(/[a-z]/gi).length > 2)) return;
+    const letters = raw.match(/[a-z]/gi)?.length ?? 0;
+    const repaired = missingSeparator || letters > 0;
+    if (letters && (!/\d/.test(raw) || letters > 2)) return;
     const candidate = { value, type: context || 'Expiry date', explicit: !!context, repaired };
     const previous = matches.get(value);
     if (!previous || (candidate.explicit && !previous.explicit) ||
@@ -36,10 +37,10 @@ export function extractDate(text, order = 'dmy') {
       matches.set(value, candidate);
     }
   };
-  function numeric(a, b, year, context) {
+  function numeric(a, b, year, context, missingSeparator = false) {
     const first = +ocrDigits(a), second = +ocrDigits(b);
     const monthFirst = second > 12 || (first <= 12 && order === 'mdy');
-    add(toISO(yearNumber(ocrDigits(year)), monthFirst ? first : second, monthFirst ? second : first), context, [a, b, year]);
+    add(toISO(yearNumber(ocrDigits(year)), monthFirst ? first : second, monthFirst ? second : first), context, [a, b, year], missingSeparator);
   }
   let precedingContext = '';
   for (const line of lines) {
@@ -53,6 +54,10 @@ export function extractDate(text, order = 'dmy') {
         if (a.length === 4 && c.length <= 2) add(toISO(+ocrDigits(a), +ocrDigits(b), +ocrDigits(c)), context, [a, b, c]);
         else if (a.length <= 2 && [2, 4].includes(c.length)) numeric(a, b, c, context);
       }
+      // Blur can erase the first divider of a two-line numeric stamp.
+      // Only repair a complete, otherwise bare line with a visible four-digit year.
+      const joined = segment.trim().match(/^[:.]?\s*([0-9oilsbz]{2})([0-9oilsbz]{2})[ \t]*[./-][ \t]*((?:19|20|21)\d{2})$/i);
+      if (joined) numeric(...joined.slice(1), context, true);
       if (context && context !== 'production') {
         const compact = segment.trim().match(/^[:.]?[ \t]*(\d{2})(\d{2})(\d{2}|\d{4})(?:[ \t]|$)/);
         if (compact) numeric(...compact.slice(1), context);
@@ -72,25 +77,29 @@ export function extractDate(text, order = 'dmy') {
   }
   const explicit = [...matches.values()].filter(candidate => candidate.explicit);
   const candidates = explicit.length ? explicit : [...matches.values()];
-  return candidates.length === 1 ? { ...candidates[0], ambiguous: false } :
-    { value: '', type: 'Expiry date', explicit: false, repaired: false, ambiguous: candidates.length > 1 };
+  return candidates.length === 1 ? { ...candidates[0], ambiguous: false, candidates } :
+    { value: '', type: 'Expiry date', explicit: false, repaired: false, ambiguous: candidates.length > 1, candidates };
 }
 
 function titleLine(text) {
-  return text.normalize('NFKC').replace(/\s+/g, ' ').replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N})]+$/gu, '')
+  return text.normalize('NFKC').replace(/\s+/g, ' ').replace(/^[^\p{L}\p{N}(]+|[^\p{L}\p{N})]+$/gu, '')
     .replace(/\s+\d+(?:[.,]\d+)?\s*(?:g|kg|ml|oz|lb)\b.*$/i, '').trim();
 }
 
 function validTitle(line) {
   const letters = line.match(/\p{L}/gu)?.length ?? 0;
   return letters >= 3 && letters / line.length > .5 && line.length <= 100 && !expiryWords.test(line) &&
+    (line.match(/\(/g)?.length ?? 0) === (line.match(/\)/g)?.length ?? 0) &&
     !/^(?:keep\b|net\b|ingredients?\b|nutrition\b|cooking\b|storage\b|frozen food\b|product of\b|warning\b|lot\b|batch\b|suitable for\b|serving\b|cook (?:from|before)\b|made with\b|recycl|no (?:artificial|added)\b|serves?\s+\d|per (?:portion|serving|\d)|family pack$)/i.test(line);
 }
 
 function formatTitle(text) {
   const name = text.slice(0, 100);
-  return name === name.toUpperCase() ? name.toLowerCase().replace(/(^|[\s-])\p{L}/gu, c => c.toUpperCase()) : name;
+  return name === name.toUpperCase() ? name.toLowerCase().replace(/(^|[\s(-])\p{L}/gu, c => c.toUpperCase()) : name;
 }
+
+const foodWord = /\b(?:chicken|turkey|pork|beef|lamb|duck|salmon|tuna|cod|haddock|fish|seafood|prawns?|shrimps?|fillets?|thighs?|wings?|drumsticks?|drumettes?|breasts?|meat|burgers?|sausages?|rolls?|dumplings?|gyoza|peas|beans|corn|potato(?:es)?|chips|fries|carrots?|broccoli|spinach|vegetables?|berries|bread|pasta|pizza|noodles?|rice|curry|soup|pastry|cheese|fruit|ice cream)\b/i;
+const genericTitle = /^(?:frozen|fresh|chilled|classic|original|premium|traditional|delicious|organic|family|selected|natural|part|pieces)$/i;
 
 export function readTitle(text, blocks, confidence = 0) {
   const lines = (blocks ?? []).flatMap(block => block.paragraphs ?? []).flatMap(paragraph => paragraph.lines ?? []);
@@ -100,25 +109,35 @@ export function readTitle(text, blocks, confidence = 0) {
     if (!line.bbox || !validTitle(title)) continue;
     const height = Math.max(1, line.bbox.y1 - line.bbox.y0);
     const words = title.split(' ').length;
-    const score = height * (words === 1 ? .56 : 1 + Math.min(words, 5) * .08) * (.38 + line.confidence / 130);
-    candidates.push({ title, height, score, bbox: line.bbox, confidence: line.confidence });
+    const food = foodWord.test(title);
+    const modifier = /^(?:frozen|fresh|chilled)$/i.test(title) || /^\(.*\)$/.test(title);
+    const score = height * (words === 1 ? .56 : 1 + Math.min(words, 5) * .08) *
+      (.38 + line.confidence / 130) * (food ? 1.85 : 1);
+    candidates.push({ title, height, score, bbox: line.bbox, confidence: line.confidence, food, modifier });
   }
   candidates.sort((a, b) => b.score - a.score);
-  const best = candidates[0];
+  const best = candidates.find(line => !line.modifier && !genericTitle.test(line.title));
   if (!best) {
-    const plain = text.split(/\n/).map(titleLine).filter(validTitle);
-    return { name: plain.length ? formatTitle(plain.find(line => line.includes(' ')) || plain[0]) : '', confidence, score: 0 };
+    const plain = text.split(/\n/).map(titleLine).filter(line => validTitle(line) && !genericTitle.test(line));
+    const title = plain.find(line => foodWord.test(line) && line.includes(' ')) ||
+      plain.find(line => foodWord.test(line)) || plain.find(line => line.includes(' ')) || plain[0] || '';
+    return { name: formatTitle(title), confidence, food: foodWord.test(title) };
   }
-  // Join two close, similarly sized and horizontally overlapping title lines.
-  const adjacent = candidates.slice(1).find(line => {
+  const adjoining = candidates.filter(line => {
+    if (line === best || line.confidence < 50 || genericTitle.test(line.title) && !line.modifier) return false;
+    if (best.food && !line.food && !line.modifier) return false;
     const [a, b] = [best, line].sort((first, second) => first.bbox.y0 - second.bbox.y0);
     const gap = b.bbox.y0 - a.bbox.y1;
     const overlap = Math.min(a.bbox.x1, b.bbox.x1) - Math.max(a.bbox.x0, b.bbox.x0);
-    return line.height >= best.height * .65 && line.height <= best.height * 1.35 && line.confidence >= 50 &&
-      gap >= -2 && gap <= best.height * .65 && overlap >= Math.min(a.bbox.x1 - a.bbox.x0, b.bbox.x1 - b.bbox.x0) * .55;
+    return line.height >= best.height * .48 && line.height <= best.height * 1.45 &&
+      gap >= -Math.min(line.height, best.height) * .5 && gap <= best.height * .7 &&
+      overlap >= Math.min(a.bbox.x1 - a.bbox.x0, b.bbox.x1 - b.bbox.x0) * .55;
   });
-  const title = adjacent ? [best, adjacent].sort((a, b) => a.bbox.y0 - b.bbox.y0).map(line => line.title).join(' ') : best.title;
-  return { name: formatTitle(title), confidence: best.confidence, score: best.score };
+  // Keep a heading and at most one continuation on each side.
+  const above = adjoining.filter(line => line.bbox.y0 < best.bbox.y0).sort((a, b) => b.bbox.y0 - a.bbox.y0)[0];
+  const below = adjoining.filter(line => line.bbox.y0 >= best.bbox.y0).sort((a, b) => a.bbox.y0 - b.bbox.y0)[0];
+  const title = [above, best, below].filter(Boolean).map(line => line.title).join(' ');
+  return { name: formatTitle(title), confidence: best.confidence, food: foodWord.test(title) };
 }
 
 export const extractName = text => readTitle(text).name;

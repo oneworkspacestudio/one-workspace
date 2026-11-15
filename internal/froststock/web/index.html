@@ -71,9 +71,22 @@
         </section>
       </div>
       <section id="settings" class="settings" hidden aria-labelledby="settings-title">
-        <div class="page-heading"><div><h1 id="settings-title">Settings</h1><p>Manage local scanning and inventory preferences.</p></div></div>
+        <div class="page-heading"><div><h1 id="settings-title">Settings</h1><p>Manage scanning and inventory preferences.</p></div></div>
+        <section class="settings-card"><h2><i class="icon" data-icon="sparkles"></i> DeepSeek</h2>
+          <form id="deepseek-settings" class="deepseek-settings">
+            <p>Saving a key makes DeepSeek the default label reader. Item photos and the expiry photo or its crop are sent to DeepSeek. Local scanning is available if a cloud scan fails.</p>
+            <label for="deepseek-key">DeepSeek API key</label>
+            <input id="deepseek-key" type="password" maxlength="250" autocomplete="new-password" spellcheck="false" required>
+            <div class="detail-actions">
+              <button class="button primary" type="submit">Save key</button>
+              <button class="button subtle" type="button" id="deepseek-remove" hidden>Remove key</button>
+            </div>
+            <p id="deepseek-status" role="status"></p>
+          </form>
+        </section>
         <section class="settings-card"><h2><i class="icon" data-icon="scan-line"></i> Scanning</h2>
           <div class="setting-row"><div><strong>Date order</strong><p>Used for dates such as 04/06/27.</p></div><select id="date-order" aria-label="Date order"><option value="dmy">Day / Month / Year</option><option value="mdy">Month / Day / Year</option></select></div>
+          <div class="setting-row"><div><strong>On-device date recognition</strong><p>Tesseract reads clear labels first. A compact PaddleOCR model retries difficult food names and dates.</p></div></div>
           <div class="setting-row"><div><strong>Vision model fallback</strong><p>Use SmolVLM 256M on this device when OCR can’t read a label. Downloads about 200 MB the first time and requires WebGPU.</p></div><label class="toggle"><input id="vision-enabled" type="checkbox" aria-label="Vision model fallback"><span></span></label></div>
         </section>
         <section class="settings-card"><h2><i class="icon" data-icon="shield-check"></i> Your data</h2>
@@ -101,10 +114,27 @@
       <button type="button" class="button primary" id="capture" data-action="capture"><i class="icon" data-icon="camera"></i> <span>Open camera</span></button>
       <button type="button" class="button subtle" data-action="upload"><i class="icon" data-icon="image-plus"></i> Upload photo</button>
     </div>
+    <label id="crop-option" class="crop-option" hidden><input id="crop-on-capture" type="checkbox"> Crop expiry photo after capture</label>
     <p class="camera-hint" id="camera-hint" hidden></p>
     <div class="scan-footer"><span id="scan-session" aria-live="polite">Both photos are saved together.</span><button type="button" class="text-button" data-action="retake" id="retake" hidden>Retake item photo</button></div>
   </dialog>
   <dialog id="details" class="dialog details"></dialog>
+  <dialog id="expiry-crop" class="dialog crop-dialog" aria-labelledby="crop-heading">
+    <div class="dialog-head"><div><h2 id="crop-heading">Crop expiry photo</h2><p id="crop-tip">Move the box or drag its corners. Include “use by” or “best before” if visible.</p></div>
+      <button type="button" class="icon-button" data-crop="cancel" aria-label="Cancel crop"><i class="icon" data-icon="x"></i></button></div>
+    <div class="crop-stage">
+      <div class="crop-image">
+        <img alt="Original expiry photo" draggable="false">
+        <div class="crop-box" tabindex="0" role="group" aria-label="Crop selection. Use arrow keys to move and Shift with arrow keys to resize.">
+          <span data-corner="tl"></span><span data-corner="tr"></span><span data-corner="bl"></span><span data-corner="br"></span>
+        </div>
+      </div>
+    </div>
+    <div class="crop-actions">
+      <button type="button" class="button subtle" data-crop="full">Use full photo</button>
+      <button type="button" class="button primary" data-crop="apply">Use crop</button>
+    </div>
+  </dialog>
   <input id="photo-file" type="file" accept="image/*" hidden>
   <input id="camera-file" type="file" accept="image/*" capture="environment" hidden>
   <input id="backup-file" type="file" accept=".json,application/json" hidden>

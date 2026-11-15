@@ -34,9 +34,10 @@ source provenance and checksums. Publish through scripts/publish-release.ps1;
 it builds Android and refuses missing/unsigned/stale APKs before publication,
 verifies uploaded assets and promotes the public channel. Keep the permanent
 signing key outside Git. Never bypass this guard with a manual source-only release.
-See docs/RELEASING.md. The owner approved a Windows-only exception for
-`v0.3.0-preview.132` through the same publisher. All other releases still require
-Android signing. Published assets remain immutable.
+See docs/RELEASING.md. The owner approved Windows-only publication for
+`v0.3.0-preview.132` and the tunnel updater fix, published as
+`v0.3.0-preview.137`, through the same publisher. All other releases still
+require Android signing. Published assets remain immutable.
 
 ## README and app branding
 

@@ -1,0 +1,2 @@
+paddleocr-worker.js -text
+ort-wasm-simd-threaded.jsep.mjs -text

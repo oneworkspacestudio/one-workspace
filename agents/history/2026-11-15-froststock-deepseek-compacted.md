@@ -1,0 +1,44 @@
+# Froststock DeepSeek label recognition
+
+Froststock can send the item photo and the expiry photo or selected crop to
+DeepSeek Flash. Saving an API key in Settings makes DeepSeek the first reader
+for captures and saved-photo retries. Date-only retries send only the expiry
+image. Removing the key returns to local-only scanning.
+
+The managed service uses an owner-only, CSRF-protected API and stores the key
+in its private host data with Workspace's platform secret storage. The key is
+never included in settings responses, inventory data or browser storage.
+DeepSeek uploads go directly from the service to its fixed Chat Completions
+endpoint. No photos are needed to save settings.
+
+The browser checks the suggested expiry against the date transcription and
+existing date parser. DeepSeek date suggestions and visually inferred names
+require review. Missing fields and provider failures use the existing local
+scanner. Capture, background queuing and My Drive records keep their format.
+
+Integrates with preview.5 local OCR improvements from Workspace preview.135.
+The preview.136 rebuild uses the same authenticated preview.134 bundle pin
+as preview.135. Both rebuild the manager and Froststock payloads.
+
+Go settings and mocked API tests and mobile browser checks with a mock upstream covered activation and removal,
+two-image scans, date-only crops, packing dates, missing years, and local
+fallback. A live DeepSeek scan requires an owner-provided key.
+
+The Windows build host ran out of temporary NTFS space and then linker memory
+while embedding the full bundle. The installer was cross-linked with the
+same Go 1.27.3 toolchain and flags in the existing WSL build environment.
+The bundle matched 47 catalog entries and 939 hashes. The unrelated package
+hashes also matched the preview.135 build.
+
+The exact installer passed isolated fresh setup with owner authentication,
+CSRF checks, protected secret storage, restart and key removal. App-only
+upgrade from preview.134 and rollback kept the existing Drive inventory,
+original photos and manager version. No owner installation was changed.
+
+[Workspace preview.136](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.136)
+ships Froststock preview.6 from `6ba2528`. The signed publisher verified 960
+assets and the anonymous Android APK. A concurrent history commit advanced
+main. Rebased only the generated update index and pushed `bcf51a0`.
+The ordinary anonymous updater offered Froststock preview.6. The catalog
+and all five selected Froststock packages matched their public digests.
+Stopped isolated services and removed their fixture data and program roots.

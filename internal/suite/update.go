@@ -207,7 +207,7 @@ func startUpdatedRuntime(ctx context.Context, c Config, token string) (result er
 			operationprogress.Report(ctx, "restart", p.Phase, int64(p.Completed), int64(p.Total), "checks")
 		}
 	}); e != nil {
-		return e
+		return fmt.Errorf("Workspace manager did not become ready; see %s: %w", log.Path, e)
 	}
 	// Run writes ready once sign-in and the portal are available. Optional app
 	// failures remain visible and retryable without rolling back a valid update.

@@ -194,6 +194,39 @@ func TestBundledAppUpdatesUseWorkspaceCatalog(t *testing.T) {
 	}
 }
 
+func TestManagerUpdateCannotLowerInstalledIntegration(t *testing.T) {
+	current, _, _ := setupUpdateTransport(t, true)
+	current.Version = "0.3.0-preview.22"
+	current.InstallerIntegration = catalog.InstallerIntegration
+	plan, err := CheckUpdates(context.Background(), current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, choice := range plan.Choices {
+		if choice.ID == "workspace" && (choice.Available || !strings.Contains(choice.Reason, "this installation requires")) {
+			t.Fatalf("incompatible manager was not blocked: %+v", choice)
+		}
+	}
+	if _, _, err := SelectUpdates(current, plan, []string{"workspace"}); err == nil || !strings.Contains(err.Error(), "this installation requires") {
+		t.Fatalf("explicit update accepted an incompatible manager: %v", err)
+	}
+	target, _, err := SelectUpdates(current, plan, []string{"notes"})
+	notes, _ := target.Find("notes")
+	if err != nil || notes.Version != "0.1.0-preview.5" || target.InstallerIntegration != current.InstallerIntegration || target.Version != current.Version {
+		t.Fatalf("app-only update did not preserve Workspace: %v, %+v", err, notes)
+	}
+	offline := updateCatalogFixture()
+	offline.Version = "0.3.0-preview.23"
+	offline.Packages["manager"] = fixturePackage("Workspace.exe", []byte("incompatible-manager"))
+	if _, err := SelectBundleUpdates(current, offline, []string{"workspace"}); err == nil || !strings.Contains(err.Error(), "this installation requires") {
+		t.Fatalf("offline update accepted an incompatible manager: %v", err)
+	}
+	offline.InstallerIntegration = current.InstallerIntegration
+	if target, err := SelectBundleUpdates(current, offline, []string{"workspace"}); err != nil || target.Version != offline.Version {
+		t.Fatalf("compatible manager could not be selected: %s, %v", target.Version, err)
+	}
+}
+
 func TestInstalledAppAbsentFromPublishedSuiteKeepsIndependentBaseline(t *testing.T) {
 	for _, newer := range []bool{false, true} {
 		t.Run(fmt.Sprintf("newerRelease=%v", newer), func(t *testing.T) {

@@ -35,12 +35,13 @@ class PublisherWindowsArguments(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             list(publisher.upload_commands('v1', ['x'*30000]))
 
-    def test_windows_only_exception_is_limited_to_preview132(self):
+    def test_windows_only_exception_is_limited_to_approved_tags(self):
         with tempfile.TemporaryDirectory() as stage:
             out = Path(stage)
             publisher.validate_release_mode('v0.3.0-preview.132', True, out)
-            for tag in ['android-v0.1.0-preview.20', 'v0.3.0-preview.133']:
-                with self.assertRaisesRegex(RuntimeError, 'limited to preview.132'):
+            publisher.validate_release_mode('v0.3.0-preview.137', True, out)
+            for tag in ['android-v0.1.0-preview.20', 'v0.3.0-preview.136', 'v0.3.0-preview.138']:
+                with self.assertRaisesRegex(RuntimeError, 'limited to the approved'):
                     publisher.validate_release_mode(tag, True, out)
                 publisher.validate_release_mode(tag, False, out)
 

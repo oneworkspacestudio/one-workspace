@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	Version  = "0.1.0-preview.3"
+	Version  = "0.1.0-preview.6"
 	photoMax = 3 << 20
 )
 
@@ -38,24 +38,39 @@ func UI() fs.FS {
 	return files
 }
 
+type dateCrop struct {
+	Left   float64 `json:"left"`
+	Top    float64 `json:"top"`
+	Right  float64 `json:"right"`
+	Bottom float64 `json:"bottom"`
+}
+
+func (c *dateCrop) valid() bool {
+	return c == nil || c.Left >= 0 && c.Top >= 0 && c.Right <= 1 && c.Bottom <= 1 &&
+		c.Right-c.Left >= .01 && c.Bottom-c.Top >= .01
+}
+
 type entry struct {
-	ID           string `json:"id"`
-	Revision     int64  `json:"revision"`
-	Created      int64  `json:"created"`
-	Used         int64  `json:"used,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Category     string `json:"category,omitempty"`
-	Quantity     int    `json:"quantity"`
-	Expiry       string `json:"expiry,omitempty"`
-	DateType     string `json:"dateType,omitempty"`
-	Review       bool   `json:"review,omitempty"`
-	ReviewReason string `json:"reviewReason,omitempty"`
-	RawItem      string `json:"rawItem,omitempty"`
-	RawDate      string `json:"rawDate,omitempty"`
-	VisionItem   string `json:"visionItem,omitempty"`
-	VisionDate   string `json:"visionDate,omitempty"`
-	State        string `json:"state"`
-	Job          string `json:"job"`
+	ID             string    `json:"id"`
+	Revision       int64     `json:"revision"`
+	Created        int64     `json:"created"`
+	Used           int64     `json:"used,omitempty"`
+	Name           string    `json:"name,omitempty"`
+	Category       string    `json:"category,omitempty"`
+	Quantity       int       `json:"quantity"`
+	Expiry         string    `json:"expiry,omitempty"`
+	DateCandidates []string  `json:"dateCandidates,omitempty"`
+	DateCrop       *dateCrop `json:"dateCrop,omitempty"`
+	DateOnly       bool      `json:"dateOnly,omitempty"`
+	DateType       string    `json:"dateType,omitempty"`
+	Review         bool      `json:"review,omitempty"`
+	ReviewReason   string    `json:"reviewReason,omitempty"`
+	RawItem        string    `json:"rawItem,omitempty"`
+	RawDate        string    `json:"rawDate,omitempty"`
+	VisionItem     string    `json:"visionItem,omitempty"`
+	VisionDate     string    `json:"visionDate,omitempty"`
+	State          string    `json:"state"`
+	Job            string    `json:"job"`
 }
 
 var identifier = regexp.MustCompile(`^[A-Za-z0-9_-]{12,80}$`)
@@ -66,19 +81,26 @@ func revisionTag(revision int64) string {
 
 func (e entry) valid() bool {
 	if !identifier.MatchString(e.ID) || !identifier.MatchString(e.Job) ||
-		e.Quantity < 1 || e.Quantity > 999 || e.Created <= 0 || e.Used < 0 ||
+		e.Quantity < 1 || e.Quantity > 999 || e.Created <= 0 || e.Used < 0 || !e.DateCrop.valid() ||
 		(e.State != "queued" && e.State != "ready") {
 		return false
 	}
-	if e.Expiry != "" {
-		date, err := time.Parse("2006-01-02", e.Expiry)
-		if err != nil || date.Year() < 1900 || date.Year() > 2199 {
+	if e.Expiry != "" && !validDate(e.Expiry) || len(e.DateCandidates) > 6 {
+		return false
+	}
+	for _, candidate := range e.DateCandidates {
+		if !validDate(candidate) {
 			return false
 		}
 	}
 	return len(e.Name) <= 400 && len(e.Category) <= 160 && len(e.DateType) <= 80 &&
 		len(e.ReviewReason) <= 1200 && len(e.RawItem) <= 20000 && len(e.RawDate) <= 20000 &&
 		len(e.VisionItem) <= 4000 && len(e.VisionDate) <= 4000
+}
+
+func validDate(value string) bool {
+	date, err := time.Parse("2006-01-02", value)
+	return err == nil && date.Year() >= 1900 && date.Year() <= 2199
 }
 
 type drive struct {
@@ -90,6 +112,10 @@ func Register(host *apphost.Host, root string) error {
 	if !filepath.IsAbs(root) || filepath.Base(root) != "Froststock" || host.Config.Issuer == "" || host.Config.Owner == "" {
 		return errors.New("Froststock requires My Drive and a managed MyAccounts owner")
 	}
+	cloud, err := newDeepSeek(host.Config.Data)
+	if err != nil {
+		return err
+	}
 	store := &drive{root: root}
 	owner := func(handler http.HandlerFunc) http.HandlerFunc {
 		return host.Owner(func(w http.ResponseWriter, r *http.Request) {
@@ -100,6 +126,9 @@ func Register(host *apphost.Host, root string) error {
 			handler(w, r)
 		})
 	}
+	host.Mux.HandleFunc("GET /api/recognition/settings", owner(cloud.status))
+	host.Mux.HandleFunc("PUT /api/recognition/settings", owner(cloud.configure))
+	host.Mux.HandleFunc("POST /api/recognition/read", owner(cloud.read))
 	host.Mux.HandleFunc("GET /api/items", owner(store.list))
 	host.Mux.HandleFunc("POST /api/items/{id}", owner(store.create))
 	host.Mux.HandleFunc("PUT /api/items/{id}", owner(store.update))

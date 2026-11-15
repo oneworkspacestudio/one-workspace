@@ -197,11 +197,23 @@
     "asset": "workspace-bundle.zip",
     "sha256": "cc61e4bf4f12ed0a7062d8ad9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
   },
-  "updateTunnelSeed": {
+  "froststockLabelSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.134",
+    "asset": "workspace-bundle.zip",
+    "sha256": "984a38fd9a7d68c679e073df9769a680aa4564946b303f020da723a84d93c547"
+  },
+  "froststockCropSeed": {
     "repository": "oneworkspacestudio/one-workspace",
     "tag": "v0.3.0-preview.133",
     "asset": "workspace-bundle.zip",
     "sha256": "3f3f20f27eef7f7eea4dc42c7dd2be892f3da235ba05ebf550e66cee3a47dc90"
+  },
+  "updateTunnelSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.136",
+    "asset": "workspace-bundle.zip",
+    "sha256": "b60c1fdcafb6491141fe887a0ef9754a7b1b3fff3c444717632e9dee7adb026c"
   },
   "froststockRecognitionSeed": {
     "repository": "oneworkspacestudio/one-workspace",

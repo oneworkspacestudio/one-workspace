@@ -7,6 +7,12 @@ https://github.com/naptha/tesseract.js
 https://github.com/naptha/tesseract.js-core
 https://github.com/naptha/tessdata
 
+Expiry OCR also uses PaddleOCR.js 0.4.2 and the PP-OCRv6 tiny detection and
+recognition models under Apache License 2.0. The browser worker includes
+ONNX Runtime Web, OpenCV.js, js-yaml and Clipper. Sources, model revisions,
+licences and notices are listed in web/assets/paddle/SOURCES.md.
+https://github.com/PaddlePaddle/PaddleOCR/tree/e5046169b225bcdfbe25d45b4e809ff0f1a69c2c/paddleocr-js
+
 Browser vision uses Transformers.js 3.8.1 and its bundled ONNX Runtime Web.
 Apache License 2.0 and MIT, respectively. The optional SmolVLM-256M-Instruct
 model weights are distributed separately by Hugging Face under Apache 2.0.
