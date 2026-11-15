@@ -8,6 +8,8 @@ The dashboard shows items due within seven days, items past their printed date, 
 
 Your photos and inventory records live in **My Drive → Froststock**. A second device signed in to the same Workspace sees the same inventory. Each item folder holds `item.jpg`, `expiry.jpg`, and `item.json`. Keep those files together. My Drive access controls who can view the underlying Drive files. Froststock itself permits the Workspace owner.
 
-OCR runs in the browser using bundled English Tesseract. The optional SmolVLM 256M model uses WebGPU and downloads about 200 MB of model weights from Hugging Face. Inference runs on the device. Check suggested dates against the original label. Change the numeric date order in **Settings**.
+OCR runs in the browser using bundled English Tesseract. It retries difficult labels with adjusted contrast, cropping and rotation. The optional SmolVLM 256M model uses WebGPU and downloads about 200 MB of model weights from Hugging Face. Inference runs on the device. Check suggested dates against the original label. Change the numeric date order in **Settings**.
+
+Open a saved scan and choose **Read labels again** to retry with the current scanner. Confirm dates marked **Needs review** against the photo.
 
 For the standalone preview, export a backup in its Settings, then import it in Froststock under One Workspace. It writes each imported pair to My Drive. Managed app updates keep the Drive files. Use Workspace Backups to protect My Drive and the app’s private sign-in data.

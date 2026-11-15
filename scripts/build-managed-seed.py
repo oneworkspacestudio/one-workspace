@@ -105,8 +105,8 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
- if a.version == '0.3.0-preview.132' and not candidate:
-  pin = lock['froststockPortSeed']
+ if a.version == '0.3.0-preview.133' and not candidate:
+  pin = lock['froststockRecognitionSeed']
   base = asset(pin, cache, a.seed_archive)
   return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)], integration=19)
  if a.version == '0.3.0-preview.131' and not candidate:

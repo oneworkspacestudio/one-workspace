@@ -1,18 +1,87 @@
-import { extractDate, extractName } from './dates.js';
+import { extractDate, extractName, readTitle } from './dates.js';
+import { labelVariants } from './label-image.js';
 
 const assetPath = new URL('./assets/ocr/', import.meta.url).href;
 let worker;
 let vision;
 let visionFailed = false;
 
-async function recognize(blob, expiry = false) {
-  worker ??= window.Tesseract.createWorker('eng', 1, {
-    workerPath: assetPath + 'worker.min.js', langPath: assetPath, corePath: assetPath,
-    workerBlobURL: false, errorHandler: () => {},
-  }).catch(error => { worker = undefined; throw error; });
-  const engine = await worker;
-  const result = await engine.recognize(blob, { tessedit_pageseg_mode: expiry ? '11' : '3' });
-  return { text: result.data.text.trim(), confidence: result.data.confidence };
+async function recognize(image, mode, blocks = false) {
+  let timer;
+  let engine;
+  try {
+    const read = async () => {
+      worker ??= window.Tesseract.createWorker('eng', 1, {
+        workerPath: assetPath + 'worker.min.js', langPath: assetPath, corePath: assetPath,
+        workerBlobURL: false,
+      });
+      engine = await worker;
+      const { data } = await engine.recognize(image, { tessedit_pageseg_mode: mode }, { text: true, blocks });
+      return { text: data.text.trim(), confidence: data.confidence, blocks: data.blocks };
+    };
+    return await Promise.race([read(), new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Label reading timed out')), 22000);
+    })]);
+  } catch (error) {
+    const failed = worker;
+    worker = undefined;
+    if (engine) void engine.terminate().catch(() => {});
+    else void failed?.then(instance => instance.terminate()).catch(() => {});
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+const emptyRead = { text: '', confidence: 0 };
+
+async function readProduct(blob) {
+  let reading = await recognize(blob, '11', true);
+  let title = readTitle(reading.text, reading.blocks, reading.confidence);
+  if (title.confidence >= 75 && title.name.includes(' ')) return { reading, title };
+  try {
+    for await (const { canvas, mode } of labelVariants(blob, 'item')) {
+      const alternate = await recognize(canvas, mode, true);
+      const found = readTitle(alternate.text, alternate.blocks, alternate.confidence);
+      const quality = value => (value.name ? value.confidence : 0) + (value.name.includes(' ') ? 12 : 0);
+      if (quality(found) > quality(title)) {
+        title = found;
+        reading = alternate;
+      }
+      if (title.confidence >= 82 && title.name.includes(' ')) break;
+    }
+  } catch (error) {
+    console.warn('Additional title scans stopped', error);
+  }
+  return { reading, title };
+}
+
+async function readExpiry(blob, order) {
+  const reads = [];
+  async function read(image, mode) {
+    const reading = await recognize(image, mode);
+    const date = extractDate(reading.text, order);
+    const score = (date.explicit ? 45 : 0) + (date.repaired ? 0 : 23) + reading.confidence;
+    reads.push({ reading, date, score });
+    return date.value && date.explicit && !date.repaired && reading.confidence >= 76;
+  }
+  if (!await read(blob, '11')) {
+    try {
+      for await (const { canvas, mode } of labelVariants(blob, 'date')) {
+        if (await read(canvas, mode)) break;
+      }
+    } catch (error) {
+      console.warn('Additional date scans stopped', error);
+    }
+  }
+  const valid = reads.filter(hit => hit.date.value).sort((a, b) => b.score - a.score);
+  const best = valid[0];
+  if (best) {
+    const conflict = valid.some(hit => hit.date.value !== best.date.value && hit.score >= best.score - 18);
+    if (!conflict) return best;
+    return { reading: best.reading, date: { ...best.date, value: '', ambiguous: true } };
+  }
+  return reads.find(hit => hit.date.ambiguous) || reads.sort((a, b) => b.reading.confidence - a.reading.confidence)[0];
 }
 
 function readWithVision(blob, purpose) {
@@ -36,35 +105,39 @@ function readWithVision(blob, purpose) {
 }
 
 export async function scanLabels(item, preferences, report, commit) {
-  let dateResult = { text: '', confidence: 0 };
-  let itemResult = { text: '', confidence: 0 };
-  try {
-    dateResult = await recognize(item.datePhoto, true);
-    if (!extractDate(dateResult.text, preferences.dateOrder).value) {
-      const block = await (await worker).recognize(item.datePhoto, { tessedit_pageseg_mode: '6' });
-      if (extractDate(block.data.text, preferences.dateOrder).value || block.data.confidence > dateResult.confidence) {
-        dateResult = { text: block.data.text.trim(), confidence: block.data.confidence };
-      }
-    }
-  } catch (error) { console.warn('Expiry OCR failed', error); }
-  try { itemResult = await recognize(item.itemPhoto); }
-  catch (error) { console.warn('Item OCR failed', error); }
-  const date = extractDate(dateResult.text, preferences.dateOrder);
-  const name = extractName(itemResult.text);
+  let dateResult = emptyRead, itemResult = emptyRead;
+  let date = extractDate('', preferences.dateOrder);
+  let title = { name: '', confidence: 0 };
+  let readFailed = false;
+  try { ({ reading: dateResult, date } = await readExpiry(item.datePhoto, preferences.dateOrder)); }
+  catch (error) { readFailed = true; console.warn('Expiry OCR failed', error); }
+  try { ({ reading: itemResult, title } = await readProduct(item.itemPhoto)); }
+  catch (error) { readFailed = true; console.warn('Item OCR failed', error); }
+  const name = title.confidence >= 38 ? title.name : '';
+  const otherDate = extractDate(itemResult.text, preferences.dateOrder);
+  const fromItem = !date.value && !date.ambiguous && otherDate.value && otherDate.explicit;
+  const expiry = fromItem ? otherDate : date;
+  const review = Boolean(!expiry.value || fromItem || expiry.repaired || dateResult.confidence < 75 || !name || title.confidence < 65);
   const result = {
-    name: itemResult.confidence >= 40 ? name : '',
-    expiry: date.value, dateType: date.type, rawItem: itemResult.text, rawDate: dateResult.text,
-    review: !date.value || dateResult.confidence < 75 || !name || itemResult.confidence < 60,
-    reviewReason: date.ambiguous ? 'Several dates were found. Check the expiry photo.' : '',
+    name: name || item.name || '',
+    expiry: expiry.value || item.expiry || '', dateType: expiry.value ? expiry.type : item.dateType || 'Expiry date',
+    rawItem: itemResult.text || item.rawItem || '', rawDate: dateResult.text || item.rawDate || '',
+    review,
+    reviewReason: date.ambiguous ? 'Several dates were found. Check the expiry photo.'
+      : fromItem ? 'The date was read from the item photo. Check it against the expiry photo.'
+      : expiry.repaired ? 'Some digits were unclear. Confirm the suggested date against the photo.'
+      : readFailed ? 'Label reading was interrupted. Read the labels again or enter the details.'
+      : !expiry.value ? 'The expiry date could not be read. Check the close-up or enter the date.'
+      : !name ? 'The food title could not be read. Check the package photo or enter the name.' : '',
     state: 'ready',
   };
   const tryVision = preferences.vision && navigator.gpu && !visionFailed &&
-    ((!date.value && !date.ambiguous) || !result.name);
+    ((!expiry.value && !date.ambiguous) || !name);
   await commit(result, tryVision);
   if (!tryVision) return;
   report('Reading difficult labels with the local vision model…');
   try {
-    if (!date.value && !date.ambiguous) {
+    if (!expiry.value && !date.ambiguous) {
       const text = await readWithVision(item.datePhoto, 'date');
       const suggestion = extractDate(text, preferences.dateOrder);
       result.visionDate = text;
@@ -74,10 +147,10 @@ export async function scanLabels(item, preferences, report, commit) {
         result.reviewReason = 'The vision model suggested this date. Confirm it against the photo.';
       }
     }
-    if (!result.name) {
+    if (!name) {
       const text = await readWithVision(item.itemPhoto, 'item');
       result.visionItem = text;
-      if (!/\b(?:unknown|illegible|cannot read)\b/i.test(text)) result.name = extractName(text);
+      if (!/\b(?:unknown|illegible|cannot read)\b/i.test(text)) result.name = extractName(text) || result.name;
     }
   } catch (error) {
     visionFailed = true;

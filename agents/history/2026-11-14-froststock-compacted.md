@@ -55,3 +55,20 @@ recovery copy was verified. The installed My Cinema preview.5 health endpoint
 returned HTTP 503 during startup and again after the supported app-only retry.
 The update retained the Cinema package. Froststock, My Drive and MyAccounts
 were running after the retry. No physical phone or owner-scan fixture was used.
+
+## Label recognition repair
+
+The user reported missed food names and expiry dates. The preview.3 scanner
+ranks OCR lines by size and confidence, joins wrapped titles, skips packaging
+instructions, and retries faint, off-centre and sideways text. The date parser
+distinguishes printed expiry and production labels, accepts common separators
+and digit confusions, and marks repaired or conflicting readings for review.
+It does not infer missing year or day from the calendar. The existing
+**Read labels again** action works from the retained Drive photos and keeps
+prior values if no new value is readable. OCR and optional vision stay local.
+
+The separate Workspace preview.132 draft addresses startup and updating and
+is outside this repair. Preview.133 uses the signed standard publisher and the
+published preview.131 seed, changing only the Froststock payloads and suite
+manager and release notes. Browser regressions cover wrapped titles, sideways
+low-contrast dates, packing-date disambiguation and a missing year.

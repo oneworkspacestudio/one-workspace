@@ -197,11 +197,11 @@
     "asset": "workspace-bundle.zip",
     "sha256": "cc61e4bf4f12ed0a7062d8ad9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
   },
-  "froststockPortSeed": {
+  "froststockRecognitionSeed": {
     "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.131",
+    "tag": "v0.3.0-preview.132",
     "asset": "workspace-bundle.zip",
-    "sha256": "186f4dd35f137f4a39f3e95b138130567e6cc0e038a49945c7db6069171f9679"
+    "sha256": "2575ed8e1954560d30d8129008bc53980217a8129779f810ee0a3eb57152ad3b"
   },
   "sunnyMoonSeed": {
     "repository": "oneworkspacestudio/one-workspace",
