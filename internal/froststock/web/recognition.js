@@ -180,7 +180,17 @@ function readWithVision(blob, purpose) {
   });
 }
 
-export async function scanLabels(item, preferences, report, commit) {
+function deepSeekDate(reading, order) {
+  const text = reading.rawDate?.trim().slice(0, 4900) || '';
+  const evidence = extractDate(text, order);
+  const stamp = reading.expiryText?.trim().slice(0, 80);
+  if (!stamp || !text.toLowerCase().includes(stamp.toLowerCase())) return null;
+  const suggested = extractDate(stamp, order);
+  if (!suggested.value || evidence.value !== suggested.value) return null;
+  return { text, date: evidence };
+}
+
+export async function scanLabels(item, preferences, report, commit, readCloud) {
   let dateResult = emptyRead, itemResult = emptyRead;
   let date = extractDate('', preferences.dateOrder);
   let title = { name: '', confidence: 0 };
@@ -188,24 +198,58 @@ export async function scanLabels(item, preferences, report, commit) {
   let datePhoto = item.datePhoto;
   try {
     datePhoto = await cropLabelPhoto(item.datePhoto, item.dateCrop);
-    const result = await readExpiry(datePhoto, preferences.dateOrder, datePhoto !== item.datePhoto);
-    if (!result) readFailed = true;
-    else ({ reading: dateResult, date } = result);
-  } catch (error) { readFailed = true; console.warn('Expiry OCR failed', error); }
-  if (!item.dateOnly) {
+  } catch (error) {
+    readFailed = true;
+    console.warn('Expiry photo crop failed', error);
+  }
+  const localReading = 'Reading labels on this device…';
+  let cloud, cloudDate, cloudName, cloudError;
+  if (readCloud && !readFailed) {
+    try {
+      cloud = await readCloud(item.dateOnly ? null : item.itemPhoto, datePhoto, report);
+      if (cloud) {
+        cloudDate = deepSeekDate(cloud, preferences.dateOrder);
+        if (!item.dateOnly) cloudName = extractName(cloud.name || '');
+      }
+    } catch (error) {
+      const message = error?.message;
+      if (message?.startsWith('DeepSeek ')) cloudError = message;
+    }
+  }
+  if (!cloudDate || (!item.dateOnly && !cloudName)) {
+    report(cloud ? 'Checking unreadable fields on this device…'
+      : cloudError ? cloudError + ' ' + localReading : localReading);
+  }
+  if (cloudDate) {
+    date = cloudDate.date;
+    dateResult = { text: cloudDate.text };
+  } else {
+    try {
+      const result = await readExpiry(datePhoto, preferences.dateOrder, datePhoto !== item.datePhoto);
+      if (!result) readFailed = true;
+      else ({ reading: dateResult, date } = result);
+    } catch (error) { readFailed = true; console.warn('Expiry OCR failed', error); }
+  }
+  if (!item.dateOnly && !cloudName) {
     try { ({ reading: itemResult, title } = await readProduct(item.itemPhoto)); }
     catch (error) { readFailed = true; console.warn('Item OCR failed', error); }
   }
-  const name = title.confidence >= 38 ? title.name : '';
-  const otherDate = extractDate(itemResult.text, preferences.dateOrder);
+  const name = cloudName || (title.confidence >= 38 ? title.name : '');
+  const cloudItemText = item.dateOnly ? '' : cloud?.rawItem?.trim().slice(0, 4900) || '';
+  const otherDate = extractDate(itemResult.text || cloudItemText, preferences.dateOrder);
   const fromItem = !item.dateCrop && !date.value && !date.ambiguous && otherDate.value && otherDate.explicit;
   const expiry = fromItem ? otherDate : date;
-  const nameReview = item.dateOnly ? !item.name : !name || title.confidence < 65 || !title.food && !name.includes(' ');
-  const review = Boolean(!expiry.value || fromItem || expiry.suggested || expiry.repaired || dateResult.confidence < 75 || nameReview);
+  const inferredName = Boolean(cloudName && cloud?.nameInferred);
+  const localNameReview = !name || title.confidence < 65 || (!title.food && !name.includes(' '));
+  const nameReview = item.dateOnly ? !item.name : cloudName ? inferredName : localNameReview;
+  const review = Boolean(cloudDate || !expiry.value || fromItem || expiry.suggested || expiry.repaired ||
+    dateResult.confidence < 75 || nameReview);
   const result = {
     name: name || item.name || '',
-    expiry: expiry.value || (date.ambiguous && item.review ? '' : item.expiry || ''), dateType: expiry.value ? expiry.type : item.dateType || 'Expiry date',
-    rawItem: itemResult.text || item.rawItem || '', rawDate: dateResult.text || (item.dateCrop ? '' : item.rawDate || ''),
+    expiry: expiry.value || (date.ambiguous && item.review ? '' : item.expiry || ''),
+    dateType: expiry.value ? expiry.type : item.dateType || 'Expiry date',
+    rawItem: (cloudName ? cloudItemText : itemResult.text) || cloudItemText || item.rawItem || '',
+    rawDate: dateResult.text || cloud?.rawDate?.trim().slice(0, 4900) || (item.dateCrop ? '' : item.rawDate || ''),
     visionDate: '',
     dateCandidates: expiry.candidates.length > 1 ? expiry.candidates.slice(0, 6).map(candidate => candidate.value) : [],
     review,
@@ -213,6 +257,9 @@ export async function scanLabels(item, preferences, report, commit) {
       : date.ambiguous ? 'Several dates were found. Choose the expiry date printed on the pack.'
       : fromItem ? 'The date was read from the item photo. Check it against the expiry photo.'
       : expiry.repaired ? 'Some digits were unclear. Confirm the suggested date against the photo.'
+      : cloudDate && inferredName ? 'DeepSeek suggested the food name and expiry date. Confirm both against the photos.'
+      : cloudDate ? 'DeepSeek suggested this expiry date. Confirm it against the photo.'
+      : inferredName ? 'DeepSeek suggested a food name from the image. Confirm it against the photo.'
       : readFailed ? 'Label reading was interrupted. Read the labels again or enter the details.'
       : !expiry.value ? 'The expiry date could not be read. Crop around the date or enter it.'
       : nameReview && !name ? 'The food title could not be read. Check the package photo or enter the name.' : '',

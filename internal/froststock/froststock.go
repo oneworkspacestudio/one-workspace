@@ -112,6 +112,10 @@ func Register(host *apphost.Host, root string) error {
 	if !filepath.IsAbs(root) || filepath.Base(root) != "Froststock" || host.Config.Issuer == "" || host.Config.Owner == "" {
 		return errors.New("Froststock requires My Drive and a managed MyAccounts owner")
 	}
+	cloud, err := newDeepSeek(host.Config.Data)
+	if err != nil {
+		return err
+	}
 	store := &drive{root: root}
 	owner := func(handler http.HandlerFunc) http.HandlerFunc {
 		return host.Owner(func(w http.ResponseWriter, r *http.Request) {
@@ -122,6 +126,9 @@ func Register(host *apphost.Host, root string) error {
 			handler(w, r)
 		})
 	}
+	host.Mux.HandleFunc("GET /api/recognition/settings", owner(cloud.status))
+	host.Mux.HandleFunc("PUT /api/recognition/settings", owner(cloud.configure))
+	host.Mux.HandleFunc("POST /api/recognition/read", owner(cloud.read))
 	host.Mux.HandleFunc("GET /api/items", owner(store.list))
 	host.Mux.HandleFunc("POST /api/items/{id}", owner(store.create))
 	host.Mux.HandleFunc("PUT /api/items/{id}", owner(store.update))

@@ -32,6 +32,21 @@ export async function connect() {
   });
 }
 
+const recognitionSettings = new URL('./api/recognition/settings', import.meta.url);
+export const deepSeekStatus = () => request(recognitionSettings);
+export const configureDeepSeek = settings => request(recognitionSettings, {
+  method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings),
+});
+
+export async function readWithDeepSeek(itemPhoto, datePhoto, report) {
+  if (!(await deepSeekStatus()).configured) return null;
+  report('Reading labels with DeepSeek…');
+  const body = new FormData();
+  if (itemPhoto) body.set('item', itemPhoto, 'item.jpg');
+  body.set('expiry', datePhoto, 'expiry.jpg');
+  return request(new URL('./api/recognition/read', import.meta.url), { method: 'POST', body });
+}
+
 async function transaction(mode, operation) {
   const db = await database;
   return new Promise((resolve, reject) => {

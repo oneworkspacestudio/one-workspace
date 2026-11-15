@@ -1,10 +1,10 @@
-import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, loadPhoto, driveStatus } from './storage.js';
+import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, loadPhoto, driveStatus, deepSeekStatus, configureDeepSeek, readWithDeepSeek } from './storage.js';
 import { isDate, offsetDate, daysFromToday, formatDate, formatToday } from './dates.js';
 import { scanLabels } from './recognition.js';
 import { chooseExpiryCrop, validCrop } from './expiry-crop.js';
 
 const $ = selector => document.querySelector(selector);
-const icons = 'snowflake layout-grid boxes clock-3 history settings camera chevron-right scan-line search shield-check calendar-clock triangle-alert package image x check loader-circle clipboard-list gallery-horizontal-end calendar-days download list-filter check-circle-2 image-plus upload'.split(' ');
+const icons = 'snowflake layout-grid boxes clock-3 history settings camera chevron-right scan-line search shield-check calendar-clock triangle-alert package image x check loader-circle clipboard-list gallery-horizontal-end calendar-days download list-filter check-circle-2 image-plus upload sparkles'.split(' ');
 const symbol = name => '<i aria-hidden="true" class="icon" data-icon="' + name + '"></i>';
 const iconStyle = document.createElement('style');
 iconStyle.textContent = icons.map(name => '[data-icon="' + name + '"]{--icon:url("./assets/icons/' + name + '.svg")}').join('\n');
@@ -201,6 +201,7 @@ function applyRoute() {
   }
   $('#dashboard').hidden = activePage === 'settings';
   $('#settings').hidden = activePage !== 'settings';
+  if (activePage === 'settings' && ownerReady) void refreshDeepSeekSettings();
   $('#hero').hidden = activePage !== 'overview';
   $('#metrics').hidden = activePage !== 'overview';
   $('#view-inventory').hidden = activePage !== 'overview';
@@ -237,7 +238,7 @@ async function processQueue() {
     await loadItems();
     let job;
     while ((job = nextJob())) {
-      queueMessage = 'Reading labels on this device…';
+      queueMessage = 'Opening saved label photos…';
       renderScanner();
       const token = job.job;
       const commit = async (reading, pending) => {
@@ -246,7 +247,10 @@ async function processQueue() {
         await changed();
       };
       try {
-        await scanLabels(await jobPhotos(job), preferences, message => { queueMessage = message; renderScanner(); }, commit);
+        await scanLabels(await jobPhotos(job), preferences, message => {
+          queueMessage = message;
+          renderScanner();
+        }, commit, readWithDeepSeek);
       } catch (error) {
         if ([401, 403, 409, 503].includes(error.status) || error instanceof TypeError) throw error;
         console.warn('Scan interrupted', error);
@@ -678,6 +682,49 @@ $('#date-order').addEventListener('change', event => {
   preferences.dateOrder = event.target.value;
   localStorage.setItem('froststock-date-order', preferences.dateOrder);
 });
+const deepSeekForm = $('#deepseek-settings');
+const deepSeekKey = $('#deepseek-key');
+const deepSeekRemove = $('#deepseek-remove');
+const deepSeekMessage = $('#deepseek-status');
+let deepSeekSettingsBusy = false;
+
+function showDeepSeekStatus({ configured }) {
+  deepSeekRemove.hidden = !configured;
+  deepSeekMessage.textContent = configured ? 'DeepSeek is the default label reader.' : 'Local label reading is active.';
+}
+
+async function refreshDeepSeekSettings() {
+  try {
+    const status = await deepSeekStatus();
+    if (!deepSeekSettingsBusy) showDeepSeekStatus(status);
+  } catch {
+    if (!deepSeekSettingsBusy) deepSeekMessage.textContent = 'DeepSeek settings are unavailable. Try again.';
+  }
+}
+
+async function saveDeepSeekSettings(settings) {
+  deepSeekSettingsBusy = true;
+  const save = deepSeekForm.querySelector('button[type="submit"]');
+  save.disabled = deepSeekRemove.disabled = deepSeekKey.disabled = true;
+  try {
+    showDeepSeekStatus(await configureDeepSeek(settings));
+    deepSeekKey.value = '';
+  } catch (error) {
+    deepSeekMessage.textContent = error.message || 'DeepSeek settings could not be saved. Try again.';
+  } finally {
+    save.disabled = deepSeekRemove.disabled = deepSeekKey.disabled = false;
+    deepSeekSettingsBusy = false;
+  }
+}
+
+deepSeekForm.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!deepSeekSettingsBusy) void saveDeepSeekSettings({ key: deepSeekKey.value });
+});
+deepSeekRemove.addEventListener('click', () => {
+  if (!deepSeekSettingsBusy) void saveDeepSeekSettings({ remove: true });
+});
+
 $('#vision-enabled').checked = preferences.vision;
 $('#vision-enabled').addEventListener('change', async event => {
   if (event.target.checked && !await navigator.gpu?.requestAdapter().catch(() => null)) {
@@ -724,5 +771,6 @@ connect().then(() => {
   ownerReady = true;
   $('#main').hidden = false;
   $('#session-screen').hidden = true;
+  if (activePage === 'settings') void refreshDeepSeekSettings();
   return refresh();
 }).catch(storageError);

@@ -126,7 +126,13 @@ h1{font-size:clamp(30px,3vw,43px);font-weight:800;letter-spacing:-1.75px;line-he
 .setting-row:last-child{border-bottom:0;padding-bottom:1px}
 .setting-row strong{font-size:13px}
 .setting-row p{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
-.setting-row select{border:1px solid var(--edge);border-radius:8px;padding:8px;background:var(--white);min-width:0}
+.deepseek-settings{display:grid;gap:9px;margin-top:12px}
+.deepseek-settings p{color:var(--muted);font-size:13px;line-height:1.5}
+.deepseek-settings label{font-size:13px;font-weight:600}
+.deepseek-settings input{width:min(100%,26rem);min-width:0;border:1px solid var(--edge);border-radius:8px;padding:9px 10px;font:inherit;background:var(--white)}
+.deepseek-settings .detail-actions{justify-content:flex-start}
+#deepseek-status:empty{display:none}
+.setting-row select{flex:none;max-width:100%;border:1px solid var(--edge);border-radius:8px;padding:8px;background:var(--white);min-width:0}
 .backup-buttons{display:flex;gap:6px}
 .toggle{flex:0 0 auto;display:flex;align-items:center;position:relative}
 .toggle input{width:45px;height:25px;margin:0;cursor:pointer;position:absolute;inset:0;opacity:0}

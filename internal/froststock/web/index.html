@@ -71,7 +71,19 @@
         </section>
       </div>
       <section id="settings" class="settings" hidden aria-labelledby="settings-title">
-        <div class="page-heading"><div><h1 id="settings-title">Settings</h1><p>Manage local scanning and inventory preferences.</p></div></div>
+        <div class="page-heading"><div><h1 id="settings-title">Settings</h1><p>Manage scanning and inventory preferences.</p></div></div>
+        <section class="settings-card"><h2><i class="icon" data-icon="sparkles"></i> DeepSeek</h2>
+          <form id="deepseek-settings" class="deepseek-settings">
+            <p>Saving a key makes DeepSeek the default label reader. Item photos and the expiry photo or its crop are sent to DeepSeek. Local scanning is available if a cloud scan fails.</p>
+            <label for="deepseek-key">DeepSeek API key</label>
+            <input id="deepseek-key" type="password" maxlength="250" autocomplete="new-password" spellcheck="false" required>
+            <div class="detail-actions">
+              <button class="button primary" type="submit">Save key</button>
+              <button class="button subtle" type="button" id="deepseek-remove" hidden>Remove key</button>
+            </div>
+            <p id="deepseek-status" role="status"></p>
+          </form>
+        </section>
         <section class="settings-card"><h2><i class="icon" data-icon="scan-line"></i> Scanning</h2>
           <div class="setting-row"><div><strong>Date order</strong><p>Used for dates such as 04/06/27.</p></div><select id="date-order" aria-label="Date order"><option value="dmy">Day / Month / Year</option><option value="mdy">Month / Day / Year</option></select></div>
           <div class="setting-row"><div><strong>On-device date recognition</strong><p>Tesseract reads clear labels first. A compact PaddleOCR model retries difficult food names and dates.</p></div></div>
