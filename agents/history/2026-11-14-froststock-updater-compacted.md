@@ -29,3 +29,11 @@ The signed publication attempt stopped before creating a draft because the
 Android release signer is on another PC. The owner approved a Windows-only
 exception for preview.132. The standard publisher restricts that mode to this
 tag and verifies the public catalog and update index.
+
+[Preview.132](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.132)
+shipped from `e927e4f` with 950 verified Windows release assets. The public
+index was promoted by `602b63c` alongside the next release's recognition
+changes. An anonymous preview.131 updater offered the required preview.132
+installer from the promoted index. Anonymous catalog and Froststock package
+downloads matched their published hashes. The installed Updates window also
+verified the promoted channel. The previous signed Android APK remains available.
