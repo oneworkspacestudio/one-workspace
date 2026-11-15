@@ -67,8 +67,14 @@ It does not infer missing year or day from the calendar. The existing
 **Read labels again** action works from the retained Drive photos and keeps
 prior values if no new value is readable. OCR and optional vision stay local.
 
-The separate Workspace preview.132 draft addresses startup and updating and
-is outside this repair. Preview.133 uses the signed standard publisher and the
-published preview.131 seed, changing only the Froststock payloads and suite
-manager and release notes. Browser regressions cover wrapped titles, sideways
-low-contrast dates, packing-date disambiguation and a missing year.
+Browser regressions cover wrapped titles, sideways low-contrast dates,
+packing-date disambiguation and a missing year. The original scanner returned
+the brand and missed the date on the same fixture. The new scanner returned
+the complete title and date, and the local vision worker also read the stamp.
+
+The first preview.133 candidate passed synthetic fresh setup, app-only
+update, saved-photo reprocessing and rollback over preview.131. Preview.132
+then shipped the listener and updater fixes. Stopped preview.133 preparation
+before it created a draft and advanced to the published preview.132 seed.
+Preview.133 retains the IPv6 listener and installer integration and requires
+the standard signed Android companion.
