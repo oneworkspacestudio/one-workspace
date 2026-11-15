@@ -24,3 +24,7 @@ touch, cancel, saved-photo retry, and original-photo preservation.
 
 Workspace preview.134 builds from the published preview.133 seed and uses
 the standard signed companion release process.
+
+The first managed package exposed dynamic JavaScript in the OpenCV
+bindings. Replaced it with closures in four helpers. A browser fixture
+with the same CSP as the managed app passed before the installer rebuild.

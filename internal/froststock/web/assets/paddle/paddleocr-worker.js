@@ -1,3 +1,4 @@
+// Froststock uses ordinary closures in the embedded OpenCV bindings to support a CSP without JavaScript eval.
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -13293,8 +13294,9 @@ function requireOpencv() {
             }
           }
           function createNamedFunction(name, body) {
-            name = makeLegalFunctionName(name);
-            return new Function("body", "return function " + name + '() {\n    "use strict";    return body.apply(this, arguments);\n};\n')(body);
+            return Object.defineProperty(function(...args) {
+              return body.apply(this, args);
+            }, "name", { value: makeLegalFunctionName(name) });
           }
           function extendError(baseErrorType, errorName) {
             var errorClass = createNamedFunction(errorName, function(message) {
@@ -14001,15 +14003,7 @@ function requireOpencv() {
           function embind__requireFunction(signature, rawFunction) {
             signature = readLatin1String(signature);
             function makeDynCaller(dynCall) {
-              var args = [];
-              for (var i = 1; i < signature.length; ++i) {
-                args.push("a" + i);
-              }
-              var name = "dynCall_" + signature + "_" + rawFunction;
-              var body = "return function " + name + "(" + args.join(", ") + ") {\n";
-              body += "    return dynCall(rawFunction" + (args.length ? ", " : "") + args.join(", ") + ");\n";
-              body += "};\n";
-              return new Function("dynCall", "rawFunction", body)(dynCall, rawFunction);
+              return (...args) => dynCall(rawFunction, ...args);
             }
             var fp;
             if (Module2["FUNCTION_TABLE_" + signature] !== void 0) {
@@ -14118,63 +14112,31 @@ function requireOpencv() {
             return r instanceof Object ? r : obj;
           }
           function craftInvokerFunction(humanName, argTypes, classType, cppInvokerFunc, cppTargetFunc) {
-            var argCount = argTypes.length;
-            if (argCount < 2) {
+            if (argTypes.length < 2) {
               throwBindingError("argTypes array size mismatch! Must at least get return value and 'this' types!");
             }
-            var isClassMethodFunc = argTypes[1] !== null && classType !== null;
-            var needsDestructorStack = false;
-            for (var i = 1; i < argTypes.length; ++i) {
-              if (argTypes[i] !== null && argTypes[i].destructorFunction === void 0) {
-                needsDestructorStack = true;
-                break;
+            var isMethod = argTypes[1] !== null && classType !== null;
+            var needsStack = argTypes.slice(1).some(type => type !== null && type.destructorFunction === void 0);
+            var types = argTypes.slice(isMethod ? 1 : 2);
+            var expected = argTypes.length - 2;
+            var invoke = function(...args) {
+              if (args.length !== expected) {
+                throwBindingError("function " + humanName + " called with " + args.length + " arguments, expected " + expected + " args!");
               }
-            }
-            var returns = argTypes[0].name !== "void";
-            var argsList = "";
-            var argsListWired = "";
-            for (var i = 0; i < argCount - 2; ++i) {
-              argsList += (i !== 0 ? ", " : "") + "arg" + i;
-              argsListWired += (i !== 0 ? ", " : "") + "arg" + i + "Wired";
-            }
-            var invokerFnBody = "return function " + makeLegalFunctionName(humanName) + "(" + argsList + ") {\nif (arguments.length !== " + (argCount - 2) + ") {\nthrowBindingError('function " + humanName + " called with ' + arguments.length + ' arguments, expected " + (argCount - 2) + " args!');\n}\n";
-            if (needsDestructorStack) {
-              invokerFnBody += "var destructors = [];\n";
-            }
-            var dtorStack = needsDestructorStack ? "destructors" : "null";
-            var args1 = ["throwBindingError", "invoker", "fn", "runDestructors", "retType", "classParam"];
-            var args2 = [throwBindingError, cppInvokerFunc, cppTargetFunc, runDestructors, argTypes[0], argTypes[1]];
-            if (isClassMethodFunc) {
-              invokerFnBody += "var thisWired = classParam.toWireType(" + dtorStack + ", this);\n";
-            }
-            for (var i = 0; i < argCount - 2; ++i) {
-              invokerFnBody += "var arg" + i + "Wired = argType" + i + ".toWireType(" + dtorStack + ", arg" + i + "); // " + argTypes[i + 2].name + "\n";
-              args1.push("argType" + i);
-              args2.push(argTypes[i + 2]);
-            }
-            if (isClassMethodFunc) {
-              argsListWired = "thisWired" + (argsListWired.length > 0 ? ", " : "") + argsListWired;
-            }
-            invokerFnBody += (returns ? "var rv = " : "") + "invoker(fn" + (argsListWired.length > 0 ? ", " : "") + argsListWired + ");\n";
-            if (needsDestructorStack) {
-              invokerFnBody += "runDestructors(destructors);\n";
-            } else {
-              for (var i = isClassMethodFunc ? 1 : 2; i < argTypes.length; ++i) {
-                var paramName = i === 1 ? "thisWired" : "arg" + (i - 2) + "Wired";
-                if (argTypes[i].destructorFunction !== null) {
-                  invokerFnBody += paramName + "_dtor(" + paramName + "); // " + argTypes[i].name + "\n";
-                  args1.push(paramName + "_dtor");
-                  args2.push(argTypes[i].destructorFunction);
-                }
+              var destructors = needsStack ? [] : null;
+              var values = isMethod ? [this, ...args] : args;
+              var wired = types.map((type, i) => type.toWireType(destructors, values[i]));
+              var result = cppInvokerFunc(cppTargetFunc, ...wired);
+              if (needsStack) {
+                runDestructors(destructors);
+              } else {
+                types.forEach((type, i) => {
+                  if (type.destructorFunction !== null) type.destructorFunction(wired[i]);
+                });
               }
-            }
-            if (returns) {
-              invokerFnBody += "var ret = retType.fromWireType(rv);\nreturn ret;\n";
-            }
-            invokerFnBody += "}\n";
-            args1.push(invokerFnBody);
-            var invokerFunction = new_(Function, args1).apply(null, args2);
-            return invokerFunction;
+              if (argTypes[0].name !== "void") return argTypes[0].fromWireType(result);
+            };
+            return Object.defineProperty(invoke, "name", { value: makeLegalFunctionName(humanName) });
           }
           function heap32VectorToArray(count, firstElement) {
             var array = [];
@@ -14726,39 +14688,20 @@ function requireOpencv() {
             return a;
           }
           function __emval_get_method_caller(argCount, argTypes) {
-            var types2 = __emval_lookupTypes(argCount, argTypes);
-            var retType = types2[0];
-            var signatureName = retType.name + "_$" + types2.slice(1).map(function(t) {
-              return t.name;
-            }).join("_") + "$";
-            var params = ["retType"];
-            var args = [retType];
-            var argsList = "";
-            for (var i = 0; i < argCount - 1; ++i) {
-              argsList += (i !== 0 ? ", " : "") + "arg" + i;
-              params.push("argType" + i);
-              args.push(types2[1 + i]);
-            }
-            var functionName = makeLegalFunctionName("methodCaller_" + signatureName);
-            var functionBody = "return function " + functionName + "(handle, name, destructors, args) {\n";
-            var offset = 0;
-            for (var i = 0; i < argCount - 1; ++i) {
-              functionBody += "    var arg" + i + " = argType" + i + ".readValueFromPointer(args" + (offset ? "+" + offset : "") + ");\n";
-              offset += types2[i + 1]["argPackAdvance"];
-            }
-            functionBody += "    var rv = handle[name](" + argsList + ");\n";
-            for (var i = 0; i < argCount - 1; ++i) {
-              if (types2[i + 1]["deleteObject"]) {
-                functionBody += "    argType" + i + ".deleteObject(arg" + i + ");\n";
-              }
-            }
-            if (!retType.isVoid) {
-              functionBody += "    return retType.toWireType(destructors, rv);\n";
-            }
-            functionBody += "};\n";
-            params.push(functionBody);
-            var invokerFunction = new_(Function, params).apply(null, args);
-            return __emval_addMethodCaller(invokerFunction);
+            var [retType, ...types] = __emval_lookupTypes(argCount, argTypes);
+            return __emval_addMethodCaller(function(handle, name, destructors, args) {
+              var offset = 0;
+              var values = types.map(type => {
+                var value = type.readValueFromPointer(args + offset);
+                offset += type.argPackAdvance;
+                return value;
+              });
+              var result = handle[name](...values);
+              types.forEach((type, i) => {
+                if (type.deleteObject) type.deleteObject(values[i]);
+              });
+              if (!retType.isVoid) return retType.toWireType(destructors, result);
+            });
           }
           function __emval_get_property(handle, key2) {
             handle = requireHandle(handle);
