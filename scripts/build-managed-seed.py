@@ -106,6 +106,7 @@ def main():
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
  froststock_seeds = {
+  '0.3.0-preview.136': 'froststockLabelSeed',
   '0.3.0-preview.135': 'froststockLabelSeed',
   '0.3.0-preview.134': 'froststockCropSeed',
   '0.3.0-preview.133': 'froststockRecognitionSeed',

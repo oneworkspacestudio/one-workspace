@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview136 with Froststock preview.6
+
+Save a DeepSeek API key in Froststock Settings to use DeepSeek Flash for reading
+food names and expiry labels. Froststock uses its device scanner when the
+cloud service cannot read a field. See [Froststock](FROSTSTOCK.md).
+
 ## Preview135 with Froststock preview.5
 
 Froststock uses PaddleOCR to recover food names on angled packaging and repair

@@ -16,6 +16,10 @@ existing date parser. DeepSeek date suggestions and visually inferred names
 require review. Missing fields and provider failures use the existing local
 scanner. Capture, background queuing and My Drive records keep their format.
 
-Mobile browser checks with a mock upstream covered activation and removal,
+Integrates with preview.5 local OCR improvements from Workspace preview.135.
+The preview.136 rebuild uses the same authenticated preview.134 bundle pin
+as preview.135. Both rebuild the manager and Froststock payloads.
+
+Go settings and mocked API tests and mobile browser checks with a mock upstream covered activation and removal,
 two-image scans, date-only crops, packing dates, missing years, and local
 fallback. A live DeepSeek scan requires an owner-provided key.
