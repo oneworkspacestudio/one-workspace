@@ -209,6 +209,12 @@
     "asset": "workspace-bundle.zip",
     "sha256": "3f3f20f27eef7f7eea4dc42c7dd2be892f3da235ba05ebf550e66cee3a47dc90"
   },
+  "updateResilienceSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.137",
+    "asset": "workspace-bundle.zip",
+    "sha256": "0a7e4a68827fc987b6dda95fa0869a0abc0f0cd6fd73dd9731635939417da9af"
+  },
   "updateTunnelSeed": {
     "repository": "oneworkspacestudio/one-workspace",
     "tag": "v0.3.0-preview.136",

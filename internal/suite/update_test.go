@@ -123,6 +123,28 @@ func TestUpdateCloudflareReplicaFailureLeavesRuntimeRunning(t *testing.T) {
 	}
 }
 
+func TestStagedManagerCatalogFailureDoesNotStopWorkspace(t *testing.T) {
+	c, s := updateFixture(t)
+	target, stage := fixtureTarget(t, c)
+	target.InstallerIntegration = catalog.ManagerPreflightIntegration
+	invalid := errors.New("unsupported catalog")
+	ops := updateOperations{
+		verifyManager: func(_ context.Context, got catalog.Catalog, dir string) error {
+			if got.Version != target.Version || dir != stage {
+				t.Fatal("validated the wrong manager or catalog")
+			}
+			return invalid
+		},
+		stop: func(context.Context, Config) error {
+			t.Fatal("stopped Workspace before the replacement manager accepted the catalog")
+			return nil
+		},
+	}
+	if err := applyStagedWith(context.Background(), c, s, target, stage, "", quietUpdate, ops); !errors.Is(err, invalid) || UpdatePending(c) {
+		t.Fatalf("unexpected preflight outcome: %v", err)
+	}
+}
+
 func TestUpdateKeepsReplicaThroughRestartAndServesMaintenance(t *testing.T) {
 	for _, failRestart := range []bool{false, true} {
 		name := "success"
@@ -149,6 +171,7 @@ func TestUpdateKeepsReplicaThroughRestartAndServesMaintenance(t *testing.T) {
 			replicaOpen, maintenanceServed := false, false
 			preparations, starts := 0, 0
 			ops := updateOperations{
+				serveMaintenance: true,
 				keepTunnel: func(context.Context, Config, Secrets, func(string)) (func(), error) {
 					preparations++
 					replicaOpen = true

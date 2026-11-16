@@ -41,19 +41,19 @@ func (p *Portal) updateWindow() (updateWindow, *url.URL, error) {
 	return window, u, nil
 }
 
-func (p *Portal) ensureUpdateWindow(ctx context.Context) (*url.URL, error) {
+func (p *Portal) ensureUpdateWindow(ctx context.Context, readProgress bool) (*url.URL, error) {
 	p.maintenanceMu.Lock()
 	defer p.maintenanceMu.Unlock()
 	old, u, e := p.updateWindow()
 	if e == nil && controllerMatches(p.rt.Config, old) {
 		return u, nil
 	}
-	if e == nil {
-		if err := retireUpdateController(ctx, old, u); err != nil {
-			return nil, err
+	if e = launchUpdates(p.rt.Config, false); e != nil {
+		// The existing operation still owns cleanup after a new manager has
+		// started. Its verified helper can report progress until it is idle.
+		if readProgress && u != nil && errors.Is(e, errUpdaterBusy) {
+			return u, nil
 		}
-	}
-	if e = LaunchUpdatesBackground(p.rt.Config); e != nil {
 		return nil, e
 	}
 	for i := 0; i < 60; i++ {
@@ -85,7 +85,7 @@ func (p *Portal) updateRoutes(mux *http.ServeMux) {
 			}
 			endpoint = "/api/" + action
 		}
-		target, e := p.ensureUpdateWindow(r.Context())
+		target, e := p.ensureUpdateWindow(r.Context(), endpoint == "/api/state")
 		if e != nil {
 			http.Error(w, e.Error(), http.StatusServiceUnavailable)
 			return

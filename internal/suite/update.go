@@ -1,6 +1,7 @@
 package suite
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -249,12 +250,14 @@ type UpdateRequest struct {
 }
 
 type updateOperations struct {
-	repair     bool // Only the explicitly reviewed reinstall path enables this.
-	preflight  func(context.Context, Config) error
-	keepTunnel func(context.Context, Config, Secrets, func(string)) (func(), error)
-	stop       func(context.Context, Config) error
-	start      func(context.Context, Config, string) error
-	connect    func(context.Context, Config, *Secrets) error
+	repair           bool // Only the explicitly reviewed reinstall path enables this.
+	preflight        func(context.Context, Config) error
+	verifyManager    func(context.Context, catalog.Catalog, string) error
+	keepTunnel       func(context.Context, Config, Secrets, func(string)) (func(), error)
+	serveMaintenance bool
+	stop             func(context.Context, Config) error
+	start            func(context.Context, Config, string) error
+	connect          func(context.Context, Config, *Secrets) error
 }
 
 // Check process creation from the updater itself before taking working apps
@@ -273,7 +276,36 @@ func preflightUpdateRestart(ctx context.Context, c Config) error {
 	return nil
 }
 
-var nativeUpdateOperations = updateOperations{preflight: preflightUpdateRestart, keepTunnel: keepUpdateTunnel, stop: stopUpdateRuntime, start: startUpdatedRuntime, connect: connectAddedApps}
+func verifyStagedManager(ctx context.Context, target catalog.Catalog, stage string) error {
+	path := filepath.Join(stage, "Workspace.exe")
+	binary, err := platform.LockedBinary(path, target.Packages["manager"].SHA256)
+	if err != nil {
+		return err
+	}
+	defer binary.Close()
+	file := filepath.Join(stage, "workspace-update-catalog.json")
+	if err = platform.SaveJSON(file, target); err != nil {
+		return err
+	}
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, path, "check-update-catalog", file)
+	cmd.Dir = stage
+	var diagnostic bytes.Buffer
+	cmd.Stderr = &diagnostic
+	if err = platform.StartDetached(cmd); err != nil {
+		return err
+	}
+	if err = cmd.Wait(); err != nil && diagnostic.Len() > 0 {
+		return fmt.Errorf("%w: %s", err, strings.TrimSpace(diagnostic.String()))
+	}
+	return err
+}
+
+var nativeUpdateOperations = updateOperations{
+	preflight: preflightUpdateRestart, verifyManager: verifyStagedManager, keepTunnel: keepUpdateTunnel,
+	serveMaintenance: true, stop: stopUpdateRuntime, start: startUpdatedRuntime, connect: connectAddedApps,
+}
 
 func verifyInstalledPrograms(c Config) error {
 	if p, ok := c.Catalog.Packages["manager"]; !ok || p.File != "Workspace.exe" {
@@ -489,6 +521,12 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if target.Packages["manager"].File != "Workspace.exe" {
 		return errors.New("manager update changes its executable location")
 	}
+	if ops.verifyManager != nil && target.InstallerIntegration >= catalog.ManagerPreflightIntegration &&
+		(ops.repair || c.Catalog.Packages["manager"] != target.Packages["manager"]) {
+		if err := ops.verifyManager(ctx, target, stage); err != nil {
+			return fmt.Errorf("The replacement Workspace manager failed its catalog check. Your apps have not been stopped: %w", err)
+		}
+	}
 	policy, e := planUpdateMetadata(c, target, ops.repair)
 	if e != nil {
 		return e
@@ -507,7 +545,6 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e != nil {
 		return e
 	}
-	showMaintenancePage := c.Tunnel && ops.keepTunnel != nil
 	if ops.keepTunnel != nil {
 		closeReplica, e := ops.keepTunnel(ctx, c, s, report)
 		if e != nil {
@@ -546,7 +583,7 @@ func applyStagedWith(ctx context.Context, c Config, s Secrets, target catalog.Ca
 	if e = CheckPorts(next); e != nil {
 		return fmt.Errorf("new app ports are unavailable: %w", e)
 	}
-	if showMaintenancePage {
+	if c.Tunnel && ops.serveMaintenance {
 		page, err := updateMaintenanceOrigin(c.Port)
 		if err != nil {
 			return fmt.Errorf("could not start the Workspace maintenance page: %w", err)
@@ -784,6 +821,15 @@ func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report f
 			lock.Close()
 		}
 	}()
+	closePage := func() {}
+	if c.Tunnel && ops.serveMaintenance {
+		if page, err := updateMaintenanceOrigin(c.Port); err == nil {
+			closePage = func() { _ = page.Close() }
+			defer closePage()
+		} else {
+			report("Could not display the maintenance message; continuing to restore Workspace")
+		}
+	}
 	if j.Recovery == nil {
 		var archiveScope *AppUpdateScope
 		var archivePolicy *UpdateMetadataPolicy
@@ -831,6 +877,7 @@ func recoverUpdateWith(ctx context.Context, c Config, j *UpdateJournal, report f
 	}
 	lock.Close()
 	lock = nil
+	closePage()
 	if e = ops.start(ctx, restored, ""); e != nil {
 		return fmt.Errorf("%w: %w. Open %s to start the restored installation, then use a corrected updater for the next attempt. Keep your backups; Recover is not needed after this completed rollback", errRestoredNeedsStart, e, filepath.Join(c.Data, "Workspace.exe"))
 	}
@@ -903,9 +950,14 @@ func launchUpdates(c Config, open bool) error {
 	if e := platform.ProtectMaintenanceDir(root, c.Data); e != nil {
 		return e
 	}
-	if open && OpenExistingUpdates(c) {
-		return nil
+	launch, err := platform.Lock(filepath.Join(root, "launch.lock"))
+	if err != nil {
+		if open && OpenExistingUpdates(c) {
+			return nil
+		}
+		return errors.New("The update window is already starting. Try again shortly.")
 	}
+	defer launch.Close()
 	portal := &Portal{rt: &Runtime{Config: c}}
 	if window, target, err := portal.updateWindow(); err == nil {
 		if controllerMatches(c, window) {
@@ -928,6 +980,11 @@ func launchUpdates(c Config, open bool) error {
 	if !strings.EqualFold(filepath.Clean(current), filepath.Join(c.Data, "Workspace.exe")) {
 		return errors.New("open updates from the protected installed manager")
 	}
+	binary, e := platform.LockedBinary(current, c.Catalog.Packages["manager"].SHA256)
+	if e != nil {
+		return e
+	}
+	defer binary.Close()
 	if e = replaceUpdaterFile(current, helper); e != nil {
 		return e
 	}
@@ -942,8 +999,24 @@ func launchUpdates(c Config, open bool) error {
 	if e = platform.StartDetached(cmd); e != nil {
 		return e
 	}
-	go cmd.Wait()
-	return nil
+	exited := make(chan error, 1)
+	go func() { exited <- cmd.Wait() }()
+	deadline := time.NewTimer(8 * time.Second)
+	defer deadline.Stop()
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+	for {
+		if window, _, err := portal.updateWindow(); err == nil && controllerMatches(c, window) {
+			return nil
+		}
+		select {
+		case <-exited:
+			return errors.New("The update window exited before it was ready. Check the Workspace maintenance log.")
+		case <-deadline.C:
+			return errors.New("The update window is still starting. Try again shortly.")
+		case <-ticker.C:
+		}
+	}
 }
 
 func OpenExistingUpdates(c Config) bool {

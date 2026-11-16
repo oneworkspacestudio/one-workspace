@@ -1,5 +1,13 @@
 # One Workspace release status
 
+## Preview138 with safer Workspace and app upgrades
+
+The installer checks whether the staged Workspace manager can load the
+replacement catalog before stopping the server. A newer installer carries
+forward compatible updates for installed apps published with Workspace.
+The Updates page can follow an in-progress operation while its controller is
+being replaced and reconnects to the installed manager afterward.
+
 ## Preview137 with Cloudflare continuity during updates
 
 The Windows updater connects a second Cloudflare connector before it stops

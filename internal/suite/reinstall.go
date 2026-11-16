@@ -305,7 +305,7 @@ func repairCatalog(current, incoming catalog.Catalog) (catalog.Catalog, error) {
 			}
 		}
 	}
-	target, err := distribution.SelectBundleUpdates(scoped, incoming, []string{"workspace"})
+	target, err := distribution.SelectInstallerUpgrade(scoped, incoming)
 	target.Selection = current.Selection
 	return target, err
 }

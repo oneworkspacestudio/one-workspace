@@ -36,7 +36,8 @@ verifies uploaded assets and promotes the public channel. Keep the permanent
 signing key outside Git. Never bypass this guard with a manual source-only release.
 See docs/RELEASING.md. The owner approved Windows-only publication for
 `v0.3.0-preview.132` and the tunnel updater fix, published as
-`v0.3.0-preview.137`, through the same publisher. All other releases still
+`v0.3.0-preview.137`, and the installer repair in `v0.3.0-preview.138`
+through the same publisher. All other releases still
 require Android signing. Published assets remain immutable.
 
 ## README and app branding

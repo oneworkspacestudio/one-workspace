@@ -210,3 +210,44 @@ func TestRepairCatalogCarriesInstalledFroststockThroughLoopbackUpgrade(t *testin
 		})
 	}
 }
+
+func TestInstallerUpgradeCarriesNewerBundledAppsWithoutChangingSelection(t *testing.T) {
+	for _, installedVersion := range []string{"0.1.0-preview.4", "0.1.0-preview.7"} {
+		t.Run(installedVersion, func(t *testing.T) {
+			c, _ := updateFixture(t)
+			current := c.Catalog
+			current.Version, current.InstallerIntegration = "0.3.0-preview.137", 20
+			current.Selection = &catalog.AppSelection{Excluded: []string{"websearch"}}
+			app := catalog.App{ID: "froststock", Name: "Froststock", Kind: "process", Package: "froststock",
+				Executable: "Froststock.exe", Route: "/froststock", Port: 9080, Version: installedVersion,
+				Source: "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.134"}
+			current.Apps = append(current.Apps, app)
+			current.Packages["froststock"] = updatePackage(app.Executable, "installed Froststock")
+			incoming := current
+			incoming.Version, incoming.InstallerIntegration = "0.3.0-preview.138", catalog.ManagerPreflightIntegration
+			incoming.Apps = append([]catalog.App(nil), current.Apps...)
+			incoming.Apps[0].Version = "0.1.0-preview.8"
+			app.Version, app.Port = "0.1.0-preview.6", 9048
+			app.Source = "https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.136"
+			incoming.Apps[1] = app
+			incoming.Packages = map[string]catalog.Package{
+				"manager": updatePackage("Workspace.exe", "new manager"), "notes": updatePackage("MyNotes.exe", "newer notes"),
+				"froststock": updatePackage(app.Executable, "bundled Froststock"),
+			}
+
+			result, err := repairCatalog(current, incoming)
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := installedVersion
+			if installedVersion == "0.1.0-preview.4" {
+				want = app.Version
+			}
+			got, _ := result.Find("froststock")
+			if got.Version != want || got.Port != 9080 || result.Version != incoming.Version ||
+				!reflect.DeepEqual(result.Selection, current.Selection) || result.Packages["notes"] != current.Packages["notes"] {
+				t.Fatalf("unexpected repair result: %s, %+v", result.Version, got)
+			}
+		})
+	}
+}

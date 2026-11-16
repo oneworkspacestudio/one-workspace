@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/oneworkspacestudio/one-workspace/internal/catalog"
 	"github.com/oneworkspacestudio/one-workspace/internal/maintenance"
 	"github.com/oneworkspacestudio/one-workspace/internal/platform"
 	"github.com/oneworkspacestudio/one-workspace/internal/suite"
@@ -34,6 +35,23 @@ func run() error {
 	}
 	if action == "version" {
 		fmt.Println(version)
+		return nil
+	}
+	if action == "check-update-catalog" {
+		if len(args) != 2 {
+			return fmt.Errorf("check-update-catalog requires a catalog file")
+		}
+		raw, err := os.ReadFile(args[1])
+		if err != nil {
+			return err
+		}
+		target, err := catalog.Read(raw)
+		if err != nil {
+			return err
+		}
+		if version != target.Version {
+			return fmt.Errorf("Workspace %s does not match catalog %s", version, target.Version)
+		}
 		return nil
 	}
 	if *data == "" {

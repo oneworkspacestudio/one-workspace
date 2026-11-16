@@ -1066,6 +1066,26 @@ func OpenUpdateBundle(path string) (*zip.ReadCloser, catalog.Catalog, error) {
 	}
 	return z, c, nil
 }
+
+// SelectInstallerUpgrade advances installed apps released with Workspace in
+// the same verified installer transaction, preserving independently pinned apps.
+func SelectInstallerUpgrade(current, incoming catalog.Catalog) (catalog.Catalog, error) {
+	selected := []string{"workspace"}
+	bundledSource := "https://github.com/" + Repository + "/releases/tag/"
+	for _, group := range suiteUpdateGroups(incoming) {
+		if group.id == "workspace" || "oneworkspacestudio/"+group.repo != Repository {
+			continue
+		}
+		installed, bundled := groupApps(group, current), groupApps(group, incoming)
+		if len(installed) == 1 && len(bundled) == 1 &&
+			strings.HasPrefix(installed[0].Source, bundledSource) && strings.HasPrefix(bundled[0].Source, bundledSource) &&
+			newerWorkspace(bundled[0].Version, installed[0].Version) {
+			selected = append(selected, group.id)
+		}
+	}
+	return SelectBundleUpdates(current, incoming, selected)
+}
+
 func SelectBundleUpdates(current, incoming catalog.Catalog, selected []string) (catalog.Catalog, error) {
 	if incoming.Version != current.Version && !newerWorkspace(incoming.Version, current.Version) {
 		return current, errors.New("use rollback to restore an older Workspace version")

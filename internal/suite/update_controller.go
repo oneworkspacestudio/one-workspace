@@ -65,6 +65,8 @@ func retryUpdaterReplace(ctx context.Context, replace func() error) error {
 	}
 }
 
+var errUpdaterBusy = errors.New("An update operation is still running. Wait for it to finish, then reopen Updates.")
+
 func closeIdleUpdateController(ctx context.Context, target *url.URL) error {
 	client := &http.Client{Timeout: 5 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
 	origin := "http://" + target.Host
@@ -79,8 +81,11 @@ func closeIdleUpdateController(ctx context.Context, target *url.URL) error {
 	}
 	err = json.NewDecoder(io.LimitReader(response.Body, 16<<20)).Decode(&state)
 	response.Body.Close()
-	if err != nil || response.StatusCode != http.StatusOK || state.Busy == nil || *state.Busy {
+	if err != nil || response.StatusCode != http.StatusOK || state.Busy == nil {
 		return errors.New("An update operation may still be running. Wait for it to finish, then reopen Updates.")
+	}
+	if *state.Busy {
+		return errUpdaterBusy
 	}
 	request, _ = http.NewRequestWithContext(ctx, "POST", origin+"/api/close", nil)
 	request.Header.Set("X-Workspace-Update", target.Fragment)
@@ -91,7 +96,10 @@ func closeIdleUpdateController(ctx context.Context, target *url.URL) error {
 	}
 	response.Body.Close()
 	if response.StatusCode != http.StatusAccepted {
-		return errors.New("The updater became busy. Retry after it finishes.")
+		if response.StatusCode == http.StatusConflict {
+			return errUpdaterBusy
+		}
+		return errors.New("Could not close the previous updater. Retry shortly.")
 	}
 	return nil
 }

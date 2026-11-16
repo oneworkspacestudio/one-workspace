@@ -117,6 +117,9 @@ func TestUpdateControllerRetirementRequiresConfirmedIdleAndClose(t *testing.T) {
 			if (err == nil) != tc.wantOK || closed != tc.wantClose {
 				t.Fatalf("closed=%v error=%v", closed, err)
 			}
+			if (tc.name == "active" || tc.name == "became busy") != errors.Is(err, errUpdaterBusy) {
+				t.Fatalf("unexpected busy classification: %v", err)
+			}
 		})
 	}
 }

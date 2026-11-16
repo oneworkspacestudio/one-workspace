@@ -15,7 +15,7 @@ $dirty=& git -c "safe.directory=$($root.Replace('\','/'))" -C $root status --por
 if($LASTEXITCODE -or $dirty){throw 'Commit and push the intended release source before publishing; the worktree must be clean.'}
 if(-not (Test-Path -LiteralPath $NotesFile -PathType Leaf)){throw 'Release notes file is required'}
 if($DesktopOnly){
- if($Tag -cnotin @('v0.3.0-preview.132','v0.3.0-preview.137')){throw 'Windows-only publication is limited to the approved preview.132 and preview.137 tags.'}
+ if($Tag -cnotin @('v0.3.0-preview.132','v0.3.0-preview.137','v0.3.0-preview.138')){throw 'Windows-only publication is limited to the approved tags.'}
 }else{
  & (Join-Path $PSScriptRoot 'build-android.ps1') -Release -Sdk $Sdk -Out $AssetsDirectory -Cache $Cache -Gradle $Gradle
  if($LASTEXITCODE){throw 'Required signed Android APK build failed'}

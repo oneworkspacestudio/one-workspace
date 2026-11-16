@@ -73,6 +73,8 @@ def integrated_build(args, pin, seed, cache, out, components, integration=18):
   catalog = json.dumps(cat, indent=2)
   (out / 'catalog.json').write_text(catalog, encoding='utf-8')
   go('run', '-buildvcs=false', './cmd/catalogcheck', str(out / 'catalog.json'))
+  if integration >= 21:
+   subprocess.run([str(manager), 'check-update-catalog', str(out / 'catalog.json')], check=True)
   with zipfile.ZipFile(payload, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as dest:
    dest.writestr('catalog.json', catalog)
    for key, package in cat['packages'].items():
@@ -105,6 +107,10 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if a.version == '0.3.0-preview.138' and not candidate:
+  pin = lock['updateResilienceSeed']
+  base = asset(pin, cache, a.seed_archive)
+  return integrated_build(a, pin, base, cache, out, [], integration=21)
  if a.version == '0.3.0-preview.137' and not candidate:
   pin = lock['updateTunnelSeed']
   base = asset(pin, cache, a.seed_archive)
@@ -192,7 +198,7 @@ def main():
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=20
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=21
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:

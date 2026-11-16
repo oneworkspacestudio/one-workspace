@@ -60,7 +60,8 @@ var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 // Older controllers hand off before applying a catalog whose runtime contract they lack.
 const (
 	FroststockLoopbackIntegration = 19
-	InstallerIntegration          = 20
+	ManagerPreflightIntegration   = 21
+	InstallerIntegration          = ManagerPreflightIntegration
 )
 
 func (c Catalog) Validate() error {

@@ -15,7 +15,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'oneworkspacestudio/one-workspace'
 INDEX_URL = 'https://raw.githubusercontent.com/' + REPO + '/main/updates/releases-v1.json'
-WINDOWS_ONLY_EXCEPTIONS = {'v0.3.0-preview.132', 'v0.3.0-preview.137'}
+WINDOWS_ONLY_EXCEPTIONS = {'v0.3.0-preview.132', 'v0.3.0-preview.137', 'v0.3.0-preview.138'}
 
 
 def run(args, **kwargs):
@@ -72,14 +72,14 @@ def validate_release_mode(tag, desktop_only, out):
     if not desktop_only:
         return
     if tag not in WINDOWS_ONLY_EXCEPTIONS:
-        raise RuntimeError('Windows-only publication is limited to the approved preview.132 and preview.137 tags')
+        raise RuntimeError('Windows-only publication is limited to the approved tags')
     if any(p.suffix.lower() == '.apk' or
            p.name.lower().startswith(('android', 'oneworkspace-android')) for p in out.iterdir()):
         raise RuntimeError('Remove Android artifacts from the Windows-only staging directory')
 
 
 def validate_managed_catalog(catalog):
-    if catalog.get('installerIntegration') != 20:
+    if catalog.get('installerIntegration') != 21:
         raise RuntimeError('Use the current installer contract for complete app-owned runtimes')
     registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text(encoding='utf-8'))['apps']
     apps = {a['id']: a for a in catalog['apps']}

@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -notin @(18,19,20)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -notin @(18,19,20,21)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
 $froststock=$cat.apps|Where-Object id -CEQ 'froststock'
 if($froststock.version -ne '0.1.0-preview.1' -and $cat.installerIntegration -lt 19){throw 'Froststock requires a loopback-capable Workspace installer'}
 if(-not $froststock.oidc -or -not $froststock.stripPrefix -or $froststock.route -cne '/froststock' -or $froststock.callback -cne '/froststock/auth/callback' -or $froststock.port -ne 9048 -or 'drive' -cnotin $froststock.depends -or $cat.packages.froststock.file -cne 'Froststock.exe' -or -not $cat.packages.'froststock-contract'){throw 'Froststock managed contract is incomplete'}

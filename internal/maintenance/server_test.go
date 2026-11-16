@@ -86,3 +86,25 @@ func TestReinstallRequiresCapabilityOriginAndFreshPlan(t *testing.T) {
 		}
 	}
 }
+
+func TestClosingHelperRefusesAnotherOperation(t *testing.T) {
+	closed := make(chan struct{})
+	s := &Server{Token: "fixture-token", Origin: "http://localhost:38100", Close: func() { close(closed) }}
+	handler := s.Handler()
+	post := func(path string) int {
+		r := httptest.NewRequest("POST", path, strings.NewReader("{}"))
+		r.Host = "localhost:38100"
+		r.Header.Set("X-Workspace-Update", s.Token)
+		r.Header.Set("Origin", s.Origin)
+		w := httptest.NewRecorder()
+		handler.ServeHTTP(w, r)
+		return w.Code
+	}
+	if got := post("/api/close"); got != 202 {
+		t.Fatalf("close returned HTTP %d", got)
+	}
+	if got := post("/api/check"); got != 409 {
+		t.Fatalf("closing controller accepted a new update request with HTTP %d", got)
+	}
+	<-closed
+}

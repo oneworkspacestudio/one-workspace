@@ -30,6 +30,7 @@ type Server struct {
 	Data, Token, Origin string
 	ControllerSHA256    string
 	Busy                bool
+	closing             bool
 	Phase, Problem      string
 	Operation           *operationState
 	Plan                *distribution.UpdatePlan
@@ -78,7 +79,7 @@ func Serve(ctx context.Context, data string, open bool) error {
 		return e
 	}
 	defer os.Remove(marker)
-	fmt.Println("Workspace updates:", link)
+	fmt.Println("Workspace updates controller is ready")
 	if open {
 		platform.OpenBrowser(link)
 	}
@@ -304,6 +305,9 @@ func (s *Server) Handler() http.Handler {
 		w.WriteHeader(http.StatusAccepted)
 	})
 	mux.HandleFunc("POST /api/close", func(w http.ResponseWriter, r *http.Request) {
+		s.mu.Lock()
+		s.closing = true
+		s.mu.Unlock()
 		w.WriteHeader(202)
 		go func() { time.Sleep(100 * time.Millisecond); s.Close() }()
 	})
@@ -336,7 +340,7 @@ func (s *Server) Handler() http.Handler {
 				}
 				defer s.operationMu.Unlock()
 				s.mu.Lock()
-				busy := s.Busy
+				busy := s.Busy || s.closing
 				s.mu.Unlock()
 				if busy {
 					http.Error(w, "An update operation is already running", 409)
