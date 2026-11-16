@@ -3,37 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f6f7f2">
-  <meta name="description" content="Track your freezer and read expiry labels on your device.">
+  <meta name="theme-color" content="#f9f7f6">
+  <meta name="description" content="Track your freezer and scan food labels and expiry dates.">
   <link rel="icon" href="./assets/icon-192.png">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
   <link rel="stylesheet" href="./styles.css">
   <title>Froststock · Freezer inventory</title>
 </head>
 <body>
-  <aside class="sidebar">
-    <a class="brand" href="#overview" aria-label="Froststock overview">
-      <span class="brand-mark"><i class="icon" data-icon="snowflake"></i></span>
-      <span>Froststock<small>FREEZER INVENTORY</small></span>
-    </a>
-    <div class="nav-label">WORKSPACE</div>
-    <nav class="side-nav" aria-label="Workspace">
-      <a href="#overview" data-nav="overview"><i class="icon" data-icon="layout-grid"></i> Overview</a>
-      <a href="#inventory" data-nav="inventory"><i class="icon" data-icon="boxes"></i> Inventory</a>
-      <a href="#expiring" data-nav="expiring"><i class="icon" data-icon="calendar-clock"></i> Expiring soon <b id="nav-soon" hidden></b></a>
-      <a href="#history" data-nav="history"><i class="icon" data-icon="history"></i> History</a>
-      <a href="#settings" data-nav="settings"><i class="icon" data-icon="settings"></i> Settings</a>
-    </nav>
-    <div class="sidebar-bottom">
-      <div class="local-panel"><span class="local-icon"><i class="icon" data-icon="shield-check"></i></span><span><strong>On-device scanning</strong><small>Inventory saved in My Drive</small></span></div>
-      <a class="freezer-label" href="/drive/files/My%20Drive/Froststock"><span class="freezer-icon"><i class="icon" data-icon="snowflake"></i></span><span><strong>My Drive</strong><small>Froststock folder</small></span></a>
-    </div>
-  </aside>
   <div class="workspace">
     <header class="topbar">
-      <div class="breadcrumb"><i class="icon" data-icon="snowflake"></i><span>My freezer</span><i class="icon separator" data-icon="chevron-right"></i><strong id="crumb">Overview</strong></div>
-      <a class="mobile-brand brand" href="#overview"><span class="brand-mark"><i class="icon" data-icon="snowflake"></i></span> Froststock</a>
-      <a class="top-status" href="/" data-workspace-apps-trigger><i class="icon" data-icon="layout-grid"></i> Apps</a>
+      <a class="brand" href="#overview" data-nav="overview" aria-label="Froststock freezer">
+        <span class="brand-mark"><i class="icon" data-icon="snowflake" aria-hidden="true"></i></span>Froststock
+      </a>
+      <div class="header-actions">
+        <a class="top-status" href="/" data-workspace-apps-trigger><i class="icon" data-icon="layout-grid" aria-hidden="true"></i> Apps</a>
+        <a class="top-settings" href="#settings" data-nav="settings" aria-label="Settings"><i class="icon" data-icon="settings" aria-hidden="true"></i></a>
+      </div>
     </header>
     <section id="session-screen" class="session-screen" hidden>
       <h1>Open your freezer</h1>
@@ -43,29 +29,20 @@
     <main id="main" hidden>
       <p class="drive-status" id="drive-status" role="status" hidden></p>
       <div id="dashboard">
-        <div class="page-heading">
-          <div><p class="kicker" id="today"></p><h1 id="page-title">Freezer overview</h1><p id="page-note">See what’s in your freezer and what needs using first.</p></div>
-          <button class="button primary" type="button" data-action="scan"><i class="icon" data-icon="camera"></i> Scan item</button>
+        <div class="page-heading freezer-heading">
+          <div><h1 id="page-title">My freezer</h1><p id="inventory-count"></p></div>
+          <button class="button primary scan-food" type="button" data-action="scan"><i class="icon" data-icon="camera" aria-hidden="true"></i> Scan food</button>
         </div>
-        <section class="hero" id="hero" aria-labelledby="hero-title">
-          <div class="hero-content">
-            <div class="hero-label"><i class="icon" data-icon="scan-line"></i> QUICK CAPTURE</div>
-            <h2 id="hero-title">Two photos. Next item.</h2>
-            <p>Snap the food, then its expiry date. Froststock reads the labels while you move on.</p>
-            <button type="button" class="button lime" data-action="scan"><i class="icon" data-icon="camera"></i> Start scanning <i class="icon" data-icon="chevron-right"></i></button>
-          </div>
-          <div class="hero-photo" aria-hidden="true"></div>
-        </section>
-        <section id="metrics" class="metrics" aria-label="Inventory summary"></section>
-        <section class="inventory" id="inventory-section" aria-labelledby="inventory-title">
-          <div class="inventory-heading"><div><h2 id="inventory-title">Freezer inventory</h2><p id="inventory-count"></p></div><button class="button subtle" id="view-inventory" type="button" data-action="inventory">View inventory <i class="icon" data-icon="chevron-right"></i></button></div>
-          <div id="demo-bar" class="demo-bar" hidden><div><i class="icon" data-icon="image"></i> <strong>Sample inventory</strong> <span>Explore with four example items.</span></div><button type="button" class="text-button" data-action="dismiss-demo">Clear examples</button></div>
+        <section class="inventory" aria-labelledby="page-title">
+          <div id="demo-bar" class="demo-bar" hidden><strong>Sample inventory</strong><button type="button" class="text-button" data-action="dismiss-demo">Clear examples</button></div>
           <div class="inventory-controls">
-            <div class="filters" id="filters" aria-label="Filter inventory"></div>
-            <div class="query-controls">
-              <label class="search"><i class="icon" data-icon="search"></i><input id="search" type="search" placeholder="Search items…" aria-label="Search items"></label>
-              <label class="sort" title="Sort items"><i class="icon" data-icon="list-filter"></i><select id="sort" aria-label="Sort items"><option value="expiry">Expiry date</option><option value="newest">Newest</option><option value="name">Name</option></select></label>
+            <div class="filters" id="filters" role="group" aria-label="Filter inventory">
+              <button type="button" class="filter" data-action="filter" data-value="all" aria-pressed="true">All</button>
+              <button type="button" class="filter" data-action="filter" data-value="soon" aria-pressed="false">Expiring soon</button>
+              <button type="button" class="filter" data-action="filter" data-value="expired" aria-pressed="false">Past date</button>
+              <button type="button" class="filter" data-action="filter" data-value="review" aria-pressed="false" hidden>Needs review</button>
             </div>
+            <label class="search"><i class="icon" data-icon="search" aria-hidden="true"></i><input id="search" type="search" placeholder="Search items…" aria-label="Search items"></label>
           </div>
           <div id="inventory-list" class="inventory-list" aria-live="polite"></div>
         </section>
@@ -90,23 +67,22 @@
           <div class="setting-row"><div><strong>Vision model fallback</strong><p>Use SmolVLM 256M on this device when OCR can’t read a label. Downloads about 200 MB the first time and requires WebGPU.</p></div><label class="toggle"><input id="vision-enabled" type="checkbox" aria-label="Vision model fallback"><span></span></label></div>
         </section>
         <section class="settings-card"><h2><i class="icon" data-icon="shield-check"></i> Your data</h2>
+          <div class="setting-row"><label for="sort"><strong>Sort freezer items</strong></label><select id="sort"><option value="expiry">Expiry date</option><option value="newest">Newest</option><option value="name">Name</option></select></div>
           <div class="setting-row"><div><strong>My Drive storage</strong><p>Your item records and photos are in the Froststock folder. Use the same Workspace account to see them on another device.</p></div><a class="button subtle" href="/drive/files/My%20Drive/Froststock">Open My Drive</a></div>
           <div class="setting-row"><div><strong>Freezer history</strong><p>View or restore items you’ve marked as used.</p></div><a class="button subtle" href="#history" data-nav="history"><i class="icon" data-icon="history"></i> View history</a></div>
-          <div class="setting-row"><div><strong>Sample inventory</strong><p>Try the dashboard with example items.</p></div><button type="button" class="button subtle" data-action="toggle-demo" id="toggle-demo">Show examples</button></div>
+          <div class="setting-row"><div><strong>Sample inventory</strong><p>Try the freezer with example items.</p></div><button type="button" class="button subtle" data-action="toggle-demo" id="toggle-demo">Show examples</button></div>
           <div class="setting-row"><div><strong>Inventory backup</strong><p>Export a copy or import a Froststock backup, including from the standalone preview.</p></div><div class="backup-buttons"><button type="button" class="button subtle" data-action="export"><i class="icon" data-icon="download"></i> Export</button><button type="button" class="button subtle" data-action="import"><i class="icon" data-icon="upload"></i> Import</button></div></div>
         </section>
+        <a class="button subtle settings-apps" href="/" data-workspace-apps-trigger><i class="icon" data-icon="layout-grid" aria-hidden="true"></i> Workspace apps</a>
       </section>
     </main>
   </div>
-  <nav class="mobile-nav" aria-label="Mobile workspace">
-    <a href="#overview" data-nav="overview"><i class="icon" data-icon="layout-grid"></i> Overview</a>
-    <a href="#inventory" data-nav="inventory"><i class="icon" data-icon="boxes"></i> Inventory</a>
-    <button type="button" data-action="scan"><span><i class="icon" data-icon="camera"></i></span> Scan</button>
-    <a href="#expiring" data-nav="expiring"><i class="icon" data-icon="calendar-clock"></i> Expiring</a>
-    <a href="#settings" data-nav="settings"><i class="icon" data-icon="settings"></i> Settings</a>
+  <nav class="mobile-nav" aria-label="Froststock">
+    <a href="#overview" data-nav="overview"><i class="home-icon" aria-hidden="true"></i> Freezer</a>
+    <button type="button" data-action="scan"><i class="icon" data-icon="camera" aria-hidden="true"></i> Scan</button>
   </nav>
-  <dialog id="scanner" class="dialog scanner">
-    <div class="dialog-head"><div><p class="kicker">QUICK CAPTURE</p><h2>Scan an item</h2></div><button type="button" class="icon-button" data-action="close-scan" aria-label="Close scanner"><i class="icon" data-icon="x"></i></button></div>
+  <dialog id="scanner" class="dialog scanner" aria-labelledby="scanner-title">
+    <div class="dialog-head"><h2 id="scanner-title">Scan food</h2><button type="button" class="icon-button" data-action="close-scan" aria-label="Close scanner"><i class="icon" data-icon="x"></i></button></div>
     <div class="steps"><div id="step-one" class="step active"><span>1</span> Item photo</div><i class="icon" data-icon="chevron-right"></i><div id="step-two" class="step"><span>2</span> Expiry photo</div></div>
     <div class="viewfinder" id="viewfinder"><video id="camera" autoplay playsinline muted hidden></video><div class="viewfinder-grid"></div><div class="viewfinder-placeholder" id="camera-placeholder"><i class="icon" data-icon="scan-line"></i><strong id="camera-heading">Photograph the item</strong><p id="camera-tip">Include the front of the pack or its label.</p></div><img id="first-thumb" hidden alt="Item photo"><span class="focus-frame"></span></div>
     <div id="scan-error" class="scan-error" role="status" hidden></div>

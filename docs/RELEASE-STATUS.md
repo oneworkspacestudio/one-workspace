@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview139 with Froststock preview.7
+
+Froststock opens directly to **My freezer** with photo cards, date filters,
+search and a **Scan food** button. On phones, the bottom bar opens the freezer
+and scanner. The gear opens settings, sorting and freezer history.
+See [Froststock](FROSTSTOCK.md).
+
 ## Preview138 with safer Workspace and app upgrades
 
 The installer checks whether the staged Workspace manager can load the

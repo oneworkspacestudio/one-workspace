@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	Version  = "0.1.0-preview.6"
+	Version  = "0.1.0-preview.7"
 	photoMax = 3 << 20
 )
 

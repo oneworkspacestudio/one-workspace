@@ -1,10 +1,10 @@
 import { connect, allItems, saveItem, updateItem, removeItem, addItems, itemPhotoURL, syncPending, jobPhotos, loadPhoto, driveStatus, deepSeekStatus, configureDeepSeek, readWithDeepSeek } from './storage.js';
-import { isDate, offsetDate, daysFromToday, formatDate, formatToday } from './dates.js';
+import { isDate, offsetDate, daysFromToday, formatDate } from './dates.js';
 import { scanLabels } from './recognition.js';
 import { chooseExpiryCrop, validCrop } from './expiry-crop.js';
 
 const $ = selector => document.querySelector(selector);
-const icons = 'snowflake layout-grid boxes clock-3 history settings camera chevron-right scan-line search shield-check calendar-clock triangle-alert package image x check loader-circle clipboard-list gallery-horizontal-end calendar-days download list-filter check-circle-2 image-plus upload sparkles'.split(' ');
+const icons = 'snowflake layout-grid history settings camera chevron-right scan-line search shield-check package x check download image-plus upload sparkles'.split(' ');
 const symbol = name => '<i aria-hidden="true" class="icon" data-icon="' + name + '"></i>';
 const iconStyle = document.createElement('style');
 iconStyle.textContent = icons.map(name => '[data-icon="' + name + '"]{--icon:url("./assets/icons/' + name + '.svg")}').join('\n');
@@ -52,17 +52,12 @@ const sample = [
 ].map(item => ({ ...item, demo: true, state: 'ready', quantity: 1, created: Date.now() }));
 
 const routes = {
-  overview: ['Overview', 'Freezer overview', 'See what’s in your freezer and what needs using first.'],
-  inventory: ['Inventory', 'Freezer inventory', 'Search, organise and review the items you’ve scanned.'],
-  expiring: ['Expiring soon', 'Expiring soon', 'See what’s due in the next 7 days or past its label date.'],
-  history: ['History', 'Freezer history', 'Find items you’ve marked as used.'],
-  settings: ['Settings'],
+  overview: 'My freezer', inventory: 'My freezer', expiring: 'Expiring soon',
+  history: 'Freezer history', settings: 'Settings',
 };
 const states = {
-  expired: ['Past date', 'triangle-alert'], soon: ['Expiring soon', 'calendar-clock'],
-  ready: ['In date', 'check-circle-2'], review: ['Needs review', 'clipboard-list'],
-  queued: ['Reading labels', 'loader-circle'], pending: ['Saving to Drive', 'loader-circle'],
-  used: ['Used', 'history'], none: ['No expiry date', 'calendar-days'],
+  expired: 'Past date', soon: 'Expiring soon', ready: 'In date', review: 'Needs review',
+  queued: 'Reading labels', pending: 'Saving to Drive', used: 'Used', none: 'No expiry date',
 };
 const categories = ['Meat & poultry', 'Fish & seafood', 'Fruit', 'Vegetables', 'Prepared meals', 'Bread & bakery', 'Dairy & desserts', 'Other'];
 const dateTypes = ['Expiry date', 'Use by', 'Best before', 'Sell by'];
@@ -100,38 +95,24 @@ function previewURL(item) {
   return thumbnailURLs.get(item.id);
 }
 
-function refreshSoonBadge(count) {
-  const badge = $('#nav-soon');
-  badge.hidden = count === 0;
-  badge.textContent = count;
-}
-
 function render() {
   if (!activePage) return;
   const records = demo ? items.concat(sample) : items;
   const current = records.filter(item => !item.used);
-  const counts = { all: current.length, soon: 0, expired: 0, review: 0, queued: 0, pending: 0 };
-  for (const item of current) {
-    const itemStatus = status(item);
-    if (Object.hasOwn(counts, itemStatus)) counts[itemStatus]++;
-  }
-  refreshSoonBadge(counts.soon);
   $('#toggle-demo').textContent = demo ? 'Clear examples' : 'Show examples';
   if (activePage === 'settings') return;
-  $('#metrics').innerHTML = [
-    ['all', 'Items in freezer', 'boxes'], ['soon', 'Expiring in 7 days', states.soon[1]],
-    ['expired', 'Past label date', states.expired[1]], ['review', 'Needs review', states.review[1]],
-  ].map(([key, label, icon]) => '<button type="button" class="stat ' + key + '" data-action="metric" data-value="' + key +
-    '"><span class="stat-icon">' + symbol(icon) + '</span><span><strong class="stat-number">' + counts[key] +
-    '</strong><span class="stat-label">' + label + '</span></span></button>').join('');
-  const options = activePage === 'expiring' ? [['all', 'All dates'], ['soon', 'Next 7 days'], ['expired', 'Past date']]
-    : [['all', 'All items'], ['soon', 'Expiring soon'], ['expired', 'Past date'], ['review', 'Needs review']];
-  $('#filters').hidden = activePage === 'history';
-  $('#filters').innerHTML = options.map(([key, label]) => '<button type="button" class="filter" data-action="filter" data-value="' + key +
-    '" aria-pressed="' + (key === filter) + '">' + label + '</button>').join('');
-  $('#demo-bar').hidden = !demo || activePage === 'history';
+
   const source = activePage === 'history' ? records.filter(item => item.used)
     : activePage === 'expiring' ? current.filter(item => ['soon', 'expired'].includes(status(item))) : current;
+  const hasReview = source.some(item => status(item) === 'review');
+  if (filter === 'review' && !hasReview) filter = 'all';
+  $('#filters').hidden = activePage === 'history';
+  for (const button of $('#filters').querySelectorAll('button')) {
+    const value = button.dataset.value;
+    button.hidden = value === 'review' && !hasReview;
+    button.setAttribute('aria-pressed', value === filter);
+  }
+  $('#demo-bar').hidden = !demo || activePage === 'history';
   const query = $('#search').value.trim().toLowerCase();
   const found = source.filter(item => (filter === 'all' || status(item) === filter) && (!query ||
     [nameOf(item), item.category, item.rawItem, item.rawDate].some(text => text?.toLowerCase().includes(query))));
@@ -139,21 +120,17 @@ function render() {
   found.sort((a, b) => {
     if (sort === 'name') return nameOf(a).localeCompare(nameOf(b));
     if (sort === 'newest' || activePage === 'history') return (b.used || b.created) - (a.used || a.created);
-    if (a.demo && b.demo && activePage === 'overview' && filter === 'all') {
-      return sample.indexOf(a) - sample.indexOf(b);
-    }
     return (a.expiry || '9999').localeCompare(b.expiry || '9999') || b.created - a.created;
   });
-  const shown = activePage === 'overview' && filter === 'all' && !query ? found.slice(0, 5) : found;
-  const countText = (found.length === shown.length ? String(found.length) : shown.length + ' of ' + found.length) + (found.length === 1 ? ' item' : ' items');
-  $('#inventory-count').textContent = countText + (counts.queued + counts.pending && ['overview', 'inventory'].includes(activePage)
-    ? ' · ' + (counts.queued + counts.pending) + ' processing' : '');
+  const processing = found.filter(item => ['queued', 'pending'].includes(status(item))).length;
+  $('#inventory-count').textContent = found.length + (found.length === 1 ? ' item' : ' items') +
+    (processing ? ' · ' + processing + ' processing' : '');
   const drive = driveStatus();
   $('#drive-status').textContent = drive.unavailable ? 'My Drive is unavailable. Photos waiting to sync will stay on this device.'
     : drive.incomplete ? 'Some item folders in My Drive have missing or invalid records.' : '';
   $('#drive-status').hidden = !$('#drive-status').textContent;
   const list = $('#inventory-list');
-  if (!shown.length) {
+  if (!found.length) {
     const filtered = Boolean(query) || filter !== 'all';
     const title = filtered ? 'No matching items' : activePage === 'history' ? 'No used items yet'
       : activePage === 'expiring' ? 'Nothing due this week' : 'Your freezer is empty';
@@ -163,28 +140,28 @@ function render() {
       (!filtered && ['overview', 'inventory'].includes(activePage) ? '<button type="button" class="button primary" data-action="scan">' + symbol('camera') + ' Scan first item</button>' : '') + '</div>';
     return;
   }
-  list.innerHTML = shown.map(item => {
+  list.innerHTML = found.map(item => {
     const state = status(item);
-    const [label] = states[state];
     const photo = previewURL(item);
-    const date = item.expiry ? formatDate(item.expiry) : state === 'queued' ? 'Reading label…' : 'No date';
+    const date = item.expiry ? formatDate(item.expiry) : '';
     return '<button type="button" class="item" data-action="details" data-value="' + esc(item.id) + '">' +
-      '<span class="item-main">' + (photo ? '<img class="item-photo" alt="" src="' + esc(photo) + '">' :
+      '<span class="item-main">' + (photo ? '<img class="item-photo" alt="" loading="lazy" src="' + esc(photo) + '">' :
         '<span class="item-photo">' + symbol('package') + '</span>') +
       '<span class="item-name"><strong>' + esc(nameOf(item)) + '</strong><small>' + esc(item.category || 'Uncategorised') +
-      ' · ' + (item.quantity || 1) + ' pc' + (item.quantity > 1 ? 's' : '') + '</small></span></span>' +
-      '<span class="item-date">' + symbol('calendar-days') + date + '<small>' + esc(item.dateType || 'Expiry date') + '</small></span>' +
-      '<span class="badge ' + state + '">' + label + '</span><span class="item-arrow">' + symbol('chevron-right') + '</span></button>';
+      ' · ' + (item.quantity || 1) + '&nbsp;pc' + (item.quantity > 1 ? 's' : '') + '</small></span></span>' +
+      '<span class="item-status"><span class="badge ' + state + '">' + states[state] + '</span>' +
+      (date ? '<time class="item-date" datetime="' + esc(item.expiry) + '">' + esc(date) + '</time>' : '') +
+      '</span><span class="item-arrow">' + symbol('chevron-right') + '</span></button>';
   }).join('');
 }
 
-function navigate(page, nextFilter = 'all') {
+function navigate(page) {
   if (location.hash !== '#' + page) {
     history.pushState({}, '', '#' + page);
     $('#search').value = '';
     window.scrollTo(0, 0);
   }
-  filter = nextFilter;
+  filter = 'all';
   applyRoute();
 }
 
@@ -193,22 +170,16 @@ function applyRoute() {
   const next = Object.hasOwn(routes, route) ? route : 'overview';
   if (activePage !== next) $('#search').value = '';
   activePage = next;
-  const [crumb, title, note] = routes[activePage];
-  $('#crumb').textContent = crumb;
+  const freezerPage = ['overview', 'inventory', 'expiring'].includes(activePage);
   for (const link of document.querySelectorAll('[data-nav]')) {
-    if (link.dataset.nav === activePage) link.setAttribute('aria-current', 'page');
+    const target = link.dataset.nav;
+    if (target === activePage || target === 'overview' && freezerPage) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
   $('#dashboard').hidden = activePage === 'settings';
   $('#settings').hidden = activePage !== 'settings';
   if (activePage === 'settings' && ownerReady) void refreshDeepSeekSettings();
-  $('#hero').hidden = activePage !== 'overview';
-  $('#metrics').hidden = activePage !== 'overview';
-  $('#view-inventory').hidden = activePage !== 'overview';
-  $('#page-title').textContent = title || '';
-  $('#page-note').textContent = note || '';
-  $('#today').textContent = formatToday();
-  $('#inventory-title').textContent = activePage === 'history' ? 'Used items' : activePage === 'expiring' ? 'Items by label date' : 'Freezer inventory';
+  $('#page-title').textContent = routes[activePage];
   render();
 }
 
@@ -474,8 +445,9 @@ function showDetail(key) {
   const preview = previewURL(item);
   const dateURL = item.revision ? itemPhotoURL(item.id, 'expiry.jpg') : item.datePhoto ? URL.createObjectURL(item.datePhoto) : '';
   if (dateURL.startsWith('blob:')) detailURLs.add(dateURL);
-  details.innerHTML = '<div class="dialog-head"><div><p class="kicker">' + (item.demo ? 'SAMPLE ITEM' : 'ITEM DETAILS') +
-    '</p><h2>' + esc(title) + '</h2></div><button type="button" class="icon-button" data-action="close-details" aria-label="Close item details">' + symbol('x') +
+  details.setAttribute('aria-labelledby', 'detail-title');
+  details.innerHTML = '<div class="dialog-head"><h2 id="detail-title">' + esc(title) +
+    '</h2><button type="button" class="icon-button" data-action="close-details" aria-label="Close item details">' + symbol('x') +
     '</button></div>' + (preview ? '<div class="detail-photos"><figure><img src="' + esc(preview) + '" alt="Food item"><figcaption>Item photo</figcaption></figure>' +
     (dateURL ? '<figure><img src="' + esc(dateURL) + '" alt="Expiry label"><figcaption>Expiry photo' +
       (item.revision ? ' <button class="text-button date-crop-link" type="button" data-action="crop-date">' + (item.dateCrop ? 'Adjust crop' : 'Crop &amp; read again') + '</button>' : '') +
@@ -590,8 +562,7 @@ const actions = {
   scan: openScanner, 'close-scan': () => { if (!processingPhoto) scanner.close(); }, capture,
   upload: () => $('#photo-file').click(), retake: () => { clearFirst(); displayScanError(); renderScanner(); },
   filter: value => { filter = value; render(); },
-  metric: value => navigate(value === 'soon' || value === 'expired' ? 'expiring' : 'inventory', value),
-  inventory: () => navigate('inventory'), details: showDetail, 'close-details': () => details.close(),
+  details: showDetail, 'close-details': () => details.close(),
   'dismiss-demo': () => storeDemo(false), 'toggle-demo': () => storeDemo(!demo),
   export: exportBackup, import: () => $('#backup-file').click(),
   used: async () => {
