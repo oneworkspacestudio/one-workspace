@@ -41,3 +41,12 @@ integration-19 manager into an installation that still required integration
 restored the existing preview.134 programs and data. Online and offline update
 selection now reject lower-integration replacement managers before taking the
 installation down. Valid independent app updates remain available.
+
+[Windows preview.137](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.137)
+shipped from `26d7751`. The publisher verified 949 assets and promoted the
+public channel in `b5796f6`. A fresh NTFS install passed with Froststock
+preview.6. The anonymous public preview.136 updater required the preview.137
+installer and matched its published digest. The restored local preview.134
+installation remains healthy and its release check offers compatible Workspace
+preview.137 and Froststock preview.6. The signed Android companion stays with
+preview.136.
