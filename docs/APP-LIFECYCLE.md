@@ -23,6 +23,9 @@ configuration change does not complete a managed One Workspace delivery.
 
 - Register the full release catalog and ordinary organization rebuild, not just
   a local test catalog. Pin published component versions, sizes and hashes.
+  Apps registered with independent distribution are offered through Updates.
+  Their verified release manifests must match the registered launch contract
+  and owned package paths. Workspace bundles omit their binaries and sidecars.
 - Keep every app-owned runtime payload in its package namespace (`<package>-...`).
   `catalog.InstallPackageIDs` carries that namespace through both setup selection
   and new-app updates. Test selecting and omitting the app; an executable-only

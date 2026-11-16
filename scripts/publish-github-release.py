@@ -79,9 +79,13 @@ def validate_release_mode(tag, desktop_only, out):
 
 
 def validate_managed_catalog(catalog):
-    if catalog.get('installerIntegration') != 21:
+    if catalog.get('installerIntegration') != 22:
         raise RuntimeError('Use the current installer contract for complete app-owned runtimes')
     registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text(encoding='utf-8'))['apps']
+    independent = {a['id'] for a in registry if a.get('independentDistribution')}
+    registry = [a for a in registry if a['id'] not in independent]
+    if any(key == app or key.startswith(app + '-') for key in catalog.get('packages', {}) for app in independent):
+        raise RuntimeError('The Workspace bundle contains a separately distributed app package')
     apps = {a['id']: a for a in catalog['apps']}
     if len(apps) != len(catalog['apps']) or set(apps) != {a['id'] for a in registry}:
         raise RuntimeError('Release inventory differs from managed-apps.json; complete every managed app before publishing')

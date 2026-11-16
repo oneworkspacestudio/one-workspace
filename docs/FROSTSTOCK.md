@@ -1,6 +1,8 @@
 # Froststock
 
-Choose **Froststock** under **General** when installing or updating One Workspace. Open it from the Workspace app picker and sign in with the Workspace owner account.
+On One Workspace preview.140 or later with My Drive installed, open **Updates** and select **Froststock** to install it. Subsequent updates come from Froststock’s own release channel. Open Froststock from the Workspace app picker and sign in with the Workspace owner account. [Froststock releases](https://github.com/oneworkspacestudio/froststock/releases)
+
+Existing Froststock installations can move to the new channel by updating Workspace once and then choosing the Froststock update. The same app ID keeps your My Drive inventory and private scanning settings.
 
 Take or upload one photo of the food and a second photo of its date label. The scanner returns to the first step as soon as the pair is queued. Keep scanning while your browser saves the pairs to My Drive and extracts the text. A temporarily disconnected browser keeps unsent pairs and retries when the app is open again.
 

@@ -1,10 +1,17 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -notin @(18,19,20,21)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
-$froststock=$cat.apps|Where-Object id -CEQ 'froststock'
-if($froststock.version -ne '0.1.0-preview.1' -and $cat.installerIntegration -lt 19){throw 'Froststock requires a loopback-capable Workspace installer'}
-if(-not $froststock.oidc -or -not $froststock.stripPrefix -or $froststock.route -cne '/froststock' -or $froststock.callback -cne '/froststock/auth/callback' -or $froststock.port -ne 9048 -or 'drive' -cnotin $froststock.depends -or $cat.packages.froststock.file -cne 'Froststock.exe' -or -not $cat.packages.'froststock-contract'){throw 'Froststock managed contract is incomplete'}
+if($cat.installerIntegration -notin @(18,19,20,21,22)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -ge 22){
+ $external=@((Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw|ConvertFrom-Json).apps|Where-Object independentDistribution)
+ foreach($app in $external){
+  if(($cat.apps|Where-Object id -CEQ $app.id) -or ($cat.packages.PSObject.Properties.Name|Where-Object {$_ -ceq $app.id -or $_ -like ($app.id+'-*')})){throw ('Bundled independent app: '+$app.id)}
+ }
+}else{
+ $froststock=$cat.apps|Where-Object id -CEQ 'froststock'
+ if($froststock.version -ne '0.1.0-preview.1' -and $cat.installerIntegration -lt 19){throw 'Froststock requires a loopback-capable Workspace installer'}
+ if(-not $froststock.oidc -or -not $froststock.stripPrefix -or $froststock.route -cne '/froststock' -or $froststock.callback -cne '/froststock/auth/callback' -or $froststock.port -ne 9048 -or 'drive' -cnotin $froststock.depends -or $cat.packages.froststock.file -cne 'Froststock.exe' -or -not $cat.packages.'froststock-contract'){throw 'Froststock managed contract is incomplete'}
+}
 $podcasts=$cat.apps|Where-Object id -CEQ 'podcasts'
 if(-not $podcasts.oidc -or $podcasts.route -cne '/podcasts' -or $podcasts.callback -cne '/podcasts/auth/callback' -or $podcasts.port -ne 9044 -or $cat.packages.podcasts.file -cne 'MyPodcasts.exe' -or -not $cat.packages.'podcasts-contract' -or -not $cat.packages.'podcasts-manifest'){throw 'Podcasts managed contract incomplete'}
 $pet=$cat.apps|Where-Object id -CEQ 'pet'
@@ -18,7 +25,7 @@ if(-not $websearch.oidc -or $websearch.route -cne '/websearch' -or $websearch.po
 $survival=$cat.apps|Where-Object id -CEQ 'survival'
 if(-not $survival.oidc -or $survival.route -cne '/survival' -or $survival.callback -cne '/survival/auth/callback' -or $survival.port -ne 9041 -or $cat.packages.survival.file -cne 'MySurvival.exe' -or -not $cat.packages.'survival-contract' -or -not $cat.packages.'survival-manifest'){throw 'My Survival managed contract is incomplete'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
-$required=@($registry.apps | ForEach-Object {$_.id})
+$required=@($registry.apps | Where-Object { $cat.installerIntegration -lt 22 -or -not $_.independentDistribution } | ForEach-Object {$_.id})
 $commute=$cat.apps|Where-Object id -CEQ 'commute'
 if(-not $commute.oidc -or $commute.route -cne '/commute' -or $commute.callback -cne '/commute/auth/callback' -or $commute.port -ne 9040 -or $cat.packages.commute.file -cne 'MyCommute.exe' -or -not $cat.packages.'commute-contract' -or -not $cat.packages.'commute-manifest'){throw 'Commute managed contract incomplete'}
 $books=$cat.apps|Where-Object id -CEQ 'books'

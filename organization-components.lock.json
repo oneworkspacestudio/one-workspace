@@ -197,23 +197,11 @@
     "asset": "workspace-bundle.zip",
     "sha256": "cc61e4bf4f12ed0a7062d8ad9ca0f7c186979b5e0220a6257aae4b72fffe76a4"
   },
-  "froststockLabelSeed": {
+  "independentAppsSeed": {
     "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.134",
+    "tag": "v0.3.0-preview.139",
     "asset": "workspace-bundle.zip",
-    "sha256": "984a38fd9a7d68c679e073df9769a680aa4564946b303f020da723a84d93c547"
-  },
-  "froststockCropSeed": {
-    "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.133",
-    "asset": "workspace-bundle.zip",
-    "sha256": "3f3f20f27eef7f7eea4dc42c7dd2be892f3da235ba05ebf550e66cee3a47dc90"
-  },
-  "froststockDesignSeed": {
-    "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.138",
-    "asset": "workspace-bundle.zip",
-    "sha256": "f389ddcc62432e21df60dc26c9e3c79950ed24812010e625703e3baa68c19a43"
+    "sha256": "2da0cfbd7c0e82535a0face161510ce79c76d3fa7be0e3aacb78d061dc7a5b4b"
   },
   "updateResilienceSeed": {
     "repository": "oneworkspacestudio/one-workspace",
@@ -226,12 +214,6 @@
     "tag": "v0.3.0-preview.136",
     "asset": "workspace-bundle.zip",
     "sha256": "b60c1fdcafb6491141fe887a0ef9754a7b1b3fff3c444717632e9dee7adb026c"
-  },
-  "froststockRecognitionSeed": {
-    "repository": "oneworkspacestudio/one-workspace",
-    "tag": "v0.3.0-preview.132",
-    "asset": "workspace-bundle.zip",
-    "sha256": "2575ed8e1954560d30d8129008bc53980217a8129779f810ee0a3eb57152ad3b"
   },
   "sunnyMoonSeed": {
     "repository": "oneworkspacestudio/one-workspace",

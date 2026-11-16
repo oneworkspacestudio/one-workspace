@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview140 with independent Froststock releases
+
+Workspace can discover and install Froststock from its own release channel.
+The Workspace installer keeps existing Froststock installations during an
+upgrade. To add Froststock, open **Updates** and select it. See [Froststock](FROSTSTOCK.md).
+
 ## Preview139 with Froststock preview.7
 
 Froststock opens directly to **My freezer** with photo cards, date filters,

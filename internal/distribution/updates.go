@@ -94,7 +94,7 @@ type updateGroup struct {
 var updateGroups = []updateGroup{
 	{"pet", "Pet", "one-workspace", []string{"pet"}},
 	{"sunnymoon", "Sunny & Moon", "one-workspace", []string{"sunnymoon"}},
-	{"froststock", "Froststock", "one-workspace", []string{"froststock"}},
+	{"froststock", "Froststock", "froststock", []string{"froststock"}},
 	{"gamestudio", "Game Studio", "one-workspace", []string{"gamestudio"}},
 	{"websearch", "Web Search", "one-workspace", []string{"websearch"}},
 	{"survival", "My Survival", "my-survival", []string{"survival"}},
@@ -280,7 +280,10 @@ func groupPackages(g updateGroup, c catalog.Catalog) map[string]catalog.Package 
 func suiteUpdateGroups(latest catalog.Catalog) []updateGroup {
 	groups := append([]updateGroup(nil), updateGroups...)
 	known := map[string]bool{}
-	for _, g := range groups {
+	for i, g := range groups {
+		if g.id == "froststock" && latest.InstallerIntegration < catalog.IndependentAppIntegration {
+			groups[i].repo = "one-workspace"
+		}
 		for _, id := range g.apps {
 			known[id] = true
 		}
@@ -583,9 +586,13 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 	totalGroups = 0
 	groups := suiteUpdateGroups(latest)
 	includedGroups := map[string]bool{}
-	for _, g := range groups {
+	for i, g := range groups {
+		if g.id == "froststock" && current.InstallerIntegration >= catalog.IndependentAppIntegration {
+			g.repo = "froststock"
+			groups[i] = g
+		}
 		offer := markNewApps(current, latest, UpdateChoice{Apps: groupApps(g, latest)})
-		included := g.id == "workspace" || len(groupApps(g, current)) > 0 || len(offer.NewApps) > 0
+		included := g.id == "workspace" || g.repo == "froststock" || len(groupApps(g, current)) > 0 || len(offer.NewApps) > 0
 		includedGroups[g.id] = included
 		if included {
 			totalGroups++
@@ -599,6 +606,10 @@ func CheckUpdates(ctx context.Context, current catalog.Catalog) (UpdatePlan, err
 		}
 		operationprogress.Report(ctx, "check", "Checking "+g.name+" releases", int64(checked), int64(totalGroups), "repositories")
 		checked++
+		if g.repo == "froststock" {
+			plan.Choices = append(plan.Choices, froststockReleaseChoice(ctx, h, token, g, current))
+			continue
+		}
 		ch := UpdateChoice{ID: g.id, Name: g.name, Current: current.Version, Version: latest.Version, Source: "https://github.com/" + Repository + "/releases/tag/" + suiteRelease.Tag, Apps: groupApps(g, latest), Packages: groupPackages(g, latest), Downloads: map[string]UpdateDownload{}}
 		if g.id == "workspace" {
 			ch.InstallerIntegration = latest.InstallerIntegration
@@ -927,7 +938,7 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 			includeDefaults = true
 		}
 		for _, ch := range plan.Choices {
-			if ch.ID == id && len(ch.NewApps) > 0 {
+			if ch.ID == id && len(ch.NewApps) > 0 && !(id == "froststock" && ch.Optional) {
 				includeDefaults = true
 			}
 		}
@@ -1011,6 +1022,9 @@ func SelectUpdates(current catalog.Catalog, plan UpdatePlan, selected []string) 
 				allowed := false
 				for _, added := range ch.NewApps {
 					allowed = allowed || added == n.ID
+				}
+				if allowed && ch.Optional && n.ID == "froststock" && strings.HasPrefix(n.Source, "https://github.com/"+froststockRepository+"/releases/tag/") {
+					target.Selection.Excluded = slices.DeleteFunc(target.Selection.Excluded, func(id string) bool { return id == n.ID })
 				}
 				if !allowed || target.Selection.Excludes(n.ID) {
 					return target, nil, errors.New("new app is outside the selected default-app contract")

@@ -16,7 +16,6 @@ from websearch_component import websearch_component
 from gamestudio_component import gamestudio_component
 from sunnymoon_component import sunnymoon_component
 from pet_component import pet_component
-from froststock_component import froststock_component
 from tube_component import tube_replacements
 from slicer_component import slicer_replacements
 from finance_component import finance_replacements
@@ -59,7 +58,12 @@ def integrated_build(args, pin, seed, cache, out, components, integration=18):
  with zipfile.ZipFile(seed) as base:
   cat = json.loads(base.read('catalog.json'))
   cat.update(version=args.version, installerIntegration=integration)
-  apps = {app['id']: app for app in cat['apps']}
+  registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text())['apps']
+  independent = {app['id'] for app in registry if app.get('independentDistribution')} if integration >= 22 else set()
+  apps = {app['id']: app for app in cat['apps'] if app['id'] not in independent}
+  for key in list(cat['packages']):
+   if any(key == app or key.startswith(app + '-') for app in independent):
+    del cat['packages'][key]
   apps.update((c['app']['id'], c['app']) for c in components)
   cat['apps'] = list(apps.values())
   replacements = {'manager': manager, 'notice-Workspace-release-status.md': ROOT / 'docs/RELEASE-STATUS.md'}
@@ -68,8 +72,7 @@ def integrated_build(args, pin, seed, cache, out, components, integration=18):
   for key, item in inputs.items():
    file = Path(item['source'])
    cat['packages'][key] = dict(file=item['file'], size=file.stat().st_size, sha256=sha(file))
-  registry = json.loads((ROOT / 'internal/catalog/managed-apps.json').read_text())['apps']
-  assert {app['id'] for app in registry} == {app['id'] for app in cat['apps']}
+  assert {app['id'] for app in registry} - independent == {app['id'] for app in cat['apps']}
   catalog = json.dumps(cat, indent=2)
   (out / 'catalog.json').write_text(catalog, encoding='utf-8')
   go('run', '-buildvcs=false', './cmd/catalogcheck', str(out / 'catalog.json'))
@@ -107,10 +110,10 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
- if a.version == '0.3.0-preview.139' and not candidate:
-  pin = lock['froststockDesignSeed']
+ if a.version == '0.3.0-preview.140' and not candidate:
+  pin = lock['independentAppsSeed']
   base = asset(pin, cache, a.seed_archive)
-  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)], integration=21)
+  return integrated_build(a, pin, base, cache, out, [], integration=22)
  if a.version == '0.3.0-preview.138' and not candidate:
   pin = lock['updateResilienceSeed']
   base = asset(pin, cache, a.seed_archive)
@@ -119,16 +122,6 @@ def main():
   pin = lock['updateTunnelSeed']
   base = asset(pin, cache, a.seed_archive)
   return integrated_build(a, pin, base, cache, out, [], integration=20)
- froststock_seeds = {
-  '0.3.0-preview.136': 'froststockLabelSeed',
-  '0.3.0-preview.135': 'froststockLabelSeed',
-  '0.3.0-preview.134': 'froststockCropSeed',
-  '0.3.0-preview.133': 'froststockRecognitionSeed',
- }
- if a.version in froststock_seeds and not candidate:
-  pin = lock[froststock_seeds[a.version]]
-  base = asset(pin, cache, a.seed_archive)
-  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)], integration=19)
  if a.version == '0.3.0-preview.131' and not candidate:
   pin = lock['sunnyMoonSeed']
   base = asset(pin, cache, a.seed_archive)
@@ -137,10 +130,6 @@ def main():
   pin = lock['petSeed']
   base = asset(pin, cache, a.seed_archive)
   return integrated_build(a, pin, base, cache, out, [pet_component(ROOT,a.go,cache/'pet')])
- if lock.get('integratedSeed') and a.version == '0.3.0-preview.128' and not candidate:
-  pin = lock['integratedSeed']
-  base = asset(pin, cache, a.seed_archive)
-  return integrated_build(a, pin, base, cache, out, [froststock_component(ROOT,a.go,cache/'froststock',a.version)], integration=19)
  seed=asset(lock['managedSeed'],cache,a.seed_archive)
  remote=asset(lock['myRemote'],cache)
  hosting=asset(lock['myHosting'],cache)
@@ -197,12 +186,11 @@ def main():
  podcasts_stage=Path(tempfile.mkdtemp(prefix='podcasts-',dir=cache));extract(podcasts,podcasts_stage)
  podcasts_contract=podcasts_component(podcasts_stage,allow_candidate=bool(a.podcasts_candidate))
  contracts=[sunnymoon_component(ROOT,a.go,cache/'sunnymoon','0.3.0-preview.126'),pet_component(ROOT,a.go,cache/'pet'),gamestudio_component(ROOT,a.go,cache/'gamestudio','0.3.0-preview.123'),podcasts_contract,websearch_component(ROOT,a.go,cache/'websearch','0.3.0-preview.126'),survival_component(survival_stage,allow_candidate=bool(a.survival_candidate)),news_contract,commute_contract,books_contract,contract,ticket_contract,authenticator_component(auth_stage),voice_component(voice_stage,allow_candidate=bool(a.voice_candidate))]
- contracts.append(froststock_component(ROOT,a.go,cache/'froststock',a.version))
  env=os.environ.copy();env.update(CGO_ENABLED='0',GOTOOLCHAIN='local')
  def go(*args):subprocess.run([a.go,*args],cwd=ROOT,env=env,check=True)
  go('build','-buildvcs=false','-trimpath','-ldflags',f'-s -w -X main.version={a.version}','-o',str(out/'Workspace.exe'),'./cmd/workspace')
  with zipfile.ZipFile(seed) as base:
-  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=21
+  cat=json.loads(base.read('catalog.json'));old=json.loads(json.dumps(cat));cat['version']=a.version;cat['installerIntegration']=22
   for key,item in old['packages'].items():
    h=hashlib.sha256();size=0
    with base.open(item['file']) as src:
@@ -223,7 +211,7 @@ def main():
    cat['apps'].append(contract['app'])
    for k,item in contract['inputs'].items():
     assert k not in cat['packages'];f=Path(item['source']);cat['packages'][k]={'file':item['file'],'size':f.stat().st_size,'sha256':sha(f)}
-  registry=json.loads((ROOT/'internal/catalog/managed-apps.json').read_text())['apps'];assert {x['id'] for x in registry}=={x['id'] for x in cat['apps']}
+  registry=json.loads((ROOT/'internal/catalog/managed-apps.json').read_text())['apps'];assert {x['id'] for x in registry if not x.get('independentDistribution')}=={x['id'] for x in cat['apps']}
   (out/'catalog.json').write_text(json.dumps(cat,indent=2),encoding='utf-8')
   go('run','-buildvcs=false','./cmd/catalogcheck',str(out/'catalog.json'))
   payload=ROOT/'internal/payload/bundle/payload.zip';payload.parent.mkdir(parents=True,exist_ok=True)

@@ -61,7 +61,8 @@ var versionPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9.+_-]{0,79}$`)
 const (
 	FroststockLoopbackIntegration = 19
 	ManagerPreflightIntegration   = 21
-	InstallerIntegration          = ManagerPreflightIntegration
+	IndependentAppIntegration     = 22
+	InstallerIntegration          = IndependentAppIntegration
 )
 
 func (c Catalog) Validate() error {
