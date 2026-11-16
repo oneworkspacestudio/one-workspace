@@ -26,3 +26,10 @@ cropping scans, and the DeepSeek key settings. Rollback retained the
 original photo bytes and inventory. Go, recognition and publisher checks
 passed. The 47-app catalog and bundle hashes were verified against the
 preview.138 base.
+
+[Workspace preview.139](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.139)
+ships Froststock preview.7 from `ab3a965`. The signed publisher verified 960
+assets and promoted the update channel in `da3fc10`. The anonymous preview.138
+updater offered preview.7, and the public catalog and all five selected
+Froststock packages matched their digests. Stopped isolated services and
+removed the fixture data and program roots.
