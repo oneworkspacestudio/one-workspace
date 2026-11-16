@@ -204,10 +204,10 @@ def main():
     existing = []
     # Smaller pages keep the API response bounded as suite asset counts grow.
     # Drafts appear in the list, including drafts that have no public Git tag.
-    for page in range(1, 6):
-        releases = api(f'releases?per_page=20&page={page}')
+    for page in range(1, 26):
+        releases = api(f'releases?per_page=4&page={page}')
         existing = [r for r in releases if r['tag_name'] == args.tag]
-        if existing or len(releases) < 20:
+        if existing or len(releases) < 4:
             break
     if existing and (not existing[0]['draft'] or existing[0]['target_commitish'] != source):
         raise RuntimeError('Published releases are immutable; choose a new tag. A draft must match this source.')

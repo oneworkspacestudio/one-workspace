@@ -31,11 +31,11 @@ class ReleasePaginationTests(unittest.TestCase):
 
         def opener(req, timeout):
             calls.append(req.full_url)
-            return io.StringIO(json.dumps([{}] * (20 if len(calls) == 1 else 1)))
+            return io.StringIO(json.dumps([{}] * (4 if len(calls) == 1 else 1)))
 
         releases = publisher.repository_releases('oneworkspacestudio/one-workspace', 'synthetic', opener)
-        self.assertEqual(len(releases), 21)
-        self.assertTrue(all('per_page=20&' in url for url in calls))
+        self.assertEqual(len(releases), 5)
+        self.assertTrue(all('per_page=4&' in url for url in calls))
 
     def test_channel_caps_newest_public_releases_after_filtering(self):
         repo = 'example/repository'

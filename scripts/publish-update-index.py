@@ -20,7 +20,7 @@ MAX_PUBLIC_RELEASES = 100
 
 def repository_releases(repo, token, opener=urllib.request.urlopen):
     releases = []
-    page_size = 20 if repo == ORG + '/one-workspace' else 100
+    page_size = 4 if repo == ORG + '/one-workspace' else 100
     for page in range(1, 101):
         req = urllib.request.Request(
             f'https://api.github.com/repos/{repo}/releases?per_page={page_size}&page={page}',
