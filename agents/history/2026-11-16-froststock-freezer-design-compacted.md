@@ -19,3 +19,10 @@ the full inventory, item details and both scan entry points.
 Froststock preview.7 is the only changed app in the Workspace preview.139
 proposal. The managed builder pins the verified preview.138 bundle to
 retain installer integration 21 and the current updater and tunnel fixes.
+
+The packaged release passed an isolated fresh setup and an app-only update
+from preview.138, including mobile navigation, search, uploading and
+cropping scans, and the DeepSeek key settings. Rollback retained the
+original photo bytes and inventory. Go, recognition and publisher checks
+passed. The 47-app catalog and bundle hashes were verified against the
+preview.138 base.
