@@ -76,3 +76,9 @@ health, existing pairing, live DeepSeek chat, HTTP200 audio/pcm and Stop pass.
 Its actual parent area remains user-locked; parent picker switching passed
 synthetic native desktop/mobile acceptance. No suite release or Android device
 install was claimed; WonderPal's independent Android code6 build/route passed.
+
+Follow-up: user unlocked the live parent area. Production picker selects MOSS,
+Qwen06 and Pocket18 and retains selection on refresh. Qwen06 and restored
+Pocket18 report loaded/ready. MOSS remained loading when changed, so this check
+claims selection only for MOSS. Pocket18 remains selected. Live verification
+is complete; no credential rotation or further installation was needed.
