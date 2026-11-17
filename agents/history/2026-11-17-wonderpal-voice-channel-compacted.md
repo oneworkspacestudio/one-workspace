@@ -51,3 +51,16 @@ DeepSeek chat, HTTP 200 PCM, replay and Stop verified; first speech data 152/194
 No owner cloned voices were used, no credentials recorded and no unrelated app
 update applied. PC2 installation and pairing are complete; Android and other PCs
 were not changed. Detailed handoff is in the My Voice and WonderPal repositories.
+
+## Preview.13 parent picker
+
+My Voice de34fe1 / preview.13 exposes narrowly scoped same-PC stock model
+discovery and selection to the existing WonderPal grant. WonderPal 863ade9 /
+0.2.4 adds the picker directly in parent settings. Existing grant, private
+storage, proxy rules, package namespace and Android on-device routing remain.
+Native synthetic UI switching, parent authorization, real audio and revocation
+passed. All 16 public assets were verified anonymously; ZIP SHA-256
+fb5731f96daefa9fef7cfc4e7703c356376fd7839d15690691a492ac9a924e9a.
+The supported scoped publisher retained other channel entries and promoted
+the exact release pin. Five publisher tests passed. Managed acceptance and
+PC2/Hosting delivery are being verified separately. No suite tag was created.

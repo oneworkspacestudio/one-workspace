@@ -253,10 +253,10 @@
   },
   "myVoice": {
     "repository": "oneworkspacestudio/my-voice",
-    "tag": "v0.1.0-preview.12",
-    "asset": "my-voice-0.1.0-preview.12-windows-amd64.zip",
-    "sha256": "77df0d5f4d49951da98bb4372ada69b9d3988086d9e8136688b8057099c383d8",
-    "size": 88363978
+    "tag": "v0.1.0-preview.13",
+    "asset": "my-voice-0.1.0-preview.13-windows-amd64.zip",
+    "sha256": "fb5731f96daefa9fef7cfc4e7703c356376fd7839d15690691a492ac9a924e9a",
+    "size": 88366732
   },
   "myBooks": {
     "repository": "oneworkspacestudio/my-books",
