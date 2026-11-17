@@ -38,3 +38,16 @@ settings were reviewed and all fixture services stopped. A separate real
 WonderPal 0.2.3 browser relay test played Pocket with 28–39ms first PCM on this
 host. Owner installs and protected Hosting pairing are still pending; Android
 was explicitly deferred. My Voice's release source remains 5967de2.
+
+Following the user's install/host request, PC2 completed the protected Voice 10→12
+update under Workspace 140. All nine stages finished, verified recovery retained,
+and 44 installed app entries compared with only Voice changed. All 46 services
+are running; served authenticated Voice JS/CSS match the accepted build. Pocket 18M
+is enabled and resident, MOSS remains installed, and owner-approved Qwen 0.6B
+download/audio readiness completed. WonderPal 0.2.3 rebuilt its retained ZIP with
+the protected same-host voice connection as deployment 96abb38c1316dbf2a0c5ee8265bcb741,
+published 21:27:19 UTC. Previous 5cf3a2d7 production remains recoverable. Live
+DeepSeek chat, HTTP 200 PCM, replay and Stop verified; first speech data 152/194 ms.
+No owner cloned voices were used, no credentials recorded and no unrelated app
+update applied. PC2 installation and pairing are complete; Android and other PCs
+were not changed. Detailed handoff is in the My Voice and WonderPal repositories.
