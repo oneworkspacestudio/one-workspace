@@ -28,3 +28,13 @@ change; unrelated channel entries are retained. Five publisher tests and catalog
 tests passed. A new preview.140 installer setup on synthetic NTFS selected
 Accounts and Voice only. Public upgrade/rollback verification follows promotion;
 no owner installation or Hosting grant is a test fixture.
+
+Promotion ba64784 was verified by the normal anonymous preview.140 installer.
+Its new synthetic NTFS installation upgraded Voice10→12 and checked all 116
+owned files, retaining manager, Accounts and owner identity. MyAccounts OIDC,
+real Phonon PCM, Settings selection of resident Pocket, credential continuity,
+direct PCM, proxy denial and protected rollback passed. Desktop and mobile
+settings were reviewed and all fixture services stopped. A separate real
+WonderPal 0.2.3 browser relay test played Pocket with 28–39ms first PCM on this
+host. Owner installs and protected Hosting pairing are still pending; Android
+was explicitly deferred. My Voice's release source remains 5967de2.
