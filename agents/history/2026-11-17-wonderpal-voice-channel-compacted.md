@@ -64,3 +64,15 @@ fb5731f96daefa9fef7cfc4e7703c356376fd7839d15690691a492ac9a924e9a.
 The supported scoped publisher retained other channel entries and promoted
 the exact release pin. Five publisher tests passed. Managed acceptance and
 PC2/Hosting delivery are being verified separately. No suite tag was created.
+
+Promotion 29b9199 is visible anonymously and selected by the stock preview.140
+installer. Synthetic Voice10→13 upgrade checks all 116 files, MyAccounts OIDC,
+resident speech and protected rollback; services stopped afterward. Actual PC2
+Voice12→13 completed all nine protected stages in 4m58s, with retained recovery
+update-20261117T225737-59e95284ce0c and 46 services running. Pocket18 stayed
+selected and ready; MOSS/Qwen06 retained. WonderPal 0.2.4 deployed as
+ba351e994f5ca5d0b0b5ed4936068eaf at 23:05:22 UTC. Public web digests,
+health, existing pairing, live DeepSeek chat, HTTP200 audio/pcm and Stop pass.
+Its actual parent area remains user-locked; parent picker switching passed
+synthetic native desktop/mobile acceptance. No suite release or Android device
+install was claimed; WonderPal's independent Android code6 build/route passed.
