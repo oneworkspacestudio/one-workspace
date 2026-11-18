@@ -65,6 +65,11 @@
       "repository": "oneworkspacestudio/my-remote",
       "tag": "v0.1.0-preview.6",
       "reason": "Superseded by preview7: preview6 adds a runtime file outside existing app-only update contracts; normal planner refuses it before changes."
+    },
+    {
+      "repository": "oneworkspacestudio/my-hosting",
+      "tag": "v0.1.0-preview.4",
+      "reason": "Stock140 tracks12 Hosting payloads; preview4 inherited an older four-file manifest and the planner correctly refuses it before changes. Use preview5; immutable preview4 assets are retained."
     }
   ]
 }

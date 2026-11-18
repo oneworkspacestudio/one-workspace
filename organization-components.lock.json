@@ -85,10 +85,10 @@
   },
   "myHosting": {
     "repository": "oneworkspacestudio/my-hosting",
-    "tag": "v0.1.0-preview.4",
-    "asset": "my-hosting-0.1.0-preview.4-windows-amd64.zip",
-    "sha256": "244def6630cf7ed00c3bb35a24f5754ccace0ed4dc349eacaefa3869cb66bfa8",
-    "size": 6816427
+    "tag": "v0.1.0-preview.5",
+    "asset": "my-hosting-0.1.0-preview.5-windows-amd64.zip",
+    "sha256": "87774c1743201abf5a0391fcb7a061a7b944cef395e205f67f88cb5f3fffef06",
+    "size": 6816455
   },
   "myTasks": {
     "sha256": "e33b0b0de0ec9d22eae6521826f2069bdb74adaac36cf5a7ee937ff6fbbd46f2",
