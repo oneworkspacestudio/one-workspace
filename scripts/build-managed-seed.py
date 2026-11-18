@@ -110,6 +110,19 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if a.version == '0.3.0-preview.141' and not candidate:
+  pin = lock['hostingResilienceSeed']
+  base = asset(pin, cache, a.seed_archive)
+  hosting = asset(lock['myHosting'], cache)
+  stage = Path(tempfile.mkdtemp(prefix='hosting-resilience-', dir=cache))
+  extract(hosting, stage)
+  with zipfile.ZipFile(base) as source:
+   cat = json.loads(source.read('catalog.json'))
+  replacements = hosting_replacements(cat, stage, lock['myHosting'])
+  component = {'app': next(app for app in cat['apps'] if app['id'] == 'hosting'),
+   'inputs': {key: {'file': package['file'], 'source': replacements[package['file']]}
+    for key, package in cat['packages'].items() if package['file'] in replacements}}
+  return integrated_build(a, pin, base, cache, out, [component], integration=22)
  if a.version == '0.3.0-preview.140' and not candidate:
   pin = lock['independentAppsSeed']
   base = asset(pin, cache, a.seed_archive)

@@ -43,3 +43,9 @@ boot task under the existing owner identity; no SYSTEM task or ACL/DPAPI weakeni
 It requires the owner to enter their Windows password in Task Scheduler before
 saving, and a coordinated actual reboot must be verified before claiming it.
 Workspace141 and Hosting5 installation/publication acceptance remain pending.
+
+Preview141 uses the supported managed-seed builder with an immutable140 seed
+and published Hosting5 payloads, retaining other app contracts. Signed Android21
+is required through the normal publisher. Broad suite tests currently refuse
+backup operations on both full NTFS drives; targeted distribution/catalog and
+platform/payload tests pass. Do not treat those capacity failures as acceptance.
