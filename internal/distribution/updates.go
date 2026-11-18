@@ -913,6 +913,21 @@ func untrackedCompatibilityDocument(g updateGroup, current catalog.Catalog, id, 
 				return true
 			}
 		}
+		// Default-app Hosting installations registered only its four runtime/legal
+		// files. Full installers also track these exact optional guides. Keep an
+		// older installation's scope; never adopt an unregistered runtime or path.
+		if installed && a.ID == "hosting" && a.Kind == "process" && a.Executable == "MyHosting.exe" {
+			for _, name := range []string{"compatibility.json", "dependencies.json", "runtime-pins.json"} {
+				if id == "hosting-"+name && file == "docs/MyHosting/"+name {
+					return true
+				}
+			}
+			for _, name := range []string{"ACCEPTANCE.md", "FRAMEWORKS.md", "OPERATIONS.md", "PUBLISHING.md", "openapi.json"} {
+				if id == "hosting-doc-"+name && file == "docs/MyHosting/"+name {
+					return true
+				}
+			}
+		}
 	}
 	return false
 }

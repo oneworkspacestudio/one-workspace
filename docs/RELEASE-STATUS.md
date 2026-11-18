@@ -1586,3 +1586,12 @@ Adds optional My Commute with live London arrivals, connection estimates and pri
 
 ## Workspace118 preparation: shared AI Service
 Adds AI Service from My AI25: owner model/activation controls, persistent residency and a bounded authenticated inference queue. Managed My AI local chat/code use the service; existing standalone and cloud settings remain supported. Installer integration12 adds identity, private storage, recovery and coupled-update ownership. Host Ollama remains an explicit external prerequisite. See [AI Service](AI_SERVICE.md). Exact native lifecycle, release and deployment evidence is recorded separately.
+
+## Preview141 Hosting recovery compatibility
+
+Recognizes only the eight exact optional My Hosting documentation ID/path pairs
+when absent from older default-app installations. Existing runtime/legal scope,
+tracked-guide completeness, path restrictions and cross-app protections remain
+mandatory. Fresh installers with all12 files keep their complete scope. Includes
+signed Android21. Runtime/reboot acceptance is recorded separately; before-login
+Windows startup still requires an owner-configured Windows boot task.
