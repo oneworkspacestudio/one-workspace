@@ -49,3 +49,43 @@ and published Hosting5 payloads, retaining other app contracts. Signed Android21
 is required through the normal publisher. Broad suite tests currently refuse
 backup operations on both full NTFS drives; targeted distribution/catalog and
 platform/payload tests pass. Do not treat those capacity failures as acceptance.
+
+141 is published from3bc6390 with952 verified immutable assets and permanent
+signed Android21 through scripts/publish-release.ps1; public channel7620037
+verified anonymously. Full native suite tests pass with NTFS temp on F. Fresh141
+selected Accounts/Hosting5 setup, all payload hashes, startup and owner OIDC pass
+(fresh141-verification.json in task artifact storage). Fresh fixture stopped and
+removed. Exact complete independent upgrade/rollback rehearsal is capacity-
+blocked; do not infer it from unit rollback tests. PC2 Podcasts independently
+advanced to18, Voice14; preserve them. Combined141+Hosting5 installation started
+through the supported updater at12:35 UTC with a31.8MB/three-file plan; it is
+still running behind the expected maintenance503. Do not repeat installation.
+WonderPal0.2.9 web has complete-body recovery;0.2.10 supersedes an invalid0.2.9
+Android packaging race, with final packaged local-speech route accepted.
+Before-login task remains unsaved pending the owner Windows credential handoff.
+Actual OS reboot/sign-in acceptance remains required.
+
+PC2 managed delivery accepted: Workspace141 and Hosting5 installed together
+through the supported updater. Its2.2GB consistent recovery backup verified;
+latest140 recovery retained (2026-11-18 12:36:46 UTC). Root health confirms46/46
+apps running, MyAccounts owner session returns, Voice14 and Podcasts18 retained.
+WonderPal restored automatically before the Root portal finished starting. A
+pre-update approved speech ticket still rendered PCM after the complete managed
+restart. Public Root and WonderPal health200 at12:54-55 UTC. The old ten-minute
+client window expired during this long backup;0.2.11/code13 fromf2c99fb extends
+it to one hour, with53 Node tests/one optional skip, six desktop/mobile recovery
+cases, web build/typecheck and packaged Android local-speech route passing.
+All49 packaged Android assets match the APK; HTTPS base and prior debug
+evaluation certificate verified.0.2.11 private release has three checked assets.
+Final0.2.11 web deployment is running. OS boot task still requires owner password
+entry/save and coordinated before-login reboot acceptance; do not claim it yet.
+
+Final0.2.11 deployedc136bea9d0ef3f6f9d92e6aff7f8e7df, source ZIP
+1dae57e6b2573e60410d703f4195d2d2b3a9e4a60c7817fcdac98e1a6de3b8a8.
+Public JS, service worker and voice assets match the released ZIP; DeepSeek,
+learning-only refusal, same-nonce replay and paired voice status pass. Current
+public update channel still promotes141 and Hosting5. Local C remains full,
+so original C source has not been fast-forwarded; preserve unrelated Nov5
+history. Active source is the isolated I checkout. Synthetic F browser/speech
+fixtures were stopped/removed after verification. Boot task password handoff
+and actual before-Windows-login reboot remain pending.
