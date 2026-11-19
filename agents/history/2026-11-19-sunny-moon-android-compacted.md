@@ -4,7 +4,7 @@ The user requested an installable Android APK of the existing game. The
 `:sunnymoon` Android module packages the canonical Sunny & Moon preview.4 web
 assets with a local routine adapter. The managed server edition is untouched.
 The offline Android edition has an independent per-phone routine, private
-WebView storage, no network permissions and permanent release signing under
+Android preference storage, no network permissions and permanent release signing under
 the existing Workspace Android certificate. Package `uk.co.m8e.sunnymoon`,
 version 1.0.0, versionCode 1. Default bedtime remains 21:00, wake 07:00 and
 the toilet reminder 60 minutes before bed. Earlier visits, expression cues,
@@ -28,3 +28,12 @@ check-ins, evening cue, happy morning reset, revision conflict and failed saves.
 Build and acceptance artifacts are in the tooling folder
 `sunny-moon-android-20261119`. Native acceptance and publication remain pending.
 No owner installation or physical-phone acceptance was requested.
+
+Native acceptance found that WebView localStorage could lose a just-saved visit
+on immediate force-stop. The phone adapter now confirms a synchronous private
+SharedPreferences commit before reporting success. The native bridge is exposed
+only inside the bundled, navigation-restricted offline WebView. A single-task
+activity keeps one writer. Older development localStorage saves migrate on open.
+The browser adapter retains localStorage for isolated web acceptance. Native
+retesting is pending. An Android-only release also preserves direct packages
+on the latest suite bundle when the channel needs to trim historic rows.

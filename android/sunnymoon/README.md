@@ -26,7 +26,9 @@ The `:sunnymoon` Android module packages the canonical game from
 `src/main/web/device-routine.mjs`. The server edition keeps its authenticated
 routine API. No runtime downloads, network permissions or server connection
 are required for this APK. The local adapter validates saved routines, clears
-expired check-ins and uses revisions to avoid overwriting a newer save.
+expired check-ins and uses revisions to avoid overwriting a newer save. Android
+confirms each save on disk through private preferences before displaying success.
+Earlier development WebView saves migrate automatically on first open.
 
 Build using `scripts/build-sunny-moon-android.ps1`, adding `-Release` for permanent
 signing. Use JDK 17+, SDK 35 and the repository Gradle wrapper. Supply the existing

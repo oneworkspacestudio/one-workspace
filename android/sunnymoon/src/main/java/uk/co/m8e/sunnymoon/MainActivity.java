@@ -2,10 +2,12 @@ package uk.co.m8e.sunnymoon;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebResourceRequest;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -34,6 +36,7 @@ public final class MainActivity extends Activity {
         settings.setBlockNetworkLoads(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setSupportMultipleWindows(false);
+        game.addJavascriptInterface(new RoutineStore(), "SunnyRoutineStore");
         WebView.setWebContentsDebuggingEnabled((getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0);
 
         WebViewAssetLoader assets = new WebViewAssetLoader.Builder()
@@ -57,6 +60,21 @@ public final class MainActivity extends Activity {
         });
         setContentView(game);
         game.loadUrl(GAME_URL);
+    }
+
+    private final class RoutineStore {
+        private final SharedPreferences preferences = getSharedPreferences("routine", MODE_PRIVATE);
+
+        @JavascriptInterface
+        public String read() {
+            return preferences.getString("routine.v1", null);
+        }
+
+        @JavascriptInterface
+        public boolean write(String value) {
+            return value != null && value.length() <= 4096
+                && preferences.edit().putString("routine.v1", value).commit();
+        }
     }
 
     @Override
