@@ -77,6 +77,20 @@ class ReleasePaginationTests(unittest.TestCase):
         with self.assertRaises(OSError):
             publisher.repository_releases('example/repository', 'synthetic', opener)
 
+    def test_android_release_does_not_make_latest_suite_packages_removable(self):
+        repo = 'oneworkspacestudio/one-workspace'
+        android = dict(tag_name='android-v1', assets=[dict(name='SunnyMoon.apk')])
+        suite = dict(tag_name='v3', assets=[dict(name='workspace-bundle.zip'),
+            dict(name='workspace-package-latest.bin', digest='a' * 400)])
+        older = dict(tag_name='v2', assets=[dict(name='workspace-bundle.zip'),
+            dict(name='workspace-package-older.bin', digest='b' * 400)])
+        output = dict(repositories={repo: [android, suite, older]})
+        encoded = publisher.encode_channel(output, max_bytes=850)
+        self.assertLessEqual(len(encoded), 850)
+        self.assertEqual(len(suite['assets']), 2)
+        self.assertEqual([asset['name'] for asset in older['assets']], ['workspace-bundle.zip'])
+        self.assertEqual(android['assets'][0]['name'], 'SunnyMoon.apk')
+
 
 if __name__ == '__main__':
     unittest.main()

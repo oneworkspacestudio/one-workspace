@@ -68,9 +68,13 @@ def encode_channel(output, max_bytes=8 << 20):
     # Historical suite releases can use their verified bundle. Keep direct
     # package downloads on the latest bundle and retain all release tags.
     workspace = output['repositories'][ORG + '/one-workspace']
-    for release in reversed(workspace[1:]):
+    latest_bundle = next((release for release in workspace
+                          if any(asset['name'] == 'workspace-bundle.zip' for asset in release['assets'])), None)
+    for release in reversed(workspace):
         if len(data) <= max_bytes:
             break
+        if release is latest_bundle:
+            continue
         assets = release['assets']
         reduced = [asset for asset in assets if not asset['name'].startswith('workspace-package-')]
         if len(reduced) != len(assets):
