@@ -31,6 +31,24 @@ class PublisherWindowsArguments(unittest.TestCase):
             self.assertLessEqual(len(subprocess.list2cmdline(command).encode('utf-16-le')) // 2, 24000)
     def test_empty_input_never_starts_an_upload(self):
         self.assertEqual(list(publisher.upload_commands('v1', [])), [])
+
+    def test_only_requested_signed_apks_can_be_published(self):
+        with tempfile.TemporaryDirectory() as stage:
+            out = Path(stage)
+            companion = out / 'OneWorkspace-Android-test.apk'
+            companion.touch()
+            publisher.validate_apk_inventory(out, companion)
+            with self.assertRaisesRegex(RuntimeError, 'APK inventory'):
+                publisher.validate_apk_inventory(out, companion, True)
+            version, _ = publisher.sunny_moon_version()
+            sunny = out / ('SunnyMoon-Android-' + version + '.apk')
+            sunny.touch()
+            publisher.validate_apk_inventory(out, companion, True)
+            with self.assertRaisesRegex(RuntimeError, 'APK inventory'):
+                publisher.validate_apk_inventory(out, companion)
+            (out / 'stale.APK').touch()
+            with self.assertRaisesRegex(RuntimeError, 'APK inventory'):
+                publisher.validate_apk_inventory(out, companion, True)
     def test_single_overlong_path_is_refused_before_upload(self):
         with self.assertRaises(RuntimeError):
             list(publisher.upload_commands('v1', ['x'*30000]))

@@ -128,7 +128,46 @@ def prepare_package_assets(out):
             if dest.stat().st_size != package['size'] or sha(dest) != 'sha256:' + package['sha256']:
                 raise RuntimeError('Independent package checksum mismatch: ' + key)
 
-def prepare_android_assets(out, sdk, tag, source):
+def sunny_moon_version():
+    build = (ROOT / 'android/sunnymoon/build.gradle').read_text(encoding='utf-8')
+    return re.search(r"versionName\s+'([^']+)'", build).group(1), int(re.search(r'versionCode\s+(\d+)', build).group(1))
+
+
+def validate_apk_inventory(out, companion, sunny_moon=False):
+    allowed = {companion.name}
+    if sunny_moon:
+        version, _ = sunny_moon_version()
+        allowed.add('SunnyMoon-Android-' + version + '.apk')
+    actual = {p.name for p in out.iterdir() if p.suffix.lower() == '.apk'}
+    if actual != allowed:
+        raise RuntimeError('APK inventory differs from the requested signed Android builds')
+
+
+def prepare_sunny_moon_assets(out, tools, policy, source, tree):
+    version, code = sunny_moon_version()
+    apk = out / ('SunnyMoon-Android-' + version + '.apk')
+    signature = run([tools / ('apksigner.bat' if sys.platform == 'win32' else 'apksigner'), 'verify', '--verbose', '--print-certs', apk])
+    certs = re.findall(r'Signer #\d+ certificate SHA-256 digest:\s*([a-f0-9]{64})', signature)
+    if certs != [policy['certificateSHA256']]:
+        raise RuntimeError('Sunny & Moon APK must use the approved permanent Android key')
+    badging = run([tools / ('aapt2.exe' if sys.platform == 'win32' else 'aapt2'), 'dump', 'badging', apk])
+    if not re.search(r"package: name='uk.co.m8e.sunnymoon' versionCode='" + str(code) + r"' versionName='" + re.escape(version) + "'", badging):
+        raise RuntimeError('Sunny & Moon APK package/version does not match its source')
+    provenance = dict(schema=1, sourceCommit=source, androidTree=tree,
+                      webTree=git('rev-parse', 'HEAD:internal/sunnymoon/web'))
+    with zipfile.ZipFile(apk) as archive:
+        if json.loads(archive.read('assets/sunny-moon-release.json')) != provenance:
+            raise RuntimeError('Sunny & Moon APK provenance differs from the committed game')
+        for name in ['assets/game/app.mjs', 'assets/game/device-routine.mjs', 'assets/licenses/APACHE-2.0.txt', 'assets/licenses/THIRD-PARTY-NOTICES.txt', 'assets/licenses/DM-Sans-OFL.txt']:
+            archive.getinfo(name)
+    (out / 'SUNNYMOON-BUILD.json').write_text(json.dumps(dict(provenance, applicationId='uk.co.m8e.sunnymoon',
+        versionName=version, versionCode=code, apk=apk.name, apkSHA256=sha(apk)[7:], certificateSHA256=certs[0]), indent=2) + '\n', encoding='utf-8')
+    (out / 'SUNNYMOON-SIGNATURE.txt').write_text(signature + '\n', encoding='utf-8')
+    shutil.copyfile(ROOT / 'android/sunnymoon/README.md', out / 'SUNNYMOON.md')
+    return apk
+
+
+def prepare_android_assets(out, sdk, tag, source, sunny_moon=False):
     tree = git('rev-parse', 'HEAD:android')
     policy = json.loads((ROOT / 'android/release-policy.json').read_text(encoding='utf-8'))
     assert policy['schema'] == 1 and policy['requireAPKForEveryRelease'] is True
@@ -140,8 +179,7 @@ def prepare_android_assets(out, sdk, tag, source):
     apk = out / ('OneWorkspace-Android-' + version + '.apk')
     if not apk.is_file():
         raise RuntimeError('Required signed companion APK is missing')
-    if any(p.suffix == '.apk' and p != apk for p in out.iterdir()):
-        raise RuntimeError('Remove stale/different APKs from this public staging directory')
+    validate_apk_inventory(out, apk, sunny_moon)
     tools = sorted((p for p in (sdk / 'build-tools').iterdir() if re.fullmatch(r'\d+\.\d+\.\d+', p.name)), key=lambda p: tuple(map(int, p.name.split('.'))))[-1]
     signature = run([tools / ('apksigner.bat' if sys.platform == 'win32' else 'apksigner'), 'verify', '--verbose', '--print-certs', apk])
     certs = re.findall(r'Signer #\d+ certificate SHA-256 digest:\s*([a-f0-9]{64})', signature)
@@ -156,7 +194,9 @@ def prepare_android_assets(out, sdk, tag, source):
             raise RuntimeError('APK provenance does not match the committed release source')
         for name in ['assets/licenses/APACHE-2.0.txt', 'assets/licenses/THIRD-PARTY-NOTICES.txt']:
             archive.getinfo(name)
-    run(['git', '-c', 'safe.directory=' + ROOT.as_posix(), '-C', ROOT, 'archive', '--format=zip', '--prefix=one-workspace-android/', '--output=' + str(out / 'OneWorkspace-Android-source.zip'), source, 'android', 'scripts/build-android.ps1', 'LICENSE', 'NOTICE'])
+    if sunny_moon:
+        prepare_sunny_moon_assets(out, tools, policy, source, tree)
+    run(['git', '-c', 'safe.directory=' + ROOT.as_posix(), '-C', ROOT, 'archive', '--format=zip', '--prefix=one-workspace-android/', '--output=' + str(out / 'OneWorkspace-Android-source.zip'), source, 'android', 'internal/sunnymoon/web', 'internal/sunnymoon/DM-Sans-OFL.txt', 'scripts/build-android.ps1', 'scripts/build-sunny-moon-android.ps1', 'LICENSE', 'NOTICE'])
     for src, name in [('android/README.md', 'ANDROID.md'), ('android/app/src/main/assets/licenses/THIRD-PARTY-NOTICES.txt', 'ANDROID-NOTICES.txt'), ('LICENSE', 'ANDROID-LICENSE.txt')]:
         shutil.copyfile(ROOT / src, out / name)
     (out / 'ANDROID-SIGNATURE.txt').write_text(signature + '\n', encoding='utf-8')
@@ -173,7 +213,10 @@ def main():
     parser.add_argument('--title', default='')
     parser.add_argument('--sdk', type=Path, required=True)
     parser.add_argument('--desktop-only', action='store_true')
+    parser.add_argument('--sunny-moon', action='store_true')
     args = parser.parse_args()
+    if args.sunny_moon and (args.desktop_only or not args.tag.startswith('android-')):
+        raise RuntimeError('Sunny & Moon requires an Android release with the signed companion')
     if not re.fullmatch(r'(android-)?v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?', args.tag):
         raise RuntimeError('Use an Android or Workspace version tag')
     if git('status', '--porcelain'):
@@ -211,7 +254,7 @@ def main():
             break
     if existing and (not existing[0]['draft'] or existing[0]['target_commitish'] != source):
         raise RuntimeError('Published releases are immutable; choose a new tag. A draft must match this source.')
-    public_asset = out / 'catalog.json' if args.desktop_only else prepare_android_assets(out, args.sdk, args.tag, source)
+    public_asset = out / 'catalog.json' if args.desktop_only else prepare_android_assets(out, args.sdk, args.tag, source, args.sunny_moon)
     if not args.tag.startswith('android-'):
         prepare_package_assets(out)
     files = sorted(p for p in out.iterdir() if p.is_file() and p.name not in ['SHA256SUMS', 'SHA256SUMS.txt'])
@@ -245,6 +288,10 @@ def main():
     if api('commits/' + args.tag)['sha'] != source:
         raise RuntimeError('Published tag does not resolve to the intended source')
     verify_public_download('https://github.com/' + REPO + '/releases/download/' + args.tag + '/' + public_asset.name, public_asset)
+    if args.sunny_moon:
+        sunny_version, _ = sunny_moon_version()
+        sunny_apk = out / ('SunnyMoon-Android-' + sunny_version + '.apk')
+        verify_public_download('https://github.com/' + REPO + '/releases/download/' + args.tag + '/' + sunny_apk.name, sunny_apk)
     # Promotion is part of the supported publication flow. Do not move the source tag.
     subprocess.run([sys.executable, str(ROOT / 'scripts/publish-update-index.py')], cwd=str(ROOT), check=True)
     git('add', 'updates/releases-v1.json')
@@ -260,6 +307,8 @@ def main():
     rows = promoted['repositories'][REPO]
     if not any(r['tag_name'] == args.tag and any(a['name'] == public_asset.name and a['digest'] == sha(public_asset) for a in r['assets']) for r in rows):
         raise RuntimeError('Release is published and index pushed; public CDN is still propagating. Verify the exact public index URL before announcing delivery.')
+    if args.sunny_moon and not any(r['tag_name'] == args.tag and any(a['name'] == sunny_apk.name and a['digest'] == sha(sunny_apk) for a in r['assets']) for r in rows):
+        raise RuntimeError('Sunny & Moon APK is missing from the public update channel')
     result = {'url': release['html_url'], 'assetsVerified': len(files), 'publicChannelVerified': True}
     if args.desktop_only:
         result['anonymousAssetVerified'] = public_asset.name

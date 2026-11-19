@@ -77,6 +77,14 @@ every release. Server app repositories retain their own release workflows.
 
 ## Windows publication reliability
 
+### Sunny & Moon APK
+
+Add `-SunnyMoon` to an Android publication to build and include the offline game
+alongside the required signed Workspace companion. The publisher validates both
+package identities, versions, signatures and embedded source provenance, includes
+the shared game source, and checks both anonymous downloads and channel assets.
+See [the Android game guide](../android/sunnymoon/README.md).
+
 The publisher decodes GitHub/Git output as UTF-8 and batches asset arguments below
 Windows UTF-16 command-line limits. `python scripts/test-publisher.py` covers
 large catalogs, Unicode paths and empty/overlong input without network writes.

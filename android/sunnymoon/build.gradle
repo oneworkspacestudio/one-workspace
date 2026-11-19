@@ -1,0 +1,100 @@
+plugins { id 'com.android.application' }
+
+dependencyLocking { lockAllConfigurations() }
+
+def signingValues = ['WORKSPACE_ANDROID_KEYSTORE', 'WORKSPACE_ANDROID_STORE_PASSWORD',
+                     'WORKSPACE_ANDROID_KEY_ALIAS', 'WORKSPACE_ANDROID_KEY_PASSWORD'].collect { System.getenv(it) }
+def provenance = [schema: 1,
+    sourceCommit: System.getenv('WORKSPACE_ANDROID_SOURCE_COMMIT') ?: 'development',
+    androidTree: System.getenv('WORKSPACE_ANDROID_SOURCE_TREE') ?: 'development',
+    webTree: System.getenv('SUNNY_MOON_WEB_TREE') ?: 'development']
+def generatedAssets = layout.buildDirectory.dir('generated/sunnyAssets')
+def webSource = rootProject.file('../internal/sunnymoon/web')
+
+def prepareWeb = tasks.register('prepareSunnyWeb', Sync) {
+    from(webSource)
+    into(generatedAssets.map { it.dir('game') })
+    // The native build shares the managed game's UI and clock rules. Only its
+    // routine transport and server navigation change for the offline edition.
+    filesMatching('app.mjs') {
+        filter { line ->
+            line.replace("await fetch('./api/routine',", "await deviceRoutineRequest('./api/routine',")
+        }
+        filter { line -> line.startsWith('import { MINUTE,') ?
+            "import { deviceRoutineRequest } from './device-routine.mjs';\n" + line : line }
+    }
+    filesMatching('index.html') {
+        filter { line ->
+            if (line.contains('data-workspace-apps-trigger')) return ''
+            if (line.contains('id="sign-in"')) return '<span id="sign-in" hidden></span>'
+            return line
+        }
+    }
+    from('src/main/web')
+    doLast {
+        def app = new File(destinationDir, 'app.mjs').getText('UTF-8')
+        if (!app.contains("await deviceRoutineRequest('./api/routine',") || app.contains("await fetch('./api/routine',")) {
+            throw new GradleException('Shared game transport changed. Update the native adapter before building.')
+        }
+    }
+}
+
+def writeProvenance = tasks.register('writeSunnyProvenance') {
+    inputs.properties(provenance)
+    outputs.file(generatedAssets.map { it.file('sunny-moon-release.json') })
+    doLast {
+        def folder = generatedAssets.get().asFile
+        folder.mkdirs()
+        new File(folder, 'sunny-moon-release.json').setText(groovy.json.JsonOutput.toJson(provenance), 'UTF-8')
+    }
+}
+
+android {
+    namespace 'uk.co.m8e.sunnymoon'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'uk.co.m8e.sunnymoon'
+        minSdk 28
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    sourceSets.main.assets.srcDir(generatedAssets)
+    // Share the canonical game artwork without keeping a second raster export.
+    sourceSets.main.res.srcDir(layout.buildDirectory.dir('generated/sunnyRes'))
+    signingConfigs {
+        release {
+            if (signingValues.every { it }) {
+                storeFile file(signingValues[0])
+                storePassword signingValues[1]
+                keyAlias signingValues[2]
+                keyPassword signingValues[3]
+            }
+        }
+    }
+    buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
+}
+
+def prepareIcon = tasks.register('prepareSunnyIcon', Copy) {
+    from(new File(webSource, 'assets/icon-192.png'))
+    into(layout.buildDirectory.dir('generated/sunnyRes/drawable'))
+    rename { 'sunny_icon.png' }
+}
+def prepareLicenses = tasks.register('prepareSunnyLicenses', Copy) {
+    from(rootProject.file('app/src/main/assets/licenses'))
+    from(rootProject.file('../internal/sunnymoon/DM-Sans-OFL.txt'))
+    into(generatedAssets.map { it.dir('licenses') })
+}
+tasks.named('preBuild').configure { dependsOn(prepareWeb, prepareIcon, prepareLicenses, writeProvenance) }
+
+gradle.taskGraph.whenReady { graph ->
+    if (graph.allTasks.any { it.project == project && it.name.toLowerCase().contains('release') }) {
+        if (!signingValues.every { it }) throw new GradleException('Sunny & Moon release requires the permanent signing key.')
+        if (!provenance.findAll { it.key != 'schema' }.values().every { it ==~ /[a-f0-9]{40}/ }) {
+            throw new GradleException('Signed releases require committed source. Use scripts/build-sunny-moon-android.ps1 -Release.')
+        }
+    }
+}
+
+dependencies { implementation 'androidx.webkit:webkit:1.12.1' }
