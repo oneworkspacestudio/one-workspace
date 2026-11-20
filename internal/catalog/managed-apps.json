@@ -471,6 +471,17 @@
       "foundation": true,
       "updateGroup": "froststock",
       "recovery": "app"
+    },
+    {
+      "id": "mymusic",
+      "name": "My Music",
+      "route": "/mymusic",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "mymusic",
+      "recovery": "app",
+      "sinceIntegration": 23
     }
   ]
 }

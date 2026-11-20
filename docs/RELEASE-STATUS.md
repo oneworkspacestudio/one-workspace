@@ -1,5 +1,12 @@
 # One Workspace release status
 
+## Preview142 with My Music
+
+My Music is an optional Creative & Development app. It creates songs with
+a local ACE-Step server, plays imported and generated audio, and exports stereo
+arrangements. It uses MyAccounts and the normal Workspace setup, backup and
+updates. See the [My Music guide](../cmd/mymusic/README.md) for engine setup.
+
 ## Preview140 with independent Froststock releases
 
 Workspace can discover and install Froststock from its own release channel.

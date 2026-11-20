@@ -14,6 +14,7 @@ from survival_component import survival_component
 from myai_component import myai_replacements
 from websearch_component import websearch_component
 from gamestudio_component import gamestudio_component
+from mymusic_component import mymusic_component
 from sunnymoon_component import sunnymoon_component
 from pet_component import pet_component
 from tube_component import tube_replacements
@@ -72,7 +73,7 @@ def integrated_build(args, pin, seed, cache, out, components, integration=18):
   for key, item in inputs.items():
    file = Path(item['source'])
    cat['packages'][key] = dict(file=item['file'], size=file.stat().st_size, sha256=sha(file))
-  assert {app['id'] for app in registry} - independent == {app['id'] for app in cat['apps']}
+  assert {app['id'] for app in registry if app.get('sinceIntegration', 0) <= integration} - independent == {app['id'] for app in cat['apps']}
   catalog = json.dumps(cat, indent=2)
   (out / 'catalog.json').write_text(catalog, encoding='utf-8')
   go('run', '-buildvcs=false', './cmd/catalogcheck', str(out / 'catalog.json'))
@@ -110,6 +111,10 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if a.version == '0.3.0-preview.142' and not candidate:
+  pin = lock['myMusicSeed']
+  base = asset(pin, cache, a.seed_archive)
+  return integrated_build(a, pin, base, cache, out, [mymusic_component(ROOT,a.go,cache/'mymusic',a.version)], integration=23)
  if a.version == '0.3.0-preview.141' and not candidate:
   pin = lock['hostingResilienceSeed']
   base = asset(pin, cache, a.seed_archive)

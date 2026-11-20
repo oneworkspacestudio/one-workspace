@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-a0ee0de7.png)
+![The complete One Workspace app collection](docs/branding/app-suite-806cb2c3.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -271,6 +271,11 @@ Choose an app name to learn more. The full collection is listed below, including
       <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/FROSTSTOCK.md"><strong>Froststock</strong></a></td>
       <td>Scan freezer items and expiry labels, and keep the inventory in My Drive.</td>
     </tr>
+    <tr>
+      <td align="center" width="56"><img src="internal/branding/icons/my_music_studio.svg" alt="" width="40" height="40"></td>
+      <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/cmd/mymusic/README.md"><strong>My Music</strong></a></td>
+      <td>Generate songs, arrange tracks and export a mix.</td>
+    </tr>
   </tbody>
 </table>
 <!-- app-directory:end -->
@@ -295,7 +300,7 @@ Updates keep the apps you already selected.
 
 The [Android app](android/README.md) opens the apps on your Workspace with the
 same MyAccounts sign-in. Download the signed APK from the
-[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/v0.3.0-preview.141/OneWorkspace-Android-0.1.0-preview.21.apk).
+[Android download](https://github.com/oneworkspacestudio/one-workspace/releases/download/android-v0.1.0-preview.22/OneWorkspace-Android-0.1.0-preview.22.apk).
 Enter your remote Workspace address once; Chat is found automatically, or you can
 choose a separate Chat server. Your addresses and valid sign-in are remembered.
 It includes a saved app launcher and native Chat notification/background integration. Alerts require the

@@ -297,5 +297,11 @@
     "tag": "v0.3.0-preview.140",
     "asset": "workspace-bundle.zip",
     "sha256": "8c8bd6c562c66f99c29d36dfbb3d578117c000f5f21837b1d7e27762d8cb6ac6"
+  },
+  "myMusicSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.141",
+    "asset": "workspace-bundle.zip",
+    "sha256": "2365d52ec6c8b080a6a1e2cacec4ccb6ea70001304978d5d412d442b70eba000"
   }
 }

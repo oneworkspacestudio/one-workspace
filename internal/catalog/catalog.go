@@ -62,7 +62,8 @@ const (
 	FroststockLoopbackIntegration = 19
 	ManagerPreflightIntegration   = 21
 	IndependentAppIntegration     = 22
-	InstallerIntegration          = IndependentAppIntegration
+	MyMusicIntegration            = 23
+	InstallerIntegration          = MyMusicIntegration
 )
 
 func (c Catalog) Validate() error {
