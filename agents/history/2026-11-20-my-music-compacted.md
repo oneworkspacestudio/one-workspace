@@ -86,3 +86,14 @@ historical inventory check accepts the old preview.142 display name. New
 catalogs use Vuno. Synthetic browser checks passed at desktop and mobile
 widths, including WAV import/export and mocked ACE-Step requests. The
 prior live ACE-Step model loading issue is outside this UI revision.
+
+Fresh managed setup and offline upgrade passed on isolated NTFS data. The
+upgrade retained the imported audio and MyAccounts session, showed Vuno in
+the app picker, and rollback restored preview.142 and its prior branding.
+
+Published Workspace preview.143 from cd91faadbabed59cd271b8eea81c0ba58d7b6396
+through the signed Android publisher. The publisher verified 958 assets and
+promoted channel commit ef82afd. Anonymous checks confirmed the live index and
+catalog list Vuno preview.3, and both Vuno.exe and the managed mymusic package
+match SHA-256 c18ff0c6e802b38f58baaff22aa5aa34dfb2e297fe7cb36616ad72b1ac07bcb5.
+The owner installation remained on preview.142 during the UI-only revision.
