@@ -120,3 +120,23 @@ During DiT model loading the Windows volume fell below 2 GB free, and the test
 stopped the dedicated backend to preserve room for Workspace. No audio was
 generated. The test backend was stopped and Vuno health passed again after
 cleanup. Keep live song generation open until the host can load the model.
+
+
+## ACE-Step runtime acceptance
+
+After reclaiming space on the Windows volume, installed the prepared official
+ACE-Step 1.5 v0.1.8 runtime at its pinned upstream commit dce6214. It serves the
+Turbo model at the existing Vuno loopback origin 127.0.0.1:8001. The working
+profile uses eager initialization, CUDA residency for the audio models and
+runs with the optional 5 Hz language model disabled. CPU offload triggered
+paging and the disk reserve during synthesis on this host. The 5 Hz model also
+triggered the reserve during startup on the original configuration.
+
+Browser tests used the exact installed Vuno binary with isolated NTFS data and
+the live engine. Both the instrumental job and the song with supplied lyrics
+created, saved and played non-silent 10-second stereo WAVs at 48 kHz. The
+prompt-only vocal job requires the language model and failed as expected under
+this profile. The engine stayed healthy after that check. The per-user Start
+menu entry ACE-Step for Vuno launches on demand and was exercised while an
+engine was already running, which preserved the active listener. It leaves the
+existing Vuno installation and owner library intact.
