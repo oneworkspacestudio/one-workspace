@@ -26,3 +26,38 @@ validated. An older installer must hand off before applying integration 23.
 Preview.1's standalone paths passed synthetic API, playback, import, search,
 Studio preview/export and narrow layout acceptance. The managed release is
 tested with synthetic accounts in NTFS roots under the named task cache.
+
+## Verified release and installation
+
+The ordinary preview.142 rebuild validated 47 apps and 939 packages. The
+Windows setup and app EXE used for acceptance match the public release.
+Catalog, distribution, suite and apphost tests passed with NTFS test roots.
+Publisher tests and update-index tests passed. Synthetic setup covered My
+Music selected and omitted, the real MyAccounts owner flow and shared picker,
+CSRF and expired-session denial, audio imports/playback, Studio WAV export
+and narrow/desktop layouts. A native app-only fixture update retained the
+manager, account and audio. The preview.141 installer rejected integration
+23. The current installer upgraded the same baseline with identity and files
+preserved and restored it through supported rollback. The large offline
+bundle needed NTFS staging for timely full verification on this host.
+
+The permanently signed Android companion shipped with the 958 verified
+release assets. The immutable suite tag points to source ad5dc8e. Channel
+promotion initially raced an unrelated My Voice/Podcasts channel push.
+Merged the published source over the newer main and regenerated the supported
+index. Channel commit 3c5d2ad preserved those releases. An anonymous
+workspace-package-mymusic.bin download matched the staged and installed
+SHA-256 (834063354ecb9419af8e99d2bb031f4acb674c94288e05abd7d46ef93f4df190).
+The ordinary installer check sees preview.142 and My Music preview.2 up to date.
+
+The authorized installation on the current Windows PC completed through the
+normal backed-up update, with the same payloads and served JavaScript. The
+Workspace origin and native app health both passed. The existing Music player
+hash and locations were preserved. The new recovery copy was verified. Older
+backups that cleanup could not verify were retained by the installer.
+No physical handset or reboot test was performed.
+
+The ACE-Step v0.1.8 CUDA dependencies and model checkpoints were prepared
+separately. PyTorch confirmed CUDA. The earlier synthetic generation QA used
+an API fixture. The initial live engine readiness check timed out and was
+retried with lazy initialization. DeepSeek needs the owner's optional API key.
