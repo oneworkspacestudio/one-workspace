@@ -432,7 +432,7 @@ func (p *Portal) aiNativeIdentity(ctx context.Context, browser session, app cata
 		raw, _, e = p.aiNativeRequest(ctx, app, connection, "", "GET", "/studio/bootstrap", nil, "")
 		var bootstrap struct{ CSRF string }
 		if e != nil || json.Unmarshal(raw, &bootstrap) != nil || bootstrap.CSRF == "" {
-			return connection, "", errors.New("Open My Music to reconnect its library")
+			return connection, "", errors.New("Open Vuno to reconnect its library")
 		}
 		me.CSRF = bootstrap.CSRF
 	}

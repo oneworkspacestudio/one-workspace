@@ -474,7 +474,7 @@
     },
     {
       "id": "mymusic",
-      "name": "My Music",
+      "name": "Vuno",
       "route": "/mymusic",
       "repository": "oneworkspacestudio/one-workspace",
       "oidc": true,

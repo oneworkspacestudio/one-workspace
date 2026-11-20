@@ -345,7 +345,7 @@
   {
     "id": "mymusic",
     "icon": "my_music_studio",
-    "name": "My Music",
+    "name": "Vuno",
     "description": "Generate songs, arrange tracks and export a mix.",
     "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/cmd/mymusic/README.md"
   }

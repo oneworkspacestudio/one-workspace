@@ -20,7 +20,7 @@ $sunnyMoon=$cat.apps|Where-Object id -CEQ 'sunnymoon'
 if(-not $sunnyMoon.oidc -or $sunnyMoon.route -cne '/sunnymoon' -or $sunnyMoon.callback -cne '/sunnymoon/auth/callback' -or $sunnyMoon.port -ne 9047 -or $cat.packages.sunnymoon.file -cne 'SunnyMoon.exe' -or -not $cat.packages.'sunnymoon-contract' -or -not $cat.packages.'sunnymoon-font-ofl' -or -not $cat.packages.'sunnymoon-font-source'){throw 'Sunny & Moon managed contract is incomplete'}
 if($cat.installerIntegration -ge 23){
  $myMusic=$cat.apps|Where-Object id -CEQ 'mymusic'
- if(-not $myMusic.oidc -or -not $myMusic.stripPrefix -or $myMusic.route -cne '/mymusic' -or $myMusic.callback -cne '/mymusic/auth/callback' -or $myMusic.port -ne 9049 -or 'accounts' -cnotin $myMusic.depends -or $cat.packages.mymusic.file -cne 'MyMusic.exe' -or -not $cat.packages.'mymusic-contract' -or -not $cat.packages.'mymusic-notices'){throw 'My Music managed contract is incomplete'}
+ if(-not $myMusic.oidc -or -not $myMusic.stripPrefix -or $myMusic.route -cne '/mymusic' -or $myMusic.callback -cne '/mymusic/auth/callback' -or $myMusic.port -ne 9049 -or 'accounts' -cnotin $myMusic.depends -or $cat.packages.mymusic.file -cne 'MyMusic.exe' -or -not $cat.packages.'mymusic-contract' -or -not $cat.packages.'mymusic-notices'){throw 'Vuno managed contract is incomplete'}
 }
 $gameStudio=$cat.apps|Where-Object id -CEQ 'gamestudio'
 if(-not $gameStudio.oidc -or $gameStudio.route -cne '/gamestudio' -or $gameStudio.port -ne 9045 -or $cat.packages.gamestudio.file -cne 'GameStudio.exe' -or -not $cat.packages.'gamestudio-contract'){throw 'Game Studio runtime contract is incomplete'}

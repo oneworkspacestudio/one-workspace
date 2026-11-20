@@ -30,7 +30,7 @@ import (
 var assets embed.FS
 
 const (
-	version       = "0.1.0-preview.2"
+	version       = "0.1.0-preview.3"
 	defaultEngine = "http://127.0.0.1:8001"
 	maxAudio      = 100 << 20
 )
@@ -402,7 +402,7 @@ func main() {
 		mux.ServeHTTP(w, r)
 	})}
 	launch := origin + prefix + "/"
-	fmt.Println("My Music • " + launch)
+	fmt.Println("Vuno • " + launch)
 	if os.Getenv("MYMUSIC_NO_BROWSER") != "1" {
 		edge := filepath.Join(os.Getenv("ProgramFiles(x86)"), "Microsoft", "Edge", "Application", "msedge.exe")
 		if _, err := os.Stat(edge); err == nil {

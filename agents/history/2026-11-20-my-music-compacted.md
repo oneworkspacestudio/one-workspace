@@ -69,3 +69,20 @@ process was left listening on the production port. Keep generation acceptance
 open. Preserve the downloaded engine, pinned checkpoints and diagnostics for a
 follow-up. Low free space on the private NTFS drive precluded staging a second
 full Windows CUDA layout without jeopardizing the existing installation.
+
+## Vuno rename and interface redesign
+
+The user renamed the song generation app to Vuno to distinguish it from
+the existing Music player and requested the reference charcoal palette.
+Vuno preview.3 adds Home, a split Create view, searchable and sortable
+Library, persistent playback controls, and a waveform arrangement Studio.
+The layout, icon and wording are Vuno originals. The app ID mymusic,
+managed executable path, routing, sessions, OIDC callback, package namespace,
+standalone library and managed backup root retain their existing contracts.
+The standalone public download is named Vuno.exe.
+
+Workspace preview.143 seeds from the immutable preview.142 archive. A
+historical inventory check accepts the old preview.142 display name. New
+catalogs use Vuno. Synthetic browser checks passed at desktop and mobile
+widths, including WAV import/export and mocked ACE-Step requests. The
+prior live ACE-Step model loading issue is outside this UI revision.

@@ -4,7 +4,7 @@ import "testing"
 
 func TestMyMusicReleaseAndOptionalPayload(t *testing.T) {
 	if DefaultInstall("mymusic") || CategoryFor("mymusic").ID != "development" {
-		t.Fatal("My Music must be optional under Creative & Development")
+		t.Fatal("Vuno must be optional under Creative & Development")
 	}
 	c := Catalog{InstallerIntegration: MyMusicIntegration}
 	for _, app := range ManagedApps() {
@@ -13,14 +13,14 @@ func TestMyMusicReleaseAndOptionalPayload(t *testing.T) {
 		}
 	}
 	if c.ValidateManagedInventory() == nil {
-		t.Fatal("accepted a current release without My Music")
+		t.Fatal("accepted a current release without Vuno")
 	}
 	c.InstallerIntegration = IndependentAppIntegration
 	if err := c.ValidateManagedInventory(); err != nil {
 		t.Fatal("old release failed inventory validation:", err)
 	}
 	c.InstallerIntegration = MyMusicIntegration
-	c.Apps = append(c.Apps, App{ID: "mymusic", Name: "My Music", Route: "/mymusic", OIDC: true, Package: "mymusic"})
+	c.Apps = append(c.Apps, App{ID: "mymusic", Name: "Vuno", Route: "/mymusic", OIDC: true, Package: "mymusic"})
 	c.Packages = map[string]Package{
 		"accounts":         {File: "MyAccounts.exe"},
 		"mymusic":          {File: "MyMusic.exe"},
@@ -28,6 +28,15 @@ func TestMyMusicReleaseAndOptionalPayload(t *testing.T) {
 	}
 	if err := c.ValidateManagedInventory(); err != nil {
 		t.Fatal(err)
+	}
+	c.Version = "0.3.0-preview.142"
+	c.Apps[len(c.Apps)-1].Name = "My Music"
+	if err := c.ValidateManagedInventory(); err != nil {
+		t.Fatal("published preview.142 name must remain valid:", err)
+	}
+	c.Version = "0.3.0-preview.143"
+	if c.ValidateManagedInventory() == nil {
+		t.Fatal("a new release must use the Vuno display name")
 	}
 	for _, chosen := range []bool{false, true} {
 		selected := InstallPackageIDs(c, map[string]bool{"accounts": true, "mymusic": chosen})

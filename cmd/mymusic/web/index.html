@@ -3,99 +3,133 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Music · One Workspace</title>
+  <title>Vuno · One Workspace</title>
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
 </head>
 <body>
-<header>
-  <a class="brand" href="#create"><span class="mark">♫</span> My Music</a>
+<header class="rail">
+  <a class="brand" href="#home"><span class="mark" aria-hidden="true">◈</span> Vuno</a>
   <nav id="tabs" aria-label="Main">
-    <a href="#create">Create</a>
-    <a href="#library">Library</a>
-    <a href="#studio">Studio</a>
+    <a href="#home"><span aria-hidden="true">⌂</span>Home</a>
+    <a href="#create"><span aria-hidden="true">✦</span>Create</a>
+    <a href="#studio"><span aria-hidden="true">▥</span>Studio</a>
+    <a href="#library"><span aria-hidden="true">▤</span>Library</a>
   </nav>
-  <a id="apps" data-workspace-apps-trigger hidden>Apps</a>
-  <button id="engine" type="button" hidden>Engine</button>
+  <div class="rail-tools">
+    <a id="apps" data-workspace-apps-trigger hidden>Apps</a>
+    <button id="engine" type="button" hidden>Engine settings</button>
+  </div>
 </header>
-<section id="sign-in" class="panel entry" hidden>
-  <h1>My Music</h1>
+<section id="sign-in" class="entry surface" hidden>
+  <h1>Vuno</h1>
   <p id="entryMessage" role="status"></p>
   <a id="connect" hidden>Continue with MyAccounts</a>
 </section>
 <main id="work" hidden>
-  <section id="create" class="page">
+  <section id="home" class="page home">
     <div class="hero">
-      <div><h1>Make it sound like you.</h1><p>Generate a song from a brief or bring your own lyrics.</p></div>
-      <div class="graphic" aria-hidden="true"></div>
+      <div class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h1>What do you want to hear?</h1>
+      <form id="quick" class="quick">
+        <label class="sr-only" for="idea">Describe a song</label>
+        <textarea id="idea" rows="2" maxlength="4000" required placeholder="A late-night house track with a warm bassline…"></textarea>
+        <button class="primary">Open in Create <span aria-hidden="true">↗</span></button>
+      </form>
     </div>
-    <form id="compose" class="panel">
-      <div class="heading">
-        <h2>New song</h2>
-        <label class="inline"><input name="Instrumental" type="checkbox"> Instrumental</label>
-      </div>
-      <label>Title<input name="Title" maxlength="120" placeholder="Untitled"></label>
-      <label>Music brief<textarea name="Prompt" rows="3" maxlength="4000" required placeholder="Dusty drum breaks, a warm Rhodes and a slow evening groove"></textarea></label>
-      <details id="custom">
-        <summary>Custom lyrics</summary>
-        <label>Lyrics<textarea name="Lyrics" rows="6" maxlength="12000" placeholder="[Verse]"></textarea></label>
-      </details>
-      <div class="options">
-        <label>Length in seconds<input type="number" name="Seconds" min="5" max="240" value="30" required></label>
-        <label>Tempo (optional)<input type="number" name="BPM" min="1" max="300" placeholder="Auto"></label>
-      </div>
-      <div class="actions">
-        <button class="primary">Generate song</button>
-        <button type="button" id="lyrics">Draft lyrics</button>
-        <button type="button" id="refine">Refine brief</button>
-      </div>
-      <p class="status" id="generationStatus" role="status"></p>
-    </form>
+    <section class="home-recent">
+      <header class="heading"><h2>Recent tracks</h2><a class="button" href="#library">Open library ↗</a></header>
+      <div id="homeTracks" class="track-list"></div>
+    </section>
   </section>
-  <section id="library" class="page" hidden>
-    <div class="heading">
-      <div><h1>Sound library</h1><p>Your generated and imported audio.</p></div>
-      <label class="upload">Import audio<input type="file" id="import" accept=".wav,.mp3,.ogg,.flac,.m4a"></label>
-    </div>
-    <div class="panel">
-      <label>Search tracks<input type="search" id="search" placeholder="Track title"></label>
-      <div id="tracks"></div>
-    </div>
+  <section id="create" class="page workspace-grid" hidden>
+    <section class="surface editor">
+      <header class="heading editor-head"><div><h1>Create</h1><p>Song generator</p></div><span class="engine-label">ACE-Step 1.5</span></header>
+      <form id="compose" class="compose">
+        <div class="editor-body">
+          <div class="field-card">
+            <label>Music brief<textarea name="Prompt" rows="4" maxlength="4000" required placeholder="Genre, mood, instruments, or a scene to score"></textarea></label>
+            <button type="button" id="refine" class="small">Refine brief</button>
+          </div>
+          <details class="field-card" id="custom">
+            <summary>Lyrics</summary>
+            <label><span class="sr-only">Lyrics</span><textarea name="Lyrics" rows="7" maxlength="12000" placeholder="[Verse]&#10;&#10;[Chorus]"></textarea></label>
+            <button type="button" id="lyrics" class="small">Draft lyrics</button>
+          </details>
+          <div class="field-card">
+            <label>Title<input name="Title" maxlength="120" placeholder="Untitled"></label>
+            <div class="options">
+              <label>Length in seconds<input type="number" name="Seconds" min="5" max="240" value="30" required></label>
+              <label>Tempo (optional)<input type="number" name="BPM" min="1" max="300" placeholder="Auto"></label>
+            </div>
+            <label class="inline"><input name="Instrumental" type="checkbox"> Instrumental</label>
+          </div>
+        </div>
+        <div class="create-footer">
+          <p id="generationStatus" role="status"></p>
+          <button class="primary" id="generate">Generate song <span aria-hidden="true">✦</span></button>
+        </div>
+      </form>
+    </section>
+    <section class="surface takes">
+      <header class="heading"><h2>Recent tracks</h2><a class="button" href="#library">Library ↗</a></header>
+      <div id="createTracks" class="track-list"></div>
+    </section>
   </section>
-  <section id="studio" class="page" hidden>
-    <h1>Arrangement Studio</h1>
-    <p>Place tracks on a timeline, balance levels and bounce a stereo WAV.</p>
-    <div class="panel">
-      <div class="heading">
-        <label>Add a library track<select id="source"></select></label>
-        <button id="add">Add clip</button>
-      </div>
-      <div id="timeline" aria-hidden="true"><div id="ruler"></div><div id="lanes"></div></div>
-      <div id="clips"></div>
-      <div class="actions">
-        <button id="preview">Preview mix</button>
-        <button id="stop">Stop</button>
-        <button id="export" class="primary">Export WAV</button>
+  <section id="library" class="page library" hidden>
+    <header class="heading">
+      <h1>Library</h1>
+      <label class="upload button">＋ Import audio<input type="file" id="import" accept=".wav,.mp3,.ogg,.flac,.m4a"></label>
+    </header>
+    <div class="library-tools">
+      <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Search tracks</span><input type="search" id="search" placeholder="Search tracks"></label>
+      <label><span class="sr-only">Sort tracks</span><select id="sort"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="title">Title A–Z</option></select></label>
+    </div>
+    <div id="tracks" class="track-list"></div>
+  </section>
+  <section id="studio" class="page studio" hidden>
+    <header class="heading studio-head">
+      <h1>Studio</h1>
+      <div class="actions"><button id="preview">▶ Preview mix</button><button id="stop">■ Stop</button><button id="export" class="primary">Export WAV</button></div>
+    </header>
+    <div class="arrangement">
+      <section class="channel-panel" aria-label="Tracks">
+        <header>Tracks</header>
+        <div id="clips"></div>
+        <div class="add-clip"><label for="source">Add a library track</label><select id="source"></select><button id="add">＋ Add clip</button></div>
+      </section>
+      <div id="timeline" aria-label="Arrangement timeline">
+        <div id="ruler"></div>
+        <div id="lanes"></div>
       </div>
     </div>
   </section>
   <p id="notice" role="status"></p>
 </main>
-<footer id="transport" hidden>
-  <span id="playing">Choose a track in Library</span>
-  <audio id="player" controls preload="metadata"></audio>
+<footer id="transport" class="transport" hidden>
+  <div class="now"><span class="play-mark" aria-hidden="true">◈</span><span id="playing">Choose a track</span></div>
+  <div class="playback">
+    <div class="transport-buttons">
+      <button id="previous" type="button" aria-label="Previous track">‹‹</button>
+      <button id="toggle" type="button" aria-label="Play" class="play-toggle">▶</button>
+      <button id="next" type="button" aria-label="Next track">››</button>
+    </div>
+    <div class="scrubber"><time id="elapsed">0:00</time><input id="seek" type="range" min="0" max="1" step=".1" value="0" aria-label="Playback position"><time id="total">0:00</time></div>
+  </div>
+  <label class="volume"><span>Volume</span><input id="volume" type="range" min="0" max="1" step=".01" value="1"></label>
+  <audio id="player" preload="metadata"></audio>
 </footer>
 <dialog id="settings">
   <h2>Generation engine</h2>
   <p id="connection"></p>
-  <p>Start an ACE-Step 1.5 API server on the Workspace host to generate music.</p>
-  <p>When you request a draft or refinement, your music brief is sent to DeepSeek.</p>
+  <p>Connect to an ACE-Step 1.5 API server on the Workspace host.</p>
   <form id="engineSettings" hidden>
     <label>ACE-Step origin<input name="Engine" type="url" required></label>
     <label>ACE-Step API key<input name="ACEKey" type="password" autocomplete="off" placeholder="Leave blank to keep saved key"></label>
     <label class="inline"><input name="clearACE" type="checkbox"> Remove saved ACE-Step key</label>
     <label>DeepSeek API key<input name="DeepSeekKey" type="password" autocomplete="off" placeholder="Leave blank to keep saved key"></label>
     <label class="inline"><input name="clearDeepSeek" type="checkbox"> Remove saved DeepSeek key</label>
+    <p>Draft and refine requests send the brief to DeepSeek.</p>
     <p id="engineStatus" role="status"></p>
     <button class="primary">Save engine settings</button>
   </form>

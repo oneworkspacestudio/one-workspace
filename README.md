@@ -6,7 +6,7 @@
 </div>
 
 <!-- app-overview:start -->
-![The complete One Workspace app collection](docs/branding/app-suite-806cb2c3.png)
+![The complete One Workspace app collection](docs/branding/app-suite-e538b4f7.png)
 <!-- app-overview:end -->
 
 ## A place for your everyday work
@@ -273,7 +273,7 @@ Choose an app name to learn more. The full collection is listed below, including
     </tr>
     <tr>
       <td align="center" width="56"><img src="internal/branding/icons/my_music_studio.svg" alt="" width="40" height="40"></td>
-      <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/cmd/mymusic/README.md"><strong>My Music</strong></a></td>
+      <td><a href="https://github.com/oneworkspacestudio/one-workspace/blob/main/cmd/mymusic/README.md"><strong>Vuno</strong></a></td>
       <td>Generate songs, arrange tracks and export a mix.</td>
     </tr>
   </tbody>

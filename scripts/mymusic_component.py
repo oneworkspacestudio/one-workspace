@@ -7,7 +7,7 @@ def mymusic_component(root, go, output, suite_version):
     output.mkdir(parents=True, exist_ok=True)
     for name in ('index.html', 'app.js', 'style.css'):
         if (root / 'cmd/mymusic/web' / name).stat().st_size == 0:
-            raise ValueError('My Music web asset is empty: ' + name)
+            raise ValueError('Vuno web asset is empty: ' + name)
     binary = output / 'MyMusic.exe'
     subprocess.run([go, 'build', '-buildvcs=false', '-trimpath', '-ldflags', '-s -w',
                     '-o', str(binary), './cmd/mymusic'], cwd=root,
@@ -23,7 +23,7 @@ def mymusic_component(root, go, output, suite_version):
     }, indent=2), encoding='utf-8')
     return {
         'app': {
-            'id': 'mymusic', 'name': 'My Music', 'version': version,
+            'id': 'mymusic', 'name': 'Vuno', 'version': version,
             'description': 'Generate songs, arrange tracks and export a mix',
             'kind': 'process', 'package': 'mymusic', 'executable': 'MyMusic.exe',
             'port': 9049, 'route': '/mymusic', 'stripPrefix': True, 'health': '/healthz',

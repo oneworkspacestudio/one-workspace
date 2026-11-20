@@ -26,10 +26,10 @@ func runManaged() error {
 	if err != nil {
 		return err
 	}
-	cfg := apphost.Config{ID: "mymusic", Name: "My Music", Version: version, Listen: "127.0.0.1:9049", RestoreFiles: []string{"audio", "engine-settings"}}
+	cfg := apphost.Config{ID: "mymusic", Name: "Vuno", Version: version, Listen: "127.0.0.1:9049", RestoreFiles: []string{"audio", "engine-settings"}}
 	return apphost.Main(cfg, ui, func(h *apphost.Host) (apphost.Application, error) {
 		if h.Config.Issuer == "" {
-			return nil, errors.New("configure the MyAccounts client before starting managed My Music")
+			return nil, errors.New("configure the MyAccounts client before starting managed Vuno")
 		}
 		return nil, registerManaged(h)
 	})
@@ -45,7 +45,7 @@ func registerManaged(h *apphost.Host) error {
 	path := filepath.Join(h.Config.Data, "engine-settings")
 	settings := engineSettings{Engine: defaultEngine}
 	if err := platform.LoadSecret(path, &settings); err != nil && !errors.Is(err, os.ErrNotExist) {
-		return errors.New("could not read My Music engine settings")
+		return errors.New("could not read Vuno engine settings")
 	}
 	if !validEngine(settings.Engine) {
 		return errors.New("invalid saved ACE-Step origin")

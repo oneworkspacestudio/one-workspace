@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview143 with Vuno
+
+The song creation app is now Vuno. It has a charcoal interface, a split song
+editor and recent tracks view, a persistent player and a waveform timeline.
+Existing libraries and engine settings carry forward.
+
 ## Preview142 with My Music
 
 My Music is an optional Creative & Development app. It creates songs with

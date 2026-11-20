@@ -96,7 +96,7 @@ var updateGroups = []updateGroup{
 	{"sunnymoon", "Sunny & Moon", "one-workspace", []string{"sunnymoon"}},
 	{"froststock", "Froststock", "froststock", []string{"froststock"}},
 	{"gamestudio", "Game Studio", "one-workspace", []string{"gamestudio"}},
-	{"mymusic", "My Music", "one-workspace", []string{"mymusic"}},
+	{"mymusic", "Vuno", "one-workspace", []string{"mymusic"}},
 	{"websearch", "Web Search", "one-workspace", []string{"websearch"}},
 	{"survival", "My Survival", "my-survival", []string{"survival"}},
 	{"podcasts", "My Podcasts", "my-podcasts", []string{"podcasts"}},
