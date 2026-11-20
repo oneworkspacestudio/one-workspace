@@ -61,3 +61,11 @@ The ACE-Step v0.1.8 CUDA dependencies and model checkpoints were prepared
 separately. PyTorch confirmed CUDA. The earlier synthetic generation QA used
 an API fixture. The initial live engine readiness check timed out and was
 retried with lazy initialization. DeepSeek needs the owner's optional API key.
+
+The lazy ACE-Step retry reached HTTP readiness and accepted a generation
+request, then the Python backend exited while loading the DiT checkpoint.
+The client received a connection reset and no WAV was produced. No ACE-Step
+process was left listening on the production port. Keep generation acceptance
+open. Preserve the downloaded engine, pinned checkpoints and diagnostics for a
+follow-up. Low free space on the private NTFS drive precluded staging a second
+full Windows CUDA layout without jeopardizing the existing installation.
