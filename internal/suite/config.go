@@ -208,6 +208,8 @@ func NewConfig(r Request, c catalog.Catalog) Config {
 			app.Port = r.Port + 57
 		case "froststock":
 			app.Port = r.Port + 58
+		case "mymusic":
+			app.Port = r.Port + 59
 		case "gamestudio":
 			app.Port = r.Port + 55
 		case "podcasts":

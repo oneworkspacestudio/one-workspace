@@ -75,6 +75,7 @@ func Icon(app string) string {
 		"sunnymoon":     "sunny_moon",
 		"froststock":    "froststock",
 		"gamestudio":    "game_studio",
+		"mymusic":       "my_music_studio",
 		"pet":           "pet",
 		"websearch":     "web_search",
 		"aiservice":     "ai_service",

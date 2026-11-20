@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -notin @(18,19,20,21,22)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -notin @(18,19,20,21,22,23)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
 if($cat.installerIntegration -ge 22){
  $external=@((Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw|ConvertFrom-Json).apps|Where-Object independentDistribution)
  foreach($app in $external){
@@ -18,6 +18,10 @@ $pet=$cat.apps|Where-Object id -CEQ 'pet'
 if(-not $pet.oidc -or -not $pet.stripPrefix -or $pet.route -cne '/pet' -or $pet.callback -cne '/pet/auth/callback' -or $pet.port -ne 9046 -or $cat.packages.pet.file -cne 'Pet.exe' -or -not $cat.packages.'pet-contract' -or -not $cat.packages.'pet-notices'){throw 'Pet managed runtime contract is incomplete'}
 $sunnyMoon=$cat.apps|Where-Object id -CEQ 'sunnymoon'
 if(-not $sunnyMoon.oidc -or $sunnyMoon.route -cne '/sunnymoon' -or $sunnyMoon.callback -cne '/sunnymoon/auth/callback' -or $sunnyMoon.port -ne 9047 -or $cat.packages.sunnymoon.file -cne 'SunnyMoon.exe' -or -not $cat.packages.'sunnymoon-contract' -or -not $cat.packages.'sunnymoon-font-ofl' -or -not $cat.packages.'sunnymoon-font-source'){throw 'Sunny & Moon managed contract is incomplete'}
+if($cat.installerIntegration -ge 23){
+ $myMusic=$cat.apps|Where-Object id -CEQ 'mymusic'
+ if(-not $myMusic.oidc -or -not $myMusic.stripPrefix -or $myMusic.route -cne '/mymusic' -or $myMusic.callback -cne '/mymusic/auth/callback' -or $myMusic.port -ne 9049 -or 'accounts' -cnotin $myMusic.depends -or $cat.packages.mymusic.file -cne 'MyMusic.exe' -or -not $cat.packages.'mymusic-contract' -or -not $cat.packages.'mymusic-notices'){throw 'My Music managed contract is incomplete'}
+}
 $gameStudio=$cat.apps|Where-Object id -CEQ 'gamestudio'
 if(-not $gameStudio.oidc -or $gameStudio.route -cne '/gamestudio' -or $gameStudio.port -ne 9045 -or $cat.packages.gamestudio.file -cne 'GameStudio.exe' -or -not $cat.packages.'gamestudio-contract'){throw 'Game Studio runtime contract is incomplete'}
 $websearch=$cat.apps|Where-Object id -CEQ 'websearch'
@@ -25,7 +29,7 @@ if(-not $websearch.oidc -or $websearch.route -cne '/websearch' -or $websearch.po
 $survival=$cat.apps|Where-Object id -CEQ 'survival'
 if(-not $survival.oidc -or $survival.route -cne '/survival' -or $survival.callback -cne '/survival/auth/callback' -or $survival.port -ne 9041 -or $cat.packages.survival.file -cne 'MySurvival.exe' -or -not $cat.packages.'survival-contract' -or -not $cat.packages.'survival-manifest'){throw 'My Survival managed contract is incomplete'}
 $registry=Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw | ConvertFrom-Json
-$required=@($registry.apps | Where-Object { $cat.installerIntegration -lt 22 -or -not $_.independentDistribution } | ForEach-Object {$_.id})
+$required=@($registry.apps | Where-Object { ($cat.installerIntegration -lt 22 -or -not $_.independentDistribution) -and [int]$_.sinceIntegration -le $cat.installerIntegration } | ForEach-Object {$_.id})
 $commute=$cat.apps|Where-Object id -CEQ 'commute'
 if(-not $commute.oidc -or $commute.route -cne '/commute' -or $commute.callback -cne '/commute/auth/callback' -or $commute.port -ne 9040 -or $cat.packages.commute.file -cne 'MyCommute.exe' -or -not $cat.packages.'commute-contract' -or -not $cat.packages.'commute-manifest'){throw 'Commute managed contract incomplete'}
 $books=$cat.apps|Where-Object id -CEQ 'books'

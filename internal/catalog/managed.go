@@ -20,6 +20,7 @@ type ManagedApp struct {
 	Recovery                string `json:"recovery"`
 	UpdateGroup             string `json:"updateGroup"`
 	IndependentDistribution bool   `json:"independentDistribution,omitempty"`
+	SinceIntegration        int    `json:"sinceIntegration,omitempty"`
 }
 
 func ManagedApps() []ManagedApp {
@@ -37,6 +38,9 @@ func ManagedApps() []ManagedApp {
 func (c Catalog) ValidateManagedInventory() error {
 	for _, want := range ManagedApps() {
 		a, ok := c.Find(want.ID)
+		if !ok && c.InstallerIntegration < want.SinceIntegration {
+			continue
+		}
 		if want.IndependentDistribution && c.InstallerIntegration >= IndependentAppIntegration {
 			if ok {
 				return fmt.Errorf("managed release bundles an independent app: %s", want.ID)

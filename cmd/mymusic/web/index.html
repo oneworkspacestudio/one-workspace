@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Music · One Workspace</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<header>
+  <a class="brand" href="#create"><span class="mark">♫</span> My Music</a>
+  <nav id="tabs" aria-label="Main">
+    <a href="#create">Create</a>
+    <a href="#library">Library</a>
+    <a href="#studio">Studio</a>
+  </nav>
+  <a id="apps" data-workspace-apps-trigger hidden>Apps</a>
+  <button id="engine" type="button" hidden>Engine</button>
+</header>
+<section id="sign-in" class="panel entry" hidden>
+  <h1>My Music</h1>
+  <p id="entryMessage" role="status"></p>
+  <a id="connect" hidden>Continue with MyAccounts</a>
+</section>
+<main id="work" hidden>
+  <section id="create" class="page">
+    <div class="hero">
+      <div><h1>Make it sound like you.</h1><p>Generate a song from a brief or bring your own lyrics.</p></div>
+      <div class="graphic" aria-hidden="true"></div>
+    </div>
+    <form id="compose" class="panel">
+      <div class="heading">
+        <h2>New song</h2>
+        <label class="inline"><input name="Instrumental" type="checkbox"> Instrumental</label>
+      </div>
+      <label>Title<input name="Title" maxlength="120" placeholder="Untitled"></label>
+      <label>Music brief<textarea name="Prompt" rows="3" maxlength="4000" required placeholder="Dusty drum breaks, a warm Rhodes and a slow evening groove"></textarea></label>
+      <details id="custom">
+        <summary>Custom lyrics</summary>
+        <label>Lyrics<textarea name="Lyrics" rows="6" maxlength="12000" placeholder="[Verse]"></textarea></label>
+      </details>
+      <div class="options">
+        <label>Length in seconds<input type="number" name="Seconds" min="5" max="240" value="30" required></label>
+        <label>Tempo (optional)<input type="number" name="BPM" min="1" max="300" placeholder="Auto"></label>
+      </div>
+      <div class="actions">
+        <button class="primary">Generate song</button>
+        <button type="button" id="lyrics">Draft lyrics</button>
+        <button type="button" id="refine">Refine brief</button>
+      </div>
+      <p class="status" id="generationStatus" role="status"></p>
+    </form>
+  </section>
+  <section id="library" class="page" hidden>
+    <div class="heading">
+      <div><h1>Sound library</h1><p>Your generated and imported audio.</p></div>
+      <label class="upload">Import audio<input type="file" id="import" accept=".wav,.mp3,.ogg,.flac,.m4a"></label>
+    </div>
+    <div class="panel">
+      <label>Search tracks<input type="search" id="search" placeholder="Track title"></label>
+      <div id="tracks"></div>
+    </div>
+  </section>
+  <section id="studio" class="page" hidden>
+    <h1>Arrangement Studio</h1>
+    <p>Place tracks on a timeline, balance levels and bounce a stereo WAV.</p>
+    <div class="panel">
+      <div class="heading">
+        <label>Add a library track<select id="source"></select></label>
+        <button id="add">Add clip</button>
+      </div>
+      <div id="timeline" aria-hidden="true"><div id="ruler"></div><div id="lanes"></div></div>
+      <div id="clips"></div>
+      <div class="actions">
+        <button id="preview">Preview mix</button>
+        <button id="stop">Stop</button>
+        <button id="export" class="primary">Export WAV</button>
+      </div>
+    </div>
+  </section>
+  <p id="notice" role="status"></p>
+</main>
+<footer id="transport" hidden>
+  <span id="playing">Choose a track in Library</span>
+  <audio id="player" controls preload="metadata"></audio>
+</footer>
+<dialog id="settings">
+  <h2>Generation engine</h2>
+  <p id="connection"></p>
+  <p>Start an ACE-Step 1.5 API server on the Workspace host to generate music.</p>
+  <p>When you request a draft or refinement, your music brief is sent to DeepSeek.</p>
+  <form id="engineSettings" hidden>
+    <label>ACE-Step origin<input name="Engine" type="url" required></label>
+    <label>ACE-Step API key<input name="ACEKey" type="password" autocomplete="off" placeholder="Leave blank to keep saved key"></label>
+    <label class="inline"><input name="clearACE" type="checkbox"> Remove saved ACE-Step key</label>
+    <label>DeepSeek API key<input name="DeepSeekKey" type="password" autocomplete="off" placeholder="Leave blank to keep saved key"></label>
+    <label class="inline"><input name="clearDeepSeek" type="checkbox"> Remove saved DeepSeek key</label>
+    <p id="engineStatus" role="status"></p>
+    <button class="primary">Save engine settings</button>
+  </form>
+  <form method="dialog"><button>Close</button></form>
+</dialog>
+</body>
+</html>
