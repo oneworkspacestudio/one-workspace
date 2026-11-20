@@ -16,3 +16,8 @@ The unchanged embedded Voice runtime matches preview.13. Native synthetic
 runtime generated real Alba and Marius PCM using separate generic keys,
 rejected forwarded access and proved isolated revocation. No owner settings,
 keys or installations were changed. WonderPal has separate source delivery.
+
+Promotion 084ae8d verified anonymously. The public channel and component
+pins match both tags. Downloaded both managed ZIPs without credentials and
+verified every manifest member (164 total), archive digests and sizes. No
+new suite release or installed-owner change was performed.
