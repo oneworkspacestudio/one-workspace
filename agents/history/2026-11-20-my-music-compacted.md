@@ -158,3 +158,22 @@ clip using just the first two verses also skipped opening lines. A separate
 sections in order according to local audio transcription. Wording and timing
 can still vary across renders. Workspace preview.144 seeds from the immutable
 preview.143 bundle and preserves Vuno's existing installation contract.
+
+
+Auto length selected 170 seconds for the 24-line fixture at 105 BPM. Browser
+checks exercised tempo changes, manual override, the short-length warning,
+vocal language selection and the 390px layout. The exact release executable
+and the installed executable rendered WAVs through the real engine. Additional
+170- and 180-second renders still skipped or merged some lines, and a
+64-second opening-only run still omitted wording. Treat duration as a pacing
+estimate and keep sample-to-sample lyric adherence separate from payload fidelity.
+
+The signed Workspace preview.144 release points to 551e66b and verified 956
+assets. Channel commit b8abae9 and anonymous downloads verified Vuno preview.4
+at SHA-256 82f09a119540132c254b2199dcb97ed7a35d6740fc027dbc20fe87cb75b80e95.
+Fresh setup, upgrade from preview.143, library/account preservation and rollback
+passed in isolated data. The authorized backed-up installation on the active
+Windows PC completed. All five Vuno payloads matched the release and the
+separate Music executable remained intact. Native and public health passed
+after the tunnel recovered, the installed binary completed a 170-second live
+ACE-Step render, and the normal updater reported the installed build current.
