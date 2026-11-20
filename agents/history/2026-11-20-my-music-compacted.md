@@ -140,3 +140,21 @@ this profile. The engine stayed healthy after that check. The per-user Start
 menu entry ACE-Step for Vuno launches on demand and was exercised while an
 engine was already running, which preserved the active listener. It leaves the
 existing Vuno installation and owner library intact.
+
+
+## Vuno lyric timing
+
+Vuno preview.4 estimates duration from sung line length, written section
+boundaries and tempo. With no explicit tempo it uses 105 BPM for auto-length
+tracks with supplied lyrics. Manual length remains available and warns when
+it is shorter than the estimate. The ACE-Step request sends the supplied
+lyrics unchanged, with the selected vocal language and explicit formatting,
+caption enhancement and language enhancement disabled.
+
+A synthetic six-section nursery rhyme established the baseline on the live
+ACE-Step Turbo engine. A 30-second clip omitted most of the lyrics. A 45-second
+clip using just the first two verses also skipped opening lines. A separate
+180-second run at 105 BPM with English and formatting off included all six
+sections in order according to local audio transcription. Wording and timing
+can still vary across renders. Workspace preview.144 seeds from the immutable
+preview.143 bundle and preserves Vuno's existing installation contract.

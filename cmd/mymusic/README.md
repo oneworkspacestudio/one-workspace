@@ -9,6 +9,19 @@ and arranges clips into a stereo WAV. It is an optional app in Setup under
 Updates when applying the compatible Workspace release. Open the **Vuno**
 tile and continue with MyAccounts. The Workspace owner can use the app.
 
+## Set the length for supplied lyrics
+
+Use a heading such as `[Verse 1]`, `[Chorus]` or `[Outro]` to mark each
+section. Write out repeated sections where you want them sung. Auto length
+estimates time from the written lines, section breaks and tempo. It uses 105
+BPM when a track with supplied lyrics has no tempo selected. You can turn Auto
+length off to enter a duration and see how it compares with the estimate.
+
+Select the vocal language and leave Instrumental clear. Vuno sends supplied
+lyrics and section tags as written, with ACE-Step formatting turned off.
+Generated performances can still vary. To diagnose a skipped opening, try just
+the first two verses as a separate generation and compare the results.
+
 ## Connect a generation engine
 
 Run a local [ACE-Step 1.5 API server](https://github.com/ace-step/ACE-Step-1.5/blob/v0.1.8/docs/en/INSTALL.md)

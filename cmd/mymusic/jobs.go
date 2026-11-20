@@ -22,9 +22,17 @@ func (app application) generationRoutes(handle func(string, http.HandlerFunc)) {
 	var active string
 	jobs := make(map[string]generationJob)
 	var order []string
+	handle("POST /api/duration", func(w http.ResponseWriter, r *http.Request) {
+		var song generation
+		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 128<<10)).Decode(&song); err != nil {
+			respond(w, nil, errors.New("invalid duration request"))
+			return
+		}
+		respond(w, lyricDuration(song.Lyrics, song.BPM), nil)
+	})
 	handle("POST /api/generate", func(w http.ResponseWriter, r *http.Request) {
 		var song generation
-		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 32<<10)).Decode(&song); err != nil {
+		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 128<<10)).Decode(&song); err != nil {
 			respond(w, nil, errors.New("invalid generation request"))
 			return
 		}

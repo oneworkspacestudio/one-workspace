@@ -93,6 +93,8 @@ main, .entry { margin: 12px 12px calc(var(--transport) + 20px) var(--rail); }
 .field-card { background: var(--panel); border: 1px solid #28282a; border-radius: 9px; padding: 13px; }
 .field-card label { font-size: .85rem; font-weight: 600; }
 .field-card textarea { background: #131314; }
+.field-note { margin: 8px 0; color: var(--muted); font-size: .8rem; line-height: 1.45; }
+.field-note:empty { display: none; }
 .field-card .small, .field-card .options, .field-card .inline, details[open] summary { margin-top: 9px; }
 details[open] summary { margin-top: 0; margin-bottom: 10px; }
 summary { cursor: pointer; font-weight: 650; }

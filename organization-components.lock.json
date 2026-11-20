@@ -309,5 +309,11 @@
     "tag": "v0.3.0-preview.142",
     "asset": "workspace-bundle.zip",
     "sha256": "8248bb1e2131c94fe9dce2a56af88d64708e3731461801676f2b1a87c49aeba7"
+  },
+  "vunoLyricsSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.143",
+    "asset": "workspace-bundle.zip",
+    "sha256": "6c9925ffddc74e51e06dcd3f242c7be44fc066bd3888296f3d842ceefdc1688e"
   }
 }

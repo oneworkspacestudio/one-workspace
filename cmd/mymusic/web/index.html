@@ -54,14 +54,23 @@
           <details class="field-card" id="custom">
             <summary>Lyrics</summary>
             <label><span class="sr-only">Lyrics</span><textarea name="Lyrics" rows="7" maxlength="12000" placeholder="[Verse]&#10;&#10;[Chorus]"></textarea></label>
+            <p class="field-note">Put tags such as [Verse 1] and [Chorus] on their own lines. Vuno sends lyrics in the order you write them.</p>
             <button type="button" id="lyrics" class="small">Draft lyrics</button>
           </details>
           <div class="field-card">
             <label>Title<input name="Title" maxlength="120" placeholder="Untitled"></label>
+            <label class="inline"><input name="AutoDuration" type="checkbox" checked> Auto length</label>
             <div class="options">
-              <label>Length in seconds<input type="number" name="Seconds" min="5" max="240" value="30" required></label>
+              <label>Length in seconds<input type="number" name="Seconds" min="5" max="240" value="30" aria-describedby="lengthEstimate" required disabled></label>
               <label>Tempo (optional)<input type="number" name="BPM" min="1" max="300" placeholder="Auto"></label>
             </div>
+            <p class="field-note" id="lengthEstimate" aria-live="polite">Add lyrics to estimate the track length.</p>
+            <label>Vocal language<select name="VocalLanguage">
+              <option value="en">English</option><option value="ar">Arabic</option><option value="zh">Chinese</option>
+              <option value="fr">French</option><option value="de">German</option><option value="hi">Hindi</option>
+              <option value="it">Italian</option><option value="ja">Japanese</option><option value="ko">Korean</option>
+              <option value="pt">Portuguese</option><option value="es">Spanish</option><option value="tr">Turkish</option>
+            </select></label>
             <label class="inline"><input name="Instrumental" type="checkbox"> Instrumental</label>
           </div>
         </div>

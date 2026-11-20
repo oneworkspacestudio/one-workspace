@@ -12,6 +12,8 @@ let mixOperation = 0;
 const buffers = new Map();
 let session;
 let managed = false;
+let durationTimer;
+let durationRevision = 0;
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function lock(message, reconnect) {
@@ -150,11 +152,52 @@ byId("engineSettings").onsubmit = event => {
     notice.textContent = "Engine settings saved.";
   });
 };
+function updateDuration() {
+  const fields = form.elements;
+  const hint = byId("lengthEstimate");
+  const auto = fields.AutoDuration.checked;
+  const lyrics = fields.Instrumental.checked ? "" : fields.Lyrics.value;
+  const revision = ++durationRevision;
+  const maximum = Number(fields.Seconds.max);
+  clearTimeout(durationTimer);
+  fields.Seconds.disabled = auto;
+  fields.VocalLanguage.disabled = fields.Instrumental.checked;
+  if (!lyrics.trim()) {
+    if (auto) fields.Seconds.value = fields.Seconds.defaultValue;
+    hint.textContent = fields.Instrumental.checked ? "" : "Add lyrics to estimate the track length.";
+    return;
+  }
+  durationTimer = setTimeout(async () => {
+    try {
+      const result = await post("duration", {Lyrics:lyrics, BPM:Number(fields.BPM.value)});
+      if (revision !== durationRevision) return;
+      if (auto) fields.Seconds.value = Math.min(result.seconds, maximum);
+      if (!result.lines) {
+        hint.textContent = "Add sung lines below your section tags.";
+        return;
+      }
+      const detail = "Estimated " + timeLabel(result.seconds) + " at " + result.bpm + " BPM for " + result.lines + " sung lines.";
+      if (result.seconds > maximum) {
+        hint.textContent = detail + " Split the lyrics into shorter tracks to stay within four minutes.";
+      } else if (!auto && fields.Seconds.valueAsNumber < result.seconds) {
+        hint.textContent = detail + " Your selected length may cut some lines.";
+      } else {
+        hint.textContent = detail;
+      }
+    } catch {
+      if (revision === durationRevision) hint.textContent = "The estimate will be calculated when you generate.";
+    }
+  }, 250);
+}
+for (const name of ["AutoDuration", "Lyrics", "BPM", "Seconds", "Instrumental"]) {
+  form.elements[name].addEventListener("input", updateDuration);
+}
 form.onsubmit = event => {
   event.preventDefault();
   const data = Object.fromEntries(new FormData(form));
-  data.Seconds = Number(data.Seconds);
+  data.Seconds = Number(form.elements.Seconds.value);
   data.BPM = Number(data.BPM);
+  data.AutoDuration = form.elements.AutoDuration.checked;
   data.Instrumental = data.Instrumental === "on";
   data.Describe = !data.Lyrics.trim();
   const status = byId("generationStatus");
@@ -177,7 +220,10 @@ for (const [id,mode,field] of [["lyrics","lyrics","Lyrics"],["refine","prompt","
     byId("generationStatus").textContent = "Waiting for DeepSeek…";
     const result = await post("assist", {Prompt:form.elements.Prompt.value, Mode:mode});
     form.elements[field].value = result.text;
-    if (mode === "lyrics") byId("custom").open = true;
+      if (mode === "lyrics") {
+        byId("custom").open = true;
+        updateDuration();
+      }
     form.elements[field].focus();
     byId("generationStatus").textContent = "Draft ready.";
   });

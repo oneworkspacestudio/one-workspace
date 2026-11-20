@@ -1,5 +1,11 @@
 # One Workspace release status
 
+## Preview144 with Vuno lyric timing
+
+Vuno estimates the track length from the written lines, sections and tempo.
+Select the vocal language and use Auto length or enter your own duration.
+Vuno passes supplied lyrics to ACE-Step with formatting disabled.
+
 ## Preview143 with Vuno
 
 The song creation app is now Vuno. It has a charcoal interface, a split song

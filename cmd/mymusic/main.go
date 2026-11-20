@@ -30,7 +30,7 @@ import (
 var assets embed.FS
 
 const (
-	version       = "0.1.0-preview.3"
+	version       = "0.1.0-preview.4"
 	defaultEngine = "http://127.0.0.1:8001"
 	maxAudio      = 100 << 20
 )
@@ -88,13 +88,15 @@ type aceResponse[T any] struct {
 }
 
 type generation struct {
-	Title        string
-	Prompt       string
-	Lyrics       string
-	Seconds      int
-	BPM          int
-	Instrumental bool
-	Describe     bool
+	Title         string
+	Prompt        string
+	Lyrics        string
+	Seconds       int
+	BPM           int
+	AutoDuration  bool
+	VocalLanguage string
+	Instrumental  bool
+	Describe      bool
 }
 
 type application struct {
@@ -104,22 +106,12 @@ type application struct {
 }
 
 func (app application) generate(ctx context.Context, song generation) (track, error) {
-	if strings.TrimSpace(song.Prompt) == "" || song.Seconds < 5 || song.Seconds > 240 || song.BPM < 0 || song.BPM > 300 {
-		return track{}, errors.New("enter a prompt, 5–240 seconds and an optional tempo up to 300 BPM")
+	body, err := song.acePayload()
+	if err != nil {
+		return track{}, err
 	}
 	settings := app.config()
 	engine, key := settings.Engine, settings.ACEKey
-	body := map[string]any{"prompt": song.Prompt, "lyrics": song.Lyrics, "audio_duration": song.Seconds, "batch_size": 1, "audio_format": "wav"}
-	if song.BPM > 0 {
-		body["bpm"] = song.BPM
-	}
-	if song.Instrumental {
-		body["lyrics"] = "[Instrumental]"
-	}
-	if song.Describe && !song.Instrumental {
-		body["sample_query"] = song.Prompt
-		body["thinking"] = true
-	}
 	var start aceResponse[struct {
 		TaskID string `json:"task_id"`
 	}]
