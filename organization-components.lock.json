@@ -254,10 +254,10 @@
   },
   "myVoice": {
     "repository": "oneworkspacestudio/my-voice",
-    "tag": "v0.1.0-preview.13",
-    "asset": "my-voice-0.1.0-preview.13-windows-amd64.zip",
-    "sha256": "fb5731f96daefa9fef7cfc4e7703c356376fd7839d15690691a492ac9a924e9a",
-    "size": 88366732
+    "tag": "v0.1.0-preview.14",
+    "asset": "my-voice-0.1.0-preview.14-windows-amd64.zip",
+    "sha256": "24bb843fe6b32d846e27edc26abf29e87b7027045d29f7b9c520d3b00e169f2f",
+    "size": 88375231
   },
   "myBooks": {
     "repository": "oneworkspacestudio/my-books",
@@ -287,10 +287,10 @@
   },
   "myPodcasts": {
     "repository": "oneworkspacestudio/my-podcasts",
-    "tag": "v0.1.0-preview.8",
+    "tag": "v0.1.0-preview.9",
     "asset": "MyPodcasts-windows-amd64.zip",
-    "sha256": "e01067a092eb0c560bf739a9efb490ceeb194b6aefefdd2d02fdc10a0fd965ff",
-    "size": 11610685
+    "sha256": "612b04287df245d2f1b237c4f4dfcbc9c58b12a3453f492b95c6d36189dbc84d",
+    "size": 5948594
   },
   "hostingResilienceSeed": {
     "repository": "oneworkspacestudio/one-workspace",
