@@ -97,3 +97,26 @@ promoted channel commit ef82afd. Anonymous checks confirmed the live index and
 catalog list Vuno preview.3, and both Vuno.exe and the managed mymusic package
 match SHA-256 c18ff0c6e802b38f58baaff22aa5aa34dfb2e297fe7cb36616ad72b1ac07bcb5.
 The owner installation remained on preview.142 during the UI-only revision.
+
+
+## Live Vuno installation
+
+The owner requested installation and live verification for future managed app
+updates. Use the normal backed-up Workspace updater on the active target and
+verify the deployment. Keep functional test data isolated from owner data.
+
+The public channel offered a selective Workspace and Vuno update. The current
+Windows PC finished that update to Workspace preview.143 and Vuno preview.3,
+with a verified recovery copy. All five Vuno payloads matched the public
+catalog. The separate Music executable and existing install settings were
+preserved. The running Workspace and Vuno native health checks passed. The
+served HTML, CSS and JS matched the release source, OIDC was configured, and
+the library rejected anonymous requests. Browser checks against the exact
+installed binary passed import, playback, and stereo Studio WAV export using
+isolated data.
+
+The retry against the real local ACE-Step server reached inference submission.
+During DiT model loading the Windows volume fell below 2 GB free, and the test
+stopped the dedicated backend to preserve room for Workspace. No audio was
+generated. The test backend was stopped and Vuno health passed again after
+cleanup. Keep live song generation open until the host can load the model.
