@@ -1,0 +1,126 @@
+[
+  {
+    "id": "loop-engineering",
+    "title": "Loop engineering comes into focus",
+    "summary": "What happens when a team designs the feedback loop around an AI agent, and how to try one on a real UI workflow.",
+    "topic": "Engineering concepts",
+    "date": "2026-11-22",
+    "sections": [
+      {
+        "heading": "What the term means",
+        "body": "A prompt tells an agent what to do in one interaction. A harness supplies the environment around it: tools, repository guidance, permissions and a way to see what happened. Loop engineering describes the recurring workflow that decides when an agent should run, what it should observe, when it should try again and when it should stop. Practitioners still use these terms differently. An exploratory study from Lulla and colleagues describes a family of approaches and highlights how little comparative evidence exists.",
+        "refs": [
+          1,
+          2
+        ]
+      },
+      {
+        "heading": "Make the UI feedback concrete",
+        "body": "Start with a recurring design-system chore such as finding usage of a deprecated component. The first pass inventories call sites and groups them by migration risk. A second pass proposes changes only for unambiguous cases. Use fixture routes, interaction tests and reviewed screenshot baselines to compare the before and after states. Have a reviewer inspect at least one untouched case as well as every flagged edge case. Keep the report and the rejected suggestions so that the next run can build on them.",
+        "refs": []
+      },
+      {
+        "heading": "Give the loop an end",
+        "body": "Write down the accepted component patterns, the tests that must pass and the surfaces the loop is allowed to touch. Set a run limit and a small retry budget. Escalate ambiguous product behaviour, browser-specific regressions and accessibility issues for a human decision. OpenAI's account of harness engineering describes making its repository and runtime more legible to agents, and turning repeated mistakes into rules and feedback. Treat that experience as a case study from one environment.",
+        "refs": [
+          2
+        ]
+      },
+      {
+        "heading": "One experiment for a UI lead",
+        "body": "Compare a handful of similar component migrations with and without the loop. Track reviewer minutes per accepted change, regressions found after review and the share of proposals abandoned for ambiguous behaviour. Ask reviewers what context they still had to supply. Use those notes to decide whether to improve the harness, adjust the loop's scope or keep the task manual.",
+        "refs": []
+      }
+    ],
+    "sources": [
+      {
+        "title": "Loop Engineering: Building Blocks, Adoption, and Impact",
+        "url": "https://arxiv.org/abs/2608.21884",
+        "date": "2026-10-22"
+      },
+      {
+        "title": "Harness engineering: leveraging Codex in an agent-first world",
+        "url": "https://openai.com/index/harness-engineering/",
+        "date": "2026-02-11"
+      }
+    ]
+  },
+  {
+    "id": "five-stages",
+    "title": "Five stages of AI engineering maturity",
+    "summary": "A working framework for deciding what a UI team is ready to delegate next.",
+    "topic": "AI maturity",
+    "date": "2026-11-22",
+    "sections": [
+      {
+        "heading": "1–2 · From individual help to repeatable tasks",
+        "body": "At stage one, engineers ask for explanations, alternative approaches or help writing a test. They still assemble and review the result themselves. At stage two, the team trusts AI with specific, well-understood jobs such as scaffolding component stories or proposing translation keys. It has a shared example of a good result and can review a batch quickly.",
+        "refs": []
+      },
+      {
+        "heading": "3–4 · From repository workflows to bounded loops",
+        "body": "At stage three, agents understand the repo's component conventions, use a reliable test environment and can leave reviewable changes. At stage four, the team can run a bounded workflow repeatedly, collect evidence and stop on uncertainty. To move from one to the other, establish a repeatable UI evaluation before adding more autonomy. A visual diff helps catch layout regressions, while keyboard and interaction checks exercise behaviour the image will miss.",
+        "refs": []
+      },
+      {
+        "heading": "5 · AI as an operating practice",
+        "body": "At stage five, the team improves the conditions under which AI-assisted engineering works. Product teams own the outcomes and their evidence. Design-system and platform teams maintain shared tooling, policies and feedback. DORA's AI Capabilities Model describes seven organisational capabilities that can amplify AI benefits. This five-stage Fieldnotes framework is a separate discussion aid for deciding what to try next with one team.",
+        "refs": [
+          1,
+          2
+        ]
+      },
+      {
+        "heading": "Identify the constraint before advancing",
+        "body": "Pick one workflow and write down the evidence that would justify delegating the next decision. If the team cannot agree on the expected empty, error and loading states of a component, putting an agent in charge of those states transfers the ambiguity. Adding a reviewable specification may be the highest-leverage next step. Reassess each workflow on its own evidence.",
+        "refs": []
+      }
+    ],
+    "sources": [
+      {
+        "title": "DORA AI Capabilities Model",
+        "url": "https://dora.dev/ai/capabilities-model/report/",
+        "date": "2025-11-25"
+      },
+      {
+        "title": "Building an AI-native engineering team",
+        "url": "https://cdn.openai.com/business-guides-and-resources/building-an-ai-native-engineering-team.pdf"
+      }
+    ]
+  },
+  {
+    "id": "inclusive-interface",
+    "title": "An accessibility contract for AI-built interfaces",
+    "summary": "Use WCAG 2.2 and concrete interaction evidence to make AI-assisted changes easier to review.",
+    "topic": "Standards",
+    "date": "2026-11-22",
+    "sections": [
+      {
+        "heading": "Translate criteria into interactions",
+        "body": "WCAG 2.2 is a W3C Recommendation with testable success criteria. An interaction contract turns a few criteria into examples for the component you are changing. For a dialog, specify where focus goes on open, how a keyboard user reaches the controls and where focus returns on close. Include real content and a phone-size viewport. Capture expectations alongside the component so the agent and its reviewer consult the same source.",
+        "refs": [
+          1
+        ]
+      },
+      {
+        "heading": "Use more than a scan",
+        "body": "A scanner can detect problems such as some missing names and contrast failures, depending on the surface. It can also pass a screen whose focus moves in a confusing order or whose status update is hard to understand. Pair automation with a keyboard walkthrough and a screen-reader check for a small set of high-value paths. Keep a reproducible failure for each issue the team finds.",
+        "refs": [
+          1
+        ]
+      },
+      {
+        "heading": "Start with one high-traffic flow",
+        "body": "Ask the agent to produce tests for one form's loading, invalid and success states. Measure how many acceptance criteria reviewers can verify from the resulting evidence and where they still need to examine the implementation. Expand the workflow after the evidence becomes trustworthy and the fixes remain understandable to the team.",
+        "refs": []
+      }
+    ],
+    "sources": [
+      {
+        "title": "Web Content Accessibility Guidelines 2.2",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "date": "2024-12-12"
+      }
+    ]
+  }
+]

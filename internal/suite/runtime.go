@@ -243,6 +243,11 @@ func (rt *Runtime) command(app catalog.App) *exec.Cmd {
 				cmd.Env = append(cmd.Env, "AISERVICE_MYAI_TOKEN="+myaiCapability("ai-service:"+myai.Secret))
 			}
 		}
+		if app.ID == "fieldnotes" {
+			if search, ok := c.Catalog.Find("websearch"); ok {
+				cmd.Env = append(cmd.Env, fmt.Sprintf("FIELDNOTES_BROWSER_URL=http://127.0.0.1:%d", search.Port))
+			}
+		}
 		if app.ID == "pet" {
 			service, _ := c.Catalog.Find("aiservice")
 			cmd.Env = append(cmd.Env, "PET_AI_SERVICE_PORT="+strconv.Itoa(service.Port))

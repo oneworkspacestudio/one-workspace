@@ -21,6 +21,7 @@ type appSignIn struct {
 }
 
 var suiteSignIns = []appSignIn{
+	{"fieldnotes", "AI Fieldnotes", "/fieldnotes", "/api/me", "/fieldnotes/auth/login", "/fieldnotes/auth/logout", []string{"fieldnotes_session"}},
 	{"mymusic", "Vuno", "/mymusic", "/api/me", "/mymusic/auth/login", "/mymusic/auth/logout", []string{"mymusic_session"}},
 	{"websearch", "Web Search", "/websearch", "/api/me", "/websearch/auth/login", "/websearch/auth/logout", []string{"websearch_session"}},
 	{"aiservice", "AI Service", "/aiservice", "/api/me", "/aiservice/auth/login", "/aiservice/auth/logout", []string{"aiservice_session"}},

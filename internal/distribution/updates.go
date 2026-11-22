@@ -96,6 +96,7 @@ var updateGroups = []updateGroup{
 	{"sunnymoon", "Sunny & Moon", "one-workspace", []string{"sunnymoon"}},
 	{"froststock", "Froststock", "froststock", []string{"froststock"}},
 	{"gamestudio", "Game Studio", "one-workspace", []string{"gamestudio"}},
+	{"fieldnotes", "AI Fieldnotes", "one-workspace", []string{"fieldnotes"}},
 	{"mymusic", "Vuno", "one-workspace", []string{"mymusic"}},
 	{"websearch", "Web Search", "one-workspace", []string{"websearch"}},
 	{"survival", "My Survival", "my-survival", []string{"survival"}},
@@ -314,6 +315,9 @@ func updatePackageOwner(id string) string {
 	}
 	if id == "froststock" || strings.HasPrefix(id, "froststock-") {
 		return "froststock"
+	}
+	if id == "fieldnotes" || strings.HasPrefix(id, "fieldnotes-") {
+		return "fieldnotes"
 	}
 	if id == "mymusic" || strings.HasPrefix(id, "mymusic-") {
 		return "mymusic"

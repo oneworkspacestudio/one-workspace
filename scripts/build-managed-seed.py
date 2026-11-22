@@ -15,6 +15,7 @@ from myai_component import myai_replacements
 from websearch_component import websearch_component
 from gamestudio_component import gamestudio_component
 from mymusic_component import mymusic_component
+from fieldnotes_component import fieldnotes_component
 from sunnymoon_component import sunnymoon_component
 from pet_component import pet_component
 from tube_component import tube_replacements
@@ -111,6 +112,11 @@ def main():
  cache=Path(a.cache).resolve();out=Path(a.out).resolve();cache.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True)
  lock=json.loads((ROOT/'organization-components.lock.json').read_text(encoding='utf-8-sig'))
  candidate = any(value for key, value in vars(a).items() if key.endswith('_candidate'))
+ if a.version == '0.3.0-preview.145' and not candidate:
+  pin = lock['fieldnotesSeed']
+  base = asset(pin, cache, a.seed_archive)
+  component = fieldnotes_component(ROOT, a.go, cache/'fieldnotes', a.version)
+  return integrated_build(a, pin, base, cache, out, [component], integration=24)
  if a.version in ('0.3.0-preview.143', '0.3.0-preview.144') and not candidate:
   pin = lock['vunoLyricsSeed' if a.version == '0.3.0-preview.144' else 'vunoSeed']
   base = asset(pin, cache, a.seed_archive)

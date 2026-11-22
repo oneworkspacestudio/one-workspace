@@ -1,0 +1,82 @@
+plugins { id 'com.android.application' }
+dependencyLocking { lockAllConfigurations() }
+
+def signing = ['WORKSPACE_ANDROID_KEYSTORE', 'WORKSPACE_ANDROID_STORE_PASSWORD',
+    'WORKSPACE_ANDROID_KEY_ALIAS', 'WORKSPACE_ANDROID_KEY_PASSWORD'].collect { System.getenv(it) }
+def provenance = [schema: 1,
+    sourceCommit: System.getenv('WORKSPACE_ANDROID_SOURCE_COMMIT') ?: 'development',
+    androidTree: System.getenv('WORKSPACE_ANDROID_SOURCE_TREE') ?: 'development',
+    webTree: System.getenv('FIELDNOTES_WEB_TREE') ?: 'development']
+def generated = layout.buildDirectory.dir('generated/fieldnotesAssets')
+def reader = rootProject.file('../internal/fieldnotes/ui/dist')
+
+def copyReader = tasks.register('copyFieldnotesReader', Sync) {
+    from(reader)
+    into(generated.map { it.dir('reader') })
+    doFirst {
+        if (!new File(reader, 'main.js').isFile()) {
+            throw new GradleException('Build the AI Fieldnotes reader before assembling Android.')
+        }
+    }
+}
+def copyNotices = tasks.register('copyFieldnotesNotices', Copy) {
+    from(rootProject.file('app/src/main/assets/licenses'))
+    from(rootProject.file('../LICENSE'))
+    from(new File(reader, 'THIRD-PARTY-NOTICES.txt')) { rename { 'READER-NOTICES.txt' } }
+    into(generated.map { it.dir('licenses') })
+}
+def copyIcon = tasks.register('copyFieldnotesIcon', Copy) {
+    from(rootProject.file('../docs/branding/ai_fieldnotes-192.png'))
+    into(layout.buildDirectory.dir('generated/fieldnotesRes/drawable'))
+    rename { 'brand_ai_fieldnotes.png' }
+}
+def writeProvenance = tasks.register('writeFieldnotesProvenance') {
+    inputs.properties(provenance)
+    outputs.file(generated.map { it.file('fieldnotes-release.json') })
+    doLast {
+        def output = generated.get().file('fieldnotes-release.json').asFile
+        output.parentFile.mkdirs()
+        output.setText(groovy.json.JsonOutput.toJson(provenance), 'UTF-8')
+    }
+}
+
+android {
+    namespace 'uk.co.m8e.fieldnotes'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'uk.co.m8e.fieldnotes'
+        minSdk 28
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets.main.assets.srcDir(generated)
+    sourceSets.main.res.srcDir(layout.buildDirectory.dir('generated/fieldnotesRes'))
+    signingConfigs {
+        release {
+            if (signing.every { it }) {
+                storeFile file(signing[0])
+                storePassword signing[1]
+                keyAlias signing[2]
+                keyPassword signing[3]
+            }
+        }
+    }
+    buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
+}
+tasks.named('preBuild').configure { dependsOn(copyReader, copyNotices, copyIcon, writeProvenance) }
+
+gradle.taskGraph.whenReady { graph ->
+    if (graph.allTasks.any { it.project == project && it.name.toLowerCase().contains('release') }) {
+        if (!signing.every { it }) throw new GradleException('Fieldnotes release requires permanent signing.')
+        if (!provenance.findAll { it.key != 'schema' }.values().every { it ==~ /[a-f0-9]{40}/ }) {
+            throw new GradleException('Use scripts/build-fieldnotes-android.ps1 -Release on committed source.')
+        }
+    }
+}
+
+dependencies { implementation 'androidx.webkit:webkit:1.12.1' }

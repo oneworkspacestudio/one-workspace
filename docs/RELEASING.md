@@ -77,6 +77,13 @@ every release. Server app repositories retain their own release workflows.
 
 ## Windows publication reliability
 
+### AI Fieldnotes APK
+
+Pass `-Fieldnotes` to include the signed offline reader with the required
+Workspace companion. The first AI Fieldnotes release requires both APKs.
+The publisher checks the reader's package, version, certificate, provenance,
+network permissions and embedded reader assets before upload.
+
 ### Sunny & Moon APK
 
 Add `-SunnyMoon` to an Android publication to build and include the offline game

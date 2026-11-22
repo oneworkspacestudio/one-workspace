@@ -8,6 +8,7 @@
 *.log
 .env*
 node_modules/
+/internal/fieldnotes/ui/generated/
 
 # Local Python build/publisher bytecode
 __pycache__/

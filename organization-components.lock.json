@@ -1,5 +1,11 @@
 {
   "schema": 1,
+  "fieldnotesSeed": {
+    "repository": "oneworkspacestudio/one-workspace",
+    "tag": "v0.3.0-preview.144",
+    "asset": "workspace-bundle.zip",
+    "sha256": "cce3b3f72a6269edc987b6f2029a49fdf09bd8b624d00bb1b7b15267fd24de55"
+  },
   "suiteSeed": {
     "repository": "oneworkspacestudio/one-workspace",
     "tag": "v0.3.0-preview.93",

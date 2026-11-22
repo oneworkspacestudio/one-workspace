@@ -482,6 +482,17 @@
       "updateGroup": "mymusic",
       "recovery": "app",
       "sinceIntegration": 23
+    },
+    {
+      "id": "fieldnotes",
+      "name": "AI Fieldnotes",
+      "route": "/fieldnotes",
+      "repository": "oneworkspacestudio/one-workspace",
+      "oidc": true,
+      "foundation": true,
+      "updateGroup": "fieldnotes",
+      "recovery": "app",
+      "sinceIntegration": 24
     }
   ]
 }

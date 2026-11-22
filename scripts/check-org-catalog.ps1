@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$Catalog)
 $ErrorActionPreference='Stop'
 $cat=Get-Content -LiteralPath $Catalog -Raw|ConvertFrom-Json
-if($cat.installerIntegration -notin @(18,19,20,21,22,23)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
+if($cat.installerIntegration -notin @(18,19,20,21,22,23,24)){throw 'Missing installer compatibility guard for complete app-owned runtimes'}
 if($cat.installerIntegration -ge 22){
  $external=@((Get-Content -LiteralPath (Join-Path $PSScriptRoot '../internal/catalog/managed-apps.json') -Raw|ConvertFrom-Json).apps|Where-Object independentDistribution)
  foreach($app in $external){
@@ -21,6 +21,10 @@ if(-not $sunnyMoon.oidc -or $sunnyMoon.route -cne '/sunnymoon' -or $sunnyMoon.ca
 if($cat.installerIntegration -ge 23){
  $myMusic=$cat.apps|Where-Object id -CEQ 'mymusic'
  if(-not $myMusic.oidc -or -not $myMusic.stripPrefix -or $myMusic.route -cne '/mymusic' -or $myMusic.callback -cne '/mymusic/auth/callback' -or $myMusic.port -ne 9049 -or 'accounts' -cnotin $myMusic.depends -or $cat.packages.mymusic.file -cne 'MyMusic.exe' -or -not $cat.packages.'mymusic-contract' -or -not $cat.packages.'mymusic-notices'){throw 'Vuno managed contract is incomplete'}
+}
+if($cat.installerIntegration -ge 24){
+ $fieldnotes=$cat.apps|Where-Object id -CEQ 'fieldnotes'
+ if(-not $fieldnotes.oidc -or -not $fieldnotes.stripPrefix -or $fieldnotes.route -cne '/fieldnotes' -or $fieldnotes.callback -cne '/fieldnotes/auth/callback' -or $fieldnotes.port -ne 9050 -or 'accounts' -cnotin $fieldnotes.depends -or $cat.packages.fieldnotes.file -cne 'AIFieldnotes.exe' -or -not $cat.packages.'fieldnotes-contract' -or -not $cat.packages.'fieldnotes-ui-notices'){throw 'AI Fieldnotes managed contract is incomplete'}
 }
 $gameStudio=$cat.apps|Where-Object id -CEQ 'gamestudio'
 if(-not $gameStudio.oidc -or $gameStudio.route -cne '/gamestudio' -or $gameStudio.port -ne 9045 -or $cat.packages.gamestudio.file -cne 'GameStudio.exe' -or -not $cat.packages.'gamestudio-contract'){throw 'Game Studio runtime contract is incomplete'}

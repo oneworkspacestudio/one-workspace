@@ -63,7 +63,8 @@ const (
 	ManagerPreflightIntegration   = 21
 	IndependentAppIntegration     = 22
 	MyMusicIntegration            = 23
-	InstallerIntegration          = MyMusicIntegration
+	FieldnotesIntegration         = 24
+	InstallerIntegration          = FieldnotesIntegration
 )
 
 func (c Catalog) Validate() error {

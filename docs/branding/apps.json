@@ -343,6 +343,13 @@
     "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/FROSTSTOCK.md"
   },
   {
+    "id": "fieldnotes",
+    "icon": "ai_fieldnotes",
+    "name": "AI Fieldnotes",
+    "description": "Research AI engineering and save briefings for offline reading.",
+    "url": "https://github.com/oneworkspacestudio/one-workspace/blob/main/docs/AI_FIELDNOTES.md"
+  },
+  {
     "id": "mymusic",
     "icon": "my_music_studio",
     "name": "Vuno",

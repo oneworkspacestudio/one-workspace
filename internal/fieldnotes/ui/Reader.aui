@@ -1,0 +1,103 @@
+Page Reader
+  Row variant=masthead
+    Button action=home variant=wordmark "AI Fieldnotes"
+    Row variant=top-actions
+      If condition=$offline
+        Button action=import variant=outline "Import pack"
+      Else
+        Link href=$workspace variant=apps "Apps"
+        If condition=$owner
+          Button action=settings "Settings"
+          Button action=research variant=primary "Research"
+        Else
+          Link href=$login variant=outline "Sign in"
+  If condition=$notice
+    Alert $notice
+  If condition=$reader
+    Section variant=reading
+      Row variant=reading-actions
+        Button action=back "← Back"
+        Button action=bookmark disabled=$bookmarkDisabled "$bookmarkLabel"
+      Text variant=kicker "$reader.label"
+      Heading level=1 "$reader.title"
+      Text variant=standfirst "$reader.summary"
+      Text variant=byline "$reader.byline"
+      Cover tone=$reader.tone
+      For each=$reader.sections
+        Section variant=prose
+          Heading level=2 "$item.heading"
+          Paragraphs body=$item.body refs=$item.refs
+      Section variant=references
+        Heading level=2 "Sources"
+        For each=$reader.sources
+          SourceReference item=$item
+  Else
+    Section variant=layout
+      Section variant=feed
+        Row variant=tabs
+          Button action=all variant=$allTab "Reading room"
+          Button action=saved variant=$savedTab "Reading list"
+        If condition=$researchOpen
+          Card variant=panel
+            Row variant=panel-heading
+              Heading level=2 "Research a topic"
+              Button action=close variant=quiet "Close"
+            Text "Find source material before drafting a briefing."
+            Input name=query label="Topic or phrase" placeholder="e.g. loop engineering for UI teams"
+            Select name=provider label="Search provider" options=$providers
+            Button action=search variant=primary disabled=$searchDisabled "Search the web"
+            If condition=$jobStatus
+              Alert $jobStatus
+            If condition=$hasSources
+              Heading level=3 "Choose up to five sources"
+              For each=$sources
+                SourceChoice item=$item
+              Button action=generate variant=primary disabled=$generateDisabled "Write briefing"
+        If condition=$settingsOpen
+          Card variant=panel
+            Row variant=panel-heading
+              Heading level=2 "Research settings"
+              Button action=close variant=quiet "Close"
+            Text "Credentials stay in the Workspace service. Search queries and selected evidence go to the providers you use."
+            Input name=deepseek label="DeepSeek API key" type=password placeholder=$deepseekStatus
+            Row variant=setting-actions
+              Button action=saveDeepSeek variant=primary disabled=$busy "Save key"
+              Button action=removeDeepSeek disabled=$deepseekMissing "Remove key"
+            If condition=$browser
+              Input name=browser label="Workspace Web Search credential" type=password placeholder=$browserStatus
+              Row variant=setting-actions
+                Button action=saveBrowser variant=primary disabled=$busy "Save credential"
+                Button action=removeBrowser disabled=$browserMissing "Remove credential"
+        If condition=$featured
+          Card variant=featured
+            Cover tone=$featured.tone
+            Text variant=kicker "$featured.label"
+            Heading level=1 "$featured.title"
+            Text variant=standfirst "$featured.summary"
+            Row variant=story-actions
+              Button action=read item=$featured.id variant=primary "Read briefing"
+              Text variant=byline "$featured.byline"
+        If condition=$hasStories
+          Section variant=stories
+            Heading level=2 "$listHeading"
+            For each=$stories
+              Story item=$item
+        If condition=$emptyList
+          Card variant=empty
+            Heading level=2 "Your reading list is empty"
+            Text "Save a briefing to keep it here."
+        If condition=$allowExport
+          Button action=export variant=outline "Download reading pack"
+      Section variant=rail
+        Heading level=2 "On the radar"
+        Text variant=rail-copy "AI engineering terms, standards and practices for teams building interfaces."
+        For each=$topics
+          Button action=topic item=$item.query variant=topic "$item.title"
+        Divider
+        If condition=$offline
+          Heading level=2 "Reading offline"
+          Text variant=rail-copy "Import a reading pack from AI Fieldnotes in One Workspace."
+        Else
+          Heading level=2 "Read on Android"
+          Text variant=rail-copy "Save briefings to your reading list, download a pack and import it into the Android reader."
+          Link href=$androidLink variant=guide "Get the Android reader"

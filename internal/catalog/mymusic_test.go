@@ -8,7 +8,7 @@ func TestMyMusicReleaseAndOptionalPayload(t *testing.T) {
 	}
 	c := Catalog{InstallerIntegration: MyMusicIntegration}
 	for _, app := range ManagedApps() {
-		if !app.IndependentDistribution && app.ID != "mymusic" {
+		if !app.IndependentDistribution && app.SinceIntegration < MyMusicIntegration {
 			c.Apps = append(c.Apps, App{ID: app.ID, Name: app.Name, Route: app.Route, OIDC: app.OIDC, Package: app.ID})
 		}
 	}
