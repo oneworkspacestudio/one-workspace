@@ -49,4 +49,4 @@ applied to obtain safe backup space. Its hash matched after compression.
 F: filled before the attribute could be restored.
 
 [Public release](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.145)
-and [user guide](../../../docs/AI_FIELDNOTES.md).
+and [user guide](../../docs/AI_FIELDNOTES.md).
