@@ -1,27 +1,52 @@
 # AI Fieldnotes
 
 Workspace preview.145 introduces the optional Creative & Development app
-`fieldnotes` (service preview.1). It is a supervised native apphost service with
-embedded AUI reader, MyAccounts owner sign-in, a dedicated private database,
-encrypted provider settings and standard recovery ownership. The published
-preview.144 seed preserves other app contracts and payloads. Installer
-integration 24 covers the new app's package, licenses and launch contract.
+`fieldnotes` (service preview.1). The supervised native apphost service has a
+bundled AUI reader, MyAccounts owner sign-in, a private database, encrypted
+provider settings and Workspace recovery ownership. The verified preview.144
+seed preserved all 47 previous app contracts and 938 unchanged payload pins.
+Installer integration 24 covers the five Fieldnotes payloads.
 
 Search uses DeepSeek Search or the optional Workspace Web Search server API.
-Source selection precedes DeepSeek generation. Drafts are validated against
-numbered source IDs and persisted with citations. The app contains original
-starter articles on loop engineering, a proposed five-stage maturity framework
-and WCAG-based interface evaluation. Requests run on demand. Keys and provider
-responses containing credentials do not appear in the reader or exports.
+A source selection precedes DeepSeek generation. Validated numbered citations
+persist with the briefing. Starter articles cover loop engineering, a proposed
+five-stage maturity framework and WCAG-based UI evaluation. Research runs on
+demand. Provider credentials stay in the private service and out of exports.
 
 Android package `uk.co.m8e.fieldnotes` version 1.0.0 reuses the bundled reader,
-ships with no Internet permission and imports bounded JSON packs through the
-Android file picker. Imported reading state is private and commits before UI
-acknowledgement. The signed publisher's `-Fieldnotes` flag pairs the APK with the
-required signed Workspace companion and verifies its provenance and public
-channel entry. The web-to-Android handoff uses explicit file transfer.
+ships without Internet permission and imports bounded JSON packs through the
+file picker. Imported reading state is private and commits before success.
+The signed publisher's `-Fieldnotes` flag pairs both APKs and validates their
+certificate, package, asset bytes and provenance. Android receives reading
+material through explicit file transfer.
 
-Use only synthetic NTFS private folders during acceptance. The baseline
-preview.144 bundle is pinned by public SHA-256. Do not install on an owner
-machine absent a separate request. Finish release verification and record
-any outstanding acceptance here before reporting managed delivery.
+## Verified delivery
+
+Source `8ac4038` shipped at immutable Workspace `v0.3.0-preview.145`. The
+supported publisher verified 964 assets and both anonymous APK downloads.
+Channel commit `bdfe363` promoted the tag. The initial publisher check saw
+the older CDN response. The exact anonymous raw-main channel later selected
+preview.145, and the preview.145 installer downloaded and verified its full
+bundle and reported Fieldnotes preview.1. Public catalogue, installer,
+bundle and both APK digests match local release assets. Actions were disabled.
+
+Fresh NTFS setup with selected Fieldnotes, MyAccounts owner launch, header
+picker, pack export, responsive reading and sign-out passed. A synthetic
+preview.144 controller refused integration 24, then the new installer
+completed the protected upgrade with its verified backup and preserved the
+owner and test file. Supported recovery completed the rollback after an
+NTFS space guard. Full apphost, Fieldnotes, catalog, suite and distribution
+tests and eight publisher checks passed. The provider round trip used
+synthetic DeepSeek responses. Offline pack import, invalid input rejection and
+reload persistence passed in a browser. The signed Android APK and offline
+permissions were verified. The emulator did not boot on available test storage.
+No owner installation, physical phone or live credential usage is claimed.
+
+Both synthetic installations and listeners were removed or stopped. Four
+archived public preview.130 staging files were restored with matching hashes.
+The SDK's API 35 Google Play system image on F: still has NTFS compression,
+applied to obtain safe backup space. Its hash matched after compression.
+F: filled before the attribute could be restored.
+
+[Public release](https://github.com/oneworkspacestudio/one-workspace/releases/tag/v0.3.0-preview.145)
+and [user guide](../../../docs/AI_FIELDNOTES.md).
